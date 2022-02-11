@@ -1,0 +1,16 @@
+/* components/alert.css */
+.alert {
+  @apply p-3 text-sm font-mono mb-4 lg:mb-8 border-2;
+}
+
+.alert-danger {
+  @apply border-theme-red text-theme-red;
+}
+
+.alert-info {
+  @apply bg-blue-500;
+}
+
+.alert-success {
+  @apply bg-green-500;
+}

@@ -1,0 +1,13 @@
+<template>
+  <div>
+    <participant-form type="create"></participant-form>
+  </div>
+</template>
+<script>
+import ParticipantForm from '@/views/pages/event/participant/form.vue';
+export default {
+  components: {
+    ParticipantForm
+  }
+}
+</script>

@@ -1,0 +1,7 @@
+/* components/buttons.css */
+
+button.btn-primary,
+input[type="submit"].btn-primary,
+a.btn-primary {
+  @apply block w-auto max-w-xs p-2 md:py-4 md:px-6 font-mono text-white text-base sm:text-sm lg:text-base bg-theme-dark hover:bg-theme-magenta active:bg-theme-magenta focus:outline-none transition ease-in-out duration-150 rounded-sm
+}

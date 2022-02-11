@@ -1,0 +1,40 @@
+/* components/form */
+
+/* Auth forms */
+section.auth {
+  @apply w-10/12 sm:max-w-lg p-6 md:p-8 lg:p-10 bg-white border-theme
+}
+
+h2.auth-heading {
+  @apply mt-0 lg:mt-0 text-dark;
+}
+
+.auth-logo {
+  @apply flex justify-center mb-4 md:mb-8
+}
+
+.auth-buttons {
+  @apply flex items-center justify-between mt-8 lg:mt-12;
+}
+
+a.auth-helper {
+  @apply text-gray-400 text-sm font-normal no-underline underline-offset-2 hover:underline;
+}
+
+/* Reset */
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  outline: none !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+}
