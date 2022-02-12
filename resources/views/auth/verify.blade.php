@@ -1,4 +1,4 @@
-@extends('layout.web')
+@extends('layout.auth')
 @section('seo_title', 'E-Mail verifizieren')
 @section('seo_description', '')
 @section('content')

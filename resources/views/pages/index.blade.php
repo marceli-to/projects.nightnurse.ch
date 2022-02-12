@@ -1,4 +1,6 @@
 @extends('layout.web')
 @section('content')
-<h1>Emergency Room Nightnurse 💬</h1>
+<header>
+  <h2 class="!mt-0">Clients</h2>
+</header>
 @endsection

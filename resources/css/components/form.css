@@ -18,7 +18,7 @@ h2.auth-heading {
 }
 
 a.auth-helper {
-  @apply text-gray-400 text-sm font-normal no-underline underline-offset-2 hover:underline;
+  @apply text-gray-400 text-sm font-normal no-underline hover:text-magenta;
 }
 
 /* Reset */

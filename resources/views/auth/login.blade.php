@@ -1,4 +1,4 @@
-@extends('layout.web')
+@extends('layout.auth')
 @section('seo_title', 'Login')
 @section('content')
 <section class="auth">
