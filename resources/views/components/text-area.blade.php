@@ -11,5 +11,4 @@
     columns="25"
     {{ ($required ?? false) ? 'required' : '' }}
   ></textarea>
-
 </div>

@@ -10,7 +10,7 @@
       </a>
     </div>
   </header>
-  <nav :class="[!menuVisible ? '' : 'is-visible', 'page']">
+  <!-- <nav :class="[!menuVisible ? '' : 'is-visible', 'page']">
     <header>
       <span>
         <strong>{{user}}</strong><br>
@@ -45,7 +45,7 @@
         </router-link>
       </li>
     </ul>
-  </nav>
+  </nav> -->
 </div>
 </template>
 <script>
@@ -54,11 +54,9 @@
 import { ArrowRightIcon, MenuIcon, LogOutIcon } from 'vue-feather-icons';
 
 // Theme
-import Logo from '@/components/theme/Logo.vue';
 
 export default {
   components: {
-    Logo,
     ArrowRightIcon,
     MenuIcon,
     LogOutIcon,

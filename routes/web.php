@@ -31,11 +31,9 @@ Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageControl
 
 Route::middleware('auth:sanctum', 'verified')->group(function() {
   
-  // Catch all routes
-  Route::get('administration/{any?}', function () {
-    return view('layout.cms');
+  Route::get('{any?}', function () {
+    return view('layout.authenticated');
   })->where('any', '.*')->middleware('role:admin')->name('cms');
-
 
 });
 

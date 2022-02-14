@@ -1,35 +1,23 @@
 <template>
+<div>
+  <header>
+    <h3 class="!mt-0 border-b-2 border-light pb-2">Clients</h3>
+  </header>
+
   <div v-if="isFetched" class="is-loaded">
     <page-header>
       <h1>Willkommen <strong>{{user.firstname}} {{user.name}}</strong></h1>
     </page-header>
     <div class="content content--wide cards">
-      <div class="card">
+      <!-- <div class="card">
         <router-link :to="{name: 'events'}">
           <h2>Edizioni</h2>
           <p>Verwaltung der Edizioni &amp; Mitglieder</p>
         </router-link>
-      </div>
-      <div class="card">
-        <router-link :to="{name: 'itdv'}">
-          <h2>ITDV</h2>
-          <p>Verwaltung der Inhalte</p>
-        </router-link>
-      </div>
-      <div class="card">
-        <router-link :to="{name: 'files'}">
-          <h2>Dateien</h2>
-          <p>Verwaltung der Dateien</p>
-        </router-link>
-      </div>
-      <div class="card">
-        <router-link :to="{name: 'newsletters'}">
-          <h2>Newsletter</h2>
-          <p>Verwaltung der Newsletter &amp; Subscriber</p>
-        </router-link>
-      </div>
+      </div> -->
     </div>
   </div>
+</div>
 </template>
 <script>
 

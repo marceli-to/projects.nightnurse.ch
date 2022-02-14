@@ -1,18 +1,30 @@
 <template>
 <div>
   <notifications classes="notification" />
-  <page-header :user="$store.state.user"></page-header>
-  <main class="site">
-    <router-view></router-view>
-  </main>
+  <page-main>
+    <page-menu :user="$store.state.user"></page-menu>
+    <page-content>
+      <router-view></router-view>
+    </page-content>
+  </page-main>
 </div>
 </template>
+
 <script>
 import PageHeader from '@/views/layout/PageHeader.vue';
+import PageMenu from '@/views/layout/Menu.vue';
+import PageMain from '@/views/layout/Main.vue';
+import PageContent from '@/views/layout/Content.vue';
+
 export default {
+
   components: {
-    PageHeader
+    PageHeader,
+    PageMenu,
+    PageMain,
+    PageContent,
   },
+
   mounted() {
     this.fetchUser();
   },

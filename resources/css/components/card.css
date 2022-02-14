@@ -1,0 +1,18 @@
+/* components/cards.css */
+
+/* auth card */
+.card-auth {
+  @apply w-10/12 sm:max-w-lg p-6 md:p-8 lg:p-10 bg-white border-theme
+}
+
+h2.card-auth__heading {
+  @apply mt-0 lg:mt-0 text-dark;
+}
+
+.card-auth__logo {
+  @apply flex justify-center mb-4 md:mb-8
+}
+
+.card-auth__buttons {
+  @apply flex items-center justify-between mt-8 lg:mt-12;
+}

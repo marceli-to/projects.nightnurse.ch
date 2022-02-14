@@ -1,48 +1,20 @@
 @extends('layouts.auth')
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Confirm Password') }}</div>
-
-                <div class="card-body">
-                    {{ __('Please confirm your password before continuing.') }}
-
-                    <form method="POST" action="{{ route('password.confirm') }}">
-                        @csrf
-
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Confirm Password') }}
-                                </button>
-
-                                @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
-                                @endif
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+<x-card-auth>
+  <h2 class="card-auth__heading">Passwort bestätigen</h2>
+  <p>{{ __('Please confirm your password before continuing.') }}</p>
+  @if ($errors->any())
+    <x-alert type="danger" message="{{__('messages.general_error')}}" />
+  @endif
+  <form method="POST" action="{{ route('password.confirm') }}">
+    @csrf
+    <x-text-field label="Passwort" type="password" name="password" autocomplete="false" />
+    <div class="card-auth__buttons">
+      <x-button label="{{ __('Confirm Password') }}" name="register" type="submit" />
+      @if (Route::has('password.request'))
+        <a href="{{ route('password.request') }}" class="form-helper">Passwort vergessen?</a>
+      @endif
     </div>
-</div>
+  </form>
+</x-card-auth>
 @endsection

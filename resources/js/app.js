@@ -30,30 +30,13 @@ Vue.use(VueRouter);
 // Vue.use(require('vue-moment'));
 
 // Loading indicator
-import LoadingIndicator from "@/components/ui/LoadingIndicator";
-Vue.component('LoadingIndicator', LoadingIndicator);
+// import LoadingIndicator from "@/components/ui/LoadingIndicator";
+// Vue.component('LoadingIndicator', LoadingIndicator);
 
-// Separator
-import Separator from "@/components/ui/Separator";
-Vue.component('Separator', Separator);
+// // Separator
+// import Separator from "@/components/ui/Separator";
+// Vue.component('Separator', Separator);
 
-// Vue-cleave
-// import Cleave from 'cleave.js';
-// Vue.directive('cleave', {
-//   inserted: (el, binding) => {
-//     el.cleave = new Cleave(el, binding.value || {});
-//   },
-//   update: (el) => {
-//     const event = new Event('input', {bubbles: true});
-//     setTimeout(function () {
-//       el.value = el.cleave.properties.result;
-//       el.dispatchEvent(event);
-//     }, 100);
-//   }
-// });
-
-// Global mixins
-// import ErrorHandling from "@/global/mixins/ErrorHandling";
 
 // Store
 import store from '@/config/store';
