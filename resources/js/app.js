@@ -42,8 +42,18 @@ Vue.use(VueRouter);
 import store from '@/config/store';
 
 // Routes
-import routes from '@/config/routes';
-const router = new VueRouter({ mode: 'history', routes: routes});
+import baseRoutes from '@/config/routes';
+import companyRoutes from '@/views/pages/company/config/routes';
+
+const router = new VueRouter(
+  { 
+    mode: 'history', 
+    routes: [
+      ...baseRoutes,
+      ...companyRoutes
+    ]
+  }
+);
 
 // App component
 import AppComponent from '@/App.vue';

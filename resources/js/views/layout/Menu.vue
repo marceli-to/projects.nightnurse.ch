@@ -24,12 +24,12 @@
         </a>
       </li>
       <li class="block !p-0 !m-0">
-        <a href="" class="text-gray-400 text-base font-normal no-underline flex items-center p-3 sm:p-5 hover:text-magenta">
+        <router-link :to="{name: 'companies'}" class="text-gray-400 text-base font-normal no-underline flex items-center p-3 sm:p-5 hover:text-magenta">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
           </svg>
           <span class="hidden sm:block pl-3">Clients</span>
-        </a>
+        </router-link>
       </li>
     </ul>
   </div>

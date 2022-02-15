@@ -1,5 +1,5 @@
 <template>
-  <footer class="content-footer">
+  <footer>
     <div>
       <slot />
     </div>

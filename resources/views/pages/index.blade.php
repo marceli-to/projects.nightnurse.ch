@@ -1,6 +1,8 @@
-@extends('layout.web')
+@extends('layout.guest')
 @section('content')
-<header>
-  <h3 class="!mt-0 border-b-2 border-light pb-2">Clients</h3>
-</header>
+<section class="">
+  <div>
+    <h3 class="!p-0 !m-0">ER @ NNI</h3>
+  </div>
+</section>
 @endsection

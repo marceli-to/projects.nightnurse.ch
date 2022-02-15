@@ -2,7 +2,7 @@
 @section('seo_title', 'Passwort vergessen')
 @section('content')
 <x-card-auth>
-  <h2 class="auth-heading">Passwort vergessen</h2>
+  <h2 class="card-auth__heading">Passwort vergessen</h2>
   <p class="text-sm text-dark">{{__('messages.password_recovery')}}</p>
   @if ($errors->any())
     <x-alert type="danger" message="{{__('messages.general_error')}}" />
@@ -13,7 +13,7 @@
   <form method="POST" action="{{ route('password.email') }}">
     @csrf
     <x-text-field label="E-Mail" type="email" name="email" />
-    <div class="auth-buttons">
+    <div class="card-auth__buttons">
       <x-button label="Senden" name="register" type="submit" />
       <a href="{{ route('login') }}" class="form-helper">Zurück</a>
     </div>

@@ -1,8 +1,13 @@
 /* components/cards.css */
 
+/* global card */
+.card {
+  @apply w-10/12 sm:max-w-lg p-6 md:p-8 lg:p-10 bg-white border-theme
+}
+
 /* auth card */
 .card-auth {
-  @apply w-10/12 sm:max-w-lg p-6 md:p-8 lg:p-10 bg-white border-theme
+  @apply w-10/12 sm:max-w-lg p-6 md:p-8 lg:p-10 bg-white shadow-sm
 }
 
 h2.card-auth__heading {

@@ -11,7 +11,6 @@
 </template>
 
 <script>
-import PageHeader from '@/views/layout/PageHeader.vue';
 import PageMenu from '@/views/layout/Menu.vue';
 import PageMain from '@/views/layout/Main.vue';
 import PageContent from '@/views/layout/Content.vue';
@@ -19,7 +18,6 @@ import PageContent from '@/views/layout/Content.vue';
 export default {
 
   components: {
-    PageHeader,
     PageMenu,
     PageMain,
     PageContent,
