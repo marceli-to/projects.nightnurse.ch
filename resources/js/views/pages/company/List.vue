@@ -112,7 +112,7 @@ export default {
 
   computed: {
     title() {
-      return "Firmen";
+      return "Kunden";
     }
   }
 }

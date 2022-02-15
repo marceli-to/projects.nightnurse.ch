@@ -138,7 +138,7 @@ export default {
 
   computed: {
     title() {
-      return this.$props.type == "update" ? "Firma bearbeiten"  : "Firma hinzufügen";
+      return this.$props.type == "update" ? "Kunde bearbeiten"  : "Kunde hinzufügen";
     }
   }
 };

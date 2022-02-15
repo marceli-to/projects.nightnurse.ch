@@ -9,7 +9,7 @@
         <menu-item :route="'dashboard'">
           <AnnotationIcon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
-            Messages
+            Nachrichten
           </menu-item-label>
         </menu-item>
       </li>
@@ -17,7 +17,7 @@
         <menu-item :route="'dashboard'">
           <FolderIcon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
-            Projects
+            Projekte
           </menu-item-label>
         </menu-item>
       </li>
@@ -25,7 +25,7 @@
         <menu-item :route="'companies'">
           <UsersIcon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
-            Clients
+            Kunden
           </menu-item-label>
         </menu-item>
       </li>
