@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import CompanyForm from '@/views/pages/company/form.vue';
+import CompanyForm from '@/views/pages/company/partials/Form.vue';
 export default {
   components: {
     CompanyForm

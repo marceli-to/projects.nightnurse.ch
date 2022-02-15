@@ -19,6 +19,6 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="csrf-token" content="{{ csrf_token() }}" />
 <meta name="format-detection" content="telephone=no">
-<link href="{{ mix('css/app.css') }}" type="text/css" rel="stylesheet" />
+<link href="{{ mix('assets/css/app.css') }}" type="text/css" rel="stylesheet" />
 </head>
 <body class="prose lg:prose-lg max-w-none">

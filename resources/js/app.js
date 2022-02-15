@@ -59,11 +59,13 @@ const router = new VueRouter(
 import AppComponent from '@/App.vue';
 
 // Mount App
-const app = new Vue({
-  mixins: [],
-  components: { 
-    AppComponent
-  },
-  router,
-  store
-}).$mount('#app');
+if (document.querySelector('#app')) {
+  const app = new Vue({
+    mixins: [],
+    components: { 
+      AppComponent
+    },
+    router,
+    store
+  }).$mount('#app');
+}

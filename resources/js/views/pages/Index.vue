@@ -23,7 +23,7 @@
 
 // Mixins
 import Helpers from "@/mixins/Helpers";
-import PageHeader from "@/components/ui/PageHeader.vue";
+import PageHeader from "@/components/ui/layout/Header.vue";
 
 export default {
 

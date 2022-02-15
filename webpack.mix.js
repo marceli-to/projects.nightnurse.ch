@@ -10,9 +10,9 @@ mix.webpackConfig({
 });
 
 
-mix.js("resources/js/app.js", "public/js")
+mix.js("resources/js/app.js", "public/assets/js")
   .vue()
-  .postCss("resources/css/app.css", "public/css", [
+  .postCss("resources/css/app.css", "public/assets/css", [
     require("tailwindcss"),
   ])
   .version();

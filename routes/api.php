@@ -19,11 +19,11 @@ Route::middleware('auth:sanctum')->group(function() {
 
   // Companies
   Route::get('companies', [CompanyController::class, 'get']);
-  Route::get('company/{company}', [CompanyController::class, 'find']);
+  Route::get('company/{company:uuid}', [CompanyController::class, 'find']);
   Route::post('company', [CompanyController::class, 'store']);
-  Route::put('company/{company}', [CompanyController::class, 'update']);
-  Route::get('company/state/{company}', [CompanyController::class, 'toggle']);
-  Route::delete('company/{company}', [CompanyController::class, 'destroy']);
+  Route::put('company/{company:uuid}', [CompanyController::class, 'update']);
+  Route::get('company/state/{company:uuid}', [CompanyController::class, 'toggle']);
+  Route::delete('company/{company:uuid}', [CompanyController::class, 'destroy']);
 
 });
 

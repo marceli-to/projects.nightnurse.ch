@@ -1,5 +1,6 @@
 import CompanyIndex from '@/views/pages/company/List.vue';
-import CompanyForm from '@/views/pages/company/Form.vue';
+import CompanyCreate from '@/views/pages/company/Create.vue';
+import CompanyUpdate from '@/views/pages/company/Update.vue';
 
 const routes = [
 
@@ -12,13 +13,13 @@ const routes = [
   {
     name: 'company-create',
     path: '/company/create',
-    component: CompanyForm,
+    component: CompanyCreate,
   },
   
   {
-    name: 'company-edit',
-    path: '/company/edit/:id',
-    component: CompanyForm,
+    name: 'company-update',
+    path: '/company/update/:uuid',
+    component: CompanyUpdate,
   },
 
 ];

@@ -1,28 +1,39 @@
 <template>
 <div>
+  <content-header>
+    <h3 class="!mt-0">{{title}}</h3>
+  </content-header>
   <form @submit.prevent="submit" v-if="isFetched">
 
+    <div class="form-group">
+      <label>Name</label>
+      <input type="text" v-model="data.name">
+    </div>
 
+    <div class="form-group">
+      <label>City</label>
+      <input type="text" v-model="data.city">
+    </div>
     
-    <page-footer>
+    <!-- <page-footer>
       <button type="submit" class="btn-primary">Speichern</button>
       <router-link :to="{ name: 'companies' }" class="btn-secondary">
         <span>Zurück</span>
       </router-link>
-    </page-footer>
+    </page-footer> -->
 
   </form>
 </div>
 </template>
 <script>
 import ErrorHandling from "@/mixins/ErrorHandling";
-import PageFooter from "@/components/ui/PageFooter.vue";
-import PageHeader from "@/components/ui/PageHeader.vue";
+import ContentHeader from "@/components/ui/layout/Footer.vue";
+import ContentFooter from "@/components/ui/layout/Header.vue";
 
 export default {
   components: {
-    PageFooter,
-    PageHeader,
+    ContentHeader,
+    ContentFooter,
   },
 
   mixins: [ErrorHandling],
@@ -36,8 +47,9 @@ export default {
       
       // Model
       data: {
-        title: null,
-        text: null,
+        name: null,
+        city: null,
+        owner: 0,
         publish: 1,
       },
 
@@ -66,7 +78,7 @@ export default {
   },
 
   created() {
-    if (this.$props.type == "edit") {
+    if (this.$props.type == "update") {
       this.fetch();
     }
   },
@@ -75,14 +87,14 @@ export default {
 
     fetch() {
       this.isFetched = false;
-      this.axios.get(`${this.routes.fetch}/${this.$route.params.id}`).then(response => {
+      this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
         this.data = response.data;
         this.isFetched = true;
       });
     },
 
     submit() {
-      if (this.$props.type == "edit") {
+      if (this.$props.type == "update") {
         this.update();
       }
 
@@ -102,7 +114,7 @@ export default {
 
     update() {
       this.isLoading = true;
-      this.axios.put(`${this.routes.put}/${this.$route.params.id}`, this.data).then(response => {
+      this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$router.push({ name: "companies" });
         this.$notify({ type: "success", text: this.messages.updated });
         this.isLoading = false;
@@ -113,7 +125,7 @@ export default {
 
   computed: {
     title() {
-      return this.$props.type == "edit" ? "Firma bearbeiten"  : "Firma hinzufügen";
+      return this.$props.type == "update" ? "Firma bearbeiten"  : "Firma hinzufügen";
     }
   }
 };
