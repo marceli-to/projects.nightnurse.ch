@@ -46,33 +46,33 @@ export default {
   methods: {
 
     validationError(data) {
-      let errors = {};
-      data.body.forEach(function(key) {
-        errors[key.field] = true;
-      });
-      this.errors = errors;
+      // let errors = {};
+      // data.body.forEach(function(key) {
+      //   errors[key.field] = true;
+      // });
+      // this.errors = errors;
       this.isLoading = false;
-      this.$notify({ type: "error", text: `Bitte alle mit * markierten Felder prüfen!`});
+      this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
     },
 
     serverError(data) {
       this.isLoading = false;
-      this.$notify({ type: "error", text: `${data.status} ${data.code}<br>${data.body.message}`});
+      this.$notify({ type: "danger", text: `${data.status} ${data.code}<br>${data.body.message}`});
     },
 
     notFoundError(data) {
-      this.$notify({ type: "error", text: `${data.status} ${data.code}`});
+      this.$notify({ type: "danger", text: `${data.status} ${data.code}`});
       this.$router.push({ name: 'not-found' });
     },
 
     notAllowed(data) {
       this.isLoading = false;
-      this.$notify({ type: "error", text: `${data.status} ${data.code}`});
+      this.$notify({ type: "danger", text: `${data.status} ${data.code}`});
     },
 
     forbiddenError(data) {
       this.isLoading = false;
-      this.$notify({ type: "error", text: `${data.status} - Zugriff verweigert!`});
+      this.$notify({ type: "danger", text: `${data.status} - Zugriff verweigert!`});
       this.$router.push({ name: 'forbidden' });
     },
 

@@ -1,6 +1,6 @@
 <template>
 <div>
-  <notifications classes="notification" />
+  <notifications />
   <page-main>
     <page-menu :user="$store.state.user"></page-menu>
     <page-content>

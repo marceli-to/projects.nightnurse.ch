@@ -35,14 +35,8 @@ class CompanyStoreRequest extends FormRequest
   public function messages()
   {
     return [
-      'name.required' => [
-        'field' => 'name',
-        'error' => 'Name wird benötigt!'
-      ],
-      'owner.required' => [
-        'field' => 'owner',
-        'error' => 'Owner wird benötigt!'
-      ],
+      'name.required' => 'Name wird benötigt!',
+      'owner.required' => 'Name wird benötigt!',
     ];
   }
 }

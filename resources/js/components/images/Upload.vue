@@ -45,7 +45,7 @@ export default {
   methods: {
     complete(image) {
       if (image.status == "error" && image.accepted == false) {
-        this.$notify({ type: "error", text: this.messages.uploadError });
+        this.$notify({ type: "danger", text: this.messages.uploadError });
       } 
       else {
         let response = JSON.parse(image.xhr.response);

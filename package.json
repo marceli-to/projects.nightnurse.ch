@@ -27,6 +27,7 @@
     "dependencies": {
         "@tailwindcss/forms": "^0.4.0",
         "@tinymce/tinymce-vue": "^3.2.2",
+        "@vue-hero-icons/outline": "^1.7.2",
         "moment": "^2.26.0",
         "vue-advanced-cropper": "^0.16.5",
         "vue-axios": "^2.1.5",

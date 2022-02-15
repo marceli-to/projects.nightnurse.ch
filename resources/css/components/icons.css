@@ -1,0 +1,5 @@
+/* components/icons.css */
+
+.icon-list {
+  @apply h-5 w-5 text-gray-300 hover:text-magenta;
+}

@@ -5,31 +5,29 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.14 44.9" class="w-5 sm:w-8 h-auto"><polygon points="8.16 0 0 10.21 0 44.9 8.16 34.7 8.16 0"></polygon><polygon points="29.25 43.31 10.89 17.11 10.89 1.6 29.25 27.79 29.25 43.31" class="brand-fill"></polygon><polygon points="40.14 0 31.98 10.21 31.98 44.9 40.14 34.7 40.14 0" class="brand-fill"></polygon></svg>
     </div>
     <ul class="list-none !p-0 !m-0">
-      <li class="block !pl-0  !m-0">
-        <a href="" class="text-gray-400 text-base font-normal no-underline flex items-center p-3 sm:p-5 hover:text-magenta">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-          </svg>
-          <span class="hidden sm:block pl-3">
+      <li class="block !pl-0 !m-0">
+        <menu-item :route="'dashboard'">
+          <AnnotationIcon class="h-5 w-5" aria-hidden="true" />
+          <menu-item-label>
             Messages
-          </span>
-        </a>
+          </menu-item-label>
+        </menu-item>
       </li>
       <li class="block !p-0 !m-0">
-        <a href="" class="text-gray-400 text-base font-normal no-underline flex items-center p-3 sm:p-5 hover:text-magenta">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-          </svg>
-          <span class="hidden sm:block pl-3">Projects</span>
-        </a>
+        <menu-item :route="'dashboard'">
+          <FolderIcon class="h-5 w-5" aria-hidden="true" />
+          <menu-item-label>
+            Projects
+          </menu-item-label>
+        </menu-item>
       </li>
       <li class="block !p-0 !m-0">
-        <router-link :to="{name: 'companies'}" class="text-gray-400 text-base font-normal no-underline flex items-center p-3 sm:p-5 hover:text-magenta">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-          <span class="hidden sm:block pl-3">Clients</span>
-        </router-link>
+        <menu-item :route="'companies'">
+          <UsersIcon class="h-5 w-5" aria-hidden="true" />
+          <menu-item-label>
+            Clients
+          </menu-item-label>
+        </menu-item>
       </li>
     </ul>
   </div>
@@ -83,8 +81,19 @@
 </template>
 <script>
 
-// Theme
+import { AnnotationIcon, UsersIcon, FolderIcon } from "@vue-hero-icons/outline";
+import MenuItem from '@/components/ui/menu/Item';
+import MenuItemLabel from '@/components/ui/menu/Label';
+
 export default {
+
+  components: {
+    AnnotationIcon,
+    FolderIcon,
+    UsersIcon,
+    MenuItem,
+    MenuItemLabel,
+  },
 
   props: {
     user: '',

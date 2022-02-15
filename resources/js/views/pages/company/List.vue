@@ -1,37 +1,51 @@
 <template>
 <div v-if="isFetched">
-
-  <div v-if="data.length">
-    <div v-for="d in data" :key="d.uuid">
-      {{d.name}} {{ d.uuid }}
-      <router-link :to="{name: 'company-update', params: { uuid: d.uuid }}">
-        edit
-      </router-link>
-      delete
-    </div>
-  </div>
-  <div v-else>
-    <p class="no-records">
-      {{messages.emptyData}}
-    </p>
-  </div>
-  
-  <!-- <page-footer>
-    <router-link :to="{ name: 'dashboard' }" class="btn-primary">
-      <span>Zurück</span>
+  <content-header :title="title">
+    <router-link :to="{ name: 'company-create' }" class="btn-icon">
+      <PlusCircleIcon class="h-5 w-5" aria-hidden="true" />
     </router-link>
-  </page-footer> -->
-    
+  </content-header>
+  <list v-if="data.length">
+    <list-item v-for="d in data" :key="d.uuid">
+      <div>{{d.name}}<separator />{{ d.city }}</div>
+      <list-action>
+        <router-link :to="{name: 'company-update', params: { uuid: d.uuid }}">
+          <PencilAltIcon class="icon-list mr-2" aria-hidden="true" />
+        </router-link>
+        <a href="" @click.prevent="destroy(d.uuid)">
+          <TrashIcon class="icon-list" aria-hidden="true" />
+        </a>
+      </list-action>
+    </list-item>
+  </list>
+  <list-empty v-else>
+    {{messages.emptyData}}
+  </list-empty>
 </div>
 </template>
 <script>
-
+import { PlusCircleIcon, PencilAltIcon, TrashIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
+import Separator from "@/components/ui/misc/Separator.vue";
+import ContentHeader from "@/components/ui/layout/Header.vue";
+import List from "@/components/ui/layout/List.vue";
+import ListItem from "@/components/ui/layout/ListItem.vue";
+import ListAction from "@/components/ui/layout/ListAction.vue";
+import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 
 export default {
 
   components: {
+    PlusCircleIcon,
+    PencilAltIcon,
+    TrashIcon,
+    ContentHeader,
+    Separator,
+    List,
+    ListItem,
+    ListAction,
+    ListEmpty
   },
 
   mixins: [ErrorHandling, Helpers],
@@ -45,8 +59,8 @@ export default {
       // Routes
       routes: {
         list: '/api/companies',
-        toggle: '/api/company/state/',
-        destroy: '/api/company/'
+        toggle: '/api/company/state',
+        destroy: '/api/company'
       },
 
       // States
@@ -94,7 +108,12 @@ export default {
         });
       }
     },
+  },
 
+  computed: {
+    title() {
+      return "Firmen";
+    }
   }
 }
 </script>

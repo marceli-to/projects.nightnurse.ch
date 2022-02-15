@@ -15,7 +15,7 @@ class CompanyController extends Controller
    */
   public function get()
   {
-    return new DataCollection(Company::get());
+    return new DataCollection(Company::orderBy('owner', 'DESC')->orderBy('name')->get());
   }
 
   /**
@@ -33,7 +33,7 @@ class CompanyController extends Controller
   /**
    * Store a newly created company
    *
-   * @param  \Illuminate\Http\Request $request
+   * @param  \Illuminate\Http\CompanyStoreRequest $request
    * @return \Illuminate\Http\Response
    */
   public function store(CompanyStoreRequest $request)
@@ -48,7 +48,7 @@ class CompanyController extends Controller
    * Update a company for a given company
    *
    * @param Company $company
-   * @param  \Illuminate\Http\Request $request
+   * @param  \Illuminate\Http\CompanyStoreRequest $request
    * @return \Illuminate\Http\Response
    */
   public function update(Company $company, CompanyStoreRequest $request)

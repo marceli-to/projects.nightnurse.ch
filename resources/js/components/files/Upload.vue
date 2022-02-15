@@ -44,7 +44,7 @@ export default {
   methods: {
     complete(file) {
       if (file.status == "error" && file.accepted == false) {
-        this.$notify({ type: "error", text: this.messages.uploadError });
+        this.$notify({ type: "danger", text: this.messages.uploadError });
       } 
       else {
         let response = JSON.parse(file.xhr.response);

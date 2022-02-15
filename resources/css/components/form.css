@@ -31,9 +31,15 @@ select:-webkit-autofill:focus {
   -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
 }
 
+/* checked radio buttons */
+input[type="radio"]:checked + label,
+input[type="checkbox"]:checked + label {
+  @apply bg-space-black border-0 text-white
+}
+
 /* form group */
 .form-group {
-  @apply mb-4 lg:mb-6;
+  @apply mb-4 lg:mb-6 max-w-4xl;
 }
 
 .form-group label {
@@ -43,4 +49,8 @@ select:-webkit-autofill:focus {
 /* form helpers */
 a.form-helper {
   @apply text-gray-400 text-xs sm:text-sm font-normal no-underline hover:text-magenta;
+}
+
+a.form-helper-footer {
+  @apply text-sm lg:text-base ml-6 lg:ml-12
 }

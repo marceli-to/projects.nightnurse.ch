@@ -12,13 +12,13 @@ const routes = [
 
   {
     name: 'company-create',
-    path: '/company/create',
+    path: '/companies/company/create',
     component: CompanyCreate,
   },
   
   {
     name: 'company-update',
-    path: '/company/update/:uuid',
+    path: '/companies/company/update/:uuid',
     component: CompanyUpdate,
   },
 

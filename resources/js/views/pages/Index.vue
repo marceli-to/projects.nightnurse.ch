@@ -31,7 +31,6 @@ export default {
     PageHeader,
   },
 
-
   mixins: [Helpers],
 
   data() {

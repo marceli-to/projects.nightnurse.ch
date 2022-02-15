@@ -1,13 +1,13 @@
 <template>
 <div>
-  <content-header>
-    <h3 class="!mt-0">{{title}}</h3>
-  </content-header>
   <form @submit.prevent="submit" v-if="isFetched">
+    
+    <content-header :title="title"></content-header>
 
     <div class="form-group">
-      <label>Name</label>
+      <label>Name *</label>
       <input type="text" v-model="data.name">
+      <required />
     </div>
 
     <div class="form-group">
@@ -15,25 +15,38 @@
       <input type="text" v-model="data.city">
     </div>
     
-    <!-- <page-footer>
+    <div class="form-group">
+      <form-radio 
+        :label="'Owner?'"
+        v-bind:owner.sync="data.owner"
+        :model="data.owner"
+        :name="'owner'">
+      </form-radio>
+    </div>
+       
+    <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>
-      <router-link :to="{ name: 'companies' }" class="btn-secondary">
+      <router-link :to="{ name: 'companies' }" class="form-helper form-helper-footer">
         <span>Zurück</span>
       </router-link>
-    </page-footer> -->
+    </content-footer>
 
   </form>
 </div>
 </template>
 <script>
 import ErrorHandling from "@/mixins/ErrorHandling";
-import ContentHeader from "@/components/ui/layout/Footer.vue";
-import ContentFooter from "@/components/ui/layout/Header.vue";
+import ContentHeader from "@/components/ui/layout/Header.vue";
+import ContentFooter from "@/components/ui/layout/Footer.vue";
+import FormRadio from "@/components/ui/form/Radio.vue";
+import Required from "@/components/ui/form/Required.vue";
 
 export default {
   components: {
     ContentHeader,
     ContentFooter,
+    FormRadio,
+    Required
   },
 
   mixins: [ErrorHandling],

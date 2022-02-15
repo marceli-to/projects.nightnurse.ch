@@ -1,10 +1,10 @@
 /* components/alert.css */
 .alert {
-  @apply p-3 text-sm font-mono mb-4 lg:mb-8 border-2;
+  @apply bg-white p-3 text-sm font-mono mb-4 lg:mb-8 border-2;
 }
 
 .alert-danger {
-  @apply border-bright-red text-bright-red;
+  @apply border-red-500 text-red-500;
 }
 
 .alert-info {

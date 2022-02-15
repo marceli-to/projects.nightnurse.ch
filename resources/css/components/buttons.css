@@ -3,5 +3,9 @@
 button.btn-primary,
 input[type="submit"].btn-primary,
 a.btn-primary {
-  @apply block w-auto max-w-xs p-2 md:py-4 md:px-6 font-mono text-white text-xs sm:text-sm lg:text-base bg-space-black hover:bg-magenta active:bg-magenta focus:outline-none transition ease-in-out duration-150 rounded-sm
+  @apply block w-auto max-w-xs p-4 md:py-4 md:px-5 font-mono text-white text-xs sm:text-sm bg-space-black hover:bg-magenta active:bg-magenta focus:outline-none transition ease-in-out duration-150
+}
+
+a.btn-icon {
+  @apply inline-flex items-center w-auto text-base text-space-black hover:text-magenta no-underline mr-2 lg:mr-3
 }
