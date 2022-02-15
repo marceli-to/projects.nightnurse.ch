@@ -14,7 +14,16 @@ class User extends Authenticatable implements MustVerifyEmail
    * @var array
    */
   protected $fillable = [
-    'email', 'password', 'role'
+    'firstname', 
+    'name', 
+    'email',
+    'phone',
+    'password', 
+    'role',
+    'email_verified_at',
+    'language_id',
+    'company_id',
+    'gender_id',
   ];
 
   /**
@@ -42,5 +51,14 @@ class User extends Authenticatable implements MustVerifyEmail
   public function isAdmin()
   {
     return $this->role == 'admin' ? TRUE : FALSE;
+  }
+
+  /**
+   * Role helper for admins
+   */
+
+  public function isEditor()
+  {
+    return $this->role == 'editor' ? TRUE : FALSE;
   }
 }
