@@ -61,7 +61,17 @@
         <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
       </select>
     </div>
-      
+
+    <template v-if="showSelector">
+      <company-selector
+        v-bind:companies.sync="data.companies"
+        :projectId="data.id"
+        :label="'Weitere Kunden hinufügen'"
+        :labelSelected="'Kunden'"
+        :data="data.companies"
+      ></company-selector>
+    </template>
+
     <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>
       <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
@@ -79,6 +89,8 @@ import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
+import CompanySelector from '@/views/pages/company/components/Selector.vue';
+
 import { TheMask } from "vue-the-mask";
 
 export default {
@@ -88,7 +100,8 @@ export default {
     ContentGrid,
     FormRadio,
     Required,
-    TheMask
+    TheMask,
+    CompanySelector
   },
 
   mixins: [ErrorHandling],
@@ -106,6 +119,7 @@ export default {
         name: null,
         date_start: null,
         date_end: null,
+        companies: [],
       },
 
       // Settings
@@ -130,6 +144,7 @@ export default {
       // States
       isFetched: true,
       isLoading: false,
+      showSelector: false,
 
       // Messages
       messages: {
@@ -153,6 +168,7 @@ export default {
       this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
         this.data = response.data;
         this.isFetched = true;
+        this.showSelector = true;
       });
     },
 
@@ -182,6 +198,16 @@ export default {
         this.$notify({ type: "success", text: this.messages.updated });
         this.isLoading = false;
       });
+    },
+
+    addCompany(company) {
+      this.data.companies.push(company);
+    },
+
+    removeCompany(id) {
+      const idx = this.data.companies.findIndex(x => x.id === id);
+      console.log(idx);
+      this.data.companies.splice(idx, 1);
     },
 
     getSettings() {

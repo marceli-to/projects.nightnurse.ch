@@ -39,6 +39,12 @@ class Project extends Base
     return $this->hasOne(ProjectState::class, 'id', 'state_id');
   }
 
+	public function companies()
+	{
+		return $this->belongsToMany(Company::class);
+	}
+
+
   /**
    * Accessor for date_start
    * @param Date $value

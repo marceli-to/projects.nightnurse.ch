@@ -15,7 +15,7 @@ class ProjectController extends Controller
    */
   public function get()
   {
-    return new DataCollection(Project::with('state', 'company', 'manager')->orderBy('number', 'DESC')->get());
+    return new DataCollection(Project::with('state', 'company', 'companies', 'manager')->orderBy('number', 'DESC')->get());
   }
 
   /**
@@ -26,7 +26,7 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    return response()->json(Project::with('state', 'company', 'manager')->findOrFail($project->id));
+    return response()->json(Project::with('state', 'company', 'companies', 'manager')->findOrFail($project->id));
   }
 
   /**

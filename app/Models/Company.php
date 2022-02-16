@@ -26,6 +26,11 @@ class Company extends Base
     return $this->hasMany(User::class, 'company_id', 'id');
   }
 
+	public function projects()
+	{
+		return $this->belongsToMany(Project::class);
+	}
+
 
 	/**
    * Scope for clients (external companies)

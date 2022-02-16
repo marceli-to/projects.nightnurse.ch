@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\CompanyProjectController;
 use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
@@ -40,6 +41,11 @@ Route::middleware('auth:sanctum')->group(function() {
 
   // Project states
   Route::get('project-states', [ProjectStateController::class, 'get']);
+
+
+  // Project companies
+  Route::get('project-companies/{project}', [CompanyProjectController::class, 'findByProject']);
+  Route::delete('project-company/{companyProject}', [CompanyProjectController::class, 'destroy']);
 
   // Companies
   Route::get('companies', [CompanyController::class, 'get']);
