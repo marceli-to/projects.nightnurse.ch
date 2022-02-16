@@ -14,7 +14,7 @@
         </menu-item>
       </li>
       <li class="block !p-0 !m-0">
-        <menu-item :route="'dashboard'">
+        <menu-item :route="'projects'">
           <FolderIcon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
             Projekte

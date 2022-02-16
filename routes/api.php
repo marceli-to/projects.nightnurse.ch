@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
@@ -26,6 +27,14 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('user/state/{user:uuid}', [UserController::class, 'toggle']);
   Route::delete('user/{user:uuid}', [UserController::class, 'destroy']);
   Route::get('authenticated-user', [UserController::class, 'findAuthenticated']);
+
+  // Projects
+  Route::get('projects', [ProjectController::class, 'get']);
+  Route::get('project/{project:uuid}', [ProjectController::class, 'find']);
+  Route::post('project', [ProjectController::class, 'store']);
+  Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
+  Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
+  Route::delete('project/{project:uuid}', [ProjectController::class, 'destroy']);
 
   // Companies
   Route::get('companies', [CompanyController::class, 'get']);

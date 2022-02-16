@@ -12,11 +12,11 @@ import axios from 'axios';
 window.axios = require('axios');
 Vue.use(VueAxios, axios);
 
-// Filters
-require('@/mixins/Filters');
-
 // Vue-Axios defaults
 Vue.axios.defaults.withCredentials = true;
+
+// Filters
+require('@/mixins/Filters');
 
 // Vue-Notifications
 import Notifications from 'vue-notification';
@@ -26,23 +26,12 @@ Vue.use(Notifications);
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-// Vue-Moment
-// Vue.use(require('vue-moment'));
-
-// Loading indicator
-// import LoadingIndicator from "@/components/ui/LoadingIndicator";
-// Vue.component('LoadingIndicator', LoadingIndicator);
-
-// // Separator
-// import Separator from "@/components/ui/Separator";
-// Vue.component('Separator', Separator);
-
-
 // Store
 import store from '@/config/store';
 
 // Routes
 import baseRoutes from '@/config/routes';
+import projectRoutes from '@/views/pages/project/config/routes';
 import companyRoutes from '@/views/pages/company/config/routes';
 import userRoutes from '@/views/pages/user/config/routes';
 
@@ -51,6 +40,7 @@ const router = new VueRouter(
     mode: 'history', 
     routes: [
       ...baseRoutes,
+      ...projectRoutes,
       ...companyRoutes,
       ...userRoutes,
     ]
