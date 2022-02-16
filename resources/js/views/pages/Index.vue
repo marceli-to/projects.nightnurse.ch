@@ -1,9 +1,5 @@
 <template>
 <div>
-  <header>
-    <h3 class="!mt-0 border-b-2 border-light pb-2">Clients</h3>
-  </header>
-
   <div v-if="isFetched" class="is-loaded">
     <page-header>
       <h1>Willkommen <strong>{{user.firstname}} {{user.name}}</strong></h1>

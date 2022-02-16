@@ -5,14 +5,15 @@ module.exports = {
     "./resources/**/*.vue",
   ],
   theme: {
+
     extend: {
+      fontSize: {
+        tiny: ['.775rem', '1']
+      },
       colors: {
-        'bright-red': '#eb0000',
-        'magenta': '#ff008b',
-        'cyan': '#87ffff',
+        'highlight': '#ff008b',
+        'dark': '#222222',
         'light': '#f9f9f9',
-        'space-black': '#222222',
-        'midnight': '#292f4c',
       },
     },
   },

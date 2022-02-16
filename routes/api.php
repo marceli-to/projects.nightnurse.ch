@@ -1,21 +1,31 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\UploadController;
+use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\Settings\GenderController;
+use App\Http\Controllers\Api\Settings\LanguageController;
+use App\Http\Controllers\Api\Settings\RoleController;
 
-
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:sanctum')->get('/authenticated-user', function (Request $request) {
   return $request->user();
 });
 
 Route::middleware('auth:sanctum')->group(function() {
-  Route::get('user', [UserController::class, 'find']);
 
   // Uploads
   Route::post('image/upload', [UploadController::class, 'image']);
   Route::post('file/upload', [UploadController::class, 'file']);
+
+  // Users
+  Route::get('users', [UserController::class, 'get']);
+  Route::get('user/{user:uuid}', [UserController::class, 'find']);
+  Route::post('user', [UserController::class, 'store']);
+  Route::put('user/{user:uuid}', [UserController::class, 'update']);
+  Route::get('user/state/{user:uuid}', [UserController::class, 'toggle']);
+  Route::delete('user/{user:uuid}', [UserController::class, 'destroy']);
+  Route::get('authenticated-user', [UserController::class, 'findAuthenticated']);
 
   // Companies
   Route::get('companies', [CompanyController::class, 'get']);
@@ -24,6 +34,18 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::put('company/{company:uuid}', [CompanyController::class, 'update']);
   Route::get('company/state/{company:uuid}', [CompanyController::class, 'toggle']);
   Route::delete('company/{company:uuid}', [CompanyController::class, 'destroy']);
+
+  // Genders
+  Route::get('genders', [GenderController::class, 'get']);
+  Route::get('gender/{gender}', [GenderController::class, 'find']);
+
+  // Languages
+  Route::get('languages', [LanguageController::class, 'get']);
+  Route::get('language/{language}', [LanguageController::class, 'find']);
+
+  // Roles
+  Route::get('roles', [RoleController::class, 'get']);
+  Route::get('role/{role}', [RoleController::class, 'find']);
 
 });
 

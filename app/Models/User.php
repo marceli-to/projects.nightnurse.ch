@@ -14,16 +14,17 @@ class User extends Authenticatable implements MustVerifyEmail
    * @var array
    */
   protected $fillable = [
+    'uuid',
     'firstname', 
     'name', 
     'email',
     'phone',
     'password', 
-    'role',
     'email_verified_at',
     'language_id',
     'company_id',
     'gender_id',
+    'role_id'
   ];
 
   /**
@@ -44,13 +45,38 @@ class User extends Authenticatable implements MustVerifyEmail
     'email_verified_at' => 'datetime',
   ];
 
+
+  /**
+   * Relations
+   */
+
+  public function role()
+  {
+    return $this->hasOne(Role::class, 'id', 'role_id');
+  }
+
+  public function language()
+  {
+    return $this->hasOne(Language::class, 'id', 'language_id');
+  }
+
+  public function company()
+  {
+    return $this->belongsTo(Company::class);
+  }
+
+  public function gender()
+  {
+    return $this->hasOne(Gender::class, 'id', 'gend_id');
+  }
+
   /**
    * Role helper for admins
    */
 
   public function isAdmin()
   {
-    return $this->role == 'admin' ? TRUE : FALSE;
+    return $this->role_id == 1 ? TRUE : FALSE;
   }
 
   /**
@@ -59,6 +85,6 @@ class User extends Authenticatable implements MustVerifyEmail
 
   public function isEditor()
   {
-    return $this->role == 'editor' ? TRUE : FALSE;
+    return $this->role_id == 2 ? TRUE : FALSE;
   }
 }

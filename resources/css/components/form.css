@@ -1,40 +1,47 @@
 /* components/form */
 
 /* default styles for input, select, textarea */
-input[type=text],
-input[type=password],
-input[type=email],
-input[type=number],
-select,
-textarea {
-  @apply font-mono text-dark text-sm sm:text-base mt-0 block w-full px-0 py-1 sm:py-2 border-0 border-bottom-theme focus:ring-0 focus:border-space-black;
-}
 
-/* remove outline */
-input:focus, 
-textarea:focus, 
-select:focus {
-  outline: none !important;
-}
+@layer base {
+  input[type=text],
+  input[type=password],
+  input[type=email],
+  input[type=number],
+  select,
+  textarea {
+    @apply font-mono text-dark text-sm mt-0 block w-full px-0 py-2 lg:py-3 border-0 border-bottom focus:ring-0 focus:border-dark;
+  }
 
-/* remove autofill background */
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus,
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus,
-select:-webkit-autofill,
-select:-webkit-autofill:hover,
-select:-webkit-autofill:focus {
-  outline: none !important;
-  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
-}
+  select {
+    @apply mt-0 block w-full px-0 py-3 pr-0 pl-0 border-b-2 border-gray-100 focus:ring-0 focus:border-dark font-mono text-sm;
+  }
 
-/* checked radio buttons */
-input[type="radio"]:checked + label,
-input[type="checkbox"]:checked + label {
-  @apply bg-space-black border-0 text-white
+  /* remove outline */
+  input:focus, 
+  textarea:focus, 
+  select:focus {
+    outline: none !important;
+  }
+
+  /* remove autofill background */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+    outline: none !important;
+    -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  }
+
+  /* checked radio buttons */
+  input[type="radio"]:checked + label,
+  input[type="checkbox"]:checked + label {
+    @apply bg-dark border-0 text-white
+  }
 }
 
 /* form group */
@@ -48,7 +55,7 @@ input[type="checkbox"]:checked + label {
 
 /* form helpers */
 a.form-helper {
-  @apply text-gray-400 text-xs sm:text-sm font-normal no-underline hover:text-magenta;
+  @apply text-gray-400 text-xs sm:text-sm font-normal no-underline hover:text-highlight;
 }
 
 a.form-helper-footer {

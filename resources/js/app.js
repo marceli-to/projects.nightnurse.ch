@@ -44,13 +44,15 @@ import store from '@/config/store';
 // Routes
 import baseRoutes from '@/config/routes';
 import companyRoutes from '@/views/pages/company/config/routes';
+import userRoutes from '@/views/pages/user/config/routes';
 
 const router = new VueRouter(
   { 
     mode: 'history', 
     routes: [
       ...baseRoutes,
-      ...companyRoutes
+      ...companyRoutes,
+      ...userRoutes,
     ]
   }
 );

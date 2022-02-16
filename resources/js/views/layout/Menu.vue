@@ -1,5 +1,5 @@
 <template>
-<nav class="min-h-screen flex flex-col items-stretch w-12 sm:w-64 bg-light py-4 sm:py-5">
+<nav class="min-h-screen max-h-screen sticky top-0 flex flex-col items-stretch w-12 sm:w-64 bg-light py-4 sm:py-5">
   <div class="grow">
     <div class="mb-6 px-3 sm:px-5">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.14 44.9" class="w-5 sm:w-8 h-auto"><polygon points="8.16 0 0 10.21 0 44.9 8.16 34.7 8.16 0"></polygon><polygon points="29.25 43.31 10.89 17.11 10.89 1.6 29.25 27.79 29.25 43.31" class="brand-fill"></polygon><polygon points="40.14 0 31.98 10.21 31.98 44.9 40.14 34.7 40.14 0" class="brand-fill"></polygon></svg>
@@ -29,6 +29,14 @@
           </menu-item-label>
         </menu-item>
       </li>
+      <li class="block !p-0 !m-0">
+        <menu-item :route="'users'">
+          <UserIcon class="h-5 w-5" aria-hidden="true" />
+          <menu-item-label>
+            Benutzer
+          </menu-item-label>
+        </menu-item>
+      </li>
     </ul>
   </div>
   <div class="sm:hidden p-3 pb-0 text-gray-400">
@@ -38,7 +46,7 @@
   </div>
   <div class="hidden sm:flex items-center px-5 pt-4">
     <div class="">
-      <div class="flex items-center justify-center rounded-full bg-magenta text-white h-8 w-8">
+      <div class="flex items-center justify-center rounded-full bg-highlight text-white h-8 w-8">
         <span class="text-sm font-mono">MS</span>
       </div>
     </div>
@@ -47,41 +55,15 @@
       <div class="flex">
         <a href="" class="text-xs text-gray-400 font-normal hover:no-underline">Profile</a>
         <span class="inline-block px-2">&bull;</span>
-        <a href="/logout" class="text-xs text-gray-400 font-normal hover:no-underline hover:text-magenta">Logout</a>
+        <a href="/logout" class="text-xs text-gray-400 font-normal hover:no-underline hover:text-highlight">Logout</a>
       </div>
     </div>
   </div>
 </nav>
-<!--
-  <div>
-
-    <nav :class="[!menuVisible ? '' : 'is-visible', 'page']">
-      <header>
-        <span>
-          <strong>{{user}}</strong><br>
-          <a href="/logout" class="feather-icon feather-icon--prepend">
-            <log-out-icon size="12"></log-out-icon>
-            <span>Logout</span>
-          </a>
-        </span>
-        <a href="javascript:;" @click="toggleMenu()" class="feather-icon ">
-          <arrow-right-icon size="24"></arrow-right-icon>
-        </a>
-      </header>
-      <ul>
-        <li>
-          <router-link :to="{name: 'events'}">
-            <span>Edizione</span>
-          </router-link>
-        </li>
-      </ul>
-    </nav>
-  </div>
-  -->
 </template>
 <script>
 
-import { AnnotationIcon, UsersIcon, FolderIcon } from "@vue-hero-icons/outline";
+import { AnnotationIcon, UsersIcon, UserIcon, FolderIcon } from "@vue-hero-icons/outline";
 import MenuItem from '@/components/ui/menu/Item';
 import MenuItemLabel from '@/components/ui/menu/Label';
 
@@ -91,6 +73,7 @@ export default {
     AnnotationIcon,
     FolderIcon,
     UsersIcon,
+    UserIcon,
     MenuItem,
     MenuItemLabel,
   },

@@ -1,18 +1,20 @@
 <template>
 <div v-if="isFetched">
   <content-header :title="title">
-    <router-link :to="{ name: 'company-create' }" class="btn-icon">
+    <router-link :to="{ name: 'user-create' }" class="btn-icon">
       <PlusCircleIcon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
-        {{d.name}}<separator />{{ d.city }}
-        <pill v-if="d.owner">Owner</pill>
+        {{d.firstname}} {{ d.name }}
+        <span class="hidden sm:inline"><separator />{{ d.email }}</span>
+        <separator />{{ d.company.name }}
+        <pill v-if="d.role_id == 1">Admin</pill>
       </div>
       <list-action>
-        <router-link :to="{name: 'company-update', params: { uuid: d.uuid }}">
+        <router-link :to="{name: 'user-update', params: { uuid: d.uuid }}">
           <PencilAltIcon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
         <a href="" @click.prevent="destroy(d.uuid)">
@@ -63,9 +65,9 @@ export default {
 
       // Routes
       routes: {
-        list: '/api/companies',
-        toggle: '/api/company/state',
-        destroy: '/api/company'
+        list: '/api/users',
+        toggle: '/api/user/state',
+        destroy: '/api/user'
       },
 
       // States
@@ -117,7 +119,7 @@ export default {
 
   computed: {
     title() {
-      return "Kunden";
+      return "Benutzer";
     }
   }
 }

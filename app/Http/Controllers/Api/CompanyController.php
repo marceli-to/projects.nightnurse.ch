@@ -26,8 +26,7 @@ class CompanyController extends Controller
    */
   public function find(Company $company)
   {
-    $company = Company::findOrFail($company->id);
-    return response()->json($company);
+    return response()->json(Company::findOrFail($company->id));
   }
 
   /**

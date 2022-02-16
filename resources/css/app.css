@@ -11,11 +11,11 @@
 @tailwind utilities;
 
 /* Theme: Border */
-.border-bottom-theme {
+.border-bottom {
   @apply border-0 border-b-2 border-gray-100;
 }
 
-.border-top-theme {
+.border-top {
   @apply border-0 border-t-2 border-gray-100;
 }
 
@@ -27,15 +27,6 @@
   @apply border-0 border-r-2 border-gray-100;
 }
 
-.border-top-bottom-theme {
-  @apply border-0 border-b-2 border-t-2 border-gray-100;
-}
-
-.border-theme {
+.border {
   @apply border-2 border-gray-100;
-}
-
-/* Theme: Text colors */
-.text-dark {
-  @apply text-black;
 }
