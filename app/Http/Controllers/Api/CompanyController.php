@@ -19,6 +19,17 @@ class CompanyController extends Controller
   }
 
   /**
+   * Get a list of client companies
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getClients()
+  {
+    return new DataCollection(Company::clients()->orderBy('name')->get());
+  }
+
+
+  /**
    * Get a single companies for a given companies
    * 
    * @param Company $company

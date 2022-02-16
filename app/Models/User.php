@@ -45,7 +45,6 @@ class User extends Authenticatable implements MustVerifyEmail
     'email_verified_at' => 'datetime',
   ];
 
-
   /**
    * Relations
    */
@@ -69,6 +68,15 @@ class User extends Authenticatable implements MustVerifyEmail
   {
     return $this->hasOne(Gender::class, 'id', 'gend_id');
   }
+
+	/**
+   * Scope for staff (members of company 'Nightnurse')
+   */
+
+	public function scopeStaff($query)
+	{
+		return $query->where('company_id', config('client.owner_id'));
+	}
 
   /**
    * Role helper for admins

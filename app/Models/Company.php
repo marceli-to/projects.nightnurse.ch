@@ -26,4 +26,14 @@ class Company extends Base
     return $this->hasMany(User::class, 'company_id', 'id');
   }
 
+
+	/**
+   * Scope for clients (external companies)
+   */
+
+	public function scopeClients($query)
+	{
+		return $query->where('owner', 0);
+	}
+
 }

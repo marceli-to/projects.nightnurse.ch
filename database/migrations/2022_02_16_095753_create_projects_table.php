@@ -22,6 +22,7 @@ class CreateProjectsTable extends Migration
       $table->date('date_end')->nullable();
       $table->foreignId('project_state_id')->constrained();
       $table->foreignId('user_id')->constrained();
+      $table->foreignId('company_id')->constrained();
       $table->softDeletes();
       $table->timestamps();
     });

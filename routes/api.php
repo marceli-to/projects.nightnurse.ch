@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\CompanyController;
+use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
 use App\Http\Controllers\Api\Settings\RoleController;
@@ -21,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
   // Users
   Route::get('users', [UserController::class, 'get']);
+  Route::get('users/staff', [UserController::class, 'getStaff']);
   Route::get('user/{user:uuid}', [UserController::class, 'find']);
   Route::post('user', [UserController::class, 'store']);
   Route::put('user/{user:uuid}', [UserController::class, 'update']);
@@ -36,8 +38,12 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
   Route::delete('project/{project:uuid}', [ProjectController::class, 'destroy']);
 
+  // Project states
+  Route::get('project-states', [ProjectStateController::class, 'get']);
+
   // Companies
   Route::get('companies', [CompanyController::class, 'get']);
+  Route::get('companies/clients', [CompanyController::class, 'getClients']);
   Route::get('company/{company:uuid}', [CompanyController::class, 'find']);
   Route::post('company', [CompanyController::class, 'store']);
   Route::put('company/{company:uuid}', [CompanyController::class, 'update']);

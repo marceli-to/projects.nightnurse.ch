@@ -8,7 +8,7 @@
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
-        {{d.number}}<separator />{{ d.name }}
+        {{d.number}}<separator />{{ d.name }}<separator />{{ d.company.name }}
       </div>
       <list-action>
         <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">

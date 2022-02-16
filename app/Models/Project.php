@@ -15,6 +15,7 @@ class Project extends Base
     'name',
     'date_start',
     'date_end',
+    'company_id',
     'user_id',
     'state_id'
 	];
@@ -23,9 +24,14 @@ class Project extends Base
    * Relations
    */
 
+  public function company()
+  {
+    return $this->hasOne(Company::class, 'id', 'company_id',);
+  }
+
   public function manager()
   {
-    return $this->hasOne(User::class, 'user_id', 'id');
+    return $this->hasOne(User::class, 'id', 'user_id');
   }
 
   public function state()

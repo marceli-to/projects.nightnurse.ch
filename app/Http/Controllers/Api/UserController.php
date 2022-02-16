@@ -23,6 +23,16 @@ class UserController extends Controller
   }
 
   /**
+   * Get a list of users
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getStaff()
+  {
+    return new DataCollection(User::staff()->get());
+  }
+
+  /**
    * Get a single user for a given user
    * 
    * @param  $user

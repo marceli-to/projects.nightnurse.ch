@@ -3,19 +3,65 @@
   <form @submit.prevent="submit" v-if="isFetched">
     
     <content-header :title="title"></content-header>
-
+    
     <div class="form-group">
-      <label>Number *</label>
+      <label>Nummer *</label>
       <input type="text" v-model="data.number">
       <required />
     </div>
 
     <div class="form-group">
-      <label>Name</label>
+      <label>Name *</label>
       <input type="text" v-model="data.name">
+      <required />
+    </div>
+    
+    <div class="form-group">
+      <label>Projektleiter</label>
+      <select v-model="data.user_id">
+        <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
+      </select>
     </div>
 
-       
+    <div class="form-group">
+      <label>Hauptkunde</label>
+      <select v-model="data.company_id">
+        <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
+      </select>
+    </div>
+
+    <content-grid class="mt-6 sm:mt-8">
+      <div class="form-group">
+        <label>Projektstart</label>
+        <the-mask
+          type="text"
+          mask="##.##.####"
+          :masked="true"
+          name="date_start"
+          placeholder="dd.mm.YYYY"
+          v-model="data.date_start"
+        ></the-mask>
+      </div>
+      <div class="form-group">
+        <label>Abgabetermin</label>
+        <the-mask
+          type="text"
+          mask="##.##.####"
+          :masked="true"
+          name="date_end"
+          placeholder="dd.mm.YYYY"
+          v-model="data.date_end"
+        ></the-mask>
+      </div>
+    </content-grid>
+
+    <div class="form-group">
+      <label>Status</label>
+      <select v-model="data.project_state_id">
+        <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
+      </select>
+    </div>
+      
     <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>
       <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
@@ -30,15 +76,19 @@
 import ErrorHandling from "@/mixins/ErrorHandling";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
+import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
+import { TheMask } from "vue-the-mask";
 
 export default {
   components: {
     ContentHeader,
     ContentFooter,
+    ContentGrid,
     FormRadio,
-    Required
+    Required,
+    TheMask
   },
 
   mixins: [ErrorHandling],
@@ -54,6 +104,15 @@ export default {
       data: {
         number: null,
         name: null,
+        date_start: null,
+        date_end: null,
+      },
+
+      // Settings
+      settings: {
+        staff: [],
+        states: [],
+        companies: [],
       },
 
       // Validation
@@ -84,6 +143,7 @@ export default {
     if (this.$props.type == "update") {
       this.fetch();
     }
+    this.getSettings();
   },
 
   methods: {
@@ -122,6 +182,24 @@ export default {
         this.$notify({ type: "success", text: this.messages.updated });
         this.isLoading = false;
       });
+    },
+
+    getSettings() {
+      this.isFetched = false;
+      this.isLoading = true;
+      this.axios.all([
+        this.axios.get(`/api/companies/clients`),
+        this.axios.get(`/api/users/staff`),
+        this.axios.get(`/api/project-states`),
+      ]).then(axios.spread((...responses) => {
+        this.settings = {
+          companies: responses[0].data.data,
+          staff: responses[1].data.data,
+          states: responses[2].data.data,
+        };
+        this.isFetched = true;
+        this.isLoading = true;
+      }));
     },
 
   },
