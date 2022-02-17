@@ -62,15 +62,27 @@
       </select>
     </div>
 
-    <template v-if="showSelector">
-      <company-selector
-        v-bind:companies.sync="data.companies"
-        :projectId="data.id"
-        :label="'Weitere Kunden hinufügen'"
-        :labelSelected="'Kunden'"
-        :data="data.companies"
-      ></company-selector>
-    </template>
+    <div class="form-group">
+      <label>Weitere Kunden hinufügen</label>
+      <select name="companies" @change="addCompany($event)">
+        <option value="null">Bitte wählen...</option>
+        <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.name }}</option>
+      </select>
+    </div>
+
+    <div v-if="data.companies" class="form-group">
+      <div class="flex flex-wrap">
+        <a 
+          href="javascript:;"
+          class="rounded-full inline-flex w-auto items-center bg-dark hover:bg-highlight px-3 py-2 lg:px-4 lg:py-3 text-white font-mono mr-4 mb-4 text-xs sm:text-sm no-underline"
+          v-for="d in data.companies" 
+          :key="d.id"
+          @click.prevent="removeCompany(d.id)">
+          <span class="inline-block mr-3">{{ d.name }}, {{ d.city }}</span>
+          <x-icon class="h-5 w-5" aria-hidden="true"></x-icon>
+        </a>
+      </div>
+    </div>
 
     <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>
@@ -84,12 +96,12 @@
 </template>
 <script>
 import ErrorHandling from "@/mixins/ErrorHandling";
+import { XIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
-import CompanySelector from '@/views/pages/company/components/Selector.vue';
 
 import { TheMask } from "vue-the-mask";
 
@@ -101,7 +113,7 @@ export default {
     FormRadio,
     Required,
     TheMask,
-    CompanySelector
+    XIcon
   },
 
   mixins: [ErrorHandling],
@@ -144,7 +156,6 @@ export default {
       // States
       isFetched: true,
       isLoading: false,
-      showSelector: false,
 
       // Messages
       messages: {
@@ -168,7 +179,6 @@ export default {
       this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
         this.data = response.data;
         this.isFetched = true;
-        this.showSelector = true;
       });
     },
 
@@ -200,16 +210,6 @@ export default {
       });
     },
 
-    addCompany(company) {
-      this.data.companies.push(company);
-    },
-
-    removeCompany(id) {
-      const idx = this.data.companies.findIndex(x => x.id === id);
-      console.log(idx);
-      this.data.companies.splice(idx, 1);
-    },
-
     getSettings() {
       this.isFetched = false;
       this.isLoading = true;
@@ -226,6 +226,20 @@ export default {
         this.isFetched = true;
         this.isLoading = true;
       }));
+    },
+
+    addCompany(event) {
+      let target = event.target, id = target.value, name = target.options[target.selectedIndex].innerHTML;
+      const idx = this.data.companies.findIndex(x => x.id === parseInt(id));
+      if (idx == -1 && id != "null") {
+        let d = { id: parseInt(id), name: name };
+        this.data.companies.push(d);
+      }
+    },
+
+    removeCompany(id) {
+      const idx = this.data.companies.findIndex(x => x.id === id);
+      this.data.companies.splice(idx, 1);
     },
 
   },
