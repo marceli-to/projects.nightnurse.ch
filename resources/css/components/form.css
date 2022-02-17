@@ -68,7 +68,7 @@
 }
 
 .form-group label {
-  @apply text-gray-400 text-xs sm:text-sm font-mono block relative;
+  @apply text-gray-400 text-xs sm:text-sm font-mono inline-block relative;
 }
 
 /* form helpers */
