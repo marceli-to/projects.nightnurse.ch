@@ -42,7 +42,25 @@
   input[type="checkbox"]:checked + label {
     @apply bg-dark border-dark text-white
   }
+
+  input[type="checkbox"].checkbox {
+    @apply appearance-none h-4 w-4 !border !border-gray-200 bg-white checked:bg-dark checked:!border-dark focus:outline-none transition duration-100 mr-2 cursor-pointer
+  }
+  
 }
+
+.form-check {
+  @apply flex items-center;
+}
+
+.form-check input[type="checkbox"].checkbox + label {
+  @apply text-base text-dark font-sans cursor-pointer select-none
+}
+
+.form-check input[type="checkbox"].checkbox:checked + label {
+  @apply bg-transparent border-0 text-dark
+}
+
 
 /* form group */
 .form-group {

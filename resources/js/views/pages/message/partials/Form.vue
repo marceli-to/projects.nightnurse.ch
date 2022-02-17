@@ -27,6 +27,41 @@
       </form-radio>
     </div>
 
+    <div class="form-group">
+      <label class="mb-2">Empfänger</label>
+
+      <div v-for="company in project.companies" :key="company.uuid">
+        <div v-if="company.users.length > 0">
+          <div class="form-check mb-2">
+            <input 
+              type="checkbox" 
+              class="checkbox" 
+              :id="company.uuid" 
+              @change="toggleAll($event, company.uuid)">
+            <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+              {{ company.name }} (Alle)
+            </label>
+          </div>
+          <div class="grid lg:grid-cols-4 mb-6">
+            <div v-for="user in company.users" :key="user.uuid">
+              <div class="form-check">
+                <input 
+                  type="checkbox" 
+                  class="checkbox" 
+                  :value="user.uuid" 
+                  :id="user.uuid" 
+                  :data-company-uuid="company.uuid"
+                  @change="toggleOne($event, user.uuid)">
+                <label class="inline-block text-gray-800" :for="user.uuid">
+                  {{ user.firstname }} {{ user.name }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <content-footer>
       <button type="submit" class="btn-primary">Senden</button>
       <router-link :to="{ name: 'messages', params: { uuid: this.$route.params.uuid }}" class="form-helper form-helper-footer">
@@ -46,6 +81,7 @@ import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
+import Divider from "@/components/ui/misc/Divider.vue";
 import { TheMask } from "vue-the-mask";
 import tinyConfig from "@/config/tiny.js";
 import TinymceEditor from "@tinymce/tinymce-vue";
@@ -59,10 +95,12 @@ export default {
     Required,
     TheMask,
     Asterisk,
+    Divider,
     XIcon,
     TinymceEditor
   },
 
+  
   mixins: [ErrorHandling],
 
   props: {
@@ -77,6 +115,7 @@ export default {
         subject: null,
         body: null,
         private: 0,
+        users: [],
       },
 
       project: {
@@ -143,6 +182,35 @@ export default {
         this.isLoading = false;
       });
     },
+
+    toggleAll(event, uuid) {
+      const _this = this;
+      const state = event.target.checked ? true : false;
+      const boxes = document.querySelectorAll('[data-company-uuid="'+uuid+'"]');
+      boxes.forEach(function(box){
+        box.checked = state;
+        _this.addOrRemove(state, box.value);
+      });
+    },
+
+    toggleOne(event, uuid) {
+      const state = event.target.checked ? true : false;
+      this.addOrRemove(state, uuid);
+    },
+
+    addOrRemove(state, value) {
+      const idx = this.data.users.findIndex(x => x == value);
+      if (state == true) {
+        if (idx == -1) {
+          this.data.users.push(value);
+        }
+      }
+      else {
+        if (idx > -1) {
+          this.data.users.splice(idx, 1);
+        }
+      }
+    }
 
   },
 
