@@ -13,7 +13,7 @@
     >
     <label 
       :for="name + '_1'" 
-      class="bg-transparent flex items-center justify-center mb-0 mr-3 sm:mr-5 py-2 sm:py-3 w-12 sm:w-16 border text-gray-200 text-center normal-case cursor-pointer font-mono select-none">
+      class="bg-transparent hover:bg-highlight flex items-center justify-center mb-0 mr-3 sm:mr-5 py-2 sm:py-3 w-12 sm:w-16 border hover:border-highlight text-gray-200 hover:text-white text-center normal-case cursor-pointer font-mono select-none">
       {{labelTrue}}
     </label>
     <input
@@ -27,7 +27,7 @@
     >
     <label 
       :for="name + '_0'" 
-      class="bg-transparent flex items-center justify-center mb-0 mr-0 sm:mr-0 py-2 sm:py-3 w-12 sm:w-16 border text-gray-200 text-center normal-case cursor-pointer font-mono select-none">
+      class="bg-transparent hover:bg-highlight flex items-center justify-center mb-0 mr-0 sm:mr-0 py-2 sm:py-3 w-12 sm:w-16 border hover:border-highlight text-gray-200 hover:text-white text-center normal-case cursor-pointer font-mono select-none">
       {{labelFalse}}
     </label>
   </div>

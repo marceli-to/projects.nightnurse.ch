@@ -34,6 +34,7 @@ import baseRoutes from '@/config/routes';
 import projectRoutes from '@/views/pages/project/config/routes';
 import companyRoutes from '@/views/pages/company/config/routes';
 import userRoutes from '@/views/pages/user/config/routes';
+import messageRoutes from '@/views/pages/message/config/routes';
 
 const router = new VueRouter(
   { 
@@ -43,6 +44,7 @@ const router = new VueRouter(
       ...projectRoutes,
       ...companyRoutes,
       ...userRoutes,
+      ...messageRoutes
     ]
   }
 );

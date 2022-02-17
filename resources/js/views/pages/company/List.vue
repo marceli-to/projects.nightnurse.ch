@@ -2,7 +2,7 @@
 <div v-if="isFetched">
   <content-header :title="title">
     <router-link :to="{ name: 'company-create' }" class="btn-icon">
-      <PlusCircleIcon class="h-5 w-5" aria-hidden="true" />
+      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
   <list v-if="data.length">
@@ -13,10 +13,10 @@
       </div>
       <list-action>
         <router-link :to="{name: 'company-update', params: { uuid: d.uuid }}">
-          <PencilAltIcon class="icon-list mr-2" aria-hidden="true" />
+          <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
         <a href="" @click.prevent="destroy(d.uuid)">
-          <TrashIcon class="icon-list" aria-hidden="true" />
+          <trash-icon class="icon-list" aria-hidden="true" />
         </a>
       </list-action>
     </list-item>

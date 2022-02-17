@@ -1,15 +1,15 @@
 export default {
-  skin_url: '/assets/js/cms/tinymce/skins/custom',
+  skin_url: '/assets/js/tinymce/skins/custom',
   branding: false,
   menubar: false,
   statusbar: false,
   external_plugins: {
-    link: '/assets/js/cms/tinymce/plugins/link/plugin.min.js',
+    link: '/assets/js/tinymce/plugins/link/plugin.min.js',
   },
   plugins: ['lists', 'code', 'link'],
-  toolbar: 'undo redo | bold | bullist | link | superscript | removeformat | styleselect',
+  toolbar: 'undo redo | bold | italic | bullist | link | removeformat',
   paste_as_text: true,
-  height: "320px",
+  height: "240px",
   style_formats_merge: false,
   style_formats: [{
     title: 'Text',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
+use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
@@ -67,6 +68,12 @@ Route::middleware('auth:sanctum')->group(function() {
   // Roles
   Route::get('roles', [RoleController::class, 'get']);
   Route::get('role/{role}', [RoleController::class, 'find']);
+
+  // Companies
+  Route::get('messages/{project:uuid}', [MessageController::class, 'get']);
+  Route::get('message/{message:uuid}', [MessageController::class, 'find']);
+  Route::post('message', [MessageController::class, 'store']);
+  Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
 
 });
 

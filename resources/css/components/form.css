@@ -40,7 +40,7 @@
   /* checked radio buttons */
   input[type="radio"]:checked + label,
   input[type="checkbox"]:checked + label {
-    @apply bg-dark border-0 text-white
+    @apply bg-dark border-dark text-white
   }
 }
 
@@ -50,7 +50,7 @@
 }
 
 .form-group label {
-  @apply text-gray-400 text-xs sm:text-sm font-mono relative;
+  @apply text-gray-400 text-xs sm:text-sm font-mono block relative;
 }
 
 /* form helpers */
@@ -59,5 +59,5 @@ a.form-helper {
 }
 
 a.form-helper-footer {
-  @apply text-sm lg:text-base ml-6 lg:ml-12
+  @apply text-sm lg:text-base sm:ml-6 lg:ml-12
 }

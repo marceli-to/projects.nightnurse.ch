@@ -21,7 +21,6 @@ const routes = [
     path: '/projects/project/update/:uuid',
     component: ProjectUpdate,
   },
-
 ];
 
 export default routes;

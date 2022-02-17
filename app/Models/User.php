@@ -69,6 +69,12 @@ class User extends Authenticatable implements MustVerifyEmail
     return $this->hasOne(Gender::class, 'id', 'gend_id');
   }
 
+	public function messages()
+	{
+		return $this->belongsToMany(Message::class);
+	}
+
+
 	/**
    * Scope for staff (members of company 'Nightnurse')
    */

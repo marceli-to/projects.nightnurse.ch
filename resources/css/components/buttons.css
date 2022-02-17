@@ -7,5 +7,5 @@ a.btn-primary {
 }
 
 a.btn-icon {
-  @apply inline-flex items-center w-auto text-base text-dark hover:text-highlight no-underline mr-2 lg:mr-3
+  @apply inline-flex items-center w-auto text-base text-dark hover:text-highlight no-underline mt-1.5 sm:mt-0 mr-2 lg:mr-3
 }

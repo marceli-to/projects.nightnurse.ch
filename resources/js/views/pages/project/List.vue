@@ -2,7 +2,7 @@
 <div v-if="isFetched">
   <content-header :title="title">
     <router-link :to="{ name: 'project-create' }" class="btn-icon">
-      <PlusCircleIcon class="h-5 w-5" aria-hidden="true" />
+      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
   <list v-if="data.length">
@@ -11,11 +11,14 @@
         {{d.number}}<separator />{{ d.name }}<separator />{{ d.company.name }}
       </div>
       <list-action>
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}">
+          <annotation-icon class="icon-list mr-2" aria-hidden="true" />
+        </router-link>
         <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
-          <PencilAltIcon class="icon-list mr-2" aria-hidden="true" />
+          <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
         <a href="" @click.prevent="destroy(d.uuid)">
-          <TrashIcon class="icon-list" aria-hidden="true" />
+          <trash-icon class="icon-list" aria-hidden="true" />
         </a>
       </list-action>
     </list-item>
@@ -26,7 +29,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon, AnnotationIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -43,6 +46,7 @@ export default {
     PlusCircleIcon,
     PencilAltIcon,
     TrashIcon,
+    AnnotationIcon,
     ContentHeader,
     Separator,
     List,
