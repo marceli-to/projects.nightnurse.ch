@@ -19,6 +19,43 @@
     </div>
 
     <div class="form-group">
+      <label>Dateien</label>
+      <vue-dropzone
+        ref="dropzone"
+        id="dropzone"
+        :options="dropzoneConfig"
+        @vdropzone-success="uploadSuccess"
+        @vdropzone-complete="uploadComplete"
+        @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
+        :useCustomSlot=true>
+        <div>
+          <strong>Datei auswählen oder hierhin ziehen</strong><br>
+          <small>JPG, PNG, TIFF | max. Grösse 100 MB</small>
+        </div>
+      </vue-dropzone>
+
+      <div v-if="hasUpload" class="my-4 sm:my-6 lg:my-8 border-top font-mono text-dark text-sm">
+        <div 
+          class="border-bottom py-2 flex justify-between items-center"
+          v-for="(d, i) in data.files" :key="i">
+          <div class="flex items-center">
+            <file-type :extension="d.extension" />
+            <separator />
+            <div>{{ d.name | truncate(50, '...')}}</div>
+            <separator />
+            <div>{{d.size | filesize(d.size)}}</div>
+          </div>
+          <div>
+            <a href="javascript:;" @click.prevent="uploadDelete(d.file)">
+              <trash-icon class="h-5 w-5 icon-list" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="form-group">
       <form-radio 
         :label="'Private Nachricht?'"
         v-bind:private.sync="data.private"
@@ -26,6 +63,7 @@
         :name="'private'">
       </form-radio>
     </div>
+
 
     <div class="form-group">
       <label class="mb-2">Empfänger</label>
@@ -74,7 +112,7 @@
 </template>
 <script>
 import ErrorHandling from "@/mixins/ErrorHandling";
-import { XIcon } from "@vue-hero-icons/outline";
+import { TrashIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -82,9 +120,12 @@ import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import Divider from "@/components/ui/misc/Divider.vue";
+import Separator from "@/components/ui/misc/Separator.vue";
+import FileType from "@/components/ui/misc/FileType.vue";
 import { TheMask } from "vue-the-mask";
 import tinyConfig from "@/config/tiny.js";
 import TinymceEditor from "@tinymce/tinymce-vue";
+import vue2Dropzone from "vue2-dropzone";
 
 export default {
   components: {
@@ -96,8 +137,11 @@ export default {
     TheMask,
     Asterisk,
     Divider,
-    XIcon,
-    TinymceEditor
+    Separator,
+    FileType,
+    TrashIcon,
+    TinymceEditor,
+    vueDropzone: vue2Dropzone
   },
 
   
@@ -116,6 +160,7 @@ export default {
         body: null,
         private: 0,
         users: [],
+        files: [],
       },
 
       project: {
@@ -139,15 +184,34 @@ export default {
       routes: {
         fetch: '/api/project',
         post: '/api/message',
+        destroy: '/api/upload'
       },
 
       // States
       isFetched: true,
       isLoading: false,
+      hasUpload: false,
 
       // Messages
       messages: {
         created: 'Nachricht erfasst!',
+        confirm: 'Bitte löschen bestätigen',
+        deleted: 'Datei gelöscht'
+      },
+
+      // Dropzone config
+      dropzoneConfig: {
+        url: "/api/upload",
+        method: 'post',
+        maxFilesize: 100,
+        maxFiles: 99,
+        createImageThumbnails: false,
+        autoProcessQueue: true,
+        acceptedFiles: '.png, .jpg, .jpeg, .tiff',
+        previewTemplate: this.uploadTemplate(),
+        headers: {
+          'x-csrf-token': document.head.querySelector('meta[name="csrf-token"]').content
+        }
       },
 
       // TinyMCE
@@ -162,6 +226,9 @@ export default {
 
   methods: {
 
+    /**
+     * Messsage
+     */
     fetch() {
       this.isFetched = false;
       this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
@@ -182,6 +249,10 @@ export default {
         this.isLoading = false;
       });
     },
+
+    /**
+     * Recipients
+     */
 
     toggleAll(event, uuid) {
       const _this = this;
@@ -210,7 +281,72 @@ export default {
           this.data.users.splice(idx, 1);
         }
       }
-    }
+    },
+
+    /** 
+     * Image/File Upload 
+     */
+
+    uploadSuccess(file, response) {
+      let res = JSON.parse(file.xhr.response);
+      this.hasUpload = true;
+      this.data.files.push(res);
+    },
+
+    uploadComplete(file) {
+      if (file.status == "error") {
+
+        if (file.xhr !== undefined) {
+          let res = JSON.parse(file.xhr.response);
+          if (res.errors.file) {
+            res.errors.file.forEach(error => this.$notify({ type: "danger", text: error, duration: 2000 }));
+            this.$refs.dropzone.removeFile(file);
+          }
+        }
+        else {
+          if (file.accepted == false) {
+            if (file.size > 9000000) {
+              this.$notify({ type: "danger", text: 'image_exceeds_max_size', duration: 2000 });
+            }
+            else {
+              this.$notify({ type: "danger", text: 'image_type_not_allowed', duration: 2000 });
+            }
+            this.$refs.dropzone.removeFile(file);
+          }
+        }
+      }
+      else {
+        this.$refs.dropzone.removeFile(file);
+      }
+    },
+
+    uploadMaxFilesExceeded(file) {
+      this.$refs.dropzone.removeAllFiles(true);
+      this.$notify({ type: "danger", text: "image_max_files_exceeded", duration: 2000 });
+    },
+
+    uploadDelete(file) {
+      if (confirm(this.messages.confirm)) {
+        this.isLoading = true;
+        this.axios.delete(`${this.routes.destroy}/${file}`).then(response => {
+          const idx = this.data.files.findIndex(x => x.file == file);
+          if (idx > -1) {
+            this.data.files.splice(idx, 1);
+          }
+          this.isLoading = false;
+          this.$notify({ type: "success", text: this.messages.deleted, duration: 2000 });
+        });
+      }
+    },
+
+    uploadTemplate: function () {
+      return `<div class="dz-preview dz-file-preview">
+              <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+              <div class="dz-error-message"><span data-dz-errormessage></span></div>
+              <div class="dz-success-mark"><i class="fa fa-check"></i></div>
+              <div class="dz-error-mark"><i class="fa fa-close"></i></div>
+          </div>`;
+    },
 
   },
 

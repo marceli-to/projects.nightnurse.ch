@@ -40,6 +40,12 @@ class MessageController extends Controller
     $data = $request->all();
     $data['uuid'] = \Str::uuid();
     $message = Message::create($data);
+
+    // Move uploaded files
+    // $media = (new Media())->copy($request->input('image'));
+
+
+
     return response()->json(['messageId' => $message->id]);
   }
 

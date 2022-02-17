@@ -6,6 +6,9 @@
 @import "./components/icons.css";
 @import "./components/notification.css";
 
+@import "./vendor/dropzone.css";
+@import "./vendor/dropzone-custom.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

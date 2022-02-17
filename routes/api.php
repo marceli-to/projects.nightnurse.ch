@@ -19,8 +19,8 @@ Route::middleware('auth:sanctum')->get('/authenticated-user', function (Request 
 Route::middleware('auth:sanctum')->group(function() {
 
   // Uploads
-  Route::post('image/upload', [UploadController::class, 'image']);
-  Route::post('file/upload', [UploadController::class, 'file']);
+  Route::post('upload', [UploadController::class, 'store']);
+  Route::delete('upload/{filename}', [UploadController::class, 'destroy']);
 
   // Users
   Route::get('users', [UserController::class, 'get']);
