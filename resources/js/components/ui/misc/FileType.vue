@@ -1,5 +1,5 @@
 <template>
-  <div :class="'flex items-center p-2 text-white text-xs font-mono leading-none bg-dark is-' + extension">{{extension}}</div>
+  <div :class="'flex items-center rounded-sm p-1.5 text-white text-tiny font-mono leading-none bg-dark is-' + extension">{{extension}}</div>
 </template>
 
 <script>
@@ -13,9 +13,9 @@ export default {
 </script>
 <style>
 .is-jpg {
-  @apply bg-yellow-400;
+  @apply bg-yellow-500;
 }
 .is-png {
-  @apply bg-green-400;
+  @apply bg-green-500;
 }
 </style>

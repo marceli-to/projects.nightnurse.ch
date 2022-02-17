@@ -10,7 +10,7 @@
     </div>
 
     <div class="form-group mt-6 lg:mt-8">
-      <label class="mb-3 lg:mb-3">Nachricht</label>
+      <label class="mb-3 lg:mb-3">Mitteilung</label>
       <tinymce-editor
         :api-key="tinyApiKey"
         :init="tinyConfig"
@@ -34,24 +34,34 @@
         </div>
       </vue-dropzone>
 
-      <div v-if="hasUpload" class="my-4 sm:my-6 lg:my-8 border-top font-mono text-dark text-sm">
-        <div 
-          class="border-bottom py-2 flex justify-between items-center"
-          v-for="(d, i) in data.files" :key="i">
-          <div class="flex items-center">
-            <file-type :extension="d.extension" />
-            <separator />
+      <list v-if="hasUpload && data.files.length" class="my-4 sm:my-6 lg:my-8">
+        <list-item v-for="(d, i) in data.files" :key="i">
+          <div class="flex items-center font-mono text-sm">
+            <img 
+            :src="`/img/thumbnail/${d.file}`" 
+            height="100" 
+            width="100"
+            class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px]"
+            v-if="d.hasPreview" />
             <div>{{ d.name | truncate(50, '...')}}</div>
             <separator />
             <div>{{d.size | filesize(d.size)}}</div>
+            <separator />
+            <file-type :extension="d.extension" />
           </div>
-          <div>
-            <a href="javascript:;" @click.prevent="uploadDelete(d.file)">
-              <trash-icon class="h-5 w-5 icon-list" />
+          <list-action>
+            <a :href="'/img/cache/' + d.file + '/1600/1000/0,0,0,0'" target="_blank" class="mr-2" v-if="d.hasPreview">
+              <cloud-download-icon class="icon-list" aria-hidden="true" />
             </a>
-          </div>
-        </div>
-      </div>
+            <a :href="'/storage/uploads/temp/' + d.file" target="_blank" class="mr-2" v-else>
+              <cloud-download-icon class="icon-list" aria-hidden="true" />
+            </a>
+            <a href="javascript:;" @click.prevent="uploadDelete(d.file)">
+              <trash-icon class="icon-list" aria-hidden="true" />
+            </a>
+          </list-action>
+        </list-item>
+      </list>
 
     </div>
 
@@ -64,10 +74,8 @@
       </form-radio>
     </div>
 
-
     <div class="form-group">
       <label class="mb-2">Empfänger</label>
-
       <div v-for="company in project.companies" :key="company.uuid">
         <div v-if="company.users.length > 0">
           <div class="form-check mb-2">
@@ -112,7 +120,7 @@
 </template>
 <script>
 import ErrorHandling from "@/mixins/ErrorHandling";
-import { TrashIcon } from "@vue-hero-icons/outline";
+import { TrashIcon, CloudDownloadIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -121,6 +129,9 @@ import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import Divider from "@/components/ui/misc/Divider.vue";
 import Separator from "@/components/ui/misc/Separator.vue";
+import List from "@/components/ui/layout/List.vue";
+import ListItem from "@/components/ui/layout/ListItem.vue";
+import ListAction from "@/components/ui/layout/ListAction.vue";
 import FileType from "@/components/ui/misc/FileType.vue";
 import { TheMask } from "vue-the-mask";
 import tinyConfig from "@/config/tiny.js";
@@ -140,6 +151,10 @@ export default {
     Separator,
     FileType,
     TrashIcon,
+    CloudDownloadIcon,
+    List,
+    ListItem,
+    ListAction,
     TinymceEditor,
     vueDropzone: vue2Dropzone
   },
@@ -207,7 +222,7 @@ export default {
         maxFiles: 99,
         createImageThumbnails: false,
         autoProcessQueue: true,
-        acceptedFiles: '.png, .jpg, .jpeg, .tiff',
+        acceptedFiles: '.png, .jpg, .jpeg, .tiff, .pdf, .doc, .docx, .txt, .rtf, .dwg, .eps, .svg',
         previewTemplate: this.uploadTemplate(),
         headers: {
           'x-csrf-token': document.head.querySelector('meta[name="csrf-token"]').content

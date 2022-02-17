@@ -11,9 +11,7 @@
       class="sr-only"
       @change="change($event.target.value)"
     >
-    <label 
-      :for="name + '_1'" 
-      class="bg-transparent hover:bg-highlight flex items-center justify-center mb-0 mr-3 sm:mr-5 py-2 sm:py-3 w-12 sm:w-16 border hover:border-highlight text-gray-200 hover:text-white text-center normal-case cursor-pointer font-mono select-none">
+    <label :for="name + '_1'">
       {{labelTrue}}
     </label>
     <input
@@ -25,9 +23,7 @@
       class="sr-only"
       @change="change($event.target.value)"
     >
-    <label 
-      :for="name + '_0'" 
-      class="bg-transparent hover:bg-highlight flex items-center justify-center mb-0 mr-0 sm:mr-0 py-2 sm:py-3 w-12 sm:w-16 border hover:border-highlight text-gray-200 hover:text-white text-center normal-case cursor-pointer font-mono select-none">
+    <label :for="name + '_0'">
       {{labelFalse}}
     </label>
   </div>
@@ -76,3 +72,12 @@ export default {
   }
 }
 </script>
+<style scoped>
+input[type="radio"] + label {
+  @apply bg-transparent rounded-sm hover:bg-highlight flex items-center justify-center mr-2 sm:mr-4 py-2 sm:py-3 w-12 sm:w-16 border hover:border-highlight text-gray-200 hover:text-white text-center normal-case cursor-pointer font-mono select-none
+}
+
+input[type="radio"]:checked + label {
+  @apply bg-dark border-dark text-white rounded-sm
+}
+</style>

@@ -109,7 +109,7 @@ export default {
 
   computed: {
     title() {
-      return `Nachrichten für: <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
+      return `Nachrichten <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     }
   }
 }

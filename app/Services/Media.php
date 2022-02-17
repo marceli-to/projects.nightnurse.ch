@@ -23,8 +23,8 @@ class Media
    *  Image file types
    */
 
-  protected $image_types = [
-    'png', 'jpg', 'jpeg', 'gif'
+  protected $previewable_image_types = [
+    'png', 'jpg', 'jpeg'
   ];
   
   /**
@@ -61,7 +61,13 @@ class Media
     $file->move($this->upload_path, $filename);
     $filetype = File::extension($this->upload_path . $filename);
     $filesize = File::size($this->upload_path . DIRECTORY_SEPARATOR . $filename);
-    return ['file' => $filename, 'name' => $name, 'extension' => $filetype, 'size' => $filesize];
+    return [
+      'file' => $filename, 
+      'name' => $name, 
+      'extension' => $filetype, 
+      'size' => $filesize,
+      'hasPreview' => in_array($filetype, $this->previewable_image_types) ? TRUE : FALSE
+    ];
   }
 
   /**

@@ -40,7 +40,7 @@
   /* checked radio buttons */
   input[type="radio"]:checked + label,
   input[type="checkbox"]:checked + label {
-    @apply bg-dark border-dark text-white
+    @apply bg-dark border-dark text-white rounded-sm
   }
 
   input[type="checkbox"].checkbox {

@@ -33,7 +33,8 @@ return array(
   'paths' => array(
     public_path('upload'),
     public_path('images'),
-    storage_path('app/public/uploads')
+    storage_path('app/public/uploads'),
+    storage_path('app/public/uploads/temp')
   ),
 
   /*
