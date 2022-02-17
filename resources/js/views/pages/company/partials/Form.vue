@@ -5,7 +5,7 @@
     <content-header :title="title"></content-header>
 
     <div class="form-group">
-      <label>Name *</label>
+      <label>Name <asterisk /></label>
       <input type="text" v-model="data.name">
       <required />
     </div>
@@ -40,13 +40,15 @@ import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
+import Asterisk from "@/components/ui/form/Asterisk.vue";
 
 export default {
   components: {
     ContentHeader,
     ContentFooter,
     FormRadio,
-    Required
+    Required,
+    Asterisk
   },
 
   mixins: [ErrorHandling],

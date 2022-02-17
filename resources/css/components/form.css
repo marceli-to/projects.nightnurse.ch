@@ -50,7 +50,7 @@
 }
 
 .form-group label {
-  @apply text-gray-400 text-xs sm:text-sm font-mono;
+  @apply text-gray-400 text-xs sm:text-sm font-mono relative;
 }
 
 /* form helpers */

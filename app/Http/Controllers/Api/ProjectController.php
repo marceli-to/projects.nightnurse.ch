@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Project;
+use App\Models\CompanyProject;
 use App\Http\Requests\ProjectStoreRequest;
 use Illuminate\Http\Request;
 
@@ -55,6 +56,9 @@ class ProjectController extends Controller
     $project = Project::findOrFail($project->id);
     $project->update($request->all());
     $project->save();
+
+    $this->handleCompanies($project, $request->companies);
+
     return response()->json('successfully updated');
   }
 
@@ -81,5 +85,26 @@ class ProjectController extends Controller
   {
     $project->delete();
     return response()->json('successfully deleted');
+  }
+
+  /**
+   * Store or update pivot data
+   * 
+   * @param Project $project
+   * @param Array $buildings
+   * 
+   * @return void
+   */
+  protected function handleCompanies(Project $project, $companies)
+  {
+    $project->companies()->detach();
+    foreach($companies as $c)
+    { 
+      $record = new CompanyProject([
+        'company_id' => $c['id'],
+        'project_id' => $project->id,
+      ]);
+      $record->save();
+    }
   }
 }

@@ -3,12 +3,12 @@
   <content-header :title="title"></content-header>
   <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-w-4xl">
     <div class="form-group">
-      <label>Vorname *</label>
+      <label>Vorname <asterisk /></label>
       <input type="text" v-model="data.firstname">
       <required />
     </div>
     <div class="form-group">
-      <label>Name *</label>
+      <label>Name <asterisk /></label>
       <input type="text" v-model="data.name">
       <required />
     </div>
@@ -41,18 +41,18 @@
     <template v-if="$props.type == 'create'">
       <h3 class="mb-6 lg:mb-8">Zugangsdaten</h3>
       <div class="form-group">
-        <label>E-Mail *</label>
+        <label>E-Mail <asterisk /></label>
         <input type="email" v-model="data.email">
         <required />
       </div>
       <div class="form-group">
-        <label>Passwort *</label>
+        <label>Passwort <asterisk /></label>
         <input type="password" v-model="data.password">
         <required />
       </div>
 
       <div class="form-group">
-        <label>Passwort wiederholen *</label>
+        <label>Passwort wiederholen <asterisk /></label>
         <input type="password" v-model="data.password_confirmation">
         <required />
       </div>
@@ -82,6 +82,7 @@ import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
+import Asterisk from "@/components/ui/form/Asterisk.vue";
 
 export default {
   components: {
@@ -89,7 +90,8 @@ export default {
     ContentFooter,
     ContentGrid,
     FormRadio,
-    Required
+    Required,
+    Asterisk
   },
 
   mixins: [ErrorHandling],

@@ -16,6 +16,7 @@ class Project extends Base
     'date_start',
     'date_end',
     'company_id',
+    'project_state_id',
     'user_id',
     'state_id'
 	];

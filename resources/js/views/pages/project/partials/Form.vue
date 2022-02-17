@@ -5,27 +5,29 @@
     <content-header :title="title"></content-header>
     
     <div class="form-group">
-      <label>Nummer *</label>
+      <label>Nummer <asterisk /></label>
       <input type="text" v-model="data.number">
       <required />
     </div>
 
     <div class="form-group">
-      <label>Name *</label>
+      <label>Name <asterisk /></label>
       <input type="text" v-model="data.name">
       <required />
     </div>
     
     <div class="form-group">
-      <label>Projektleiter</label>
+      <label>Projektleiter <asterisk /></label>
       <select v-model="data.user_id">
+        <option value="null">Bitte wählen...</option>
         <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Hauptkunde</label>
+      <label>Hauptkunde <asterisk /></label>
       <select v-model="data.company_id">
+        <option value="null">Bitte wählen...</option>
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
     </div>
@@ -58,6 +60,7 @@
     <div class="form-group">
       <label>Status</label>
       <select v-model="data.project_state_id">
+        <option value="null">Bitte wählen...</option>
         <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
       </select>
     </div>
@@ -102,7 +105,7 @@ import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
-
+import Asterisk from "@/components/ui/form/Asterisk.vue";
 import { TheMask } from "vue-the-mask";
 
 export default {
@@ -113,6 +116,7 @@ export default {
     FormRadio,
     Required,
     TheMask,
+    Asterisk,
     XIcon
   },
 
@@ -131,6 +135,9 @@ export default {
         name: null,
         date_start: null,
         date_end: null,
+        user_id: null,
+        project_state_id: null,
+        company_id: null,
         companies: [],
       },
 

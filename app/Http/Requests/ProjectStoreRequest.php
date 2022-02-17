@@ -25,6 +25,7 @@ class ProjectStoreRequest extends FormRequest
       'number' => 'required',
       'name' => 'required',
       'user_id' => 'required|exists:App\Models\User,id',
+      'company_id' => 'required|exists:App\Models\Company,id',
       'project_state_id' => 'required|exists:App\Models\ProjectState,id',
     ];
   }
@@ -40,6 +41,7 @@ class ProjectStoreRequest extends FormRequest
       'number.required' => 'Nummer wird benötigt!',
       'name.required' => 'Name wird benötigt!',
       'user_id.required' => 'Projektmanager wird benötigt!',
+      'company_id.required' => 'Hauptkunde wird benötigt!',
       'project_state_id.required' => 'Projektstatus wird benötigt!',
     ];
   }
