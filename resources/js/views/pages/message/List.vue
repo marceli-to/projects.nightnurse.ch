@@ -5,30 +5,17 @@
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
-
   <feed>
     <feed-item v-for="d in data" :key="d.uuid">
-      <div>{{ d.created_at }}</div>
-      <div class="mb-1">{{d.sender.short_name}}</div>
-      {{ d.subject }}
+      <feed-item-timestamp>{{ d.created_at }}</feed-item-timestamp>
+      <feed-item-sender>
+        Nachricht von <span class="font-bold">{{d.sender.full_name}}:</span>
+      </feed-item-sender>
+      <feed-item-body>
+        {{ d.subject }}
+      </feed-item-body>
     </feed-item>
   </feed>
-
-  <!-- <list v-if="data.length">
-    <list-item v-for="d in data" :key="d.uuid">
-      <div class="flex items-center">
-        {{ d.created_at }}<separator />{{d.sender.short_name}}<separator />{{ d.subject }}
-      </div>
-      <list-action>
-        <a href="" @click.prevent="destroy(d.uuid)">
-          <trash-icon class="icon-list" aria-hidden="true" />
-        </a>
-      </list-action>
-    </list-item>
-  </list>
-  <list-empty v-else>
-    {{messages.emptyData}}
-  </list-empty> -->
 </div>
 </template>
 <script>
@@ -43,6 +30,9 @@ import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Feed from "@/components/ui/feed/Feed.vue";
 import FeedItem from "@/components/ui/feed/Item.vue";
+import FeedItemSender from "@/components/ui/feed/Sender.vue";
+import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
+import FeedItemBody from "@/components/ui/feed/Body.vue";
 
 export default {
 
@@ -56,7 +46,10 @@ export default {
     ListAction,
     ListEmpty,
     Feed,
-    FeedItem
+    FeedItem,
+    FeedItemSender,
+    FeedItemTimestamp,
+    FeedItemBody
   },
 
   mixins: [ErrorHandling, Helpers],

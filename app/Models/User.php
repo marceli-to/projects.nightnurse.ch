@@ -51,7 +51,7 @@ class User extends Authenticatable implements MustVerifyEmail
    *
    * @var array
    */
-  protected $appends = ['short_name'];
+  protected $appends = ['short_name', 'full_name'];
 
   /**
    * Relations
@@ -108,6 +108,17 @@ class User extends Authenticatable implements MustVerifyEmail
   public function isEditor()
   {
     return $this->role_id == 2 ? TRUE : FALSE;
+  }
+
+  /**
+   * Get the user's full name.
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getFullNameAttribute($value)
+  {
+    return $this->firstname . ' ' . $this->name;
   }
 
   /**

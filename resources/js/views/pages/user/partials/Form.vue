@@ -38,6 +38,7 @@
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
     </div>
+
     <template v-if="$props.type == 'create'">
       <h3 class="mb-6 lg:mb-8">Zugangsdaten</h3>
       <div class="form-group">
@@ -47,16 +48,23 @@
       </div>
       <div class="form-group">
         <label>Passwort <asterisk /></label>
-        <input type="password" v-model="data.password">
+        <input type="password" v-model="data.password" data-field-password>
+        <a href="javascript:;" @click.prevent="togglePassword()" class="absolute right-0 bottom-8">
+          <eye-icon class="w-5 h-5 icon-list" />
+        </a>
+        <a 
+          href="" 
+          @click.prevent="generatePassword()" 
+          class="absolute left-0 font-mono text-xs underline pt-2 text-gray-400 hover:text-highlight hover:no-underline">
+          Passwort vorschlagen
+        </a>
         <required />
       </div>
-
       <div class="form-group">
         <label>Passwort wiederholen <asterisk /></label>
-        <input type="password" v-model="data.password_confirmation">
+        <input type="password" v-model="data.password_confirmation" data-field-password>
         <required />
       </div>
-
       <div class="form-group">
         <label>Rolle</label>
         <select v-model="data.role_id">
@@ -76,6 +84,7 @@
 </div>
 </template>
 <script>
+import { EyeIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
@@ -86,6 +95,7 @@ import Asterisk from "@/components/ui/form/Asterisk.vue";
 
 export default {
   components: {
+    EyeIcon,
     ContentHeader,
     ContentFooter,
     ContentGrid,
@@ -220,6 +230,28 @@ export default {
         this.isLoading = false;
       }));
     },
+
+    togglePassword() {
+      const fields = document.querySelectorAll('input[data-field-password]');
+      fields.forEach(function(field){
+        field.type = field.type == 'password' ? 'text' : 'password';
+      });
+    },
+
+    generatePassword() {
+      const chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      const fields = document.querySelectorAll('input[data-field-password]');
+      const length = 12;
+      let password = "";
+      for (let i = 0; i <= length; i++) {
+        let randomNumber = Math.floor(Math.random() * chars.length);
+        password += chars.substring(randomNumber, randomNumber + 1);
+      }
+      fields.forEach(function(field){
+        field.value = password;
+        field.type = 'text';
+      });
+    }
   },
 
   computed: {

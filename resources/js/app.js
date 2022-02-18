@@ -15,6 +15,8 @@ Vue.use(VueAxios, axios);
 // Vue-Axios defaults
 Vue.axios.defaults.withCredentials = true;
 
+Vue.use(require('vue-moment'));
+
 // Filters
 require('@/mixins/Filters');
 

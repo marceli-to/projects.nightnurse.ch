@@ -62,7 +62,7 @@
 
 /* form group */
 .form-group {
-  @apply mb-4 lg:mb-6 max-width-content;
+  @apply mb-4 lg:mb-6 max-width-content relative;
 }
 
 .form-group label {

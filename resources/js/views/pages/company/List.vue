@@ -27,7 +27,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon, UsersIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -43,6 +43,7 @@ export default {
   components: {
     PlusCircleIcon,
     PencilAltIcon,
+    UsersIcon,
     TrashIcon,
     ContentHeader,
     Separator,

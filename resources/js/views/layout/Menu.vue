@@ -7,7 +7,7 @@
     <ul class="list-none !p-0 !m-0">
       <li class="block !pl-0 !m-0">
         <menu-item :route="'dashboard'">
-          <AnnotationIcon class="h-5 w-5" aria-hidden="true" />
+          <annotation-icon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
             Nachrichten
           </menu-item-label>
@@ -15,7 +15,7 @@
       </li>
       <li class="block !p-0 !m-0">
         <menu-item :route="'projects'">
-          <FolderIcon class="h-5 w-5" aria-hidden="true" />
+          <folder-icon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
             Projekte
           </menu-item-label>
@@ -23,7 +23,7 @@
       </li>
       <li class="block !p-0 !m-0">
         <menu-item :route="'companies'">
-          <UsersIcon class="h-5 w-5" aria-hidden="true" />
+          <office-building-icon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
             Kunden
           </menu-item-label>
@@ -31,7 +31,7 @@
       </li>
       <li class="block !p-0 !m-0">
         <menu-item :route="'users'">
-          <UserIcon class="h-5 w-5" aria-hidden="true" />
+          <users-icon class="h-5 w-5" aria-hidden="true" />
           <menu-item-label>
             Benutzer
           </menu-item-label>
@@ -63,7 +63,7 @@
 </template>
 <script>
 
-import { AnnotationIcon, UsersIcon, UserIcon, FolderIcon } from "@vue-hero-icons/outline";
+import { AnnotationIcon, UsersIcon, FolderIcon, OfficeBuildingIcon } from "@vue-hero-icons/outline";
 import MenuItem from '@/components/ui/menu/Item';
 import MenuItemLabel from '@/components/ui/menu/Label';
 
@@ -73,7 +73,7 @@ export default {
     AnnotationIcon,
     FolderIcon,
     UsersIcon,
-    UserIcon,
+    OfficeBuildingIcon,
     MenuItem,
     MenuItemLabel,
   },
