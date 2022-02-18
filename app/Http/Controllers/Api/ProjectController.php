@@ -41,6 +41,7 @@ class ProjectController extends Controller
     $data = $request->all();
     $data['uuid'] = \Str::uuid();
     $project = Project::create($data);
+    $this->handleCompanies($project, $request->companies);
     return response()->json(['projectId' => $project->id]);
   }
 
@@ -56,9 +57,7 @@ class ProjectController extends Controller
     $project = Project::findOrFail($project->id);
     $project->update($request->all());
     $project->save();
-
     $this->handleCompanies($project, $request->companies);
-
     return response()->json('successfully updated');
   }
 
