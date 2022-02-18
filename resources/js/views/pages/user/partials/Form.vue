@@ -242,15 +242,16 @@ export default {
       const chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const fields = document.querySelectorAll('input[data-field-password]');
       const length = 12;
-      let password = "";
+      let pwd = "";
       for (let i = 0; i <= length; i++) {
         let randomNumber = Math.floor(Math.random() * chars.length);
-        password += chars.substring(randomNumber, randomNumber + 1);
+        pwd += chars.substring(randomNumber, randomNumber + 1);
       }
-      fields.forEach(function(field){
-        field.value = password;
-        field.type = 'text';
-      });
+
+      alert('Ihr Passwort lautet: ' + pwd);
+      
+      this.password = pwd;
+      this.password_confirmation = passpwdword;
     }
   },
 
