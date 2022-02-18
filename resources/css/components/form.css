@@ -13,7 +13,11 @@
   }
 
   select {
-    @apply px-0 py-3 pr-0 pl-0 border-b-2 border-gray-100;
+    @apply px-0 py-3 pr-0 !pl-0 border-b-2 border-gray-100;
+  }
+
+  select option {
+    @apply !p-0
   }
 
   /* remove outline */
