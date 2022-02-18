@@ -40,7 +40,8 @@ class MessageController extends Controller
    * @return \Illuminate\Http\Response
    */
   public function store(Project $project, MessageStoreRequest $request)
-  {
+  { 
+    // Create message
     $message = Message::create([
       'uuid' => \Str::uuid(),
       'subject' => $request->input('subject'),
@@ -50,18 +51,17 @@ class MessageController extends Controller
       'user_id' => auth()->user()->id,
     ]);
 
+    // Move file & create database entry
     if ($request->input('files'))
     {
       foreach($request->input('files') as $file)
       {
-        // Move uploaded files
-        $media = (new Media())->copy($file['file']);
+        $media = (new Media())->copy($file['name']);
 
-        // Create database entry
         $messageFile = MessageFile::create([
           'uuid' => \Str::uuid(),
-          'name' => $file['file'],
-          'original_name' => $file['name'],
+          'name' => $file['name'],
+          'original_name' => $file['original_name'],
           'extension' => $file['extension'] ,
           'size' => $file['size'],
           'preview' => $file['preview'],
@@ -69,6 +69,9 @@ class MessageController extends Controller
         ]);
       }
     }
+
+    // Add recipients to queue
+    
 
     return response()->json(['messageId' => $message->id]);
   }

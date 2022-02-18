@@ -62,8 +62,8 @@ class Media
     $filetype = File::extension($this->upload_path . $filename);
     $filesize = File::size($this->upload_path . DIRECTORY_SEPARATOR . $filename);
     return [
-      'file' => $filename, 
-      'name' => $name, 
+      'name' => $filename, 
+      'original_name' => $name, 
       'extension' => $filetype, 
       'size' => $filesize,
       'preview' => in_array($filetype, $this->previewable_image_types) ? TRUE : FALSE

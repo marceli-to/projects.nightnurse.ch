@@ -38,25 +38,25 @@
         <list-item v-for="(d, i) in data.files" :key="i">
           <div class="flex items-center font-mono text-sm">
             <img 
-            :src="`/img/thumbnail/${d.file}`" 
+            :src="`/img/thumbnail/${d.name}`" 
             height="100" 
             width="100"
             class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light rounded-sm"
             v-if="d.preview" />
-            <div>{{ d.name | truncate(50, '...')}}</div>
+            <div>{{ d.original_name | truncate(50, '...')}}</div>
             <separator />
             <div>{{d.size | filesize(d.size)}}</div>
             <separator />
             <file-type :extension="d.extension" />
           </div>
           <list-action>
-            <a :href="`/img/original/${d.file}`" target="_blank" class="mr-2" v-if="d.preview">
+            <a :href="`/img/original/${d.name}`" target="_blank" class="mr-2" v-if="d.preview">
               <cloud-download-icon class="icon-list" aria-hidden="true" />
             </a>
-            <a :href="'/storage/uploads/temp/' + d.file" target="_blank" class="mr-2" v-else>
+            <a :href="`/storage/uploads/temp/${d.name}`" target="_blank" class="mr-2" v-else>
               <cloud-download-icon class="icon-list" aria-hidden="true" />
             </a>
-            <a href="javascript:;" @click.prevent="uploadDelete(d.file)">
+            <a href="javascript:;" @click.prevent="uploadDelete(d.name)">
               <trash-icon class="icon-list" aria-hidden="true" />
             </a>
           </list-action>

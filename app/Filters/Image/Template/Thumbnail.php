@@ -5,7 +5,7 @@ use Intervention\Image\Filters\FilterInterface;
 
 class Thumbnail implements FilterInterface
 {
-  protected $size = 300;
+  protected $size = 160;
   
   public function applyFilter(Image $image)
   {
