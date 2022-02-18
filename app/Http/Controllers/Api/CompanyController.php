@@ -28,6 +28,16 @@ class CompanyController extends Controller
     return new DataCollection(Company::clients()->orderBy('name')->get());
   }
 
+  /**
+   * Get the company marked as 'owner'
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getOwner()
+  {
+    return response()->json(Company::owner()->with('users')->orderBy('name')->get()->first());
+  }
+
 
   /**
    * Get a single companies for a given companies

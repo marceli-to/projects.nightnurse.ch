@@ -41,4 +41,9 @@ class Company extends Base
 		return $query->where('owner', 0);
 	}
 
+	public function scopeOwner($query)
+	{
+		return $query->where('owner', 1);
+	}
+
 }

@@ -51,6 +51,7 @@ Route::middleware('auth:sanctum')->group(function() {
   // Companies
   Route::get('companies', [CompanyController::class, 'get']);
   Route::get('companies/clients', [CompanyController::class, 'getClients']);
+  Route::get('companies/owner', [CompanyController::class, 'getOwner']);
   Route::get('company/{company:uuid}', [CompanyController::class, 'find']);
   Route::post('company', [CompanyController::class, 'store']);
   Route::put('company/{company:uuid}', [CompanyController::class, 'update']);

@@ -66,7 +66,7 @@
     </div>
 
     <div class="form-group">
-      <label>Weitere Kunden hinufügen</label>
+      <label>Weitere Kunden hinzufügen</label>
       <select name="companies" @change="addCompany($event)">
         <option value="null">Bitte wählen...</option>
         <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.name }}</option>

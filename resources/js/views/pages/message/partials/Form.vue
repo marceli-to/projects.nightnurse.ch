@@ -183,12 +183,7 @@ export default {
         name: null
       },
 
-      // Settings
-      settings: {
-        staff: [],
-        states: [],
-        companies: [],
-      },
+      projectOwner: [],
 
       // Validation
       errors: {
@@ -246,10 +241,18 @@ export default {
      */
     fetch() {
       this.isFetched = false;
-      this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
-        this.project = response.data;
+      this.axios.all([
+        this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`),
+        this.axios.get(`/api/companies/owner`),
+      ]).then(axios.spread((...responses) => {
+        this.project = responses[0].data,
+        this.projectOwner = responses[1].data,
+
+        // Add owner before all other companies
+        this.project.companies.unshift(this.projectOwner);
         this.isFetched = true;
-      });
+      }));
+
     },
 
     submit() {
