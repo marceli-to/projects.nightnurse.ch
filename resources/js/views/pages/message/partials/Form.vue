@@ -29,7 +29,7 @@
         @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
         :useCustomSlot=true>
         <div>
-          <strong>Datei auswählen oder hierhin ziehen</strong><br>
+          <div><strong>Datei auswählen oder hierhin ziehen</strong></div>
           <small>JPG, PNG, TIFF | max. Grösse 100 MB</small>
         </div>
       </vue-dropzone>
@@ -41,7 +41,7 @@
             :src="`/img/thumbnail/${d.file}`" 
             height="100" 
             width="100"
-            class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px]"
+            class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light"
             v-if="d.hasPreview" />
             <div>{{ d.name | truncate(50, '...')}}</div>
             <separator />
@@ -198,7 +198,7 @@ export default {
       // Routes
       routes: {
         fetch: '/api/project',
-        post: '/api/message',
+        post: '/api/message/queue',
         destroy: '/api/upload'
       },
 
@@ -258,8 +258,8 @@ export default {
 
     store() {
       this.isLoading = true;
-      this.axios.post(this.routes.post, this.data).then(response => {
-        this.$router.push({ name: "projects" });
+      this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
+        this.$router.push({ name: 'messages', params: { uuid: this.$route.params.uuid }});
         this.$notify({ type: "success", text: this.messages.created });
         this.isLoading = false;
       });
@@ -367,7 +367,7 @@ export default {
 
   computed: {
     title() {
-      return `Neue Nachricht erstellen<br><span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
+      return `Neue Nachricht <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     }
   }
 };

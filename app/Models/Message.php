@@ -9,6 +9,10 @@ class Message extends Base
 {
   use HasFactory, SoftDeletes;
 
+  protected $casts = [
+    'created_at' => 'datetime:d.m.Y H:i',
+  ];
+
 	protected $fillable = [
     'uuid',
     'subject',

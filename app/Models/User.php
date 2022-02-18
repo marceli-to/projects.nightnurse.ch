@@ -13,6 +13,7 @@ class User extends Authenticatable implements MustVerifyEmail
    *
    * @var array
    */
+
   protected $fillable = [
     'uuid',
     'firstname', 
@@ -44,6 +45,13 @@ class User extends Authenticatable implements MustVerifyEmail
   protected $casts = [
     'email_verified_at' => 'datetime',
   ];
+
+  /**
+   * The accessors to append to the model's array form.
+   *
+   * @var array
+   */
+  protected $appends = ['short_name'];
 
   /**
    * Relations
@@ -100,5 +108,16 @@ class User extends Authenticatable implements MustVerifyEmail
   public function isEditor()
   {
     return $this->role_id == 2 ? TRUE : FALSE;
+  }
+
+  /**
+   * Get the user's short name.
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getShortNameAttribute($value)
+  {
+    return $this->firstname . ' ' . substr($this->name, 0,1) . '.';
   }
 }

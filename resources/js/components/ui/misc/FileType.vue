@@ -13,9 +13,9 @@ export default {
 </script>
 <style>
 .is-jpg {
-  @apply bg-yellow-500;
+  @apply bg-gray-300;
 }
 .is-png {
-  @apply bg-green-500;
+  @apply bg-gray-300;
 }
 </style>

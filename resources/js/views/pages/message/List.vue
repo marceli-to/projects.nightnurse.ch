@@ -5,10 +5,19 @@
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
-  <list v-if="data.length">
+
+  <feed>
+    <feed-item v-for="d in data" :key="d.uuid">
+      <div>{{ d.created_at }}</div>
+      <div class="mb-1">{{d.sender.short_name}}</div>
+      {{ d.subject }}
+    </feed-item>
+  </feed>
+
+  <!-- <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
-        {{d.number}}<separator />{{ d.name }}<separator />{{ d.company.name }}
+        {{ d.created_at }}<separator />{{d.sender.short_name}}<separator />{{ d.subject }}
       </div>
       <list-action>
         <a href="" @click.prevent="destroy(d.uuid)">
@@ -19,7 +28,7 @@
   </list>
   <list-empty v-else>
     {{messages.emptyData}}
-  </list-empty>
+  </list-empty> -->
 </div>
 </template>
 <script>
@@ -32,6 +41,8 @@ import List from "@/components/ui/layout/List.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
+import Feed from "@/components/ui/feed/Feed.vue";
+import FeedItem from "@/components/ui/feed/Item.vue";
 
 export default {
 
@@ -44,6 +55,8 @@ export default {
     ListItem,
     ListAction,
     ListEmpty,
+    Feed,
+    FeedItem
   },
 
   mixins: [ErrorHandling, Helpers],
@@ -109,7 +122,7 @@ export default {
 
   computed: {
     title() {
-      return `Nachrichten <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
+      return `<span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     }
   }
 }

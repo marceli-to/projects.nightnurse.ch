@@ -19,5 +19,5 @@ h2.card-auth__heading {
 }
 
 .card-auth__buttons {
-  @apply flex items-center justify-between mt-8 lg:mt-12;
+  @apply flex items-center justify-between mt-12 lg:mt-12;
 }

@@ -1,7 +1,7 @@
 <template>
 <div>
   <content-header :title="title"></content-header>
-  <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-w-4xl">
+  <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-width-content">
     <div class="form-group">
       <label>Vorname <asterisk /></label>
       <input type="text" v-model="data.firstname">

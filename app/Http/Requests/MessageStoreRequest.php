@@ -22,8 +22,7 @@ class MessageStoreRequest extends FormRequest
   public function rules()
   {
     return [
-      'user_id' => 'required|exists:App\Models\User,id',
-      'project_id' => 'required|exists:App\Models\Project,id',
+      'users' => 'required',
     ];
   }
 
@@ -35,8 +34,7 @@ class MessageStoreRequest extends FormRequest
   public function messages()
   {
     return [
-      'user_id.required' => 'Absender wird benötigt!',
-      'project_id.required' => 'Projekt wird benötigt!',
+      'users.required' => 'Empfänger werden benötigt!',
     ];
   }
 }

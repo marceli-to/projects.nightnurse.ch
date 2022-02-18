@@ -72,7 +72,7 @@ Route::middleware('auth:sanctum')->group(function() {
   // Companies
   Route::get('messages/{project:uuid}', [MessageController::class, 'get']);
   Route::get('message/{message:uuid}', [MessageController::class, 'find']);
-  Route::post('message', [MessageController::class, 'store']);
+  Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
 
 });

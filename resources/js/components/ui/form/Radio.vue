@@ -74,7 +74,7 @@ export default {
 </script>
 <style scoped>
 input[type="radio"] + label {
-  @apply bg-transparent rounded-sm hover:bg-highlight flex items-center justify-center mr-2 sm:mr-4 py-2 sm:py-3 w-12 sm:w-16 border hover:border-highlight text-gray-200 hover:text-white text-center normal-case cursor-pointer font-mono select-none
+  @apply bg-transparent rounded-sm hover:bg-highlight flex items-center justify-center mr-2 sm:mr-4 py-2 sm:py-3 w-12 sm:w-16 border-2 border-gray-100 hover:border-highlight text-gray-200 hover:text-white text-center normal-case cursor-pointer font-mono select-none
 }
 
 input[type="radio"]:checked + label {

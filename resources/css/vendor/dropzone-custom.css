@@ -5,15 +5,16 @@
  */
 
 .dropzone {
-  @apply my-1 p-3 border-dashed border-gray-100 text-gray-400;
+  @apply my-1 p-3 border-dashed border-gray-100 text-dark;
 }
 
 .dropzone.dz-drag-hover {
   @apply border-dashed border-highlight;
 }
 
-.dropzone.dz-drag-hover .dz-message {
-  @apply !opacity-100;
+.dropzone.dz-drag-hover .dz-message,
+.dropzone.dz-drag-hover .dz-message strong {
+  @apply !opacity-100 text-highlight;
 }
 
 .dropzone .dz-preview {
@@ -21,7 +22,7 @@
 }
 
 .dropzone .dz-message strong {
-  @apply text-gray-400 text-base;
+  @apply text-dark text-base;
 }
 
 .dropzone .dz-preview .dz-image {
@@ -32,63 +33,5 @@
   @apply bg-light border-0 mx-0 h-3 opacity-100 overflow-hidden pointer-events-none absolute w-full left-0 top-12;
   z-index: 1000;
 }
-
-/* .dropzone {
-  border: none;
-  border-radius: 500px;
-  border: 2px dashed $color-white;
-  background-color: transparent;
-  margin-bottom: $space-6x;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 640px;
-  min-height: 0 !important;
-  position: relative;
-  
-  
-  &.dz-drag-hover {
-    border-color: $color-orange;
-    border-style: dashed;
-
-    .dz-message {
-      color: $color-orange;
-    }
-  }
-
-  .dz-message {
-    margin: 0 !important;
-    opacity: 1 !important;
-    text-align: center;
-    width: 100%;
-  }
-
-  .dz-preview {
-    display: block;
-    margin: 0;
-    min-height: 0 !important;
-  
-    .dz-image {
-      border-radius: 0 !important;
-    }
-
-    .dz-progress {
-      background: rgba(255, 255, 255, 1);
-      border-radius: 500px;
-      border: transparent;
-      margin-left: 0;
-      margin-top: 0;
-      height: 24px;
-      opacity: 1;
-      overflow: hidden;
-      pointer-events: none;
-      position: absolute;
-      width: 100%;
-      z-index: 1000;
-      left: 0;
-      top: -12px;
-    }
-  }
-
-} */
 
 

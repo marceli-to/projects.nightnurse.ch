@@ -9,11 +9,11 @@
   input[type=number],
   select,
   textarea {
-    @apply font-mono text-dark text-sm mt-0 block w-full px-0 py-2 lg:py-3 border-0 border-bottom focus:ring-0 focus:border-dark;
+    @apply text-dark text-sm lg:text-base mt-0 block w-full px-0 py-2 lg:py-3 border-0 border-bottom focus:ring-0 focus:border-dark;
   }
 
   select {
-    @apply mt-0 block w-full px-0 py-3 pr-0 pl-0 border-b-2 border-gray-100 focus:ring-0 focus:border-dark font-mono text-sm;
+    @apply px-0 py-3 pr-0 pl-0 border-b-2 border-gray-100;
   }
 
   /* remove outline */
@@ -46,7 +46,6 @@
   input[type="checkbox"].checkbox {
     @apply appearance-none h-4 w-4 !border !border-gray-200 bg-white checked:bg-dark checked:!border-dark focus:outline-none transition duration-100 mr-2 cursor-pointer
   }
-  
 }
 
 .form-check {
@@ -61,10 +60,9 @@
   @apply bg-transparent border-0 text-dark
 }
 
-
 /* form group */
 .form-group {
-  @apply mb-4 lg:mb-6 max-w-4xl;
+  @apply mb-4 lg:mb-6 max-width-content;
 }
 
 .form-group label {
