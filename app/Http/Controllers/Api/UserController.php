@@ -51,10 +51,19 @@ class UserController extends Controller
    */
   public function store(UserStoreRequest $request)
   {
-    $data = $request->all();
-    $data['uuid'] = \Str::uuid();
-    $data['email_verified_at'] = \Carbon\Carbon::now();
-    $user = User::create($data);
+    $user = User::create([
+      'uuid' => \Str::uuid(),
+      'firstname' => $request->input('firstname'),
+      'name' => $request->input('name'),
+      'email' => $request->input('email'),
+      'phone' => $request->input('phone'),
+      'email_verified_at' => \Carbon\Carbon::now(),
+      'password' => \Hash::make($request->input('password')),
+      'language_id' => $request->input('language_id'),
+      'company_id' => $request->input('company_id'),
+      'gender_id' => $request->input('gender_id'),
+      'role_id' => $request->input('role_id'),
+    ]);
     return response()->json(['userId' => $user->id]);
   }
 
