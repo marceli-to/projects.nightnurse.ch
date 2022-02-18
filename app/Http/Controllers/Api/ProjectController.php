@@ -41,6 +41,14 @@ class ProjectController extends Controller
     $data = $request->all();
     $data['uuid'] = \Str::uuid();
     $project = Project::create($data);
+
+    // Add owner
+    CompanyProject::create([
+      'company_id' => config('client.owner_id'),
+      'project_id' => $project->id
+    ]);
+
+    // Add additional companies
     $this->handleCompanies($project, $request->companies);
     return response()->json(['projectId' => $project->id]);
   }
