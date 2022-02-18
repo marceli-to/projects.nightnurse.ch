@@ -251,7 +251,7 @@ export default {
       alert('Ihr Passwort lautet: ' + pwd);
       
       this.password = pwd;
-      this.password_confirmation = passpwdword;
+      this.password_confirmation = pwd;
     }
   },
 
