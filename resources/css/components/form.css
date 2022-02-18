@@ -10,6 +10,9 @@
   select,
   textarea {
     @apply text-dark text-sm lg:text-base mt-0 block w-full px-0 py-2 lg:py-3 border-0 border-bottom focus:ring-0 focus:border-dark;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0;
   }
 
   select {

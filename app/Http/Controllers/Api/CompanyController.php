@@ -29,15 +29,14 @@ class CompanyController extends Controller
   }
 
   /**
-   * Get the company marked as 'owner'
+   * Get a single company marked as 'owner'
    * 
    * @return \Illuminate\Http\Response
    */
-  public function getOwner()
+  public function findOwner()
   {
     return response()->json(Company::owner()->with('users')->orderBy('name')->get()->first());
   }
-
 
   /**
    * Get a single companies for a given companies
