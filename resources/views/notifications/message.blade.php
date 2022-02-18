@@ -4,9 +4,6 @@
 @if ($message['body'])
 <div class="pt-20">{!! $message['body'] !!}</div>
 @endif
-<div class="py-10">
-  <a href="{{url('')}}/projects/project/{{$message['project']['uuid']}}/messages" class="text-sm text-dark">Nachricht im Browser öffnen</a>
-</div>
 @if ($message['files'])
 <div class="pt-20">
 @foreach($message['files'] as $file)
@@ -39,6 +36,9 @@
 </table>
 @endif
 @endforeach
+</div>
+<div class="pt-10 text-center font-sm">
+  <a href="{{url('')}}/projects/project/{{$message['project']['uuid']}}/messages" class="text-sm text-dark">Nachricht im Browser öffnen</a>
 </div>
 @endif
 @endcomponent

@@ -282,6 +282,18 @@ img {
   color: #222 !important;
 }
 
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
 .p-10 {
   padding: 10px;
 }
