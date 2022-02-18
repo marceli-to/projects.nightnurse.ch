@@ -243,7 +243,7 @@ export default {
       this.isFetched = false;
       this.axios.all([
         this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`),
-        this.axios.get(`/api/companies/owner`),
+        this.axios.get(`/api/company/owner`),
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data,
         this.projectOwner = responses[1].data,
