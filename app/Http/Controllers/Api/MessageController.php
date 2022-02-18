@@ -4,7 +4,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Message;
 use App\Models\MessageFile;
+use App\Models\MessageUser;
 use App\Models\Project;
+use App\Models\User;
 use App\Http\Requests\MessageStoreRequest;
 use App\Services\Media;
 use Illuminate\Http\Request;
@@ -70,9 +72,24 @@ class MessageController extends Controller
       }
     }
 
-    // Add recipients to queue
+    // Add users to message user table
+    // @todo: check if a user has "no notifications enabled" and set "processed" to 1
+    if ($request->input('users'))
+    {
+      foreach($request->input('users') as $user)
+      {
+        $user = User::where('uuid', $user)->get()->first();
+        if ($user)
+        {
+          MessageUser::create([
+            'message_id' => $message->id,
+            'user_id' => $user->id,
+            'message_state_id' => 1
+          ]);          
+        }
+      }
+    }
     
-
     return response()->json(['messageId' => $message->id]);
   }
 

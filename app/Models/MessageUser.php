@@ -13,7 +13,8 @@ class MessageUser extends Base
 	protected $fillable = [
 		'message_id',
 		'user_id',
-    'message_state_id'
+    'message_state_id',
+    'processed'
   ];
 
   /**
