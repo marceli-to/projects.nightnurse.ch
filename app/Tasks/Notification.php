@@ -10,9 +10,16 @@ class Notification
 
     foreach($messageUsers->all() as $m)
     {
-      \Mail::to($m->user->email)->send(new \App\Mail\Notification($m->message));
-      $s->processed = 1;
-      $s->save();
+      try {
+        \Mail::to($m->user->email)->send(new \App\Mail\Notification($m->message));
+        $m->processed = 1;
+        $m->save();
+      } 
+      catch(\Throwable $e) {
+        $m->processed = 1;
+        $m->save();
+        \Log::error($e);
+      }
     }
   }
 }
