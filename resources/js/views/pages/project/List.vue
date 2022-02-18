@@ -11,7 +11,8 @@
         {{d.number}}<separator />{{ d.name }}<separator />{{ d.company.name }}
       </div>
       <list-action>
-        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}">
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative">
+          <span v-if="d.messages.length" class="rounded-full bg-highlight absolute -top-[2px] right-[7px] h-2 w-2 block"></span>
           <annotation-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
         <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">

@@ -45,6 +45,10 @@ class Project extends Base
 		return $this->belongsToMany(Company::class);
 	}
 
+  public function messages()
+  {
+    return $this->hasMany(Message::class, 'project_id', 'id');
+  }
 
   /**
    * Accessor for date_start

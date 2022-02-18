@@ -7,12 +7,13 @@
   </content-header>
   <feed>
     <feed-item v-for="d in data" :key="d.uuid">
-      <feed-item-timestamp>{{ d.created_at }}</feed-item-timestamp>
+      <feed-item-timestamp>{{ d.feed_date }}</feed-item-timestamp>
       <feed-item-sender>
-        Nachricht von <span class="font-bold">{{d.sender.full_name}}:</span>
+        Nachricht von <span class="font-bold">{{d.sender.short_name}}</span>
       </feed-item-sender>
       <feed-item-body>
-        {{ d.subject }}
+        <div class="text-sm font-bold">{{ d.subject }}</div>
+        <div class="text-sm" v-html="d.body"></div>
       </feed-item-body>
     </feed-item>
   </feed>

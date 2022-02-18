@@ -1,30 +1,18 @@
 <template>
-<div>
-  <div v-if="isFetched" class="is-loaded">
-    <page-header>
-      <h1>Willkommen <strong>{{user.firstname}} {{user.name}}</strong></h1>
-    </page-header>
-    <div class="content content--wide cards">
-      <!-- <div class="card">
-        <router-link :to="{name: 'events'}">
-          <h2>Edizioni</h2>
-          <p>Verwaltung der Edizioni &amp; Mitglieder</p>
-        </router-link>
-      </div> -->
-    </div>
-  </div>
+<div v-if="isFetched">
+  <content-header :title="`Willkommen <span class='text-highlight'>${user.firstname} ${user.name}</span>`"></content-header>
 </div>
 </template>
 <script>
 
 // Mixins
 import Helpers from "@/mixins/Helpers";
-import PageHeader from "@/components/ui/layout/Header.vue";
+import ContentHeader from "@/components/ui/layout/Header.vue";
 
 export default {
 
   components: {
-    PageHeader,
+    ContentHeader,
   },
 
   mixins: [Helpers],
@@ -42,7 +30,7 @@ export default {
 
   methods: {
     fetch() {
-      this.axios.get(`/api/user`).then(response => {
+      this.axios.get(`/api/authenticated-user`).then(response => {
         this.user = response.data;
         this.isFetched = true;
       });

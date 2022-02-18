@@ -1,15 +1,13 @@
 <template>
-  <div class="text-base">
+  <div class="text-base feed-item__body">
     <slot />
   </div>
 </template>
-
-<script>
-export default {
-
-}
-</script>
-
 <style>
-
+.feed-item__body p {
+  @apply !mt-0;
+}
+.feed-item__body p:last-of-type {
+  @apply !mb-1;
+}
 </style>

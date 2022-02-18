@@ -16,7 +16,7 @@ class ProjectController extends Controller
    */
   public function get()
   {
-    return new DataCollection(Project::with('state', 'company', 'companies', 'manager')->orderBy('number', 'DESC')->get());
+    return new DataCollection(Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get());
   }
 
   /**

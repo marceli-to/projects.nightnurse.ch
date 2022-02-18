@@ -22,6 +22,9 @@ class Message extends Base
     'user_id',
 	];
 
+  protected $appends = ['feed_date'];
+
+
   public function sender()
   {
     return $this->hasOne(User::class, 'id', 'user_id');
@@ -36,4 +39,26 @@ class Message extends Base
 	{
 		return $this->belongsToMany(User::class);
 	}
+
+  /**
+   * Get the user's short name.
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getFeedDateAttribute($value)
+  {
+    $date = \Carbon\Carbon::parse($this->created_at);
+    
+    if ($date->isToday())
+    {
+      return 'Today, ' . date('h:i', strtotime($this->created_at));
+    }
+
+    if ($date->isYesterday())
+    {
+      return 'Yesterday, ' . date('H:i', strtotime($this->created_at));
+    }
+    return date('D, d.m.Y, H:i', strtotime($this->created_at));
+  }
 }
