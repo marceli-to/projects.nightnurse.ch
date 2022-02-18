@@ -40,6 +40,11 @@ class Message extends Base
 		return $this->belongsToMany(User::class);
 	}
 
+  public function files()
+  {
+    return $this->hasMany(MessageFile::class, 'message_id', 'id');
+  }
+
   /**
    * Get the user's short name.
    *
@@ -52,13 +57,13 @@ class Message extends Base
     
     if ($date->isToday())
     {
-      return 'Today, ' . date('h:i', strtotime($this->created_at));
+      return 'Today, ' . date('H:i', strtotime($this->created_at));
     }
 
     if ($date->isYesterday())
     {
       return 'Yesterday, ' . date('H:i', strtotime($this->created_at));
     }
-    return date('D, d.m.Y, H:i', strtotime($this->created_at));
+    return date('D, d.m.Y', strtotime($this->created_at));
   }
 }

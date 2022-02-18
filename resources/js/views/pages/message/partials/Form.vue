@@ -41,8 +41,8 @@
             :src="`/img/thumbnail/${d.file}`" 
             height="100" 
             width="100"
-            class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light"
-            v-if="d.hasPreview" />
+            class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light rounded-sm"
+            v-if="d.preview" />
             <div>{{ d.name | truncate(50, '...')}}</div>
             <separator />
             <div>{{d.size | filesize(d.size)}}</div>
@@ -50,7 +50,7 @@
             <file-type :extension="d.extension" />
           </div>
           <list-action>
-            <a :href="'/img/cache/' + d.file + '/1600/1000/0,0,0,0'" target="_blank" class="mr-2" v-if="d.hasPreview">
+            <a :href="`/img/original/${d.file}`" target="_blank" class="mr-2" v-if="d.preview">
               <cloud-download-icon class="icon-list" aria-hidden="true" />
             </a>
             <a :href="'/storage/uploads/temp/' + d.file" target="_blank" class="mr-2" v-else>

@@ -3,8 +3,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Message;
+use App\Models\MessageFile;
 use App\Models\Project;
 use App\Http\Requests\MessageStoreRequest;
+use App\Services\Media;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -17,7 +19,7 @@ class MessageController extends Controller
    */
   public function get(Project $project)
   {
-    return new DataCollection(Message::with('project', 'sender')->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+    return new DataCollection(Message::with('project', 'sender', 'files')->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
   }
 
   /**
@@ -48,10 +50,25 @@ class MessageController extends Controller
       'user_id' => auth()->user()->id,
     ]);
 
-    // Move uploaded files
-    // $media = (new Media())->copy($request->input('image'));
+    if ($request->input('files'))
+    {
+      foreach($request->input('files') as $file)
+      {
+        // Move uploaded files
+        $media = (new Media())->copy($file['file']);
 
-
+        // Create database entry
+        $messageFile = MessageFile::create([
+          'uuid' => \Str::uuid(),
+          'name' => $file['file'],
+          'original_name' => $file['name'],
+          'extension' => $file['extension'] ,
+          'size' => $file['size'],
+          'preview' => $file['preview'],
+          'message_id' => $message->id,
+        ]);
+      }
+    }
 
     return response()->json(['messageId' => $message->id]);
   }
