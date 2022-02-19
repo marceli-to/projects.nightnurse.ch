@@ -338,7 +338,7 @@ padding: 20px 20px; }
     border-radius: 0;
     overflow: hidden; }
     .dropzone .dz-preview .dz-progress .dz-upload {
-      background: #222;
+      background: #ff008b;
       position: absolute;
       top: 0;
       left: 0;
