@@ -347,7 +347,7 @@ export default {
       if (confirm(this.messages.confirm)) {
         this.isLoading = true;
         this.axios.delete(`${this.routes.destroy}/${file}`).then(response => {
-          const idx = this.data.files.findIndex(x => x.file == file);
+          const idx = this.data.files.findIndex(x => x.name == file);
           if (idx > -1) {
             this.data.files.splice(idx, 1);
           }
