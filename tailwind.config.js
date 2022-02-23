@@ -8,7 +8,7 @@ module.exports = {
 
     extend: {
       fontSize: {
-        tiny: ['.775rem', '1']
+        tiny: ['.675rem', '1']
       },
       colors: {
         'highlight': '#ff008b',

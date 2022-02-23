@@ -6,19 +6,19 @@ import Dashboard from '@/views/pages/Index.vue';
 
 const routes = [
 
-  // Home
-  {
-    name: 'home',
-    path: '/',
-    component: Dashboard,
-  },
+  // // Home
+  // {
+  //   name: 'home',
+  //   path: '/',
+  //   component: Dashboard,
+  // },
 
-  // Dashboard
-  {
-    name: 'dashboard',
-    path: '/dashboard',
-    component: Dashboard,
-  },
+  // // Dashboard
+  // {
+  //   name: 'dashboard',
+  //   path: '/dashboard',
+  //   component: Dashboard,
+  // },
 
   // Authorization
   {

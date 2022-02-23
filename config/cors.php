@@ -19,7 +19,7 @@ return [
         'api/*',
         '/login',
         '/logout',
-        '/herkulesdesign/csrf-cookie'
+        '/er-nightnurse/csrf-cookie'
     ],
 
     'allowed_methods' => ['*'],

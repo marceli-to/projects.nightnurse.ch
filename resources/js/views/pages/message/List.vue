@@ -1,12 +1,41 @@
 <template>
 <div v-if="isFetched">
-  <content-header :title="title">
-    <router-link :to="{ name: 'message-create' }" class="btn-icon">
-      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-    </router-link>
-  </content-header>
+  <header class="mb-4 sm:mb-8 lg:mb-9 pt-4 sm:pt-5 lg:pt-7 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-50 border-bottom sm:max-w-4xl">
+     <div class="sm:flex w-full sm:justify-between">
+      <div>
+        <div class="text-2xl font-bold mb-2 sm:mb-3 flex items-center">
+          <!-- <router-link :to="{name: 'project-update', params: { uuid: project.uuid }}" class="mr-2 mt-1">
+            <pencil-alt-icon class="icon-list" aria-hidden="true" />
+          </router-link> -->
+          <span class="text-dark">{{project.company.name}} – {{project.number}} {{project.name}}</span>
+        </div>
+        <div class="hidden md:flex">
+          <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+            <div class="text-xs font-mono">Projektleiter</div>
+            <div class="text-sm">{{project.manager.full_name}}</div>
+          </div>
+          <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+            <div class="text-xs font-mono">Projektstart</div>
+            <div class="text-sm ">{{project.date_start}}</div>
+          </div>
+          <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+            <div class="text-xs font-mono">Abgabetermin</div>
+            <div class="text-sm">{{project.date_end}}</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <router-link :to="{ name: 'message-create' }" class="btn-create">
+          <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+          <span class="block ml-2">Neue Nachricht</span>
+        </router-link>
+      </div>
+    </div>
+  </header>
+
   <feed>
-    <feed-item v-for="d in data" :key="d.uuid">
+
+    <feed-item v-for="d in data" :key="d.uuid" :internal="d.internal">
       <feed-item-timestamp>{{ d.feed_date }}</feed-item-timestamp>
       <feed-item-sender>
         Nachricht von <span class="font-bold">{{d.sender.short_name}}</span>
@@ -42,7 +71,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, TrashIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -62,6 +91,7 @@ export default {
   components: {
     PlusCircleIcon,
     TrashIcon,
+    PencilAltIcon,
     ContentHeader,
     Separator,
     List,
@@ -138,7 +168,7 @@ export default {
 
   computed: {
     title() {
-      return `<span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
+      return `${this.project.number} – <span class="text-highlight">${this.project.name}</span>`;
     }
   }
 }

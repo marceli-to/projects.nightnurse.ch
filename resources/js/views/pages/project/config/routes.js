@@ -5,6 +5,11 @@ import ProjectUpdate from '@/views/pages/project/Update.vue';
 const routes = [
 
   {
+    name: 'home',
+    path: '/',
+    component: ProjectIndex,
+  },
+  {
     name: 'projects',
     path: '/projects',
     component: ProjectIndex,

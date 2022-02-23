@@ -66,7 +66,7 @@ class Media
       'original_name' => $name, 
       'extension' => $filetype, 
       'size' => $filesize,
-      'preview' => in_array($filetype, $this->previewable_image_types) ? TRUE : FALSE
+      'preview' => in_array(strtolower($filetype), $this->previewable_image_types) ? TRUE : FALSE
     ];
   }
 

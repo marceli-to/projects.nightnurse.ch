@@ -18,11 +18,15 @@ class Message extends Base
     'subject',
     'body',
     'private',
+    'internal',
     'project_id',
     'user_id',
 	];
 
-  protected $appends = ['feed_date'];
+  protected $appends = [
+    'feed_date',
+    'can_delete',
+  ];
 
 
   public function sender()
@@ -45,6 +49,11 @@ class Message extends Base
     return $this->hasMany(MessageFile::class, 'message_id', 'id');
   }
 
+  public function getCanDeleteAttribute($value)
+  {
+    return $this->user_id == auth()->user()->id ? true : false;
+  }
+
   /**
    * Get the user's short name.
    *
@@ -64,6 +73,6 @@ class Message extends Base
     {
       return 'Yesterday, ' . date('H:i', strtotime($this->created_at));
     }
-    return date('D, d.m.Y', strtotime($this->created_at));
+    return date('D, d.m.Y – H:i', strtotime($this->created_at));
   }
 }

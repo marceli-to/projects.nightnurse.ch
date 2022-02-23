@@ -19,9 +19,6 @@ Route::get('/logout', 'Auth\LoginController@logout');
 // Frontend
 // Route::get('/', [PageController::class, 'index']);
 
-// Testing
-Route::get('/test-message', [PageController::class, 'message']);
-
 
 // Url based images
 Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageController::class, 'getResponse']);
@@ -37,7 +34,7 @@ Route::middleware('auth:sanctum', 'verified')->group(function() {
   
   Route::get('{any?}', function () {
     return view('layout.authenticated');
-  })->where('any', '.*')->middleware('role:admin')->name('cms');
+  })->where('any', '.*')->middleware('role:admin')->name('projects');
 
 });
 
