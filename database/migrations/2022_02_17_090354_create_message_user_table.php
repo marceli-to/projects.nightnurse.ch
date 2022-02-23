@@ -18,6 +18,7 @@ class CreateMessageUserTable extends Migration
             $table->foreignId('message_id')->constrained();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('message_state_id')->constrained();
+            $table->tinyInteger('processed')->default(0);
             $table->timestamps();
         });
     }

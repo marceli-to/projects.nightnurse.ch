@@ -14,15 +14,16 @@ class CreateMessagesTable extends Migration
     public function up()
     {
         Schema::create('messages', function (Blueprint $table) {
-            $table->id();
-            $table->string('uuid', 36);
-            $table->string('subject', 255)->nullable();
-            $table->text('body')->nullable();
-            $table->tinyInteger('private')->default(0);
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('project_id')->constrained();
-            $table->softDeletes();
-            $table->timestamps();
+          $table->id();
+          $table->string('uuid', 36);
+          $table->string('subject', 255)->nullable();
+          $table->text('body')->nullable();
+          $table->tinyInteger('private')->default(0);
+          $table->tinyInteger('internal')->default(0);
+          $table->foreignId('user_id')->nullable()->constrained();
+          $table->foreignId('project_id')->constrained();
+          $table->softDeletes();
+          $table->timestamps();
         });
     }
 

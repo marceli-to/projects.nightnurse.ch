@@ -3,10 +3,11 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-  use Notifiable;
+  use Notifiable, SoftDeletes;
   
   /**
    * The attributes that are mass assignable.
@@ -34,7 +35,7 @@ class User extends Authenticatable implements MustVerifyEmail
    * @var array
    */
   protected $hidden = [
-    'password', 'remember_token', 'role_id', 'id'
+    'password', 'remember_token'
   ];
 
   /**
@@ -52,6 +53,15 @@ class User extends Authenticatable implements MustVerifyEmail
    * @var array
    */
   protected $appends = ['short_name', 'full_name'];
+
+
+  public function permissions()
+  {
+    return [
+      'private' => $this->role_id == 1 ? TRUE : FALSE
+    ];
+  }
+
 
   /**
    * Relations

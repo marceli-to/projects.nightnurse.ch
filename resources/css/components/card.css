@@ -15,7 +15,7 @@ h2.card-auth__heading {
 }
 
 .card-auth__logo {
-  @apply flex justify-center mb-4 md:mb-8
+  @apply mb-4 md:mb-6
 }
 
 .card-auth__buttons {

@@ -11,60 +11,68 @@
         </div>
         <div class="hidden md:flex">
           <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-            <div class="text-xs font-mono">Projektleiter</div>
-            <div class="text-sm">{{project.manager.full_name}}</div>
+            <div class="text-xs font-mono pb-0.5">Projektleiter</div>
+            <div class="text-sm text-dark">{{project.manager.full_name}}</div>
           </div>
           <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-            <div class="text-xs font-mono">Projektstart</div>
-            <div class="text-sm ">{{project.date_start}}</div>
+            <div class="text-xs font-mono pb-0.5">Projektstart</div>
+            <div class="text-sm text-dark">{{project.date_start}}</div>
           </div>
           <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-            <div class="text-xs font-mono">Abgabetermin</div>
-            <div class="text-sm">{{project.date_end}}</div>
+            <div class="text-xs font-mono pb-0.5">Abgabetermin</div>
+            <div class="text-sm text-dark">{{project.date_end}}</div>
           </div>
         </div>
       </div>
       <div>
         <router-link :to="{ name: 'message-create' }" class="btn-create">
           <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-          <span class="block ml-2">Neue Nachricht</span>
+          <span class="block ml-2">Erstellen</span>
         </router-link>
       </div>
     </div>
   </header>
-
   <feed>
-
     <feed-item v-for="d in data" :key="d.uuid" :internal="d.internal">
       <feed-item-timestamp>{{ d.feed_date }}</feed-item-timestamp>
-      <feed-item-sender>
-        Nachricht von <span class="font-bold">{{d.sender.short_name}}</span>
-      </feed-item-sender>
-      <feed-item-body v-if="d.subject || d.body">
-        <div :class="[d.body ? 'font-bold' : '', 'text-sm']">{{ d.subject }}</div>
-        <div class="text-sm" v-html="d.body"></div>
-      </feed-item-body>
-      <div v-if="d.files" :class="[d.subject || d.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-2']">
-        <div v-for="file in d.files" :key="file.uuid" class="first:border-t-2 border-b-2 border-gray-100 py-2 lg:py-3 last:border-b-0">
-          <a :href="`/img/original/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-if="file.preview">
-            <img 
-            :src="`/img/thumbnail/${file.name}`" 
-            height="100" 
-            width="100"
-            class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light rounded-sm"
-            v-if="file.preview" />
-            <div class="font-mono text-xs">
-              <div class="mb-1">{{ file.original_name | truncate(50, '...') }}</div>
-              <div>{{ file.size | filesize(file.size) }}</div>
-            </div>
-          </a>
-          <a :href="`/storage/uploads/${file.name}`" class="flex items-center no-underline hover:text-highlight" v-else>
-            <div class="font-mono text-xs">
-              <div class="mb-1">{{ file.original_name | truncate(50, '...') }}</div>
-              <div>{{ file.size | filesize(file.size) }}</div>
-            </div>
-          </a>
+      <div v-if="!d.deleted_at">
+        <feed-item-sender>
+          Nachricht von 
+          <span class="font-bold" v-if="d.sender">{{d.sender.short_name}}</span>
+          <span v-else>[deleted user]</span>
+        </feed-item-sender>
+        <feed-item-body v-if="d.subject || d.body">
+          <div :class="[d.body ? 'font-bold' : '', 'text-sm']">{{ d.subject }}</div>
+          <div class="text-sm" v-html="d.body"></div>
+        </feed-item-body>
+        <div v-if="d.files" :class="[d.subject || d.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-2']">
+          <div v-for="file in d.files" :key="file.uuid" class="first:border-t-2 border-b-2 border-gray-100 py-2 lg:py-3 last:border-b-0">
+            <a :href="`/img/original/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-if="file.preview">
+              <img 
+              :src="`/img/thumbnail/${file.name}`" 
+              height="100" 
+              width="100"
+              class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light rounded-sm"
+              v-if="file.preview" />
+              <div class="font-mono text-xs">
+                <div class="mb-1">{{ file.original_name | truncate(50, '...') }}</div>
+                <div>{{ file.size | filesize(file.size) }}</div>
+              </div>
+            </a>
+            <a :href="`/storage/uploads/${file.name}`" class="flex items-center no-underline hover:text-highlight" v-else>
+              <div class="font-mono text-xs">
+                <div class="mb-1">{{ file.original_name | truncate(50, '...') }}</div>
+                <div>{{ file.size | filesize(file.size) }}</div>
+              </div>
+            </a>
+          </div>
         </div>
+        <a href="javascript:;" @click.prevent="destroy(d.uuid)" class="feed-item-delete" v-if="d.can_delete">Löschen</a>
+      </div>
+      <div v-else>
+        <feed-item-body>
+          <div class="text-xs text-gray-400 font-mono italic sm:pt-1">Nachricht wurde gelöscht</div>
+        </feed-item-body>
       </div>
     </feed-item>
   </feed>

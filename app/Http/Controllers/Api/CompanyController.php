@@ -33,7 +33,7 @@ class CompanyController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function findOwner()
+  public function getOwner()
   {
     return response()->json(Company::owner()->with('users')->orderBy('name')->get()->first());
   }
@@ -99,6 +99,7 @@ class CompanyController extends Controller
    */
   public function destroy(Company $company)
   {
+    $company->users()->delete();
     $company->delete();
     return response()->json('successfully deleted');
   }

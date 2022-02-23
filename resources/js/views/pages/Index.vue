@@ -30,7 +30,7 @@ export default {
 
   methods: {
     fetch() {
-      this.axios.get(`/api/authenticated-user`).then(response => {
+      this.axios.get(`/api/user/authenticated`).then(response => {
         this.user = response.data;
         this.isFetched = true;
       });

@@ -21,7 +21,12 @@ class MessageController extends Controller
    */
   public function get(Project $project)
   {
-    return new DataCollection(Message::with('project', 'sender', 'files')->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+    if (auth()->user()->isAdmin())
+    {
+      return new DataCollection(Message::with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+    }
+    return new DataCollection(Message::public()->with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+
   }
 
   /**

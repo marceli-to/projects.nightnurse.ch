@@ -21,7 +21,7 @@ class CreateMessageFilesTable extends Migration
             $table->string('extension', 4);
             $table->float('size', 24, 0)->default(0);
             $table->tinyInteger('preview')->default(0);
-            $table->foreignId('message_id')->constrained();
+            $table->foreignId('message_id')->nullable()->constrained();
             $table->softDeletes();
             $table->timestamps();
         });

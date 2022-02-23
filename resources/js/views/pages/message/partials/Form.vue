@@ -65,7 +65,7 @@
 
     </div>
 
-    <div class="form-group">
+    <div class="form-group" v-if="user.permissions.private">
       <form-radio 
         :label="'Private Nachricht?'"
         v-bind:private.sync="data.private"
@@ -185,6 +185,12 @@ export default {
 
       projectOwner: [],
 
+      user: {
+        permissions: {
+          private: false,
+        }
+      },
+
       // Validation
       errors: {
         name: false,
@@ -244,10 +250,11 @@ export default {
       this.axios.all([
         this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`),
         this.axios.get(`/api/company/owner`),
+        this.axios.get(`/api/user/authenticated`),
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data,
         this.projectOwner = responses[1].data,
-
+        this.user = responses[2].data,
         // Add owner before all other companies
         this.project.companies.unshift(this.projectOwner);
         this.isFetched = true;

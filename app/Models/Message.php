@@ -28,7 +28,6 @@ class Message extends Base
     'can_delete',
   ];
 
-
   public function sender()
   {
     return $this->hasOne(User::class, 'id', 'user_id');
@@ -52,6 +51,11 @@ class Message extends Base
   public function getCanDeleteAttribute($value)
   {
     return $this->user_id == auth()->user()->id ? true : false;
+  }
+
+  public function scopePublic($query)
+  {
+    return $query->where('private', 0);
   }
 
   /**
