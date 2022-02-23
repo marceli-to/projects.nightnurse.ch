@@ -185,11 +185,7 @@ export default {
 
       projectOwner: [],
 
-      user: {
-        permissions: {
-          private: false,
-        }
-      },
+      user: {},
 
       // Validation
       errors: {
@@ -238,6 +234,7 @@ export default {
 
   created() {
     this.fetch();
+
   },
 
   methods: {

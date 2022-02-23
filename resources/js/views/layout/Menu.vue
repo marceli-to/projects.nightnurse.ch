@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="text-xs pl-3 text-gray-400">
-      {{user}}<br>
+      {{user.firstname}} {{user.name}}<br>
       <div class="flex">
         <a href="" class="text-xs text-gray-400 font-normal hover:no-underline">Profile</a>
         <span class="inline-block px-2">&bull;</span>
@@ -70,7 +70,7 @@ export default {
   },
 
   props: {
-    user: '',
+    user: {},
   },
 
 	data() {

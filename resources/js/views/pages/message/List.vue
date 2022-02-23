@@ -1,34 +1,23 @@
 <template>
 <div v-if="isFetched">
   <header class="mb-4 sm:mb-8 lg:mb-9 pt-4 sm:pt-5 lg:pt-7 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-50 border-bottom sm:max-w-4xl">
-     <div class="sm:flex w-full sm:justify-between">
-      <div>
-        <div class="text-2xl font-bold mb-2 sm:mb-3 flex items-center">
-          <!-- <router-link :to="{name: 'project-update', params: { uuid: project.uuid }}" class="mr-2 mt-1">
-            <pencil-alt-icon class="icon-list" aria-hidden="true" />
-          </router-link> -->
-          <span class="text-dark">{{project.company.name}} – {{project.number}} {{project.name}}</span>
-        </div>
-        <div class="hidden md:flex">
-          <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-            <div class="text-xs font-mono pb-0.5">Projektleiter</div>
-            <div class="text-sm text-dark">{{project.manager.full_name}}</div>
-          </div>
-          <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-            <div class="text-xs font-mono pb-0.5">Projektstart</div>
-            <div class="text-sm text-dark">{{project.date_start}}</div>
-          </div>
-          <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-            <div class="text-xs font-mono pb-0.5">Abgabetermin</div>
-            <div class="text-sm text-dark">{{project.date_end}}</div>
-          </div>
-        </div>
+    <div>
+      <div class="text-2xl font-bold mb-2 sm:mb-3 flex items-center">
+        <span class="text-dark">{{project.company.name}} – {{project.number}} {{project.name}}</span>
       </div>
-      <div>
-        <router-link :to="{ name: 'message-create' }" class="btn-create">
-          <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-          <span class="block ml-2">Erstellen</span>
-        </router-link>
+      <div class="flex">
+        <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+          <div class="text-xs font-mono pb-0.5">Projektleiter</div>
+          <div class="text-sm text-dark">{{project.manager.full_name}}</div>
+        </div>
+        <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+          <div class="text-xs font-mono pb-0.5">Projektstart</div>
+          <div class="text-sm text-dark">{{project.date_start}}</div>
+        </div>
+        <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+          <div class="text-xs font-mono pb-0.5">Abgabetermin</div>
+          <div class="text-sm text-dark">{{project.date_end}}</div>
+        </div>
       </div>
     </div>
   </header>
@@ -76,6 +65,12 @@
       </div>
     </feed-item>
   </feed>
+  <content-footer>
+    <router-link :to="{ name: 'message-create' }" class="btn-create">
+      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+      <span class="block ml-2">Erstellen</span>
+    </router-link>
+  </content-footer>
 </div>
 </template>
 <script>
@@ -84,6 +79,7 @@ import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
 import ContentHeader from "@/components/ui/layout/Header.vue";
+import ContentFooter from "@/components/ui/layout/Footer.vue";
 import List from "@/components/ui/layout/List.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
@@ -101,6 +97,7 @@ export default {
     TrashIcon,
     PencilAltIcon,
     ContentHeader,
+    ContentFooter,
     Separator,
     List,
     ListItem,
