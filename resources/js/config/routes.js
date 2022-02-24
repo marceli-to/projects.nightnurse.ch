@@ -22,6 +22,10 @@ const routes = [
 
   // Authorization
   {
+    name: 'logout',
+    path: '/logout',
+  },
+  {
     name: 'forbidden',
     path: '/forbidden',
     component: ErrorForbidden,
