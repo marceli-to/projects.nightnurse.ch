@@ -9,7 +9,7 @@ return [
   |
   */
 
-  'company' => env('ER_NIGHTNURSE_COMPANY_NAME', 'ER Nightnurse'),
+  'company' => env('NIGHTNURSE_COMPANY_NAME', 'Projects Nightnurse'),
 
   /*
   |--------------------------------------------------------------------------
@@ -19,10 +19,10 @@ return [
   */
 
   'email' => [
-    'from' => env('ER_NIGHTNURSE_MAIL_FROM', 'noreply@nightnurse.ch'),
-    'recipient' => env('ER_NIGHTNURSE_MAIL_RECIPIENT', 'm@marceli.to'),
-    'bcc' => env('ER_NIGHTNURSE_MAIL_BCC', 'm@marceli.to'),
-    'recipient_test' => env('ER_NIGHTNURSE_MAIL_RECIPIENT_TEST', 'm@marceli.to')
+    'from' => env('NIGHTNURSE_MAIL_FROM', 'noreply@nightnurse.ch'),
+    'recipient' => env('NIGHTNURSE_MAIL_RECIPIENT', 'm@marceli.to'),
+    'bcc' => env('NIGHTNURSE_MAIL_BCC', 'm@marceli.to'),
+    'recipient_test' => env('NIGHTNURSE_MAIL_RECIPIENT_TEST', 'm@marceli.to')
   ],
 
   /*
@@ -32,7 +32,7 @@ return [
   |
   */
 
-  'domain' => env('ER_NIGHTNURSE_DOMAIN', 'https://er.nightnurse.ch'),
+  'domain' => env('NIGHTNURSE_DOMAIN', 'https://projects.nightnurse.ch'),
 
   /*
   |--------------------------------------------------------------------------
@@ -50,6 +50,6 @@ return [
   |
   */
 
-  'owner_id' => env('ER_NIGHTNURSE_OWNER_ID', 1)
+  'owner_id' => env('NIGHTNURSE_OWNER_ID', 1)
 ]
 ?>

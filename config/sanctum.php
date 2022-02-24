@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost,127.0.0.1,er.nightnurse.ch.local,er.nightnurse.ch,www.er.nightnurse.ch')),
+    'stateful' => explode(',', env('SANCTUM_STATEFUL_DOMAINS', 'localhost,127.0.0.1,projects.nightnurse.ch.local,projects.nightnurse.ch,www.projects.nightnurse.ch')),
 
     /*
     |--------------------------------------------------------------------------
