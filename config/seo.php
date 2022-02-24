@@ -11,7 +11,7 @@ return [
   |
   */
 
-  'title' => 'Emergency Room • Nightnurse',
+  'title' => 'Project Room • Nightnurse',
 
   /*
   |--------------------------------------------------------------------------

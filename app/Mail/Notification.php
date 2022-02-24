@@ -29,7 +29,7 @@ class Notification extends Mailable
    */
   public function build()
   {
-    return $this->from(\Config::get('client.email.from'), 'Emergency Room – Nightnurse')
+    return $this->from(\Config::get('client.email.from'), 'Project Room – Nightnurse')
                 ->subject($this->subject)
                 ->with(['message' => $this->message])
                 ->markdown('notifications.message');
