@@ -24,14 +24,6 @@
       </select>
     </div>
 
-    <div class="form-group">
-      <label>Hauptkunde <asterisk /></label>
-      <select v-model="data.company_id">
-        <option value="null">Bitte wählen...</option>
-        <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
-      </select>
-    </div>
-
     <content-grid class="mt-6 sm:mt-8">
       <div class="form-group">
         <label>Projektstart</label>
@@ -58,18 +50,18 @@
     </content-grid>
 
     <div class="form-group">
-      <label>Status</label>
-      <select v-model="data.project_state_id">
+      <label>Hauptkunde <asterisk /></label>
+      <select v-model="data.company_id">
         <option value="null">Bitte wählen...</option>
-        <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
+        <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Weitere Kunden hinzufügen</label>
+      <label>Weitere Kunden</label>
       <select name="companies" @change="addCompany($event)">
         <option value="null">Bitte wählen...</option>
-        <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.name }}</option>
+        <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.full_name }}</option>
       </select>
     </div>
 
@@ -81,10 +73,18 @@
           v-for="d in data.companies" 
           :key="d.id"
           @click.prevent="removeCompany(d.id)">
-          <span class="inline-block mr-3">{{ d.name }}, {{ d.city }}</span>
+          <span class="inline-block mr-3">{{ d.full_name }}</span>
           <x-icon class="h-5 w-5" aria-hidden="true"></x-icon>
         </a>
       </div>
+    </div>
+
+    <div class="form-group">
+      <label>Status</label>
+      <select v-model="data.project_state_id">
+        <option value="null">Bitte wählen...</option>
+        <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
+      </select>
     </div>
 
     <content-footer>
@@ -239,7 +239,7 @@ export default {
       let target = event.target, id = target.value, name = target.options[target.selectedIndex].innerHTML;
       const idx = this.data.companies.findIndex(x => x.id === parseInt(id));
       if (idx == -1 && id != "null") {
-        let d = { id: parseInt(id), name: name };
+        let d = { id: parseInt(id), full_name: name };
         this.data.companies.push(d);
       }
     },

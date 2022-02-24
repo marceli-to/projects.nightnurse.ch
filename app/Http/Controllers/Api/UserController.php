@@ -110,7 +110,7 @@ class UserController extends Controller
   /**
    * Get users info by authenticated user
    */
-  public function findAuthenticated()
+  public function getAuthenticated()
   {
     $user = User::findOrFail(auth()->user()->id);
     return response()->json(['firstname' => $user->firstname, 'name' => $user->name, 'permissions' => auth()->user()->permissions()]);

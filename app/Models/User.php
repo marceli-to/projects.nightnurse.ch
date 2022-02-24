@@ -57,9 +57,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
   public function permissions()
   {
-    return [
-      'private' => $this->role_id == 1 ? TRUE : FALSE
-    ];
+    if ($this->role_id == 1)
+    {
+      return [
+        'private' => TRUE,
+        'clients' => TRUE
+      ];
+    }
+
+    return [];
   }
 
 

@@ -17,6 +17,9 @@ class Company extends Base
     'publish',
 	];
 
+  protected $appends = ['full_name'];
+
+
   /**
    * Relations
    */
@@ -45,5 +48,17 @@ class Company extends Base
 	{
 		return $query->where('owner', 1);
 	}
+
+  /**
+   * Get a companies name & city (if available)
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getFullNameAttribute($value)
+  {
+    
+    return ($this->name && $this->city) ? $this->name . ', ' . $this->city : $this->name;
+  }
 
 }
