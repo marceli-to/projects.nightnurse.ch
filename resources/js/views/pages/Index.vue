@@ -1,6 +1,6 @@
 <template>
 <div v-if="isFetched">
-  <content-header :title="`Willkommen <span class='text-highlight'>${user.firstname} ${user.name}</span>`"></content-header>
+  <content-header :title="`Willkommen <span class='text-highlight'>${$store.state.user.firstname} ${$store.state.user.name}</span>`"></content-header>
 </div>
 </template>
 <script>
@@ -17,24 +17,5 @@ export default {
 
   mixins: [Helpers],
 
-  data() {
-    return {
-      isFetched: false,
-      user: {},
-    };
-  },
-
-  created() {
-    this.fetch();
-  },
-
-  methods: {
-    fetch() {
-      this.axios.get(`/api/user/authenticated`).then(response => {
-        this.user = response.data;
-        this.isFetched = true;
-      });
-    }
-  }
 }
 </script>

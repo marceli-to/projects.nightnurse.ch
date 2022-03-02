@@ -121,7 +121,20 @@ class UserController extends Controller
   public function getAuthenticated()
   {
     $user = User::findOrFail(auth()->user()->id);
-    return response()->json(['firstname' => $user->firstname, 'name' => $user->name, 'permissions' => auth()->user()->permissions()]);
+
+    $data = [
+      'firstname' => $user->firstname, 
+      'name' => $user->name,
+      'email' => $user->email,
+      //'permissions' => auth()->user()->permissions()
+    ];
+
+    if ($user->isAdmin())
+    {
+      $data['admin'] = TRUE;
+    }
+
+    return response()->json($data);
   }
 
   /**

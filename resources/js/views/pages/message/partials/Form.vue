@@ -65,7 +65,7 @@
 
     </div>
 
-    <div class="form-group" v-if="user.permissions.private">
+    <div class="form-group" v-if="$store.state.user.admin">
       <form-radio 
         :label="'Private Nachricht?'"
         v-bind:private.sync="data.private"
@@ -102,6 +102,34 @@
                   {{ user.firstname }} {{ user.name }}
                 </label>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="project.company.users.length > 0">
+        <div class="form-check mb-2">
+          <input 
+            type="checkbox" 
+            class="checkbox" 
+            :id="project.company.uuid" 
+            @change="toggleAll($event, project.company.uuid)">
+          <label class="inline-block text-gray-800 font-bold" :for="project.company.uuid">
+            {{ project.company.name }} (Alle)
+          </label>
+        </div>
+        <div class="grid lg:grid-cols-4 mb-6">
+          <div v-for="user in project.company.users" :key="user.uuid">
+            <div class="form-check">
+              <input 
+                type="checkbox" 
+                class="checkbox" 
+                :value="user.uuid" 
+                :id="user.uuid" 
+                :data-company-uuid="project.company.uuid"
+                @change="toggleOne($event, user.uuid)">
+              <label class="inline-block text-gray-800" :for="user.uuid">
+                {{ user.firstname }} {{ user.name }}
+              </label>
             </div>
           </div>
         </div>
@@ -180,7 +208,10 @@ export default {
 
       project: {
         number: null,
-        name: null
+        name: null,
+        company: {
+          users:  []
+        },
       },
 
       projectOwner: [],
@@ -247,11 +278,9 @@ export default {
       this.axios.all([
         this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`),
         this.axios.get(`/api/company/owner`),
-        this.axios.get(`/api/user/authenticated`),
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data,
         this.projectOwner = responses[1].data,
-        this.user = responses[2].data,
         // Add owner before all other companies
         this.project.companies.unshift(this.projectOwner);
         this.isFetched = true;

@@ -1,7 +1,7 @@
 <template>
 <div v-if="isFetched">
   <content-header :title="title">
-    <router-link :to="{ name: 'project-create' }" class="btn-icon">
+    <router-link :to="{ name: 'project-create' }" class="btn-icon" v-if="$store.state.user.admin">
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
@@ -15,10 +15,10 @@
           <span v-if="d.messages.length" class="rounded-full bg-highlight absolute -top-[2px] right-[7px] h-2 w-2 block"></span>
           <annotation-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
-        <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
+        <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}" v-if="$store.state.user.admin">
           <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
-        <a href="" @click.prevent="destroy(d.uuid)">
+        <a href="" @click.prevent="destroy(d.uuid)" v-if="$store.state.user.admin">
           <trash-icon class="icon-list" aria-hidden="true" />
         </a>
       </list-action>

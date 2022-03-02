@@ -27,7 +27,7 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    return response()->json(Project::with('state', 'company', 'companies.users', 'manager')->findOrFail($project->id));
+    return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager')->findOrFail($project->id));
   }
 
   /**

@@ -70,6 +70,9 @@
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
       <span class="block ml-2">Erstellen</span>
     </router-link>
+    <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
+      <span>Zurück</span>
+    </router-link>
   </content-footer>
 </div>
 </template>
