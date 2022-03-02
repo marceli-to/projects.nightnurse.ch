@@ -30,7 +30,7 @@ class MessageController extends Controller
     // Access check
     $hasProject = Project::where('company_id', auth()->user()->company_id)->get()->first();
     $hasCompanyProject = CompanyProject::where('project_id', $project->id)->where('company_id', auth()->user()->company_id)->get()->first();
-    if (!$hasProject || !$hasCompanyProject)
+    if (!$hasProject && !$hasCompanyProject)
     {
       return abort(403);
     }
