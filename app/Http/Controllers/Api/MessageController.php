@@ -35,6 +35,7 @@ class MessageController extends Controller
       return abort(403);
     }
 
+    // Map fields
     $messages = Message::public()
       ->with('project', 'sender', 'files')
       ->withTrashed()

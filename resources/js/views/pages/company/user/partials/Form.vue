@@ -2,12 +2,12 @@
 <div>
   <content-header :title="title"></content-header>
   <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-width-content">
-    <div class="form-group">
+    <div :class="[errors.firstname ? 'is-invalid' : '', 'form-group']">
       <label>Vorname <asterisk /></label>
       <input type="text" v-model="data.firstname">
       <required />
     </div>
-    <div class="form-group">
+    <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
       <label>Name <asterisk /></label>
       <input type="text" v-model="data.name">
       <required />
@@ -18,14 +18,14 @@
     </div>
 
     <content-grid class="mt-6 lg:mt-8">
-      <div class="form-group">
-        <label>Geschlecht</label>
+    <div :class="[errors.gender_id ? 'is-invalid' : '', 'form-group']">
+        <label>Geschlecht <asterisk /></label>
         <select v-model="data.gender_id">
           <option :value="g.id" v-for="g in settings.genders" :key="g.id">{{g.description}}</option>
         </select>
       </div>
-      <div class="form-group">
-        <label>Sprache</label>
+    <div :class="[errors.language_id ? 'is-invalid' : '', 'form-group']">
+        <label>Sprache <asterisk /></label>
         <select v-model="data.language_id">
           <option :value="l.id" v-for="l in settings.languages" :key="l.id">{{l.description}}</option>
         </select>
@@ -39,7 +39,7 @@
       </select>
     </div>
     <template v-if="$props.type == 'update'">
-      <div class="form-group">
+    <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
         <label>E-Mail <asterisk /></label>
         <input type="email" v-model="data.email">
         <required />
@@ -54,12 +54,12 @@
     </template>
     <template v-if="$props.type == 'create'">
       <h3 class="mb-6 lg:mb-8">Zugangsdaten</h3>
-      <div class="form-group">
+    <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
         <label>E-Mail <asterisk /></label>
         <input type="email" v-model="data.email">
         <required />
       </div>
-      <div class="form-group">
+    <div :class="[errors.password ? 'is-invalid' : '', 'form-group']">
         <label>Passwort <asterisk /></label>
         <input type="password" v-model="data.password" data-field-password>
         <a href="javascript:;" @click.prevent="togglePassword()" class="absolute right-0 bottom-8">
@@ -73,12 +73,12 @@
         </a>
         <required />
       </div>
-      <div class="form-group">
+    <div :class="[errors.password_confirmation ? 'is-invalid' : '', 'form-group']">
         <label>Passwort wiederholen <asterisk /></label>
         <input type="password" v-model="data.password_confirmation" data-field-password>
         <required />
       </div>
-      <div class="form-group">
+    <div :class="[errors.role_id ? 'is-invalid' : '', 'form-group']">
         <label>Rolle</label>
         <select v-model="data.role_id">
           <option :value="r.id" v-for="r in settings.roles" :key="r.id">{{r.description}}</option>

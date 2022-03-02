@@ -4,19 +4,19 @@
     
     <content-header :title="title"></content-header>
     
-    <div class="form-group">
+    <div :class="[errors.number ? 'is-invalid' : '', 'form-group']">
       <label>Nummer <asterisk /></label>
       <input type="text" v-model="data.number">
       <required />
     </div>
 
-    <div class="form-group">
+    <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
       <label>Name <asterisk /></label>
       <input type="text" v-model="data.name">
       <required />
     </div>
     
-    <div class="form-group">
+    <div :class="[errors.user_id ? 'is-invalid' : '', 'form-group']">
       <label>Projektleiter <asterisk /></label>
       <select v-model="data.user_id">
         <option value="null">Bitte wählen...</option>
@@ -49,7 +49,7 @@
       </div>
     </content-grid>
 
-    <div class="form-group">
+    <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group']">
       <label>Hauptkunde <asterisk /></label>
       <select v-model="data.company_id">
         <option value="null">Bitte wählen...</option>
@@ -79,8 +79,8 @@
       </div>
     </div>
 
-    <div class="form-group">
-      <label>Status</label>
+    <div :class="[errors.project_state_id ? 'is-invalid' : '', 'form-group']">
+      <label>Status <asterisk /></label>
       <select v-model="data.project_state_id">
         <option value="null">Bitte wählen...</option>
         <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>

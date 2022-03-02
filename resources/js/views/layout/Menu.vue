@@ -48,7 +48,8 @@
 </template>
 <script>
 
-import { UsersIcon, FolderIcon, OfficeBuildingIcon, LogoutIcon } from "@vue-hero-icons/outline";
+import { UsersIcon, FolderIcon, OfficeBuildingIcon } from "@vue-hero-icons/outline";
+import { LogoutIcon } from "@vue-hero-icons/solid"
 import MenuItem from '@/components/ui/menu/Item';
 import MenuItemLabel from '@/components/ui/menu/Label';
 

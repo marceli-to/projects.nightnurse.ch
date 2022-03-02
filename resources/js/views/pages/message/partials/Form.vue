@@ -5,12 +5,12 @@
     <content-header :title="title"></content-header>
     
     <div class="form-group">
-      <label>Betreff *</label>
+      <label>Betreff</label>
       <input type="text" v-model="data.subject">
     </div>
 
     <div class="form-group mt-6 lg:mt-8">
-      <label class="mb-3 lg:mb-3">Mitteilung *</label>
+      <label class="mb-3 lg:mb-3">Mitteilung</label>
       <tinymce-editor
         :api-key="tinyApiKey"
         :init="tinyConfig"
@@ -74,7 +74,7 @@
       </form-radio>
     </div>
 
-    <div class="form-group">
+    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
       <label class="mb-2">Empfänger *</label>
       <div v-for="company in project.companies" :key="company.uuid">
         <div v-if="company.users.length > 0">

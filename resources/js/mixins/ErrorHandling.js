@@ -50,7 +50,8 @@ export default {
       // data.body.forEach(function(key) {
       //   errors[key.field] = true;
       // });
-      // this.errors = errors;
+      this.errors = data.body;
+      console.log(data.body);
       this.isLoading = false;
       this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
     },

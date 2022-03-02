@@ -41,9 +41,6 @@ class UserStoreRequest extends FormRequest
    */
   public function messages()
   {
-    return [
-      'name.required' => 'Name wird benötigt!',
-      'firstname.required' => 'Vorname wird benötigt!',
-    ];
+    return [];
   }
 }

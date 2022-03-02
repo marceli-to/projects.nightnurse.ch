@@ -4,7 +4,7 @@
     
     <content-header :title="title"></content-header>
 
-    <div class="form-group">
+    <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
       <label>Name <asterisk /></label>
       <input type="text" v-model="data.name">
       <required />

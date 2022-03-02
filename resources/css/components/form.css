@@ -71,6 +71,10 @@
   @apply mb-4 lg:mb-6 max-width-content relative;
 }
 
+.form-group.is-invalid label {
+  @apply text-red-500;
+}
+
 .form-group label {
   @apply text-gray-400 text-xs sm:text-sm font-mono inline-block relative;
 }
