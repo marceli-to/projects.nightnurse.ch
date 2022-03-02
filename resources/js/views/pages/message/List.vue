@@ -156,7 +156,7 @@ export default {
         this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.project}/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
-        this.data = responses[0].data.data;
+        this.data = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
         this.isFetched = true;
         this.isLoading = false;

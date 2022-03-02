@@ -25,8 +25,31 @@ class MessageController extends Controller
     {
       return new DataCollection(Message::with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
     }
-    return new DataCollection(Message::public()->with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
 
+    $messages = Message::public()
+      ->with('project', 'sender', 'files')
+      ->withTrashed()
+      ->orderBy('created_at', 'DESC')
+      ->where('project_id', $project->id)
+      ->get()
+      ->map(function($m) {
+      return [
+        'uuid' => $m->uuid,
+        'subject' => $m->subject,
+        'body' => $m->body,
+        'internal' => $m->internal,
+        'can_delete' => $m->can_delete,
+        'feed_date' => $m->feed_date,
+        'deleted_at' => $m->deleted_at,
+        'files' => $m->files,
+        'sender' => [
+          'short_name' => $m->sender->short_name,
+          'name' => $m->sender->name,
+          'firstname' => $m->sender->firstname,
+        ]
+      ];
+    });
+    return response()->json(collect($messages));
   }
 
   /**

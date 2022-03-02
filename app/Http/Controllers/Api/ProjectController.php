@@ -21,12 +21,33 @@ class ProjectController extends Controller
       return new DataCollection(Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get());
     }
     
+    // Get users company id
     $companyId = auth()->user()->company_id;
+
+    // Get project with that company (main company)
     $projects = Project::byCompanyUser($companyId)->get()->pluck('id');
+
+    // Get projects with that compnay (associated company)
     $companyProjects = CompanyProject::where('company_id', $companyId)->get()->pluck('project_id');
+
+    // Merge array of ids and remove duplicates
     $ids = array_unique(array_merge($projects->all(), $companyProjects->all()), SORT_REGULAR);
 
-    return new DataCollection(Project::with('company', 'messages')->whereIn('id', $ids)->orderBy('number', 'DESC')->get());
+    // Map fields
+    $projects = Project::with('company', 'messages')
+      ->whereIn('id', $ids)
+      ->orderBy('number', 'DESC')
+      ->get()
+      ->map(function($p) {
+        return [
+          'uuid' => $p->uuid,
+          'number' => $p->number,
+          'name' => $p->name,
+          'company' => $p->company->name,
+          'messages' => $p->messages->count()
+        ];
+    });
+    return response()->json(collect($projects));
   }
 
   /**

@@ -10,17 +10,23 @@
       <div class="flex items-center">
         {{d.number}}<separator />{{ d.name }}<separator />{{ d.company.name }}
       </div>
-      <list-action>
+      <list-action v-if="$store.state.user.admin">
         <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative">
           <span v-if="d.messages.length" class="rounded-full bg-highlight absolute -top-[2px] right-[7px] h-2 w-2 block"></span>
           <annotation-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
-        <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}" v-if="$store.state.user.admin">
+        <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
           <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
-        <a href="" @click.prevent="destroy(d.uuid)" v-if="$store.state.user.admin">
+        <a href="" @click.prevent="destroy(d.uuid)">
           <trash-icon class="icon-list" aria-hidden="true" />
         </a>
+      </list-action>
+      <list-action v-else>
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative">
+          <span v-if="d.messages" class="rounded-full bg-highlight absolute -top-[2px] right-[7px] h-2 w-2 block"></span>
+          <annotation-icon class="icon-list mr-2" aria-hidden="true" />
+        </router-link>
       </list-action>
     </list-item>
   </list>
@@ -93,7 +99,7 @@ export default {
 
     fetch() {
       this.axios.get(this.routes.list).then(response => {
-        this.data = response.data.data;
+        this.data = response.data.data ? response.data.data : response.data;
         this.isFetched = true;
       });
     },
