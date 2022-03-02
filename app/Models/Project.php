@@ -51,6 +51,15 @@ class Project extends Base
   }
 
   /**
+   * Local scopes
+   */
+
+  public function scopeByCompanyUser($query, $companyId)
+  {
+    return $query->where('project_state_id', 1)->where('company_id', $companyId);
+  }
+
+  /**
    * Accessor for date_start
    * @param Date $value
    */

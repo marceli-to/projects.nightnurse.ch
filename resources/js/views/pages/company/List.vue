@@ -78,7 +78,7 @@ export default {
 
       // Messages
       messages: {
-        emptyData: 'Es sind noch keine Texte vorhanden...',
+        emptyData: 'Es sind noch keine Firmen vorhanden...',
         confirmDestroy: 'Bitte löschen bestätigen!',
         updated: 'Status geändert',
       }

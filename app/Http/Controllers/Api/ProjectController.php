@@ -16,7 +16,35 @@ class ProjectController extends Controller
    */
   public function get()
   {
-    return new DataCollection(Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get());
+    if (auth()->user()->isAdmin())
+    {
+      return new DataCollection(Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get());
+    }
+    
+    // 1st: try with main company
+    $data = Project::byCompanyUser(auth()->user()->company_id)->with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get();
+    if ($data->count() > 0)
+    {
+      return new DataCollection($data);
+    }
+    else
+    {
+      // 2nd: try with associated companies
+      $data = [];
+      $projects = Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get();
+      foreach($projects as $project)
+      {
+        foreach($project->companies as $company)
+        {
+          if ($company->id == auth()->user()->company_id)
+          {
+            $data[] = $project;
+          }
+        }
+      }
+    }
+
+    return new DataCollection($data);
   }
 
   /**
