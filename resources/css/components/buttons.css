@@ -3,7 +3,7 @@
 button.btn-primary,
 input[type="submit"].btn-primary,
 a.btn-primary {
-  @apply block w-auto max-w-xs p-4 md:py-4 md:px-5 font-mono text-white text-xs sm:text-sm bg-dark hover:bg-highlight active:bg-highlight focus:outline-none transition ease-in-out duration-150 rounded-sm
+  @apply block w-auto max-w-xs p-4 md:py-4 md:px-5 font-mono text-white text-xs sm:text-sm bg-dark hover:bg-highlight active:bg-highlight focus:outline-none transition ease-in-out duration-150 rounded-sm no-underline
 }
 
 a.btn-icon {

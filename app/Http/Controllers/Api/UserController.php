@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Company;
 use App\Http\Resources\DataCollection;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -16,11 +17,18 @@ class UserController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function get()
+
+  public function get(Company $company)
   {
-    $users = User::with(['company' => function ($q) { $q->orderBy('name'); }])->get();
+    $users = User::with('company')->orderBy('name')->where('company_id', $company->id)->get();
     return new DataCollection($users);
   }
+  
+  // public function get()
+  // {
+  //   $users = User::with(['company' => function ($q) { $q->orderBy('name'); }])->get();
+  //   return new DataCollection($users);
+  // }
 
   /**
    * Get a list of users
@@ -40,7 +48,7 @@ class UserController extends Controller
    */
   public function find(User $user)
   {
-    return response()->json(User::findOrFail($user->id));
+    return response()->json(User::with('company')->findOrFail($user->id));
   }
 
   /**

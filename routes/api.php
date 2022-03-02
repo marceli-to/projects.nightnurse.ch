@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::delete('upload/{filename}', [UploadController::class, 'destroy']);
 
   // Users
-  Route::get('users', [UserController::class, 'get']);
+  Route::get('users/{company:uuid}', [UserController::class, 'get']);
   Route::get('users/staff', [UserController::class, 'getStaff']);
   Route::get('user/authenticated', [UserController::class, 'getAuthenticated']);
   Route::get('user/{user:uuid}', [UserController::class, 'find']);

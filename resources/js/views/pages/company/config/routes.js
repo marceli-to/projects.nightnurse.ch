@@ -21,7 +21,6 @@ const routes = [
     path: '/companies/company/update/:uuid',
     component: CompanyUpdate,
   },
-
 ];
 
 export default routes;

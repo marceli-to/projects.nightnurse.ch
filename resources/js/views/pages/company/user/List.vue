@@ -1,21 +1,20 @@
 <template>
 <div v-if="isFetched">
   <content-header :title="title">
-    <router-link :to="{ name: 'company-create' }" class="btn-icon">
+    <router-link :to="{ name: 'user-create', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon">
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
-        {{d.name}}<separator />{{ d.city }}
-        <pill v-if="d.owner">Owner</pill>
+        {{d.firstname}} {{ d.name }}
+        <span class="hidden sm:inline"><separator />{{ d.email }}</span>
+        <!-- <separator />{{ d.company.name }} -->
+        <pill v-if="d.role_id == 1">Admin</pill>
       </div>
       <list-action>
-        <router-link :to="{name: 'users', params: { companyUuid: d.uuid }}">
-          <users-icon class="icon-list mr-2" aria-hidden="true" />
-        </router-link>
-        <router-link :to="{name: 'company-update', params: { uuid: d.uuid }}">
+        <router-link :to="{name: 'user-update', params: { uuid: d.uuid }}">
           <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
         <a href="" @click.prevent="destroy(d.uuid)">
@@ -27,14 +26,22 @@
   <list-empty v-else>
     {{messages.emptyData}}
   </list-empty>
+
+  <content-footer>
+    <router-link :to="{ name: 'companies'}" class="btn-primary">
+      <span>Zurück</span>
+    </router-link>
+  </content-footer>
+
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon, UsersIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
 import ContentHeader from "@/components/ui/layout/Header.vue";
+import ContentFooter from "@/components/ui/layout/Footer.vue";
 import List from "@/components/ui/layout/List.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
@@ -46,9 +53,9 @@ export default {
   components: {
     PlusCircleIcon,
     PencilAltIcon,
-    UsersIcon,
     TrashIcon,
     ContentHeader,
+    ContentFooter,
     Separator,
     List,
     ListItem,
@@ -67,9 +74,9 @@ export default {
 
       // Routes
       routes: {
-        list: '/api/companies',
-        toggle: '/api/company/state',
-        destroy: '/api/company'
+        list: '/api/users',
+        toggle: '/api/user/state',
+        destroy: '/api/user'
       },
 
       // States
@@ -92,7 +99,7 @@ export default {
   methods: {
 
     fetch() {
-      this.axios.get(this.routes.list).then(response => {
+      this.axios.get(`${this.routes.list}/${this.$route.params.companyUuid}`).then(response => {
         this.data = response.data.data;
         this.isFetched = true;
       });
@@ -121,7 +128,10 @@ export default {
 
   computed: {
     title() {
-      return "Kunden";
+      if (this.data.length > 0) {
+        return `Benutzer für <span class="text-highlight">${this.data[0].company.name}</span>`
+      }
+      return "Benutzer";
     }
   }
 }
