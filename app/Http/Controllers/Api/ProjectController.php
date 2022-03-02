@@ -21,30 +21,12 @@ class ProjectController extends Controller
       return new DataCollection(Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get());
     }
     
-    // 1st: try with main company
-    $data = Project::byCompanyUser(auth()->user()->company_id)->with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get();
-    if ($data->count() > 0)
-    {
-      return new DataCollection($data);
-    }
-    else
-    {
-      // 2nd: try with associated companies
-      $data = [];
-      $projects = Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get();
-      foreach($projects as $project)
-      {
-        foreach($project->companies as $company)
-        {
-          if ($company->id == auth()->user()->company_id)
-          {
-            $data[] = $project;
-          }
-        }
-      }
-    }
+    $companyId = auth()->user()->company_id;
+    $projects = Project::byCompanyUser($companyId)->get()->pluck('id');
+    $companyProjects = CompanyProject::where('company_id', $companyId)->get()->pluck('project_id');
+    $ids = array_unique(array_merge($projects->all(), $companyProjects->all()), SORT_REGULAR);
 
-    return new DataCollection($data);
+    return new DataCollection(Project::with('company', 'messages')->whereIn('id', $ids)->orderBy('number', 'DESC')->get());
   }
 
   /**
