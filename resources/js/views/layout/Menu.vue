@@ -20,7 +20,7 @@
           <users-icon class="h-5 w-5 sm:h-8 sm:w-8" aria-hidden="true" />
         </menu-item>
       </li> -->
-      <li class="block !p-0 !m-0 !mt-6">
+      <li class="block !p-0 !m-0">
         <a href="/logout" class="text-gray-400 hover:text-highlight text-base font-normal no-underline flex items-center p-3 sm:p-5">
           <logout-icon class="h-5 w-5 sm:h-8 sm:w-8" aria-hidden="true" />
         </a>
