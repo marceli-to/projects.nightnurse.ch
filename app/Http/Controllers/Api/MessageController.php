@@ -27,10 +27,13 @@ class MessageController extends Controller
       return new DataCollection(Message::with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
     }
 
-    // $project = Project::where('company_id', auth()->user()->company_id)->get()->first();
-    // $companyProject = CompanyProject::where('project_id', $project->id)->where('company_id', auth()->user()->company_id)->get()->first();
-    
-    // if (!$$project || !$companyProject) abort(403);
+    // Access check
+    $project = Project::where('company_id', auth()->user()->company_id)->get()->first();
+    $companyProject = CompanyProject::where('project_id', $project->id)->where('company_id', auth()->user()->company_id)->get()->first();
+    if (!$project || !$companyProject)
+    {
+      return abort(403);
+    }
 
     $messages = Message::public()
       ->with('project', 'sender', 'files')
