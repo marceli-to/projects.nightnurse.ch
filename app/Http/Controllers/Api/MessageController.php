@@ -6,6 +6,7 @@ use App\Models\Message;
 use App\Models\MessageFile;
 use App\Models\MessageUser;
 use App\Models\Project;
+use App\Models\CompanyProject;
 use App\Models\User;
 use App\Http\Requests\MessageStoreRequest;
 use App\Services\Media;
@@ -25,6 +26,9 @@ class MessageController extends Controller
     {
       return new DataCollection(Message::with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
     }
+
+    $canAccess = CompanyProject::where('project_id', $project->id)->where('company_id', auth()->user()->company_id)->get()->first();
+    if (!$canAccess) abort(403);
 
     $messages = Message::public()
       ->with('project', 'sender', 'files')
