@@ -51,7 +51,16 @@ class MessageController extends Controller
         'can_delete' => $m->can_delete,
         'feed_date' => $m->feed_date,
         'deleted_at' => $m->deleted_at,
-        'files' => $m->files,
+        'files' => $m->files->map(function($f) {
+          return [
+            'uuid' => $f->uuid,
+            'name' => $f->name,
+            'original_name' => $f->original_name,
+            'extension' => $f->extension,
+            'preview' => $f->preview,
+            'size' => $f->size,
+          ];
+        }),
         'sender' => [
           'short_name' => $m->sender->short_name,
           'name' => $m->sender->name,
