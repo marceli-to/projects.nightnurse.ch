@@ -37,12 +37,6 @@ class ProjectStoreRequest extends FormRequest
    */
   public function messages()
   {
-    return [
-      'number.required' => 'Nummer wird benötigt!',
-      'name.required' => 'Name wird benötigt!',
-      'user_id.required' => 'Projektmanager wird benötigt!',
-      'company_id.required' => 'Hauptkunde wird benötigt!',
-      'project_state_id.required' => 'Projektstatus wird benötigt!',
-    ];
+    return [];
   }
 }

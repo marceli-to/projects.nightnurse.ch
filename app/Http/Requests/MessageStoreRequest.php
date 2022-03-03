@@ -33,8 +33,6 @@ class MessageStoreRequest extends FormRequest
    */
   public function messages()
   {
-    return [
-      'users.required' => 'Empfänger werden benötigt!',
-    ];
+    return [];
   }
 }

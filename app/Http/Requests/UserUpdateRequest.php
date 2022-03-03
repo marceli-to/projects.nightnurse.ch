@@ -24,6 +24,7 @@ class UserUpdateRequest extends FormRequest
     return [
       'firstname' => 'required',
       'name' => 'required',
+      'email' => 'required|email',
       'language_id' => 'required|exists:App\Models\Language,id',
       'company_id' => 'required|exists:App\Models\Company,id',
       'gender_id' => 'required|exists:App\Models\Gender,id',
@@ -37,9 +38,6 @@ class UserUpdateRequest extends FormRequest
    */
   public function messages()
   {
-    return [
-      'name.required' => 'Name wird benötigt!',
-      'firstname.required' => 'Vorname wird benötigt!',
-    ];
+    return [];
   }
 }
