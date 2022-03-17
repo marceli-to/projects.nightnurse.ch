@@ -132,7 +132,8 @@ class UserController extends Controller
   }
 
   /**
-   * Quick register for external users
+   * Quick register of a user. User will be sent an email to
+   * complete the registering process.
    *
    * @param  \Illuminate\Http\UserRegisterRequest $request
    * @return \Illuminate\Http\Response
@@ -151,7 +152,7 @@ class UserController extends Controller
       'language_id' => 1,
       'company_id' => $company->id,
       'gender_id' => 1,
-      'role_id' => 2,
+      'role_id' => $company->owner ? 1 : 2,
     ]);
 
     if ($user)

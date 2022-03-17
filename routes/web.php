@@ -21,7 +21,9 @@ Route::get('/logout', 'Auth\LoginController@logout');
 Route::get('/', [PageController::class, 'index']);
 
 // Frontend register
+Route::get('/register/complete', [RegisterController::class, 'complete'])->name('complete');
 Route::get('/register/{user:uuid}', [RegisterController::class, 'index']);
+Route::post('/register', [RegisterController::class, 'update'])->name('register');
 
 // Url based images
 Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageController::class, 'getResponse']);

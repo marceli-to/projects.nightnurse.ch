@@ -1,10 +1,10 @@
 <template>
 <div v-if="isFetched">
   <content-header :title="title">
-    <router-link :to="{ name: 'user-create', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon" v-if="isOwner">
+    <!-- <router-link :to="{ name: 'user-create', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon" v-if="isOwner">
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-    </router-link>
-    <router-link :to="{ name: 'user-register', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon" v-else>
+    </router-link> -->
+    <router-link :to="{ name: 'user-register', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon">
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
@@ -18,7 +18,7 @@
         </div>
         <div v-else>
           {{ d.email }}
-          <pill v-if="d.register_complete == 0" class="bg-yellow-500">pending</pill>
+          <pill v-if="d.register_complete == 0" class="bg-yellow-500">Pending</pill>
         </div>
       </div>
       <list-action>

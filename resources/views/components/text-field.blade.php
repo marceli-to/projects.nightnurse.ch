@@ -1,7 +1,7 @@
 <div class="form-group @if ($errors->has($name)) has-error @endif">
   @if($label ?? null)
     <label class="{{ ($required ?? false) ? 'is-required' : '' }}" for="{{ $name }}">
-      {{ $label }} {{ ($required ?? false) ? '*' : '' }}
+      {{ $label }} {!! ($required ?? false) ? '<span class="text-xs absolute -top-1 -right-3">*</span>' : '' !!}
     </label>
   @endif
   <input

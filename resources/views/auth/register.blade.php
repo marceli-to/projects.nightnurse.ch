@@ -1,17 +1,30 @@
 @extends('layout.guest')
-@section('seo_title', 'Login')
+@section('seo_title', 'Registrierung')
 @section('content')
 <x-card-auth>
   <h2 class="card-auth__heading">Registrierung</h2>
   @if ($errors->any())
-    <x-alert type="danger" message="{{__('messages.general_error')}}" />
+    {{-- <x-alert type="danger" message="{{__('messages.general_error')}}" /> --}}
+    <div class="alert alert-danger pt-1">
+      <ul class="!p-0">
+        @foreach ($errors->all() as $error)
+          <li style="list-style: none">{{ $error }}</li>
+        @endforeach
+      </ul>
+  </div>
   @endif
-  <form method="POST" action="{{ route('login') }}">
+  <form method="POST" action="{{ route('register') }}">
     @csrf
-    <x-text-field label="E-Mail" type="email" name="email" autocomplete="false" />
-    <x-text-field label="Passwort" type="password" name="password" autocomplete="false" />
+    <input type="hidden" name="uuid" value="{{$uuid}}">
+    <x-text-field label="Vorname" type="text" name="firstname" autocomplete="false" required="true" />
+    <x-text-field label="Name" type="text" name="name" autocomplete="false" required="true" />
+    <x-text-field label="Telefon" type="text" name="phone" autocomplete="false" />
+    <x-select label="Geschlecht" name="gender_id" :options="['1' => 'Mann', '2' => 'Frau']" required="true" />
+      <x-select label="Sprache" name="language_id" :options="['1' => 'Deutsch', '2' => 'English']" required="true" />
+    <x-text-field label="Passwort" type="password" name="password" autocomplete="false" required="true" />
+    <x-text-field label="Passwort wiederholen" type="password" name="password_confirmation" autocomplete="false" required="true" />
     <div class="card-auth__buttons">
-      <x-button label="Anmelden" name="register" type="submit" />
+      <x-button label="Registrierung abschliessen" name="register" type="submit" />
     </div>
   </form>
 </x-card-auth>
