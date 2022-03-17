@@ -6,6 +6,7 @@ use App\Models\Company;
 use App\Http\Resources\DataCollection;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\UserRegisterRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -23,12 +24,6 @@ class UserController extends Controller
     $users = User::with('company')->orderBy('name')->where('company_id', $company->id)->get();
     return new DataCollection($users);
   }
-  
-  // public function get()
-  // {
-  //   $users = User::with(['company' => function ($q) { $q->orderBy('name'); }])->get();
-  //   return new DataCollection($users);
-  // }
 
   /**
    * Get a list of users
@@ -126,7 +121,6 @@ class UserController extends Controller
       'firstname' => $user->firstname, 
       'name' => $user->name,
       'email' => $user->email,
-      //'permissions' => auth()->user()->permissions()
     ];
 
     if ($user->isAdmin())
@@ -138,19 +132,39 @@ class UserController extends Controller
   }
 
   /**
-   * Change a users email address
-   * 
-   * @param  \Illuminate\Http\Request $request
+   * Quick register for external users
+   *
+   * @param  \Illuminate\Http\UserRegisterRequest $request
    * @return \Illuminate\Http\Response
    */
-  public function updateEmail(UserChangeEmailRequest $request)
+
+  public function register(UserRegisterRequest $request)
   {
-    $user = User::findOrFail(auth()->user()->id);
-    $user->email = $request->email;
-    $user->email_verified_at = null;
-    $user->sendEmailVerificationNotification();
-    $user->save();
-    return response()->json('successfully updated');
+    // get company
+    $company = Company::where('uuid', $request->input('company_uuid'))->get()->first();
+
+    // create user
+    $user = User::create([
+      'uuid' => \Str::uuid(),
+      'email' => $request->input('email'),
+      'email_verified_at' => \Carbon\Carbon::now(),
+      'language_id' => 1,
+      'company_id' => $company->id,
+      'gender_id' => 1,
+      'role_id' => 2,
+    ]);
+
+    if ($user)
+    {
+      try {
+        \Mail::to($user->email)->send(new \App\Mail\Invitation($user));
+      } 
+      catch(\Throwable $e) {
+        \Log::error($e);
+      }     
+    }
+
+    return response()->json(['userId' => $user->id]);
   }
 
 }

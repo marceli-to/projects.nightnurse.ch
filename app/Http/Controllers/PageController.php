@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
@@ -15,6 +16,10 @@ class PageController extends Controller
 
   public function index()
   {
-
+    if (auth()->user()) 
+    {
+      return redirect(RouteServiceProvider::DASHBOARD);
+    }
+    return redirect(route('login'));
   }
 }

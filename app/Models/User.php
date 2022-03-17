@@ -23,6 +23,7 @@ class User extends Authenticatable implements MustVerifyEmail
     'phone',
     'password', 
     'email_verified_at',
+    'register_complete',
     'language_id',
     'company_id',
     'gender_id',
@@ -98,7 +99,6 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->belongsToMany(Message::class);
 	}
 
-
 	/**
    * Scope for staff (members of company 'Nightnurse')
    */
@@ -106,6 +106,15 @@ class User extends Authenticatable implements MustVerifyEmail
 	public function scopeStaff($query)
 	{
 		return $query->where('company_id', config('client.owner_id'));
+	}
+
+	/**
+   * Scope for registered users
+   */
+
+	public function scopeRegistered($query)
+	{
+		return $query->where('register_complete', 1);
 	}
 
   /**

@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('user/authenticated', [UserController::class, 'getAuthenticated']);
   Route::get('user/{user:uuid}', [UserController::class, 'find']);
   Route::post('user', [UserController::class, 'store']);
+  Route::post('user/register', [UserController::class, 'register']);
   Route::put('user/{user:uuid}', [UserController::class, 'update']);
   Route::get('user/state/{user:uuid}', [UserController::class, 'toggle']);
   Route::delete('user/{user:uuid}', [UserController::class, 'destroy']);

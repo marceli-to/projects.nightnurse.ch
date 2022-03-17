@@ -1,20 +1,28 @@
 <template>
 <div v-if="isFetched">
   <content-header :title="title">
-    <router-link :to="{ name: 'user-create', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon">
+    <router-link :to="{ name: 'user-create', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon" v-if="isOwner">
+      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+    </router-link>
+    <router-link :to="{ name: 'user-register', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon" v-else>
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
-        {{d.firstname}} {{ d.name }}
-        <span class="hidden sm:inline"><separator />{{ d.email }}</span>
-        <!-- <separator />{{ d.company.name }} -->
-        <pill v-if="d.role_id == 1">Admin</pill>
+        <div v-if="d.register_complete">
+          {{d.firstname}} {{ d.name }}
+          <span class="hidden sm:inline"><separator />{{ d.email }}</span>
+          <pill v-if="d.role_id == 1">Admin</pill>
+        </div>
+        <div v-else>
+          {{ d.email }}
+          <pill v-if="d.register_complete == 0" class="bg-yellow-500">pending</pill>
+        </div>
       </div>
       <list-action>
-        <router-link :to="{name: 'user-update', params: { uuid: d.uuid }}">
+        <router-link :to="{name: 'user-update', params: { uuid: d.uuid }}" v-if="d.register_complete">
           <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
         <a href="" @click.prevent="destroy(d.uuid)">
@@ -26,13 +34,11 @@
   <list-empty v-else>
     {{messages.emptyData}}
   </list-empty>
-
   <content-footer>
     <router-link :to="{ name: 'companies'}" class="btn-primary">
       <span>Zurück</span>
     </router-link>
   </content-footer>
-
 </div>
 </template>
 <script>
@@ -82,6 +88,7 @@ export default {
       // States
       isLoading: false,
       isFetched: false,
+      isOwner: false,
 
       // Messages
       messages: {
@@ -101,6 +108,9 @@ export default {
     fetch() {
       this.axios.get(`${this.routes.list}/${this.$route.params.companyUuid}`).then(response => {
         this.data = response.data.data;
+        if (this.data[0] && this.data[0].company.owner) {
+          this.isOwner = true;
+        }
         this.isFetched = true;
       });
     },

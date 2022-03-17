@@ -42,7 +42,7 @@ export default {
 
 .loading-indicator__icon {
   animation: rotation 2s infinite linear;
-  color: #916e5a;
+  color: #ff008b;
 }
 
 @keyframes rotation {

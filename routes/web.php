@@ -2,6 +2,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ImageController;
 
 
@@ -17,8 +18,10 @@ Auth::routes(['verify' => true, 'register' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
 
 // Frontend
-// Route::get('/', [PageController::class, 'index']);
+Route::get('/', [PageController::class, 'index']);
 
+// Frontend register
+Route::get('/register/{user:uuid}', [RegisterController::class, 'index']);
 
 // Url based images
 Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageController::class, 'getResponse']);
