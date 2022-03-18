@@ -4,7 +4,6 @@
 <x-card-auth>
   <h2 class="card-auth__heading">Registrierung</h2>
   @if ($errors->any())
-    {{-- <x-alert type="danger" message="{{__('messages.general_error')}}" /> --}}
     <div class="alert alert-danger pt-1">
       <ul class="!p-0">
         @foreach ($errors->all() as $error)

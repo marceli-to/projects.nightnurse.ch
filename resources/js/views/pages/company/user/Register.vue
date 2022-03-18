@@ -107,7 +107,7 @@ export default {
 
   computed: {
     title() {
-      return "Benutzer erfassen";
+      return "Benutzer einladen";
     }
   }
 };
