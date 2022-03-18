@@ -20,7 +20,7 @@
     <x-text-field label="Telefon" type="text" name="phone" autocomplete="false" />
     <x-select label="Geschlecht" name="gender_id" :options="['1' => 'Mann', '2' => 'Frau']" required="true" />
       <x-select label="Sprache" name="language_id" :options="['1' => 'Deutsch', '2' => 'English']" required="true" />
-    <x-text-field label="Passwort" type="password" name="password" autocomplete="false" required="true" />
+    <x-text-field label="Passwort (min. 8 Zeichen)" type="password" name="password" autocomplete="false" required="true" />
     <x-text-field label="Passwort wiederholen" type="password" name="password_confirmation" autocomplete="false" required="true" />
     <div class="card-auth__buttons">
       <x-button label="Registrierung abschliessen" name="register" type="submit" />
