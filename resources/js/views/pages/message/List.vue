@@ -49,7 +49,7 @@
                 <div>{{ file.size | filesize(file.size) }}</div>
               </div>
             </a>
-            <a :href="`/storage/uploads/${file.name}`" class="flex items-center no-underline hover:text-highlight" v-else>
+            <a :href="`/storage/uploads/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-else>
               <div class="font-mono text-xs">
                 <div class="mb-1">{{ file.original_name | truncate(50, '...') }}</div>
                 <div>{{ file.size | filesize(file.size) }}</div>
