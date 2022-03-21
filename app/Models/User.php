@@ -105,7 +105,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
 	public function scopeStaff($query)
 	{
-		return $query->where('company_id', config('client.owner_id'));
+		return $query->where('company_id', config('client.owner_id'))->where('register_complete', 1);
 	}
 
 	/**
