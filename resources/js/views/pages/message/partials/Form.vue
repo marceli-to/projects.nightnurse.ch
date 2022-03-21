@@ -89,8 +89,8 @@
             </label>
           </div>
           <div class="grid lg:grid-cols-4 mb-6">
-            <div v-for="user in company.users" :key="user.uuid">
-              <div class="form-check" v-if="user.register_complete">
+            <div v-for="user in company.users" :key="user.uuid" v-if="user.register_complete">
+              <div class="form-check">
                 <input 
                   type="checkbox" 
                   class="checkbox" 
