@@ -3,7 +3,8 @@
   <header class="mb-4 sm:mb-8 lg:mb-9 pt-4 sm:pt-5 lg:pt-7 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-50 border-bottom sm:max-w-4xl">
     <div>
       <div class="text-2xl font-bold mb-2 sm:mb-3 flex items-center">
-        <span class="text-dark">{{project.company.name}} – {{project.number}} {{project.name}}</span>
+        <span class="text-dark" v-if="project.company">{{project.company.name}} – {{project.number}} {{project.name}}</span>
+        <span class="text-dark" v-else>{{project.number}} {{project.name}}</span>
       </div>
       <div class="flex">
         <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
