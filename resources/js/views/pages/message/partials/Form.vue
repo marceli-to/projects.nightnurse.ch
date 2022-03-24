@@ -30,7 +30,7 @@
         :useCustomSlot=true>
         <div>
           <div><strong>Datei auswählen oder hierhin ziehen</strong></div>
-          <small>JPG, PNG, TIFF | max. Grösse 100 MB</small>
+          <small>max. Grösse 100 MB</small>
         </div>
       </vue-dropzone>
 
