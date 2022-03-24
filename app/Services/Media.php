@@ -24,7 +24,7 @@ class Media
    */
 
   protected $previewable_image_types = [
-    'png', 'jpg', 'jpeg'
+    'png', 'jpg', 'jpeg', 'gif'
   ];
   
   /**
@@ -56,17 +56,21 @@ class Media
   public function store(Request $request, $destinationFolder = NULL)
   {
     $file = $request->file('file');
+    $file_data = getimagesize($request->file('file'));
     $name = $this->sanitize(trim($file->getClientOriginalName()), $this->force_lowercase);
     $filename = uniqid()  . '_' . $name;
     $file->move($this->upload_path, $filename);
-    $filetype = File::extension($this->upload_path . $filename);
+    $filetype = File::extension($this->upload_path . DIRECTORY_SEPARATOR . $filename);
     $filesize = File::size($this->upload_path . DIRECTORY_SEPARATOR . $filename);
+
+    $previewable = $file_data !== FALSE ? $this->previewable($file_data, $filetype) : FALSE;
+
     return [
       'name' => $filename, 
       'original_name' => $name, 
       'extension' => $filetype, 
       'size' => $filesize,
-      'preview' => in_array(strtolower($filetype), $this->previewable_image_types) ? TRUE : FALSE
+      'preview' => $previewable ? TRUE : FALSE
     ];
   }
 
@@ -124,4 +128,23 @@ class Media
     return number_format($size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
   }
 
+   /**
+   * Check if file is previewable
+   *
+   * @param Array $file_data
+   * @param String $filetype
+   * @return Boolean
+   */
+ 
+  protected function previewable($file_data = NULL, $filetype = NULL)
+  {
+    if (in_array(strtolower($filetype), $this->previewable_image_types))
+    {
+      if ($file_data[0] <= 2000)
+      {
+        return TRUE;
+      }
+    }
+    return FALSE;
+  }
 }

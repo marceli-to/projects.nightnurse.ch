@@ -239,7 +239,9 @@ export default {
       messages: {
         created: 'Nachricht erfasst!',
         confirm: 'Bitte löschen bestätigen',
-        deleted: 'Datei gelöscht'
+        deleted: 'Datei gelöscht',
+        image_exceeds_max_size: 'max. Dateigrösse überschritten',
+        image_type_not_allowed: 'Dateityp nicht erlaubt'
       },
 
       // Dropzone config
@@ -250,7 +252,7 @@ export default {
         maxFiles: 99,
         createImageThumbnails: false,
         autoProcessQueue: true,
-        acceptedFiles: '.png, .jpg, .jpeg, .tiff, .pdf, .doc, .docx, .txt, .rtf, .dwg, .eps, .svg',
+        //acceptedFiles: '',
         previewTemplate: this.uploadTemplate(),
         headers: {
           'x-csrf-token': document.head.querySelector('meta[name="csrf-token"]').content
@@ -357,10 +359,10 @@ export default {
         else {
           if (file.accepted == false) {
             if (file.size > 9000000) {
-              this.$notify({ type: "danger", text: 'image_exceeds_max_size', duration: 2000 });
+              this.$notify({ type: "danger", text: this.messages.image_exceeds_max_size, duration: 2000 });
             }
             else {
-              this.$notify({ type: "danger", text: 'image_type_not_allowed', duration: 2000 });
+              this.$notify({ type: "danger", text: this.messages.image_type_not_allowed, duration: 2000 });
             }
             this.$refs.dropzone.removeFile(file);
           }
