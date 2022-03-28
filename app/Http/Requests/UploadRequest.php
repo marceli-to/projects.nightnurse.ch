@@ -22,7 +22,7 @@ class UploadRequest extends FormRequest
   public function rules()
   {
     return [
-      'file' => 'required|max:10000000',
+      'file' => 'required|max:30000000',
     ];
   }
 
