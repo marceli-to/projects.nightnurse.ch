@@ -30,7 +30,7 @@
         :useCustomSlot=true>
         <div>
           <div><strong>Datei auswählen oder hierhin ziehen</strong></div>
-          <small>max. Grösse 500 MB</small>
+          <small>max. Grösse 300 MB</small>
         </div>
       </vue-dropzone>
 
@@ -248,7 +248,7 @@ export default {
       dropzoneConfig: {
         url: "/api/upload",
         method: 'post',
-        maxFilesize: 500,
+        maxFilesize: 256,
         maxFiles: 99,
         createImageThumbnails: false,
         autoProcessQueue: true,
