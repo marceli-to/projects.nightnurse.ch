@@ -248,7 +248,7 @@ export default {
       dropzoneConfig: {
         url: "/api/upload",
         method: 'post',
-        maxFilesize: 100,
+        maxFilesize: 500,
         maxFiles: 99,
         createImageThumbnails: false,
         autoProcessQueue: true,
