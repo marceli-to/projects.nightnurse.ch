@@ -86,7 +86,7 @@ class Project extends Base
 
   public function getDateStartAttribute($value)
   {
-    return strftime('%d.%m.%Y', strtotime($value));
+    return $value ? strftime('%d.%m.%Y', strtotime($value)) : null;
   }
 
   /**
@@ -96,6 +96,6 @@ class Project extends Base
 
   public function getDateEndAttribute($value)
   {
-    return strftime('%d.%m.%Y', strtotime($value));
+    return $value ? strftime('%d.%m.%Y', strtotime($value)) : null;
   }
 }
