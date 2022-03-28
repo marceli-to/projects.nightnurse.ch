@@ -18,7 +18,7 @@ class CreateMessageFilesTable extends Migration
             $table->string('uuid', 36);
             $table->string('name', 255);
             $table->string('original_name', 255);
-            $table->string('extension', 4);
+            $table->string('extension', 12);
             $table->float('size', 24, 0)->default(0);
             $table->tinyInteger('preview')->default(0);
             $table->foreignId('message_id')->nullable()->constrained();
