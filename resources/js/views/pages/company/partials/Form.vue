@@ -15,14 +15,14 @@
       <input type="text" v-model="data.city">
     </div>
     
-    <div class="form-group">
+    <!-- <div class="form-group">
       <form-radio 
         :label="'Owner?'"
         v-bind:owner.sync="data.owner"
         :model="data.owner"
         :name="'owner'">
       </form-radio>
-    </div>
+    </div> -->
        
     <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>
