@@ -5,7 +5,7 @@
 </template>
 <style>
 .feed-item__body p {
-  @apply !mt-0 !mb-0;
+  @apply !mt-0 !mb-2;
 }
 .feed-item__body p:last-of-type {
   @apply !mb-1;
