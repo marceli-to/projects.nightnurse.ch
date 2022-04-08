@@ -8,7 +8,9 @@
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
-        {{d.number}}<separator />{{ d.name }}<separator /><span v-if="d.company">{{ d.company.name }}</span>
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+          {{d.number}}<separator />{{ d.name }}<separator /><span v-if="d.company">{{ d.company.name }}</span>
+        </router-link>
       </div>
       <list-action v-if="$store.state.user.admin">
         <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative">
