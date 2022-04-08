@@ -66,7 +66,7 @@ class Project extends Base
 
   public function setDateStartAttribute($value)
   {
-    $this->attributes['date_start'] = date('Y.m.d', strtotime($value));
+    $this->attributes['date_start'] = $value ? date('Y.m.d', strtotime($value)) : NULL;
   }
 
   /**
@@ -76,7 +76,7 @@ class Project extends Base
 
   public function setDateEndAttribute($value)
   {
-    $this->attributes['date_end'] = date('Y.m.d', strtotime($value));
+    $this->attributes['date_end'] = $value ? date('Y.m.d', strtotime($value)) : NULL;
   }
 
   /**
@@ -86,7 +86,7 @@ class Project extends Base
 
   public function getDateStartAttribute($value)
   {
-    return strftime('%d.%m.%Y', strtotime($value));
+    return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
   }
 
   /**
@@ -96,6 +96,6 @@ class Project extends Base
 
   public function getDateEndAttribute($value)
   {
-    return strftime('%d.%m.%Y', strtotime($value));
+    return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
   }
 }
