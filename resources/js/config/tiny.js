@@ -7,10 +7,13 @@ export default {
     link: '/assets/js/tinymce/plugins/link/plugin.min.js',
   },
   plugins: ['lists', 'code', 'link'],
-  toolbar: 'undo redo | bold | italic | bullist | link | removeformat',
+  toolbar: 'undo redo | bold | italic | bullist | link | removeformat | code',
   paste_as_text: true,
   height: "240px",
   style_formats_merge: false,
+  force_br_newlines : true,
+  force_p_newlines : false,
+  forced_root_block : '',
   style_formats: [{
     title: 'Text',
     items: [

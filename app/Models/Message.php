@@ -24,7 +24,9 @@ class Message extends Base
 	];
 
   protected $appends = [
-    'feed_date',
+    'message_time',
+    'message_date',
+    'message_date_string',
     'can_delete',
   ];
 
@@ -59,24 +61,46 @@ class Message extends Base
   }
 
   /**
-   * Get the user's short name.
+   * Get the time attribute of a message (hours, minutes)
    *
    * @param  string  $value
    * @return string
    */
-  public function getFeedDateAttribute($value)
+  public function getMessageTimeAttribute($value)
+  {
+    return date('H:i', strtotime($this->created_at));
+  }
+
+  /**
+   * Get the date attribute of a message (day, month, year)
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getMessageDateAttribute($value)
+  {
+    return date('d.m.Y', strtotime($this->created_at));
+  }
+
+  /**
+   * Get the date attribute of a message (day, month, year)
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getMessageDateStringAttribute($value)
   {
     $date = \Carbon\Carbon::parse($this->created_at);
     
     if ($date->isToday())
     {
-      return 'Today, ' . date('H:i', strtotime($this->created_at));
+      return 'Today';
     }
 
     if ($date->isYesterday())
     {
-      return 'Yesterday, ' . date('H:i', strtotime($this->created_at));
+      return 'Yesterday';
     }
-    return date('D, d.m.Y – H:i', strtotime($this->created_at));
+    return date('D, d.m.Y', strtotime($this->created_at));
   }
 }

@@ -23,13 +23,14 @@
     </div>
   </header>
   <feed>
-    <feed-item v-for="d in data" :key="d.uuid" :internal="d.internal">
-      <feed-item-timestamp>{{ d.feed_date }}</feed-item-timestamp>
+    <feed-item v-for="(d, index) in data" :key="index" :item="d" :class="getStateClasses(data, d, index)">
+      <feed-item-timestamp :data="data" :current="d" :index="index"></feed-item-timestamp>
       <div v-if="!d.deleted_at">
         <feed-item-sender>
           Nachricht von 
           <span class="font-bold" v-if="d.sender">{{d.sender.short_name}}</span>
           <span v-else>[deleted user]</span>
+          um {{d.message_time}}
         </feed-item-sender>
         <feed-item-body v-if="d.subject || d.body">
           <div :class="[d.body ? 'font-bold' : '', 'text-sm']">{{ d.subject }}</div>
@@ -173,12 +174,31 @@ export default {
         });
       }
     },
+
+    getStateClasses(data, current, index) {
+      let cls = '';
+
+      if (index == 0) {
+        cls = 'has-timestamp';
+      }
+      else {
+        if (data[index-1].message_date != current.message_date) {
+          cls = 'has-timestamp';
+        }
+      }
+
+      if (current.deleted_at) {
+        cls += ' is-deleted';
+      }
+
+      return cls;
+    },
   },
 
   computed: {
     title() {
       return `${this.project.number} – <span class="text-highlight">${this.project.name}</span>`;
-    }
+    },
   }
 }
 </script>

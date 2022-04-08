@@ -1,5 +1,5 @@
 <template>
-  <div :class="`flex last:!mb-0 text-dark relative mb-16 sm:mb-16 lg:mb-20 relative feed-item ${cls}`">
+  <div :class="`flex text-dark relative feed-item ${position}`">
     <div class="sm:max-w-[60%] lg:max-w-[50%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark rounded">
       <slot />
     </div>
@@ -8,16 +8,16 @@
 <script>
 export default {
   props: {
-    internal: {
-      type: Number,
+    item: {
+      type: Object,
       default: 0
     }
   },
 
   computed: {
-    cls() {
-      return this.$props.internal ? 'feed-item--left' : 'feed-item--right';
-    }
+    position() {
+      return this.$props.item.internal ? 'feed-item--left' : 'feed-item--right';
+    },
   },
 }
 </script>
@@ -56,5 +56,21 @@ export default {
 
 .feed-item--left .feed-item-delete {
   @apply left-0 pl-1
+}
+
+.feed-item {
+  @apply mt-16
+}
+
+.feed-item + .feed-item.has-timestamp {
+  @apply mt-16
+}
+
+.feed-item.is-deleted + .feed-item {
+  @apply mt-8
+}
+
+.feed-item.is-deleted + .feed-item.has-timestamp {
+  @apply mt-16
 }
 </style>

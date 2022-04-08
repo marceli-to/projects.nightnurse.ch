@@ -49,7 +49,9 @@ class MessageController extends Controller
         'body' => $m->body,
         'internal' => $m->internal,
         'can_delete' => $m->can_delete,
-        'feed_date' => $m->feed_date,
+        'message_time' => $m->message_time,
+        'message_date' => $m->message_date,
+        'message_date_string' => $m->message_date_string,
         'deleted_at' => $m->deleted_at,
         'files' => $m->files->map(function($f) {
           return [
