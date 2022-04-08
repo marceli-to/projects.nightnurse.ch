@@ -1,6 +1,6 @@
 <template>
   <div :class="`flex text-dark relative feed-item ${position}`">
-    <div class="sm:max-w-[60%] lg:max-w-[50%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark rounded">
+    <div class="sm:max-w-[60%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark rounded">
       <slot />
     </div>
   </div>
