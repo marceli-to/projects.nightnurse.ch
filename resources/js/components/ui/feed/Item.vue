@@ -43,7 +43,7 @@ export default {
 }
 
 .feed-item-delete {
-  @apply absolute -bottom-[24px] text-xs text-gray-300 no-underline
+  @apply absolute -bottom-[56px] text-xs text-gray-300 no-underline pl-0
 }
 
 .feed-item-delete:hover {
@@ -51,11 +51,11 @@ export default {
 }
 
 .feed-item--right .feed-item-delete {
-  @apply right-0 pr-1
+  @apply -right-[12px]
 }
 
 .feed-item--left .feed-item-delete {
-  @apply left-0 pl-1
+  @apply -left-[12px]
 }
 
 .feed-item {
@@ -72,5 +72,9 @@ export default {
 
 .feed-item.is-deleted + .feed-item.has-timestamp {
   @apply mt-16
+}
+
+.feed-item.is-private > div {
+  @apply bg-slate-500 border-slate-500 !text-slate-100
 }
 </style>

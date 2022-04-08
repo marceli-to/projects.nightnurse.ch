@@ -25,8 +25,9 @@
   <feed>
     <feed-item v-for="(d, index) in data" :key="index" :item="d" :class="getStateClasses(data, d, index)">
       <feed-item-timestamp :data="data" :current="d" :index="index"></feed-item-timestamp>
-      <div v-if="!d.deleted_at">
-        <feed-item-sender>
+      <div v-if="!d.deleted_at" class="relative">
+        <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="d.private" />
+        <feed-item-sender :class="[d.private ? 'text-slate-100': '']">
           Nachricht von 
           <span class="font-bold" v-if="d.sender">{{d.sender.short_name}}</span>
           <span v-else>[deleted user]</span>
@@ -58,7 +59,7 @@
             </a>
           </div>
         </div>
-        <a href="javascript:;" @click.prevent="destroy(d.uuid)" class="feed-item-delete" v-if="d.can_delete">Löschen</a>
+        <a href="javascript:;" @click.prevent="destroy(d.uuid)" class="feed-item-delete" v-if="d.can_delete">Nachricht Löschen</a>
       </div>
       <div v-else>
         <feed-item-body>
@@ -79,7 +80,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon, ShieldCheckIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -101,6 +102,7 @@ export default {
     PlusCircleIcon,
     TrashIcon,
     PencilAltIcon,
+    ShieldCheckIcon,
     ContentHeader,
     ContentFooter,
     Separator,
@@ -176,6 +178,7 @@ export default {
     },
 
     getStateClasses(data, current, index) {
+      console.log(current);
       let cls = '';
 
       if (index == 0) {
@@ -189,6 +192,10 @@ export default {
 
       if (current.deleted_at) {
         cls += ' is-deleted';
+      }
+
+      if (current.private) {
+        cls += ' is-private'
       }
 
       return cls;
