@@ -74,7 +74,7 @@
       </form-radio>
     </div>
 
-    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
+    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="!data.private">
       <label class="mb-2">Empfänger *</label>
       <div v-for="company in project.companies" :key="company.uuid">
         <div v-if="company.users.length > 0">
