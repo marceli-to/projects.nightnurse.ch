@@ -61,6 +61,17 @@ class Message extends Base
   }
 
   /**
+   * Get the body attribute of a message
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getBodyAttribute($value)
+  {
+    return str_replace('<p>&nbsp;</p>', '', $value);
+  }
+
+  /**
    * Get the time attribute of a message (hours, minutes)
    *
    * @param  string  $value
