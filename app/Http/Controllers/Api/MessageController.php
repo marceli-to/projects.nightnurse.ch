@@ -24,7 +24,9 @@ class MessageController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      return new DataCollection(Message::with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+      $messages = new DataCollection(Message::with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+      $messagesGrouped = $messages->groupBy('message_date_string');
+      return $messagesGrouped->all();
     }
 
     // Access check
@@ -70,6 +72,9 @@ class MessageController extends Controller
         ]
       ];
     });
+
+    dd($messages);
+
     return response()->json(collect($messages));
   }
 
@@ -151,6 +156,14 @@ class MessageController extends Controller
    */
   public function destroy(Message $message)
   {
+    $message = Message::with('files')->findOrFail($message->id);
+    if ($message->files)
+    {
+      foreach($message->files as $file)
+      {
+        (new Media())->remove($file->name);
+      }
+    }
     $message->delete();
     return response()->json('successfully deleted');
   }

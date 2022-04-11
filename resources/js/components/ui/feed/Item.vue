@@ -1,6 +1,6 @@
 <template>
   <div :class="`flex text-dark relative feed-item ${position}`">
-    <div class="sm:max-w-[60%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark rounded">
+    <div class="sm:max-w-[60%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-zinc-100 text-sm sm:text-base text-dark rounded">
       <slot />
     </div>
   </div>
@@ -10,7 +10,7 @@ export default {
   props: {
     item: {
       type: Object,
-      default: 0
+      default: null
     }
   },
 
@@ -22,6 +22,26 @@ export default {
 }
 </script>
 <style>
+.feed-item ul {
+  @apply mb-4
+}
+
+.feed-item li {
+  @apply !mt-1 !mb-1
+}
+
+.feed-item.is-private > div {
+  @apply bg-slate-400 border-slate-400 !text-slate-100
+}
+
+.feed-item.is-private a {
+  @apply text-slate-100
+}
+
+.feed-item.is-private .feed-item__body > div {
+  @apply !text-slate-100
+}
+
 .feed-item--left {
   @apply justify-start
 }
@@ -34,20 +54,12 @@ export default {
   @apply bg-zinc-50
 }
 
-.feed-item--left > div > div:first-of-type {
-  @apply left-2/4 -translate-x-1/2
-}
-
-.feed-item--right > div > div:first-of-type {
-  @apply right-2/4 translate-x-1/2
-}
-
 .feed-item-delete {
-  @apply absolute -bottom-[56px] text-xs text-gray-300 no-underline pl-0
+  @apply absolute -bottom-[40px] text-xs !text-slate-300 no-underline pl-0
 }
 
 .feed-item-delete:hover {
-  @apply text-highlight
+  @apply !text-highlight
 }
 
 .feed-item--right .feed-item-delete {
@@ -59,26 +71,6 @@ export default {
 }
 
 .feed-item {
-  @apply mt-16
-}
-
-.feed-item li {
-  @apply !mt-1 !mb-1
-}
-
-.feed-item + .feed-item.has-timestamp {
-  @apply mt-16
-}
-
-.feed-item.is-deleted + .feed-item {
-  @apply mt-8
-}
-
-.feed-item.is-deleted + .feed-item.has-timestamp {
-  @apply mt-16
-}
-
-.feed-item.is-private > div {
-  @apply bg-slate-500 border-slate-500 !text-slate-100
+  @apply mb-10 sm:mb-8
 }
 </style>

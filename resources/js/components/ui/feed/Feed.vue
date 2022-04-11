@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-16 sm:mt-16 lg:mt-20 pb-12 max-width-content relative">
+  <div class="mt-6 sm:mt-8 lg:mt-10 pb-12 max-width-content relative">
     <slot />
   </div>
 </template>

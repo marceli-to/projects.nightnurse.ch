@@ -50,14 +50,25 @@ class Message extends Base
     return $this->hasMany(MessageFile::class, 'message_id', 'id');
   }
 
-  public function getCanDeleteAttribute($value)
-  {
-    return $this->user_id == auth()->user()->id ? true : false;
-  }
-
+  /**
+   * Scope for public messages
+   * 
+   */
   public function scopePublic($query)
   {
     return $query->where('private', 0);
+  }
+
+  /**
+   * Check if the message belongs to the authorized user
+   * and allow them to delete the message
+   *
+   * @param  string  $value
+   * @return boolean
+   */
+  public function getCanDeleteAttribute($value)
+  {
+    return $this->user_id == auth()->user()->id ? true : false;
   }
 
   /**
