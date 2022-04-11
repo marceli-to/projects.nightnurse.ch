@@ -39,7 +39,7 @@ Route::middleware('auth:sanctum', 'verified')->group(function() {
   
   Route::get('{any?}', function () {
     return view('layout.authenticated');
-  })->where('any', '.*')->middleware('role:admin')->name('projects');
+  })->where('any', '^((?!storage).)*$')->middleware('role:admin')->name('projects');
 
 });
 
