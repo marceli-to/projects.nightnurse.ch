@@ -1,9 +1,12 @@
 @extends('layout.web')
 @section('content')
-<section class="content">
+<div class="card-error">
   <div>
+    <div class="card-error__logo">
+      @include('partials.logo')
+    </div>
     <h2>Fehler 500</h2>
     <p>Server error.</p>
   </div>
-</section>
+</div>
 @endsection

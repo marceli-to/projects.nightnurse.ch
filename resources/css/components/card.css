@@ -21,3 +21,15 @@ h2.card-auth__heading {
 .card-auth__buttons {
   @apply flex items-center justify-between mt-12 lg:mt-12;
 }
+
+.card-error {
+  @apply w-10/12 sm:max-w-lg p-6 md:p-8 lg:p-10 bg-white shadow-sm
+}
+
+h2.card-error__heading {
+  @apply mt-0 lg:mt-0 text-dark;
+}
+
+.card-error__logo {
+  @apply mb-4 md:mb-6
+}
