@@ -63,7 +63,7 @@ export default {
 }
 
 .feed-item li {
-  @apply !mt-1
+  @apply !mt-1 !mb-1
 }
 
 .feed-item + .feed-item.has-timestamp {
