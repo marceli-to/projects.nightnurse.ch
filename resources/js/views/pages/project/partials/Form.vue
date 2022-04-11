@@ -136,7 +136,7 @@ export default {
         date_start: null,
         date_end: null,
         user_id: null,
-        project_state_id: null,
+        project_state_id: 1,
         company_id: null,
         companies: [],
       },
