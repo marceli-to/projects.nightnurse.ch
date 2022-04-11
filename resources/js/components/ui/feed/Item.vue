@@ -62,6 +62,10 @@ export default {
   @apply mt-16
 }
 
+.feed-item li {
+  @apply !mt-1
+}
+
 .feed-item + .feed-item.has-timestamp {
   @apply mt-16
 }
