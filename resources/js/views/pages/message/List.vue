@@ -60,13 +60,13 @@
               </a>
             </div>
           </div>
-          <a href="javascript:;" @click.prevent="destroy(d.uuid)" class="feed-item-delete" v-if="d.can_delete">Nachricht Löschen</a>
         </div>
         <div v-else>
           <feed-item-body>
             <div class="text-xs text-gray-400 font-mono italic sm:pt-1">Nachricht wurde gelöscht</div>
           </feed-item-body>
         </div>
+        <a href="javascript:;" @click.prevent="destroy(d.uuid)" class="feed-item-delete" v-if="d.can_delete && !d.deleted_at">Nachricht löschen</a>
       </feed-item>
     </div>
   </feed>

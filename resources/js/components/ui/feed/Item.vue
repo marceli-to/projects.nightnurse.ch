@@ -55,7 +55,7 @@ export default {
 }
 
 .feed-item-delete {
-  @apply absolute -bottom-[40px] text-xs !text-slate-300 no-underline pl-0
+  @apply absolute -bottom-[25px] text-xs !text-slate-300 no-underline pl-0
 }
 
 .feed-item-delete:hover {
@@ -63,11 +63,11 @@ export default {
 }
 
 .feed-item--right .feed-item-delete {
-  @apply -right-[12px]
+  @apply right-0
 }
 
 .feed-item--left .feed-item-delete {
-  @apply -left-[12px]
+  @apply left-0
 }
 
 .feed-item {
