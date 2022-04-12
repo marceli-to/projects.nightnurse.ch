@@ -1,6 +1,8 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
+// Protected API Controllers
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProjectController;
@@ -11,6 +13,29 @@ use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
 use App\Http\Controllers\Api\Settings\RoleController;
+
+// Public API Controllers
+use App\Http\Controllers\Api\v1\CompanyController as CompanyApiController;
+use App\Http\Controllers\Api\v1\UserController as UserControllerApiController;
+//use App\Http\Controllers\Api\v1\ProjectController as ProjectApiController;
+
+Route::middleware('auth:api')->group(function() {
+  Route::get('v1/companies', [CompanyApiController::class, 'get']);
+  Route::get('v1/company/{company}', [CompanyApiController::class, 'find']);
+  Route::put('v1/company/{company}', [CompanyApiController::class, 'update']);
+  Route::post('v1/company', [CompanyApiController::class, 'store']);
+  Route::delete('v1/company/{company}', [CompanyApiController::class, 'destroy']);
+
+  Route::get('v1/users', [UserControllerApiController::class, 'get']);
+  Route::get('v1/user/{user}', [UserControllerApiController::class, 'find']);
+  Route::post('v1/user', [UserControllerApiController::class, 'store']);
+  Route::post('v1/user/register', [UserControllerApiController::class, 'register']);
+  Route::put('v1/user/{user:uuid}', [UserControllerApiController::class, 'update']);
+  Route::get('v1/user/state/{user:uuid}', [UserControllerApiController::class, 'toggle']);
+  Route::delete('v1/user/{user:uuid}', [UserControllerApiController::class, 'destroy']);
+
+  //Route::get('/v1/projects', [ProjectApiController::class, 'get']);
+});
 
 Route::middleware('auth:sanctum')->get('/user/authenticated', function (Request $request) {
   return $request->user();

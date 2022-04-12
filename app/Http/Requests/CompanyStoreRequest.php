@@ -23,7 +23,6 @@ class CompanyStoreRequest extends FormRequest
   {
     return [
       'name' => 'required',
-      'owner' => 'required',
     ];
   }
 

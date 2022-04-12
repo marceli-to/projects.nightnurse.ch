@@ -1,6 +1,6 @@
 <template>
   <div :class="`flex text-dark relative feed-item ${position}`">
-    <div class="sm:max-w-[60%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-zinc-100 text-sm sm:text-base text-dark rounded">
+    <div class="sm:max-w-[70%] lg:max-w-[60%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-zinc-100 text-sm sm:text-base text-dark rounded">
       <slot />
     </div>
   </div>
@@ -71,6 +71,10 @@ export default {
 }
 
 .feed-item {
-  @apply mb-10 sm:mb-8
+  @apply mb-8 sm:mb-10
+}
+
+.feed-item.has-delete {
+  @apply mb-10 sm:mb-12
 }
 </style>

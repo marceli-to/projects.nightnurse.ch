@@ -1,8 +1,7 @@
 <?php
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Company;
 use App\Http\Resources\DataCollection;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
@@ -19,20 +18,9 @@ class UserController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function get(Company $company)
+  public function get()
   {
-    $users = User::with('company')->orderBy('name')->where('company_id', $company->id)->get();
-    return new DataCollection($users);
-  }
-
-  /**
-   * Get a list of users
-   * 
-   * @return \Illuminate\Http\Response
-   */
-  public function getStaff()
-  {
-    return new DataCollection(User::staff()->get());
+    return response()->json(User::orderBy('name')->get());
   }
 
   /**
@@ -108,27 +96,6 @@ class UserController extends Controller
   {
     $user->delete();
     return response()->json('successfully deleted');
-  }
-
-  /**
-   * Get users info by authenticated user
-   */
-  public function getAuthenticated()
-  {
-    $user  = User::findOrFail(auth()->user()->id);
-
-    $data = [
-      'firstname' => $user->firstname, 
-      'name' => $user->name,
-      'email' => $user->email,
-    ];
-
-    if ($user->isAdmin())
-    {
-      $data['admin'] = TRUE;
-    }
-
-    return response()->json($data);
   }
 
   /**

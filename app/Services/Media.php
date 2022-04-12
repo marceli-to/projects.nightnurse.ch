@@ -85,13 +85,32 @@ class Media
   }
 
   /**
+   * Remove a bunch of files from storage
+   * 
+   * @param Array $files
+   */
+  public function removeMany($files = NULL, $temp = FALSE)
+  {
+    foreach($files as $file)
+    {
+      if ($temp)
+      {
+        Storage::delete('public/uploads/temp' . DIRECTORY_SEPARATOR . $file->name);
+      }
+      Storage::delete('public/uploads' . DIRECTORY_SEPARATOR . $file->name);
+    }
+    return true;
+  }
+
+  /**
    * Removes a file from storage
    * 
    * @param String $filename
    */
   public function remove($filename = NULL, $temp = FALSE)
   {
-    if ($temp) {
+    if ($temp)
+    {
       return Storage::delete('public/uploads/temp' . DIRECTORY_SEPARATOR . $filename);
     }
     return Storage::delete('public/uploads' . DIRECTORY_SEPARATOR . $filename);

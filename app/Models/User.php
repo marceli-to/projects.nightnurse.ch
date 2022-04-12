@@ -22,6 +22,7 @@ class User extends Authenticatable implements MustVerifyEmail
     'email',
     'phone',
     'password', 
+    'api_token',
     'email_verified_at',
     'register_complete',
     'language_id',
@@ -36,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
    * @var array
    */
   protected $hidden = [
-    'password', 'remember_token'
+    'password', 'remember_token', 'api_token'
   ];
 
   /**
@@ -127,7 +128,7 @@ class User extends Authenticatable implements MustVerifyEmail
   }
 
   /**
-   * Role helper for admins
+   * Role helper for editors
    */
 
   public function isEditor()

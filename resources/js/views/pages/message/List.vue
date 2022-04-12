@@ -25,7 +25,7 @@
   <feed>
     <div v-for="(entries, day) in data" :key="day" class="relative">
       <feed-item-timestamp>{{ day }}</feed-item-timestamp>
-      <feed-item v-for="(d, index) in entries" :key="index" :item="d" :class="[d.private ? 'is-private' : '', '']">
+      <feed-item v-for="(d, index) in entries" :key="index" :item="d" :class="getStateClasses(d)">
         <div v-if="!d.deleted_at" class="relative">
           <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="d.private" />
           <feed-item-sender :class="[d.private ? 'text-slate-100': '']">
@@ -37,6 +37,7 @@
           <feed-item-body v-if="d.subject || d.body">
             <div :class="[d.body ? 'font-bold' : '', 'text-sm']">{{ d.subject }}</div>
             <div class="text-sm" v-html="d.body"></div>
+            asasdf
           </feed-item-body>
           <div v-if="d.files" :class="[d.subject || d.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-2']">
             <div v-for="file in d.files" :key="file.uuid" class="first:border-t-2 border-b-2 border-gray-100 py-2 lg:py-3 last:border-b-0">
@@ -177,6 +178,17 @@ export default {
           this.isLoading = false;
         });
       }
+    },
+
+    getStateClasses(item) {
+      let cls = '';
+      if (item.can_delete && !item.deleted_at) {
+        cls += 'has-delete ';
+      }
+      if (item.private) {
+        cls += 'is-private'
+      }
+      return cls;
     },
   },
 

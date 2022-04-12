@@ -10,4 +10,8 @@
 .feed-item__body p:last-of-type {
   @apply !mb-1;
 }
+
+.feed-item__body a {
+  @apply text-ellipsis
+}
 </style>

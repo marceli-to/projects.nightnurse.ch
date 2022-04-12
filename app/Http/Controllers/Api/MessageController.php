@@ -73,9 +73,9 @@ class MessageController extends Controller
       ];
     });
 
-    dd($messages);
-
-    return response()->json(collect($messages));
+    $messages = collect($messages);
+    $messagesGrouped = $messages->groupBy('message_date_string');
+    return response()->json($messagesGrouped->all());
   }
 
   /**
@@ -157,13 +157,7 @@ class MessageController extends Controller
   public function destroy(Message $message)
   {
     $message = Message::with('files')->findOrFail($message->id);
-    if ($message->files)
-    {
-      foreach($message->files as $file)
-      {
-        (new Media())->remove($file->name);
-      }
-    }
+    (new Media())->removeMany($message->files);
     $message->delete();
     return response()->json('successfully deleted');
   }
