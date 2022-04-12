@@ -1,8 +1,6 @@
 <?php
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-// Protected API Controllers
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProjectController;
@@ -13,12 +11,12 @@ use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
 use App\Http\Controllers\Api\Settings\RoleController;
-
-// Public API Controllers
 use App\Http\Controllers\Api\v1\CompanyController as CompanyApiController;
 use App\Http\Controllers\Api\v1\UserController as UserControllerApiController;
-//use App\Http\Controllers\Api\v1\ProjectController as ProjectApiController;
+use App\Http\Controllers\Api\v1\ProjectController as ProjectApiController;
 
+
+// Public API
 Route::middleware('auth:api')->group(function() {
   Route::get('v1/companies', [CompanyApiController::class, 'get']);
   Route::get('v1/company/{company}', [CompanyApiController::class, 'find']);
@@ -34,9 +32,16 @@ Route::middleware('auth:api')->group(function() {
   Route::get('v1/user/state/{user:uuid}', [UserControllerApiController::class, 'toggle']);
   Route::delete('v1/user/{user:uuid}', [UserControllerApiController::class, 'destroy']);
 
-  //Route::get('/v1/projects', [ProjectApiController::class, 'get']);
+  Route::get('v1/projects', [ProjectApiController::class, 'get']);
+  Route::get('v1/project/{project}', [ProjectApiController::class, 'find']);
+  Route::post('v1/project', [ProjectApiController::class, 'store']);
+  Route::put('v1/project/{project}', [ProjectApiController::class, 'update']);
+  Route::get('v1/project/state/{project}', [ProjectApiController::class, 'toggle']);
+  Route::delete('v1/project/{project}', [ProjectApiController::class, 'destroy']);
+
 });
 
+// Protected API
 Route::middleware('auth:sanctum')->get('/user/authenticated', function (Request $request) {
   return $request->user();
 });
@@ -103,6 +108,3 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
 
 });
-
-
-

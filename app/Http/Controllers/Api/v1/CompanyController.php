@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\DataCollection;
 use App\Models\Company;
 use App\Http\Requests\CompanyStoreRequest;
 use Illuminate\Http\Request;
