@@ -66,19 +66,12 @@ export default {
       this.axios.get(`/api/companies/clients`).then(response => {
         this.companies = response.data.data;
         this.selection = this.$props.data;
-        console.log(this.selection);
       });
-      // this.axios.get(`/api/project-companies/${this.$props.projectId}`).then(response => {
-      //   this.selection = response.data.data;
-      // });
     },
 
     change(event) {
       let target = event.target, id = target.value, name = target.options[target.selectedIndex].innerHTML;
       const idx = this.selection.findIndex(x => x.id === parseInt(id));
-
-      console.log(idx);
-
 
       if (idx == -1 && id != "null") {
         let d = { id: parseInt(id), name: name };
