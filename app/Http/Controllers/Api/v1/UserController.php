@@ -53,6 +53,7 @@ class UserController extends Controller
       'company_id' => $request->input('company_id'),
       'gender_id' => $request->input('gender_id'),
       'role_id' => $request->input('role_id'),
+      'vertec_id' => $request->input('vertec_id') ? $request->input('vertec_id') : NULL,
     ]);
     return response()->json(['userId' => $user->id]);
   }

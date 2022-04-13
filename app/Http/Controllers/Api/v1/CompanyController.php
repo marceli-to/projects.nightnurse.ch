@@ -41,7 +41,8 @@ class CompanyController extends Controller
       'name' => $request->input('name'),
       'city' => $request->input('city') ? $request->input('city') : NULL,
       'owner' => 0,
-      'publish' => 1
+      'publish' => 1,
+      'vertec_id' => $request->input('vertec_id') ? $request->input('vertec_id') : NULL,
     ]);
     return response()->json(['companyId' => $company->id]);
   }
