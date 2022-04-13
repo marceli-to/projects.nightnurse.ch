@@ -15,6 +15,7 @@ class Company extends Base
     'city',
     'owner',
     'publish',
+    'vertec_id'
 	];
 
   protected $appends = ['full_name'];

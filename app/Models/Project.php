@@ -18,7 +18,8 @@ class Project extends Base
     'company_id',
     'project_state_id',
     'user_id',
-    'state_id'
+    'state_id',
+    'vertec_id'
 	];
 
   /**
