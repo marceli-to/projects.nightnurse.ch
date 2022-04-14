@@ -1,0 +1,9 @@
+/* components/tooltip.css */
+
+.tooltip {
+  @apply invisible absolute rounded p-2 bg-dark text-white left-2/4 -top-14 inline-block w-56 max-w-xs opacity-80;
+}
+
+.has-tooltip:hover .tooltip {
+  @apply visible z-50;
+}

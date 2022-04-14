@@ -24,7 +24,7 @@ class MessageController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      $messages = new DataCollection(Message::with('project', 'sender', 'files')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+      $messages = new DataCollection(Message::with('project', 'sender', 'files', 'users')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
       $messagesGrouped = $messages->groupBy('message_date_string');
       return $messagesGrouped->all();
     }
@@ -69,7 +69,15 @@ class MessageController extends Controller
           'short_name' => $m->sender->short_name,
           'name' => $m->sender->name,
           'firstname' => $m->sender->firstname,
-        ]
+        ],
+        'users' => $m->users->map(function($u) {
+          return [
+            'uuid' => $u->uuid,
+            'full_name' => $f->full_name,
+            'short_name' => $f->short_name,
+            'email' => $f->email,
+          ];
+        }),
       ];
     });
 

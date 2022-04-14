@@ -25,21 +25,30 @@
   <feed>
     <div v-for="(entries, day) in data" :key="day" class="relative">
       <feed-item-timestamp>{{ day }}</feed-item-timestamp>
-      <feed-item v-for="(d, index) in entries" :key="index" :item="d" :class="getStateClasses(d)">
-        <div v-if="!d.deleted_at" class="relative">
-          <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="d.private" />
-          <feed-item-sender :class="[d.private ? 'text-slate-100': '']">
+      <feed-item v-for="(message, index) in entries" :key="index" :item="message" :class="getStateClasses(message)">
+        <div v-if="!message.deleted_at" class="relative">
+          <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="message.private" />
+          <feed-item-header :class="[message.private ? 'text-slate-100': '']">
             Nachricht von 
-            <span class="font-bold" v-if="d.sender">{{d.sender.full_name}}</span>
+            <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
             <span v-else>[deleted user]</span>
-            um {{d.message_time}}
-          </feed-item-sender>
-          <feed-item-body v-if="d.subject || d.body">
-            <div :class="[d.body ? 'font-bold' : '', 'text-sm']">{{ d.subject }}</div>
-            <div class="text-sm" v-html="d.body"></div>
+            um {{message.message_time}} an 
+            <span v-if="message.users.length == 1">{{message.users[0].full_name}}</span>
+            <span v-else class="has-tooltip">
+              <div class='tooltip'>
+                <span v-for="(user, idx) in message.users" :key="user.uuid">
+                  {{user.full_name}}<span v-if="idx < message.users.length-1">,</span>
+                </span>
+              </div>
+              <a href="javascript:;" class="underline text-gray-400 decoration-dotted">{{ message.users.length }} Empfänger</a>
+            </span>
+          </feed-item-header>
+          <feed-item-body v-if="message.subject || message.body">
+            <div :class="[message.body ? 'font-bold' : '', 'text-sm']">{{ message.subject }}</div>
+            <div class="text-sm" v-html="message.body"></div>
           </feed-item-body>
-          <div v-if="d.files" :class="[d.subject || d.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-2']">
-            <div v-for="file in d.files" :key="file.uuid" class="first:border-t-2 border-b-2 border-gray-100 py-2 lg:py-3 last:border-b-0">
+          <div v-if="message.files" :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-2']">
+            <div v-for="file in message.files" :key="file.uuid" class="first:border-t-2 border-b-2 border-gray-100 py-2 lg:py-3 last:border-b-0">
               <a :href="`/img/original/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-if="file.preview">
                 <img 
                 :src="`/img/thumbnail/${file.name}`" 
@@ -63,10 +72,10 @@
         </div>
         <div v-else>
           <feed-item-body>
-            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">Nachricht gelöscht durch {{d.sender.full_name}}</div>
+            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">Nachricht gelöscht durch {{message.sender.full_name}}</div>
           </feed-item-body>
         </div>
-        <a href="javascript:;" @click.prevent="destroy(d.uuid)" class="feed-item-delete" v-if="d.can_delete && !d.deleted_at">Nachricht löschen</a>
+        <a href="javascript:;" @click.prevent="destroy(message.uuid)" class="feed-item-delete" v-if="message.can_delete && !message.deleted_at">Nachricht löschen</a>
       </feed-item>
     </div>
   </feed>
@@ -94,7 +103,7 @@ import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Feed from "@/components/ui/feed/Feed.vue";
 import FeedItem from "@/components/ui/feed/Item.vue";
-import FeedItemSender from "@/components/ui/feed/Sender.vue";
+import FeedItemHeader from "@/components/ui/feed/Header.vue";
 import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
 import FeedItemBody from "@/components/ui/feed/Body.vue";
 
@@ -114,7 +123,7 @@ export default {
     ListEmpty,
     Feed,
     FeedItem,
-    FeedItemSender,
+    FeedItemHeader,
     FeedItemTimestamp,
     FeedItemBody
   },
@@ -166,6 +175,7 @@ export default {
         this.project = responses[1].data;
         this.isFetched = true;
         this.isLoading = false;
+        console.log(this.data);
       }));
     },
 
