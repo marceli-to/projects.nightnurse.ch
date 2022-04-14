@@ -12,7 +12,7 @@ An:
 @endif
 </div>
 @if ($message['body'])
-<div class="pt-20">{!! $message['body'] !!}</div>
+<div class="pt-10">{!! $message['body'] !!}</div>
 @endif
 @if ($message['files'])
 <div class="pt-20">
