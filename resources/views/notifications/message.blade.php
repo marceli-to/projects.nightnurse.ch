@@ -1,6 +1,16 @@
 @component('mail::message')
 @include('notifications.partials.logo')
-<div class="text-sm font-mono pt-20">Neue Nachricht von {{$message['sender']['full_name']}}:</div>
+<div class="py-20">
+<div class="border-top text-xs font-mono pt-10">Von: {{$message['sender']['full_name']}}</div>
+@if ($message['users'])
+<div class="border-bottom pb-10 pt-5 text-xs text-sm font-mono">
+An: 
+@foreach($message['users'] as $user)
+<span class="text-xs font-mono">{{$user['full_name']}}@if (!$loop->last),</span> @endif
+@endforeach
+</div>
+@endif
+</div>
 @if ($message['body'])
 <div class="pt-20">{!! $message['body'] !!}</div>
 @endif
@@ -37,17 +47,7 @@
 @endif
 @endforeach
 </div>
-@if ($message['users'])
-<br>
-<div class="border-top border-bottom py-10 text-sm text-xs font-mono">
-Gesendet an: 
-@foreach($message['users'] as $user)
-<span class="text-xs font-mono">{{$user['full_name']}}@if (!$loop->last),</span> @endif
-@endforeach
-</div>
-<br>
-@endif
-<div class="pt-20 text-center text-sm font-mono">
+<div class="pt-10 text-center text-sm font-mono">
   <a href="{{url('')}}/projects/project/{{$message['project']['uuid']}}/messages" class="font-mono text-xs text-dark">Nachricht im Browser öffnen</a>
 </div>
 @endif
