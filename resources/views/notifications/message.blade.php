@@ -37,8 +37,16 @@
 @endif
 @endforeach
 </div>
-<div class="pt-10 text-center font-sm">
-  <a href="{{url('')}}/projects/project/{{$message['project']['uuid']}}/messages" class="text-sm text-dark">Nachricht im Browser öffnen</a>
+@if ($message['users'])
+<div class="border-top pt-10 text-sm text-xs font-mono">
+Gesendet an:<br>
+@foreach($message['users'] as $user)
+<span class="text-xs">{{$user['full_name']}}@if (!$loop->last),</span> @endif
+@endforeach
+</div>
+@endif
+<div class="pt-10 text-center text-sm font-mono">
+  <a href="{{url('')}}/projects/project/{{$message['project']['uuid']}}/messages" class="font-mono text-xs text-dark">Nachricht im Browser öffnen</a>
 </div>
 @endif
 @endcomponent

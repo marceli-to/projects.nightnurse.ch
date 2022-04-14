@@ -143,7 +143,8 @@ img {
   border-radius: 6px;
   margin: 0 auto;
   padding: 0;
-  width: 640px;
+  max-width: 640px;
+  width: 100%;
 }
 
 /* Footer */
@@ -159,13 +160,13 @@ img {
 }
 
 .footer p {
-  color: #b0adc5;
+  color: #74787e;
   font-size: 12px;
   text-align: center;
 }
 
 .footer a {
-  color: #b0adc5;
+  color: #74787e;
   text-decoration: underline;
 }
 
@@ -262,7 +263,7 @@ img {
 }
 
 .text-xs {
-  font-size: 12px;
+  font-size: 12px !important;
   line-height: 1.2;
 }
 
@@ -280,6 +281,10 @@ img {
 
 .text-dark {
   color: #222 !important;
+}
+
+.text-slate {
+  color: #74787e !important;
 }
 
 .text-left {
