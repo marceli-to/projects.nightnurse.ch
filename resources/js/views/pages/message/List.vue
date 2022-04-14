@@ -30,7 +30,7 @@
           <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="d.private" />
           <feed-item-sender :class="[d.private ? 'text-slate-100': '']">
             Nachricht von 
-            <span class="font-bold" v-if="d.sender">{{d.sender.short_name}}</span>
+            <span class="font-bold" v-if="d.sender">{{d.sender.full_name}}</span>
             <span v-else>[deleted user]</span>
             um {{d.message_time}}
           </feed-item-sender>
@@ -63,7 +63,7 @@
         </div>
         <div v-else>
           <feed-item-body>
-            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">Nachricht wurde gelöscht</div>
+            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">Nachricht gelöscht durch {{d.sender.full_name}}</div>
           </feed-item-body>
         </div>
         <a href="javascript:;" @click.prevent="destroy(d.uuid)" class="feed-item-delete" v-if="d.can_delete && !d.deleted_at">Nachricht löschen</a>

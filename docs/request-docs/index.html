@@ -22,7 +22,7 @@
 
       <script src="https://unpkg.com/vue-markdown@2.2.4/dist/vue-markdown.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/sql-formatter/3.1.0/sql-formatter.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <script src="http://er.nightnurse.ch.local/./vendor/request-docs/dist/app.js"></script>
+      <script src="http://projects.nightnurse.ch.local/./vendor/request-docs/dist/app.js"></script>
       <style>
         [v-cloak] {
             display: none;
@@ -1404,7 +1404,7 @@
             return validations
         }
         var docs = [{"uri":"api\/v1\/companies","methods":["GET","HEAD"],"middlewares":["api","auth:api"],"controller":"CompanyController","controller_full_path":"App\\Http\\Controllers\\Api\\V1\\CompanyController","method":"get","httpMethod":"GET","rules":[],"docBlock":""},{"uri":"api\/v1\/company\/{company}","methods":["GET","HEAD"],"middlewares":["api","auth:api"],"controller":"CompanyController","controller_full_path":"App\\Http\\Controllers\\Api\\V1\\CompanyController","method":"find","httpMethod":"GET","rules":[],"docBlock":""},{"uri":"api\/v1\/company","methods":["POST"],"middlewares":["api","auth:api"],"controller":"CompanyController","controller_full_path":"App\\Http\\Controllers\\Api\\V1\\CompanyController","method":"store","httpMethod":"POST","rules":{"name":["required"]},"docBlock":""},{"uri":"api\/v1\/company\/{company}","methods":["PUT"],"middlewares":["api","auth:api"],"controller":"CompanyController","controller_full_path":"App\\Http\\Controllers\\Api\\V1\\CompanyController","method":"update","httpMethod":"PUT","rules":{"name":["required"]},"docBlock":""}];
-        var app_url = "http:\/\/er.nightnurse.ch.local";
+        var app_url = "http:\/\/projects.nightnurse.ch.local";
 
         //remove trailing slash if any
         app_url = app_url.replace(/\/$/, '')

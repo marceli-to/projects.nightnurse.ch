@@ -11,6 +11,7 @@ class Message extends Base
 
   protected $casts = [
     'created_at' => 'datetime:d.m.Y H:i',
+    'deleted_at' => 'datetime:d.m.Y H:i',
   ];
 
 	protected $fillable = [
