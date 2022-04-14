@@ -264,7 +264,7 @@ img {
 
 .text-xs {
   font-size: 12px !important;
-  line-height: 1.2;
+  line-height: 1.3 !important;
 }
 
 .text-sm {
