@@ -1,6 +1,6 @@
 @component('mail::message')
 @include('notifications.partials.logo')
-<div class="text-sm font-mono pt-20">Neue Nachricht von {{$message['sender']['short_name']}}:</div>
+<div class="text-sm font-mono pt-20">Neue Nachricht von {{$message['sender']['full_name']}}:</div>
 @if ($message['body'])
 <div class="pt-20">{!! $message['body'] !!}</div>
 @endif

@@ -22,6 +22,10 @@ class Project extends Base
     'vertec_id'
 	];
 
+  protected $appends = [
+    'title'
+  ];
+
   /**
    * Relations
    */
@@ -99,4 +103,16 @@ class Project extends Base
   {
     return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
   }
+
+  /**
+   * Get project title (Number + Name)
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getTitleAttribute($value)
+  {
+    return $this->number . ' ' . $this->name;
+  }
+
 }

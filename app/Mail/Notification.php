@@ -19,7 +19,7 @@ class Notification extends Mailable
   public function __construct(Message $message)
   {
     $this->message = $message;
-    $this->subject = $this->message->subject ? $this->message->subject : 'Neue Nachricht von ' . $this->message->sender->short_name;
+    $this->subject = $this->message->subject ? $this->message->subject . ' – ' . $this->message->project->title : 'Neue Nachricht – ' .  $this->message->project->title;
   }
 
   /**
@@ -29,7 +29,7 @@ class Notification extends Mailable
    */
   public function build()
   {
-    return $this->from(\Config::get('client.email.from'), 'Project Room – Nightnurse')
+    return $this->from(\Config::get('client.email.from'), 'Nightnurse Images - Project Room')
                 ->subject($this->subject)
                 ->with(['message' => $this->message])
                 ->markdown('notifications.message');
