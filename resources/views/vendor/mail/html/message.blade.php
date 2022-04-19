@@ -21,7 +21,7 @@
 {{-- Footer --}}
 @slot('footer')
 @component('mail::footer')
-<span style="color: rgb(156 163 175);">© {{ date('Y') }} {{ config('app.name') }}. @lang('All rights reserved.')</span>
+<span>© {{ date('Y') }} {{ config('app.name') }}. @lang('All rights reserved.')</span>
 @endcomponent
 @endslot
 @endcomponent

@@ -13,6 +13,12 @@ use App\Http\Controllers\ImageController;
 |
 */
 
+Route::get('/mailable', function () {
+  $message = \App\Models\MessageUser::with('user', 'message.project', 'message.files', 'message.sender', 'message.users')->find(45);
+  return new \App\Mail\Notification($message->message);
+});
+
+
 // Auth routes
 Auth::routes(['verify' => true, 'register' => false]);
 Route::get('/logout', 'Auth\LoginController@logout');
