@@ -18,6 +18,18 @@ class CompanyController extends Controller
   }
 
   /**
+   * Get a list users for a given company
+   * 
+   * @param Company $company
+   * @return \Illuminate\Http\Response
+   */
+  public function getUsersByCompany(Company $company)
+  {
+    $company = Company::with('users')->findOrFail($company->id);
+    return response()->json($company->users);
+  }
+
+  /**
    * Get a single companies for a given companies
    * 
    * @param Company $company

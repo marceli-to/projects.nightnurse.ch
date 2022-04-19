@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\v1\ProjectController as ProjectApiController;
 Route::middleware('auth:api')->group(function() {
   Route::get('v1/companies', [CompanyApiController::class, 'get']);
   Route::get('v1/company/{company}', [CompanyApiController::class, 'find']);
+  Route::get('v1/company/{company}/users', [CompanyApiController::class, 'getUsersByCompany']);
   Route::put('v1/company/{company}', [CompanyApiController::class, 'update']);
   Route::post('v1/company', [CompanyApiController::class, 'store']);
   Route::delete('v1/company/{company}', [CompanyApiController::class, 'destroy']);
