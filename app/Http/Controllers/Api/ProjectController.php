@@ -18,7 +18,23 @@ class ProjectController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      return new DataCollection(Project::with('state', 'company', 'companies', 'manager', 'messages')->orderBy('number', 'DESC')->get());
+      // Get 'users projects'
+      $user_projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
+                    ->orderBy('last_activity', 'DESC')
+                    ->orderBy('number', 'DESC')
+                    ->where('user_id', auth()->user()->id)
+                    ->get();
+
+      // Get 'all projects'
+      $projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
+                    ->orderBy('last_activity', 'DESC')
+                    ->orderBy('number', 'DESC')
+                    ->where('user_id', '!=', auth()->user()->id)
+                    ->get();
+
+      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+
+      // return new DataCollection($projects);
     }
     
     // Get users company id
@@ -34,20 +50,36 @@ class ProjectController extends Controller
     $ids = array_unique(array_merge($projects->all(), $companyProjects->all()), SORT_REGULAR);
 
     // Map fields
-    $projects = Project::with('company', 'messages')
+    $projects = Project::with('company', 'messages.sender')
       ->whereIn('id', $ids)
+      ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
       ->get()
       ->map(function($p) {
         return [
           'uuid' => $p->uuid,
           'number' => $p->number,
+          'color' => $p->color,
           'name' => $p->name,
-          'company' => $p->company->name,
-          'messages' => $p->messages->count()
+          'company' => [
+              'uuid' => $p->company->uuid,
+              'name' => $p->company->name,
+              'city' => $p->company->city,
+          ],
+          'messages' => $p->messages->map(function($m) {
+            return [
+              'uuid' => $m->uuid,
+              'subject' => $m->subject,
+              'body' => $m->body,
+              'message_date' => $m->message_date,
+              'sender' => [
+                'full_name' => $m->sender ? $m->sender->full_name : '',
+              ]
+            ];
+          }),
         ];
     });
-    return response()->json(collect($projects));
+    return response()->json(['projects' => collect($projects)]);
   }
 
   /**

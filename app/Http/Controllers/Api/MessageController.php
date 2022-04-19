@@ -73,9 +73,9 @@ class MessageController extends Controller
         'users' => $m->users->map(function($u) {
           return [
             'uuid' => $u->uuid,
-            'full_name' => $f->full_name,
-            'short_name' => $f->short_name,
-            'email' => $f->email,
+            'full_name' => $u->full_name,
+            'short_name' => $u->short_name,
+            'email' => $u->email,
           ];
         }),
       ];
@@ -152,6 +152,9 @@ class MessageController extends Controller
         }
       }
     }
+
+    $project->last_activity = \Carbon\Carbon::now();
+    $project->save();
     
     return response()->json(['messageId' => $message->id]);
   }

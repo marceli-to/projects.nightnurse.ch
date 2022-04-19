@@ -87,6 +87,11 @@
       </select>
     </div>
 
+    <div class="form-group">
+      <label>Farbe <asterisk /></label>
+      <input type="color" name="color" v-model="data.color">
+    </div>
+
     <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>
       <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
@@ -133,6 +138,7 @@ export default {
       data: {
         number: null,
         name: null,
+        color: '#ff008b',
         date_start: null,
         date_end: null,
         user_id: null,

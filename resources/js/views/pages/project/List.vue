@@ -5,6 +5,81 @@
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
   </content-header>
+
+  <div v-if="data.user_projects.length" class="max-width-content">
+    <div v-for="d in data.user_projects" :key="d.uuid" class="grid grid-cols-12 mb-4 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
+      <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
+      <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+          {{d.number}}
+        </router-link>
+      </div>
+      <div class="col-span-8 md:col-span-9">
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+         <span class="font-bold">{{ d.name }}</span><span v-if="d.company"><separator />{{ d.company.name }}</span>
+        </router-link>
+        <div v-if="d.messages">
+          <div v-for="(message, iteration) in d.messages" :key="message.uuid">
+            <div v-if="iteration < 3" class="pt-1">
+              <span v-if="message.subject">{{message.subject}}</span>
+              <span v-else-if="message.body">{{ message.body | truncate(20, '...')}}</span>
+              <span v-else>–</span>
+              <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}, {{message.message_date}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-2 md:col-span-2">
+        <div class="flex items-center justify-end" v-if="$store.state.user.admin">
+          <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
+            <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+          </router-link>
+          <a href="" @click.prevent="destroy(d.uuid)">
+            <trash-icon class="icon-list" aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </div>
+    <hr class="max-width-content border-bottom !mt-10 !my-8 !lg:mt-12 !my-10">
+  </div>
+  
+  <div v-if="data.projects.length" class="max-width-content">
+    <div v-for="d in data.projects" :key="d.uuid" class="grid grid-cols-12 mb-4 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
+      <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
+      <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+          {{d.number}}
+        </router-link>
+      </div>
+      <div class="col-span-8 md:col-span-9">
+        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+         <span class="font-bold">{{ d.name }}</span><span v-if="d.company"><separator />{{ d.company.name }}</span>
+        </router-link>
+        <div v-if="d.messages">
+          <div v-for="(message, iteration) in d.messages" :key="message.uuid">
+            <div v-if="iteration < 3" class="pt-1.5">
+              <span v-if="message.subject">{{message.subject}}</span>
+              <span v-else-if="message.body">{{ message.body | truncate(20, '...')}}</span>
+              <span v-else>–</span>
+              <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}, {{message.message_date}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-span-2 md:col-span-2">
+        <div class="flex items-center justify-end" v-if="$store.state.user.admin">
+          <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
+            <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+          </router-link>
+          <a href="" @click.prevent="destroy(d.uuid)">
+            <trash-icon class="icon-list" aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- 
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
@@ -34,7 +109,7 @@
   </list>
   <list-empty v-else>
     {{messages.emptyData}}
-  </list-empty>
+  </list-empty> -->
 </div>
 </template>
 <script>
@@ -71,7 +146,10 @@ export default {
     return {
 
       // Data
-      data: [],
+      data: {
+        user_projects: [],
+        all_projects: [],
+      },
 
       // Routes
       routes: {
@@ -101,7 +179,8 @@ export default {
 
     fetch() {
       this.axios.get(this.routes.list).then(response => {
-        this.data = response.data.data ? response.data.data : response.data;
+        this.data.user_projects = response.data.user_projects ? response.data.user_projects : [];
+        this.data.projects = response.data.projects ? response.data.projects : [];
         this.isFetched = true;
       });
     },

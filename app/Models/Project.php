@@ -13,6 +13,7 @@ class Project extends Base
     'uuid',
     'number',
     'name',
+    'color',
     'date_start',
     'date_end',
     'company_id',
@@ -21,6 +22,12 @@ class Project extends Base
     'state_id',
     'vertec_id'
 	];
+
+  protected $casts = [
+    'created_at' => 'datetime:d.m.Y H:i',
+    'deleted_at' => 'datetime:d.m.Y H:i',
+    'last_activity' => 'datetime:d.m.Y H:i',
+  ];
 
   protected $appends = [
     'title'
@@ -52,7 +59,7 @@ class Project extends Base
 
   public function messages()
   {
-    return $this->hasMany(Message::class, 'project_id', 'id');
+    return $this->hasMany(Message::class, 'project_id', 'id')->orderBy('created_at', 'DESC');
   }
 
   /**
