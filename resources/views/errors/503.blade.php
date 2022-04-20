@@ -5,8 +5,8 @@
     <div class="card-error__logo">
       @include('partials.logo')
     </div>
-    <h2>Fehler 503</h2>
-    <p>Server error.</p>
+    <h2>Service unavailable 503</h2>
+    <p>The site is undergoing some maintenance. We'll be back shortly.</p>
   </div>
 </div>
 @endsection
