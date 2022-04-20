@@ -21,10 +21,12 @@
         <div v-if="d.messages">
           <div v-for="(message, iteration) in d.messages" :key="message.uuid">
             <div v-if="iteration < 3" class="pt-1">
-              <span v-if="message.subject">{{message.subject}}</span>
-              <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
-              <span v-else>–</span>
-              <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}, {{message.message_date}}</span>
+              <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+                <span v-if="message.subject">{{message.subject}}</span>
+                <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
+                <span v-else>–</span>
+                <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}</span>
+              </router-link>
             </div>
           </div>
         </div>
@@ -61,7 +63,7 @@
               <span v-if="message.subject">{{message.subject}}</span>
               <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
               <span v-else>–</span>
-              <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}, {{message.message_date}}</span>
+              <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}</span>
             </div>
           </div>
         </div>
@@ -78,38 +80,6 @@
       </div>
     </div>
   </div>
-
-<!-- 
-  <list v-if="data.length">
-    <list-item v-for="d in data" :key="d.uuid">
-      <div class="flex items-center">
-        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
-          {{d.number}}<separator />{{ d.name }}<separator /><span v-if="d.company">{{ d.company.name }}</span>
-        </router-link>
-      </div>
-      <list-action v-if="$store.state.user.admin">
-        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative">
-          <span v-if="d.messages.length" class="rounded-full bg-highlight absolute -top-[2px] right-[7px] h-2 w-2 block"></span>
-          <annotation-icon class="icon-list mr-2" aria-hidden="true" />
-        </router-link>
-        <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
-          <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
-        </router-link>
-        <a href="" @click.prevent="destroy(d.uuid)">
-          <trash-icon class="icon-list" aria-hidden="true" />
-        </a>
-      </list-action>
-      <list-action v-else>
-        <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative">
-          <span v-if="d.messages" class="rounded-full bg-highlight absolute -top-[2px] right-[7px] h-2 w-2 block"></span>
-          <annotation-icon class="icon-list mr-2" aria-hidden="true" />
-        </router-link>
-      </list-action>
-    </list-item>
-  </list>
-  <list-empty v-else>
-    {{messages.emptyData}}
-  </list-empty> -->
 </div>
 </template>
 <script>

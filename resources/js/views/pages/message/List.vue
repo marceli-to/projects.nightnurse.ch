@@ -25,7 +25,7 @@
   <feed>
     <div v-for="(entries, day) in data" :key="day" class="relative">
       <feed-item-timestamp>{{ day }}</feed-item-timestamp>
-      <feed-item v-for="(message, index) in entries" :key="index" :item="message" :class="getStateClasses(message)">
+      <feed-item v-for="(message, index) in entries" :key="index" :item="message" :class="getStateClasses(message)" :data-uuid="message.uuid">
         <div v-if="!message.deleted_at" class="relative">
           <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="message.private" />
           <feed-item-header :class="[message.private ? 'text-slate-100': '']">
