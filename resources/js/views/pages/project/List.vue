@@ -22,7 +22,7 @@
           <div v-for="(message, iteration) in d.messages" :key="message.uuid">
             <div v-if="iteration < 3" class="pt-1">
               <span v-if="message.subject">{{message.subject}}</span>
-              <span v-else-if="message.body">{{ message.body | truncate(20, '...')}}</span>
+              <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
               <span v-else>–</span>
               <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}, {{message.message_date}}</span>
             </div>
@@ -59,7 +59,7 @@
           <div v-for="(message, iteration) in d.messages" :key="message.uuid">
             <div v-if="iteration < 3" class="pt-1.5">
               <span v-if="message.subject">{{message.subject}}</span>
-              <span v-else-if="message.body">{{ message.body | truncate(20, '...')}}</span>
+              <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
               <span v-else>–</span>
               <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}, {{message.message_date}}</span>
             </div>

@@ -33,8 +33,6 @@ class ProjectController extends Controller
                     ->get();
 
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
-
-      // return new DataCollection($projects);
     }
     
     // Get users company id
@@ -71,6 +69,7 @@ class ProjectController extends Controller
               'uuid' => $m->uuid,
               'subject' => $m->subject,
               'body' => $m->body,
+              'body_preview' => $m->body_preview,
               'message_date' => $m->message_date,
               'sender' => [
                 'full_name' => $m->sender ? $m->sender->full_name : '',

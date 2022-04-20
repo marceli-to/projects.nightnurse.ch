@@ -28,6 +28,7 @@ class Message extends Base
     'message_time',
     'message_date',
     'message_date_string',
+    'body_preview',
     'can_delete',
   ];
 
@@ -126,4 +127,16 @@ class Message extends Base
     }
     return date('D, d.m.Y', strtotime($this->created_at));
   }
+
+  /**
+   * Get a preview of the body field
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getBodyPreviewAttribute($value)
+  {
+    return \Str::words(strip_tags(str_replace('&nbsp;', '', $this->body)), 4, ' ...');
+  }
+
 }
