@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ImageController;
+use App\Http\Controllers\DownloadController;
 
 
 /*
@@ -24,6 +25,10 @@ Route::get('/', [PageController::class, 'index']);
 Route::get('/register/complete', [RegisterController::class, 'complete'])->name('complete');
 Route::get('/register/{user:uuid}', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'update'])->name('register');
+
+// Frontend download
+Route::get('/download/zip/{message:uuid}', [DownloadController::class, 'download']);
+
 
 // Url based images
 Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageController::class, 'getResponse']);

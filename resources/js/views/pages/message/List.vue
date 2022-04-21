@@ -68,6 +68,17 @@
                 </div>
               </a>
             </div>
+            <span 
+              class="block text-xs font-mono pt-2 lg:pt-3"
+              v-if="message.files.length">
+              <a 
+                :href="`/download/zip/${message.uuid}`" 
+                target="_blank" 
+                :class="[message.private ? 'text-white' : 'text-dark', 'flex items-center no-underline hover:underline']">
+                <cloud-download-icon class="h-5 w-5" aria-hidden="true" />
+                <span class="inline-block ml-2">Download als ZIP</span>
+              </a>
+            </span>
           </div>
         </div>
         <div v-else>
@@ -91,7 +102,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon, ShieldCheckIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon, ShieldCheckIcon, CloudDownloadIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -115,6 +126,7 @@ export default {
     TrashIcon,
     PencilAltIcon,
     ShieldCheckIcon,
+    CloudDownloadIcon,
     ContentHeader,
     ContentFooter,
     Separator,
