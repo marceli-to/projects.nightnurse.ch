@@ -56,7 +56,7 @@
                 width="100"
                 class="!mt-0 !mb-0 mr-2 lg:mr-3 block h-auto max-w-[40px] bg-light rounded-sm" />
                 <div class="font-mono text-xs">
-                  {{ file.original_name | truncate(30, '...') }}, {{ file.size | filesize(file.size) }}
+                  {{ file.original_name | truncate(30, '') }} – {{ file.size | filesize(file.size) }}
                 </div>
               </a>
               <a :href="`/storage/uploads/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-else>
@@ -64,7 +64,7 @@
                   <file-type :extension="file.extension" />
                 </div>
                 <div class="font-mono text-xs">
-                  {{ file.original_name | truncate(30, '...') }}, {{ file.size | filesize(file.size) }}
+                  {{ file.original_name | truncate(30, '') }} – {{ file.size | filesize(file.size) }}
                 </div>
               </a>
             </div>
