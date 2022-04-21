@@ -48,23 +48,23 @@
             <div class="text-sm" v-html="message.body"></div>
           </feed-item-body>
           <div v-if="message.files" :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-2']">
-            <div v-for="file in message.files" :key="file.uuid" class="first:border-t-2 border-b-2 border-gray-100 py-2 lg:py-3 last:border-b-0">
+            <div v-for="file in message.files" :key="file.uuid" class="first:border-t border-b border-gray-100 py-2 lg:py-3 last:border-b-0">
               <a :href="`/img/original/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-if="file.preview">
                 <img 
                 :src="`/img/thumbnail/${file.name}`" 
                 height="100" 
                 width="100"
-                class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light rounded-sm"
-                v-if="file.preview" />
+                class="!mt-0 !mb-0 mr-2 lg:mr-3 block h-auto max-w-[40px] bg-light rounded-sm" />
                 <div class="font-mono text-xs">
-                  <div class="mb-1">{{ file.original_name | truncate(50, '...') }}</div>
-                  <div>{{ file.size | filesize(file.size) }}</div>
+                  {{ file.original_name | truncate(30, '...') }}, {{ file.size | filesize(file.size) }}
                 </div>
               </a>
               <a :href="`/storage/uploads/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-else>
+                <div class="mr-2 lg:mr-3">
+                  <file-type :extension="file.extension" />
+                </div>
                 <div class="font-mono text-xs">
-                  <div class="mb-1">{{ file.original_name | truncate(50, '...') }}</div>
-                  <div>{{ file.size | filesize(file.size) }}</div>
+                  {{ file.original_name | truncate(30, '...') }}, {{ file.size | filesize(file.size) }}
                 </div>
               </a>
             </div>
@@ -101,6 +101,7 @@ import List from "@/components/ui/layout/List.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
+import FileType from "@/components/ui/misc/FileType.vue";
 import Feed from "@/components/ui/feed/Feed.vue";
 import FeedItem from "@/components/ui/feed/Item.vue";
 import FeedItemHeader from "@/components/ui/feed/Header.vue";
@@ -117,6 +118,7 @@ export default {
     ContentHeader,
     ContentFooter,
     Separator,
+    FileType,
     List,
     ListItem,
     ListAction,
@@ -175,7 +177,6 @@ export default {
         this.project = responses[1].data;
         this.isFetched = true;
         this.isLoading = false;
-        console.log(this.data);
       }));
     },
 
