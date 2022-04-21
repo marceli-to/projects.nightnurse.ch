@@ -74,7 +74,46 @@
       </form-radio>
     </div>
 
-    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="!data.private">
+    <!-- private message: show owner company only -->
+    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
+      <label class="mb-2">Empfänger *</label>
+      <div v-for="company in project.companies" :key="company.uuid">
+        <div v-if="company.users.length > 0 && company.owner">
+          <div class="form-check mb-2">
+            <input 
+              type="checkbox" 
+              class="checkbox" 
+              :id="company.uuid" 
+              @change="toggleAll($event, company.uuid)">
+            <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+              {{ company.name }} (Alle)
+            </label>
+          </div>
+          <div class="grid lg:grid-cols-4 mb-6">
+            <div v-for="user in company.users" :key="user.uuid">
+              <div class="form-check">
+                <input 
+                  type="checkbox" 
+                  class="checkbox" 
+                  :value="user.uuid" 
+                  :id="user.uuid" 
+                  :data-company-uuid="company.uuid"
+                  @change="toggleOne($event, user.uuid)">
+                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                  {{ user.firstname }} {{ user.name }}
+                </label>
+                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                  {{ user.email }}
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--non private message: show all companies -->
+    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
       <label class="mb-2">Empfänger *</label>
       <div v-for="company in project.companies" :key="company.uuid">
         <div v-if="company.users.length > 0">
@@ -89,7 +128,7 @@
             </label>
           </div>
           <div class="grid lg:grid-cols-4 mb-6">
-            <div v-for="user in company.users" :key="user.uuid" v-if="user.register_complete">
+            <div v-for="user in company.users" :key="user.uuid">
               <div class="form-check">
                 <input 
                   type="checkbox" 
@@ -98,8 +137,11 @@
                   :id="user.uuid" 
                   :data-company-uuid="company.uuid"
                   @change="toggleOne($event, user.uuid)">
-                <label class="inline-block text-gray-800" :for="user.uuid">
+                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
                   {{ user.firstname }} {{ user.name }}
+                </label>
+                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                  {{ user.email }}
                 </label>
               </div>
             </div>
