@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use ZipArchive;
+use Illuminate\Support\Facades\File;
 use Illuminate\Http\Request;
 
 class DownloadController extends Controller
@@ -15,20 +16,27 @@ class DownloadController extends Controller
    */
   public function download(Message $message)
   {
-    $zipArchive = new ZipArchive;
-    $fileName = $this->filename($message);
+    $archive = new ZipArchive;
+    $file_name = $this->filename($message);
 
-    if ($zipArchive->open(public_path($fileName), ZipArchive::CREATE) === TRUE)
+    $download_path = storage_path('app/public/downloads/zip');
+
+    if (!File::isDirectory($download_path))
+    {
+      File::makeDirectory($download_path, 0775, true, true);
+    }
+
+    if ($archive->open(public_path('storage') . '/downloads/zip/' . $file_name, ZipArchive::CREATE) === TRUE)
     {
       $path = storage_path('app/public/uploads/');
       foreach($message->files as $file)
       {
-        $zipArchive->addFile($path . $file->name, $file->name);
+        $archive->addFile($path . $file->name, $file->name);
       }
-      $zipArchive->close();
+      $archive->close();
     }
 
-    return response()->download(public_path($fileName));
+    return response()->download(public_path('storage') . '/downloads/zip/' . $file_name);
   }
 
   /**
