@@ -1,6 +1,6 @@
 <template>
 <div v-if="isFetched">
-  <header class="mb-4 sm:mb-8 lg:mb-9 pt-4 sm:pt-5 lg:pt-7 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-50 border-bottom sm:max-w-4xl">
+  <header class="mb-4 sm:mb-8 lg:mb-9 pt-4 sm:pt-5 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom sm:max-w-4xl relative -ml-[1px] pl-[1px]">
     <div>
       <div class="text-2xl font-bold mb-2 sm:mb-3 flex items-center">
         <span class="text-dark" v-if="project.company">{{project.company.name}} – {{project.number}} {{project.name}}</span>
@@ -68,11 +68,11 @@
               :private="message.private">
             </feed-item-attachement>
 
-            <span class="flex items-center justify-between text-xs font-mono pb-1 pt-4">
+            <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4">
               <a 
                 href="javascript:;" 
                 @click="toggle(message.uuid)"
-                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline']"
+                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
                 v-if="message.truncate_files">
                 <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                 <span class="inline-block ml-2">Mehr anzeigen ({{message.files.length - 3}})</span>
@@ -80,7 +80,7 @@
               <a
                 href="javascript:;" 
                 @click="toggle(message.uuid)"
-                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline']"
+                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
                 v-else-if="message.files.length > 3">
                 <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
                 <span class="inline-block ml-2">Weniger anzeigen</span>
@@ -88,7 +88,7 @@
               <a 
                 :href="`/download/zip/${message.uuid}`" 
                 target="_blank" 
-                :class="[message.private ? 'text-white' : 'text-gray-400', 'flex items-center no-underline hover:underline']">
+                :class="[message.private ? 'text-white' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']">
                 <folder-download-icon class="h-5 w-5" aria-hidden="true" />
                 <span class="inline-block ml-2">Download als ZIP</span>
               </a>

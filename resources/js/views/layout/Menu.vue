@@ -1,5 +1,5 @@
 <template>
-<nav class="min-h-screen max-h-screen sticky top-0 flex flex-col items-stretch w-12 sm:w-16 bg-light border-r-2 border-gray-100 py-4 sm:py-5 z-20">
+<nav class="h-full fixed top-0 flex flex-col items-stretch w-12 sm:w-16 bg-light border-r-2 border-gray-100 py-4 sm:py-5 z-50">
   <div class="grow">
     <div class="mb-6 px-3 sm:px-4">
       <router-link :to="{ name: 'projects' }" class="btn-icon">

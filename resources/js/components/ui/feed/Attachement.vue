@@ -8,7 +8,7 @@
         :src="`/img/thumbnail/${file.name}`" 
         height="100" 
         width="100"
-        class="!mt-0 !mb-0 mr-2 lg:mr-3 block h-auto max-w-[40px] bg-light rounded-sm"
+        class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[40px] bg-light rounded-sm"
         v-if="file.preview" />
       <div class="mr-2 lg:mr-3 py-1" v-else>
         <file-type :extension="file.extension" />
