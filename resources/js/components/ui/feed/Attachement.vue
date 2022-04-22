@@ -14,7 +14,7 @@
         <file-type :extension="file.extension" />
       </div>
       <div class="font-mono text-xs">
-        {{ file.original_name | truncate(30, '') }} – {{ file.size | filesize(file.size) }}
+        {{ file.original_name | truncate(25, '...') }} – {{ file.size | filesize(file.size) }}
       </div>
     </a>
   </div>
