@@ -23,16 +23,23 @@
     </div>
   </header>
   <feed>
-    <div v-for="(entries, day) in data" :key="day" class="relative">
+    <div v-for="(items, day) in feedItems" :key="day" class="relative">
+
       <feed-item-timestamp>{{ day }}</feed-item-timestamp>
-      <feed-item v-for="(message, index) in entries" :key="index" :item="message" :class="getStateClasses(message)" :data-uuid="message.uuid">
+      
+      <feed-item 
+        v-for="(message, index) in items" 
+        :key="index" 
+        :item="message" 
+        :class="getStateClasses(message)">
+        
         <div v-if="!message.deleted_at" class="relative">
           <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="message.private" />
-          <feed-item-header :class="[message.private ? 'text-slate-100': '']">
-            Nachricht von 
+
+          <feed-item-header :class="[message.private ? 'text-slate-100': '', 'relative']">
             <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
             <span v-else>[deleted user]</span>
-            um {{message.message_time}} an 
+            an 
             <span v-if="message.users.length == 1">{{message.users[0].full_name}}</span>
             <span v-else class="has-tooltip">
               <div class='tooltip'>
@@ -40,54 +47,76 @@
                   {{user.full_name}}<span v-if="idx < message.users.length-1">,</span>
                 </span>
               </div>
-              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} Empfänger</a>
+              <a href="javascript:;" 
+                class="underline underline-offset-4 text-gray-400 decoration-dotted">
+                {{ message.users.length }} Empfänger
+              </a>
             </span>
+            um {{message.message_time}} Uhr
           </feed-item-header>
+
           <feed-item-body v-if="message.subject || message.body">
             <div :class="[message.body ? 'font-bold' : '', 'text-sm']">{{ message.subject }}</div>
             <div class="text-sm" v-html="message.body"></div>
           </feed-item-body>
-          <div v-if="message.files" :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-2']">
-            <div v-for="file in message.files" :key="file.uuid" class="first:border-t border-b border-gray-100 py-2 lg:py-3 last:border-b-0">
-              <a :href="`/img/original/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-if="file.preview">
-                <img 
-                :src="`/img/thumbnail/${file.name}`" 
-                height="100" 
-                width="100"
-                class="!mt-0 !mb-0 mr-2 lg:mr-3 block h-auto max-w-[40px] bg-light rounded-sm" />
-                <div class="font-mono text-xs">
-                  {{ file.original_name | truncate(30, '') }} – {{ file.size | filesize(file.size) }}
-                </div>
+
+          <div v-if="message.files.length > 0" :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-3']">
+            
+            <feed-item-attachement 
+              v-for="(file, idx) in message.files"
+              :key="file.uuid"
+              :index="idx"
+              :file="file"
+              :truncate="message.truncate_files"
+              :private="message.private">
+            </feed-item-attachement>
+
+            <span class="flex items-center justify-between text-xs font-mono pb-1 pt-4">
+              <a 
+                href="javascript:;" 
+                @click="toggle(message.uuid)"
+                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline']"
+                v-if="message.truncate_files">
+                <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
+                <span class="inline-block ml-2">Mehr anzeigen ({{message.files.length}})</span>
               </a>
-              <a :href="`/storage/uploads/${file.name}`" target="_blank" class="flex items-center no-underline hover:text-highlight" v-else>
-                <div class="mr-2 lg:mr-3">
-                  <file-type :extension="file.extension" />
-                </div>
-                <div class="font-mono text-xs">
-                  {{ file.original_name | truncate(30, '') }} – {{ file.size | filesize(file.size) }}
-                </div>
+              <a
+                href="javascript:;" 
+                @click="toggle(message.uuid)"
+                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline']"
+                v-else-if="message.files.length > 3">
+                <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
+                <span class="inline-block ml-2">Weniger anzeigen</span>
               </a>
-            </div>
-            <span 
-              class="block text-xs font-mono pt-2 lg:pt-3"
-              v-if="message.files.length">
               <a 
                 :href="`/download/zip/${message.uuid}`" 
                 target="_blank" 
-                :class="[message.private ? 'text-white' : 'text-dark', 'flex items-center no-underline hover:underline']">
-                <cloud-download-icon class="h-5 w-5" aria-hidden="true" />
+                :class="[message.private ? 'text-white' : 'text-gray-400', 'flex items-center no-underline hover:underline']">
+                <folder-download-icon class="h-5 w-5" aria-hidden="true" />
                 <span class="inline-block ml-2">Download als ZIP</span>
               </a>
             </span>
+
           </div>
+
         </div>
+
         <div v-else>
           <feed-item-body>
-            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">Nachricht gelöscht durch {{message.sender.full_name}}</div>
+            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">
+              Nachricht gelöscht durch {{message.sender.full_name}}
+            </div>
           </feed-item-body>
         </div>
-        <a href="javascript:;" @click.prevent="destroy(message.uuid)" class="feed-item-delete" v-if="message.can_delete && !message.deleted_at">Nachricht löschen</a>
+
+        <a href="javascript:;" 
+          @click.prevent="destroy(message.uuid)" 
+          class="feed-item-delete" 
+          v-if="message.can_delete && !message.deleted_at">
+          Nachricht löschen
+        </a>
       </feed-item>
+
     </div>
   </feed>
   <content-footer>
@@ -102,7 +131,19 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon, ShieldCheckIcon, CloudDownloadIcon } from "@vue-hero-icons/outline";
+import { 
+  PlusCircleIcon, 
+  PencilAltIcon, 
+  TrashIcon, 
+  ShieldCheckIcon, 
+  CloudDownloadIcon, 
+  FolderDownloadIcon,
+  ChevronDownIcon,
+  ChevronUpIcon
+
+} 
+from "@vue-hero-icons/outline";
+
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -112,12 +153,13 @@ import List from "@/components/ui/layout/List.vue";
 import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
-import FileType from "@/components/ui/misc/FileType.vue";
 import Feed from "@/components/ui/feed/Feed.vue";
 import FeedItem from "@/components/ui/feed/Item.vue";
 import FeedItemHeader from "@/components/ui/feed/Header.vue";
 import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
+import FeedItemAttachement from "@/components/ui/feed/Attachement.vue";
 import FeedItemBody from "@/components/ui/feed/Body.vue";
+import FileType from "@/components/ui/misc/FileType.vue";
 
 export default {
 
@@ -127,10 +169,12 @@ export default {
     PencilAltIcon,
     ShieldCheckIcon,
     CloudDownloadIcon,
+    FolderDownloadIcon,
+    ChevronUpIcon,
+    ChevronDownIcon,
     ContentHeader,
     ContentFooter,
     Separator,
-    FileType,
     List,
     ListItem,
     ListAction,
@@ -139,7 +183,9 @@ export default {
     FeedItem,
     FeedItemHeader,
     FeedItemTimestamp,
-    FeedItemBody
+    FeedItemAttachement,
+    FeedItemBody,
+    FileType
   },
 
   mixins: [ErrorHandling, Helpers],
@@ -148,7 +194,7 @@ export default {
     return {
 
       // Data
-      data: [],
+      feedItems: [],
 
       // Project data
       project: [],
@@ -185,7 +231,7 @@ export default {
         this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.project}/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
-        this.data = responses[0].data.data ? responses[0].data.data : responses[0].data;
+        this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
         this.isFetched = true;
         this.isLoading = false;
@@ -202,10 +248,19 @@ export default {
       }
     },
 
+    toggle(uuid) {
+      Object.keys(this.feedItems).forEach(key => {
+        const index = this.feedItems[key].findIndex(x => x.uuid === uuid);
+        if (index > -1) {
+          this.feedItems[key][index].truncate_files = this.feedItems[key][index].truncate_files ? false : true;
+        }
+      });
+    },
+
     getStateClasses(item) {
       let cls = '';
       if (item.can_delete && !item.deleted_at) {
-        cls += 'has-delete ';
+        cls += 'can-delete ';
       }
       if (item.private) {
         cls += 'is-private'

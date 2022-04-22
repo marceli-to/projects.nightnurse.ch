@@ -30,6 +30,7 @@ class Message extends Base
     'message_date_string',
     'body_preview',
     'can_delete',
+    'truncate_files'
   ];
 
   public function sender()
@@ -72,6 +73,19 @@ class Message extends Base
   {
     return $this->user_id == auth()->user()->id ? true : false;
   }
+
+  /**
+   * Check if the message belongs to the authorized user
+   * and allow them to delete the message
+   *
+   * @param  string  $value
+   * @return boolean
+   */
+  public function getTruncateFilesAttribute($value)
+  {
+    return $this->files->count() > 3 ? TRUE : FALSE;
+  }
+
 
   /**
    * Get the body attribute of a message

@@ -51,6 +51,7 @@ class MessageController extends Controller
         'body' => $m->body,
         'internal' => $m->internal,
         'can_delete' => $m->can_delete,
+        'truncate_files' => $m->truncate_files,
         'message_time' => $m->message_time,
         'message_date' => $m->message_date,
         'message_date_string' => $m->message_date_string,
@@ -67,6 +68,7 @@ class MessageController extends Controller
         }),
         'sender' => [
           'short_name' => $m->sender->short_name,
+          'full_name' => $m->sender->full_name,
           'name' => $m->sender->name,
           'firstname' => $m->sender->firstname,
         ],

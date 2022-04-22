@@ -1,7 +1,7 @@
 /* components/tooltip.css */
 
 .tooltip {
-  @apply invisible absolute rounded p-2 bg-dark text-white left-2/4 -top-12 inline-block w-56 max-w-xs opacity-80;
+  @apply invisible absolute rounded p-2 bg-dark text-white left-[50%] -top-1 translate-y-[-100%] translate-x-[-25%] inline-block w-auto min-w-[50%] max-w-xs;
 }
 
 .has-tooltip:hover .tooltip {

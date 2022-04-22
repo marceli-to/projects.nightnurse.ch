@@ -18,4 +18,7 @@ export default {
 .is-png {
   @apply bg-gray-300;
 }
+.is-zip {
+  @apply bg-yellow-400;
+}
 </style>
