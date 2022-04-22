@@ -93,6 +93,7 @@ import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Pill from "@/components/ui/misc/Pill.vue";
+import i18n from "@/i18n";
 
 export default {
 
@@ -110,7 +111,7 @@ export default {
     Pill
   },
 
-  mixins: [ErrorHandling, Helpers],
+  mixins: [ErrorHandling, Helpers, i18n],
 
   data() {
     return {
@@ -178,7 +179,7 @@ export default {
 
   computed: {
     title() {
-      return "Projekte";
+      return this.translate('Projekte');
     }
   }
 }

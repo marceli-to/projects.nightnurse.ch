@@ -20,6 +20,7 @@ Vue.use(require('vue-moment'));
 // Filters
 require('@/mixins/Filters');
 
+
 // Vue-Notifications
 import Notifications from 'vue-notification';
 Vue.use(Notifications);
@@ -27,6 +28,7 @@ Vue.use(Notifications);
 // Vue-Router
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
+
 
 // Store
 import store from '@/config/store';
@@ -64,6 +66,7 @@ if (document.querySelector('#app')) {
       AppComponent
     },
     router,
-    store
+    store,
+    
   }).$mount('#app');
 }

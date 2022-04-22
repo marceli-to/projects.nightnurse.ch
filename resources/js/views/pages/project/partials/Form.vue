@@ -69,7 +69,7 @@
       <div class="flex flex-wrap">
         <a 
           href="javascript:;"
-          class="rounded-full inline-flex w-auto items-center bg-dark hover:bg-highlight px-3 py-2 lg:px-4 lg:py-3 text-white font-mono mr-4 mb-4 text-xs sm:text-sm no-underline"
+          class="rounded-sm inline-flex w-auto items-center bg-dark hover:bg-highlight px-3 py-2 lg:px-4 lg:py-3 text-white font-mono mr-4 mb-4 text-xs sm:text-sm no-underline"
           v-for="d in data.companies" 
           :key="d.id"
           @click.prevent="removeCompany(d.id)">
@@ -112,6 +112,7 @@ import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import { TheMask } from "vue-the-mask";
+import i18n from "@/i18n";
 
 export default {
   components: {
@@ -125,7 +126,7 @@ export default {
     XIcon
   },
 
-  mixins: [ErrorHandling],
+  mixins: [ErrorHandling, i18n],
 
   props: {
     type: String
@@ -259,7 +260,7 @@ export default {
 
   computed: {
     title() {
-      return this.$props.type == "update" ? "Projekt bearbeiten"  : "Projekt hinzufügen";
+      return this.$props.type == "update" ? this.translate('Projekt bearbeiten') : this.translate('Projekt erstellen');
     }
   }
 };
