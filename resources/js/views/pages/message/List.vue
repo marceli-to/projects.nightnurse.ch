@@ -47,10 +47,7 @@
                   {{user.full_name}}<span v-if="idx < message.users.length-1">,</span>
                 </span>
               </div>
-              <a href="javascript:;" 
-                class="underline underline-offset-4 text-gray-400 decoration-dotted">
-                {{ message.users.length }} Empfänger
-              </a>
+              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} Empfänger</a>
             </span>
             um {{message.message_time}} Uhr
           </feed-item-header>
