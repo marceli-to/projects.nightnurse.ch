@@ -38,53 +38,36 @@
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
     </div>
-    <template v-if="$props.type == 'update'">
-    <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
-        <label>E-Mail <asterisk /></label>
-        <input type="email" v-model="data.email">
-        <required />
-      </div>
 
-      <div class="form-group">
-        <label>Rolle</label>
-        <select v-model="data.role_id">
-          <option :value="r.id" v-for="r in settings.roles" :key="r.id">{{r.description}}</option>
-        </select>
-      </div>
-    </template>
-    <template v-if="$props.type == 'create'">
-      <h3 class="mb-6 lg:mb-8">Zugangsdaten</h3>
+    <h4 class="mb-3 lg:mb-4">Zugangsdaten</h4>
     <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
-        <label>E-Mail <asterisk /></label>
-        <input type="email" v-model="data.email">
-        <required />
-      </div>
+      <label>E-Mail <asterisk /></label>
+      <input type="email" v-model="data.email">
+      <required />
+    </div>
     <div :class="[errors.password ? 'is-invalid' : '', 'form-group']">
-        <label>Passwort <asterisk /></label>
-        <input type="password" v-model="data.password" data-field-password>
-        <a href="javascript:;" @click.prevent="togglePassword()" class="absolute right-0 bottom-8">
-          <eye-icon class="w-5 h-5 icon-list" />
-        </a>
-        <a 
-          href="" 
-          @click.prevent="generatePassword()" 
-          class="absolute left-0 font-mono text-xs underline pt-2 text-gray-400 hover:text-highlight hover:no-underline">
-          Passwort vorschlagen
-        </a>
-        <required />
-      </div>
-    <div :class="[errors.password_confirmation ? 'is-invalid' : '', 'form-group']">
-        <label>Passwort wiederholen <asterisk /></label>
-        <input type="password" v-model="data.password_confirmation" data-field-password>
-        <required />
-      </div>
+      <label>Passwort</label>
+      <input type="password" v-model="data.password" data-field-password autocomplete="off">
+      <a href="javascript:;" @click.prevent="togglePassword()" class="absolute right-0 bottom-4">
+        <eye-icon class="w-5 h-5 icon-list" />
+      </a>
+      <a 
+        href="" 
+        @click.prevent="generatePassword()" 
+        class="absolute left-0 font-mono text-xs underline pt-2 text-gray-400 hover:text-highlight hover:no-underline">
+        Passwort vorschlagen
+      </a>
+    </div>
+    <div :class="[errors.password_confirmation ? 'is-invalid' : '', 'form-group mt-12 lg:mt-16']">
+      <label>Passwort wiederholen</label>
+      <input type="password" v-model="data.password_confirmation" data-field-password autocomplete="off">
+    </div>
     <div :class="[errors.role_id ? 'is-invalid' : '', 'form-group']">
-        <label>Rolle</label>
-        <select v-model="data.role_id">
-          <option :value="r.id" v-for="r in settings.roles" :key="r.id">{{r.description}}</option>
-        </select>
-      </div>
-    </template>
+      <label>Rolle</label>
+      <select v-model="data.role_id">
+        <option :value="r.id" v-for="r in settings.roles" :key="r.id">{{r.description}}</option>
+      </select>
+    </div>
 
     <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>
@@ -173,6 +156,7 @@ export default {
       messages: {
         created: 'Benutzer erfasst!',
         updated: 'Änderungen gespeichert!',
+        password_match_error: 'Passwörter stimmen nicht überein!'
       }
     };
   },
@@ -195,6 +179,13 @@ export default {
     },
 
     submit() {
+
+
+      if (this.data.password && this.data.password_confirmation && (this.data.password !== this.data.password_confirmation)) {
+        this.$notify({ type: "danger", text: this.messages.password_match_error });
+        return false;
+      }
+
       if (this.$props.type == "update") {
         this.update();
       }
@@ -256,6 +247,13 @@ export default {
       });
     },
 
+    showPassword() {
+      const fields = document.querySelectorAll('input[data-field-password]');
+      fields.forEach(function(field){
+        field.type = 'text';
+      });
+    },
+
     generatePassword() {
       const chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       const fields = document.querySelectorAll('input[data-field-password]');
@@ -265,11 +263,23 @@ export default {
         let randomNumber = Math.floor(Math.random() * chars.length);
         pwd += chars.substring(randomNumber, randomNumber + 1);
       }
+     
+      this.data.password = pwd;
+      this.data.password_confirmation = pwd;
 
-      alert('Ihr Passwort lautet: ' + pwd);
-      
-      this.password = pwd;
-      this.password_confirmation = pwd;
+      fields.forEach(function(field){
+        field.value = pwd;
+      });
+      this.showPassword();
+    },
+
+    resetPassword() {
+      this.password = null;
+      this.password_confirmation = null;
+      const fields = document.querySelectorAll('input[data-field-password]');
+      fields.forEach(function(field){
+        field.value = '';
+      });
     }
   },
 

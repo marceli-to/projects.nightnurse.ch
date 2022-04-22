@@ -41,7 +41,7 @@
 
     <div :class="[errors.password ? 'is-invalid' : '', 'form-group']">
       <label>Passwort (min. 8 Zeichen)</label>
-      <input type="password" v-model="data.password" data-field-password>
+      <input type="password" v-model="data.password" data-field-password autocomplete="off">
       <a href="javascript:;" @click.prevent="togglePassword()" class="absolute right-0 bottom-8">
         <eye-icon class="w-5 h-5 icon-list" />
       </a>
@@ -54,7 +54,7 @@
     </div>
     <div :class="[errors.password ? 'is-invalid' : '', 'form-group mt-12 lg:mt-16']">
       <label>Passwort wiederholen</label>
-      <input type="password" v-model="data.password_confirmation" data-field-password>
+      <input type="password" v-model="data.password_confirmation" data-field-password autocomplete="off">
     </div>
     <content-footer>
       <button type="submit" class="btn-primary">Speichern</button>

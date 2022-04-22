@@ -80,8 +80,17 @@ class UserController extends Controller
   public function update(User $user, UserUpdateRequest $request)
   {
     $user = User::findOrFail($user->id);
-    $user->update($request->all());
-    $user->save();
+    $user->update($request->except(['password', 'password_confirmation']));
+
+    if ($request->input('password') && $request->input('password_confirmation'))
+    {
+      $validated = $request->validate([
+        'password' => 'min:8|required_with:password_confirmation|same:password_confirmation',
+        'password_confirmation' => 'min:8',
+      ]);
+      $user->password = \Hash::make($request->input('password'));
+      $user->save();
+    }
     return response()->json('successfully updated');
   }
 

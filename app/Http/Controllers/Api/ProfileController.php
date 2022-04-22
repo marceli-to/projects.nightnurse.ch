@@ -39,14 +39,9 @@ class ProfileController extends Controller
         'password' => 'min:8|required_with:password_confirmation|same:password_confirmation',
         'password_confirmation' => 'min:8',
       ]);
-
       $user->password = \Hash::make($request->input('password'));
       $user->save();
     }
-
-
     return response()->json('successfully updated');
   }
-
-
 }
