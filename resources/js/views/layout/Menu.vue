@@ -17,11 +17,11 @@
           <office-building-icon class="h-5 w-5 sm:h-8 sm:w-8" aria-hidden="true" />
         </menu-item>
       </li>
-      <!-- <li class="block !p-0 !m-0">
-        <menu-item :route="'users'">
-          <users-icon class="h-5 w-5 sm:h-8 sm:w-8" aria-hidden="true" />
+      <li class="block !p-0 !m-0">
+        <menu-item :route="'profile-edit'">
+          <user-circle-icon class="h-5 w-5 sm:h-8 sm:w-8" aria-hidden="true" />
         </menu-item>
-      </li> -->
+      </li>
       <li class="block !p-0 !m-0">
         <a href="/logout" class="text-gray-400 hover:text-highlight text-base font-normal no-underline flex items-center p-3 sm:p-5">
           <logout-icon class="h-5 w-5 sm:h-8 sm:w-8" aria-hidden="true" />
@@ -29,26 +29,12 @@
       </li>
     </ul>
   </div>
-  <!-- <div class="hidden sm:flex items-center px-4 pt-4">
-    <div class="">
-      <div class="flex items-center justify-center rounded-full bg-highlight text-white h-8 w-8">
-        <span class="text-sm font-mono">MS</span>
-      </div>
-    </div>
-    <div class="text-xs pl-3 text-gray-400 hidden">
-      {{user.firstname}} {{user.name}}<br>
-      <div class="flex">
-        <a href="" class="text-xs text-gray-400 font-normal hover:no-underline">Profile</a>
-        <span class="inline-block px-2">&bull;</span>
-        <a href="/logout" class="text-xs text-gray-400 font-normal hover:no-underline hover:text-highlight">Logout</a>
-      </div>
-    </div>
-  </div> -->
+
 </nav>
 </template>
 <script>
 
-import { UsersIcon, FolderIcon, OfficeBuildingIcon } from "@vue-hero-icons/outline";
+import { UsersIcon, FolderIcon, OfficeBuildingIcon, UserCircleIcon, } from "@vue-hero-icons/outline";
 import { LogoutIcon } from "@vue-hero-icons/solid"
 import MenuItem from '@/components/ui/menu/Item';
 import MenuItemLabel from '@/components/ui/menu/Label';
@@ -60,6 +46,7 @@ export default {
     UsersIcon,
     OfficeBuildingIcon,
     LogoutIcon,
+    UserCircleIcon,
     MenuItem,
     MenuItemLabel,
   },

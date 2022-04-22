@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
@@ -63,6 +64,11 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::put('user/{user:uuid}', [UserController::class, 'update']);
   Route::get('user/state/{user:uuid}', [UserController::class, 'toggle']);
   Route::delete('user/{user:uuid}', [UserController::class, 'destroy']);
+
+  // Profile
+  Route::get('profile', [ProfileController::class, 'find']);
+  Route::put('profile', [ProfileController::class, 'update']);
+
 
   // Projects
   Route::get('projects', [ProjectController::class, 'get']);
