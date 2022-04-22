@@ -78,7 +78,7 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline']"
                 v-if="message.truncate_files">
                 <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">Mehr anzeigen ({{message.files.length}})</span>
+                <span class="inline-block ml-2">Mehr anzeigen ({{message.files.length - 3}})</span>
               </a>
               <a
                 href="javascript:;" 
