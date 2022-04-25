@@ -107,7 +107,7 @@
                           {{ user.firstname }} {{ user.name }}
                         </label>
                         <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email | truncate(10, '...') }}
+                          {{ user.email | truncate(20, '...') }}
                         </label>
                       </div>
                     </div>
@@ -180,7 +180,7 @@
                   </label>
                 </div>
                 <div v-for="user in project.company.users" :key="user.uuid">
-                  <div class="form-check">
+                  <div class="form-check mb-1">
                     <input 
                       type="checkbox" 
                       class="checkbox" 
