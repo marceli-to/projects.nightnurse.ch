@@ -66,9 +66,9 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::delete('user/{user:uuid}', [UserController::class, 'destroy']);
 
   // Profile
+  Route::post('profile/switch-language', [ProfileController::class, 'switchLanguage']);
   Route::get('profile', [ProfileController::class, 'find']);
   Route::put('profile', [ProfileController::class, 'update']);
-  Route::post('profile/switch-language', [ProfileController::class, 'switchLanguage']);
 
 
   // Projects
