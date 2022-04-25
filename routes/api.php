@@ -68,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function() {
   // Profile
   Route::get('profile', [ProfileController::class, 'find']);
   Route::put('profile', [ProfileController::class, 'update']);
+  Route::post('profile/switch-language', [ProfileController::class, 'switchLanguage']);
 
 
   // Projects

@@ -44,4 +44,18 @@ class ProfileController extends Controller
     }
     return response()->json('successfully updated');
   }
+
+  /**
+   * Switch the language settings of the current user
+   *
+   * @return \Illuminate\Http\Response
+   */
+
+  public function switchLanguage()
+  {
+    $user = User::findOrFail(auth()->user()->id);
+    $user->language_id == 1 ? 2 : 1;
+    $user->save();
+    return redirect()->back();
+  }
 }

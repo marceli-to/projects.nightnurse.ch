@@ -36,6 +36,27 @@ class UserController extends Controller
   }
 
   /**
+   * Get users info by authenticated user
+   */
+  public function getAuthenticated()
+  {
+    $user  = User::with('language')->findOrFail(auth()->user()->id);
+    $data = [
+      'firstname' => $user->firstname, 
+      'name' => $user->name,
+      'email' => $user->email,
+      'language' => $user->language->acronym
+    ];
+
+    if ($user->isAdmin())
+    {
+      $data['admin'] = TRUE;
+    }
+
+    return response()->json($data);
+  }
+
+  /**
    * Get a single user for a given user
    * 
    * @param  $user
@@ -117,27 +138,6 @@ class UserController extends Controller
   {
     $user->delete();
     return response()->json('successfully deleted');
-  }
-
-  /**
-   * Get users info by authenticated user
-   */
-  public function getAuthenticated()
-  {
-    $user  = User::with('language')->findOrFail(auth()->user()->id);
-    $data = [
-      'firstname' => $user->firstname, 
-      'name' => $user->name,
-      'email' => $user->email,
-      'language' => $user->language->acronym
-    ];
-
-    if ($user->isAdmin())
-    {
-      $data['admin'] = TRUE;
-    }
-
-    return response()->json($data);
   }
 
   /**

@@ -67,9 +67,11 @@
 
     <div class="form-group" v-if="$store.state.user.admin">
       <form-radio 
-        :label="'Private Nachricht?'"
+        :label="translate('Private Nachricht?')"
         v-bind:private.sync="data.private"
         :model="data.private"
+        :labelTrue="translate('Ja')"
+        :labelFalse="translate('Nein')"
         :name="'private'">
       </form-radio>
     </div>
@@ -448,7 +450,7 @@ export default {
 
   computed: {
     title() {
-      return `Neue Nachricht <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
+      return `${this.translate('Neue Nachricht')} <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     }
   }
 };

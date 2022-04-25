@@ -1,6 +1,6 @@
 <template>
 <div>
-  <content-header :title="'Profil bearbeiten'"></content-header>
+  <content-header :title="translate('Profil bearbeiten')"></content-header>
   <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-width-content">
     <div :class="[errors.firstname ? 'is-invalid' : '', 'form-group']">
       <label>{{translate('Vorname')}} <asterisk /></label>
@@ -77,6 +77,7 @@ import Asterisk from "@/components/ui/form/Asterisk.vue";
 import i18n from "@/i18n";
 
 export default {
+  
   components: {
     EyeIcon,
     ContentHeader,
