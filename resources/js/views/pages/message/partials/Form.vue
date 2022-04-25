@@ -5,12 +5,12 @@
     <content-header :title="title"></content-header>
     
     <div class="form-group">
-      <label>Betreff</label>
+      <label>{{translate('Betreff')}}</label>
       <input type="text" v-model="data.subject">
     </div>
 
     <div class="form-group mt-6 lg:mt-8">
-      <label class="mb-3 lg:mb-3">Mitteilung</label>
+      <label class="mb-3 lg:mb-3">{{translate('Mitteilung')}}</label>
       <tinymce-editor
         :api-key="tinyApiKey"
         :init="tinyConfig"
@@ -19,7 +19,7 @@
     </div>
 
     <div class="form-group">
-      <label>Dateien</label>
+      <label>{{translate('Dateien')}}</label>
       <vue-dropzone
         ref="dropzone"
         id="dropzone"
@@ -29,8 +29,8 @@
         @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
         :useCustomSlot=true>
         <div>
-          <div><strong>Datei auswählen oder hierhin ziehen</strong></div>
-          <small>max. Grösse 250 MB</small>
+          <div><strong>{{translate('Datei auswählen oder hierhin ziehen')}}</strong></div>
+          <small>{{translate('max. Grösse 250 MB')}}</small>
         </div>
       </vue-dropzone>
 
@@ -76,7 +76,7 @@
 
     <!-- private message: show owner company only -->
     <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
-      <label class="mb-2">Empfänger *</label>
+      <label class="mb-2">{{translate('Empfänger')}} *</label>
       <div v-for="company in project.companies" :key="company.uuid">
         <div v-if="company.users.length > 0 && company.owner">
           <div class="form-check mb-2">
@@ -86,7 +86,7 @@
               :id="company.uuid" 
               @change="toggleAll($event, company.uuid)">
             <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-              {{ company.name }} (Alle)
+              {{ company.name }} ({{translate('Alle')}})
             </label>
           </div>
           <div class="grid lg:grid-cols-4 mb-6">
@@ -114,7 +114,7 @@
 
     <!--non private message: show all companies -->
     <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
-      <label class="mb-2">Empfänger *</label>
+      <label class="mb-2">{{translate('Empfänger')}} *</label>
       <div v-for="company in project.companies" :key="company.uuid">
         <div v-if="company.users.length > 0">
           <div class="form-check mb-2">
@@ -124,7 +124,7 @@
               :id="company.uuid" 
               @change="toggleAll($event, company.uuid)">
             <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-              {{ company.name }} (Alle)
+              {{ company.name }} ({{translate('Alle')}})
             </label>
           </div>
           <div class="grid lg:grid-cols-4 mb-6">
@@ -156,7 +156,7 @@
             :id="project.company.uuid" 
             @change="toggleAll($event, project.company.uuid)">
           <label class="inline-block text-gray-800 font-bold" :for="project.company.uuid">
-            {{ project.company.name }} (Alle)
+            {{ project.company.name }} ({{translate('Alle')}})
           </label>
         </div>
         <div class="grid lg:grid-cols-4 mb-6">
@@ -179,9 +179,9 @@
     </div>
 
     <content-footer>
-      <button type="submit" class="btn-primary">Senden</button>
+      <button type="submit" class="btn-primary">{{translate('Senden')}}</button>
       <router-link :to="{ name: 'messages', params: { uuid: this.$route.params.uuid }}" class="form-helper form-helper-footer">
-        <span>Zurück</span>
+        <span>{{translate('Zurück')}}</span>
       </router-link>
     </content-footer>
 
@@ -207,6 +207,7 @@ import { TheMask } from "vue-the-mask";
 import tinyConfig from "@/config/tiny.js";
 import TinymceEditor from "@tinymce/tinymce-vue";
 import vue2Dropzone from "vue2-dropzone";
+import i18n from "@/i18n";
 
 export default {
   components: {
@@ -230,7 +231,7 @@ export default {
   },
 
   
-  mixins: [ErrorHandling],
+  mixins: [ErrorHandling, i18n],
 
   props: {
     type: String

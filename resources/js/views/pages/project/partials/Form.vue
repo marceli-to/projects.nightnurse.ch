@@ -5,28 +5,28 @@
     <content-header :title="title"></content-header>
     
     <div :class="[errors.number ? 'is-invalid' : '', 'form-group']">
-      <label>Nummer <asterisk /></label>
+      <label>{{translate('Nummer')}} <asterisk /></label>
       <input type="text" v-model="data.number">
-      <required />
+      <required :text="translate('Pflichtfeld')" />
     </div>
 
     <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
-      <label>Name <asterisk /></label>
+      <label>{{translate('Name')}} <asterisk /></label>
       <input type="text" v-model="data.name">
-      <required />
+      <required :text="translate('Pflichtfeld')" />
     </div>
     
     <div :class="[errors.user_id ? 'is-invalid' : '', 'form-group']">
-      <label>Projektleiter <asterisk /></label>
+      <label>{{translate('Projektleiter')}} <asterisk /></label>
       <select v-model="data.user_id">
-        <option value="null">Bitte wählen...</option>
+        <option value="null">{{translate('Bitte wählen...')}}</option>
         <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
       </select>
     </div>
 
     <content-grid class="mt-6 sm:mt-8">
       <div class="form-group">
-        <label>Projektstart</label>
+        <label>{{translate('Projektstart')}}</label>
         <the-mask
           type="text"
           mask="##.##.####"
@@ -37,7 +37,7 @@
         ></the-mask>
       </div>
       <div class="form-group">
-        <label>Abgabetermin</label>
+        <label>{{translate('Abgabetermin')}}</label>
         <the-mask
           type="text"
           mask="##.##.####"
@@ -50,17 +50,17 @@
     </content-grid>
 
     <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group']">
-      <label>Hauptkunde <asterisk /></label>
+      <label>{{translate('Hauptkunde')}} <asterisk /></label>
       <select v-model="data.company_id">
-        <option value="null">Bitte wählen...</option>
+        <option value="null">{{translate('Bitte wählen...')}}</option>
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Weitere Kunden</label>
+      <label>{{translate('Weitere Kunden')}}</label>
       <select name="companies" @change="addCompany($event)">
-        <option value="null">Bitte wählen...</option>
+        <option value="null">{{translate('Bitte wählen...')}}</option>
         <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.full_name }}</option>
       </select>
     </div>
@@ -80,22 +80,22 @@
     </div>
 
     <div :class="[errors.project_state_id ? 'is-invalid' : '', 'form-group']">
-      <label>Status <asterisk /></label>
+      <label>{{translate('Status')}} <asterisk /></label>
       <select v-model="data.project_state_id">
-        <option value="null">Bitte wählen...</option>
+        <option value="null">{{translate('Bitte wählen...')}}</option>
         <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>Farbe <asterisk /></label>
+      <label>{{translate('Farbe')}} <asterisk /></label>
       <input type="color" name="color" v-model="data.color">
     </div>
 
     <content-footer>
-      <button type="submit" class="btn-primary">Speichern</button>
+      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
       <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
-        <span>Zurück</span>
+        <span>{{translate('Zurück')}}</span>
       </router-link>
     </content-footer>
 
@@ -170,12 +170,6 @@ export default {
       // States
       isFetched: true,
       isLoading: false,
-
-      // Messages
-      messages: {
-        created: 'Projekt erfasst!',
-        updated: 'Änderungen gespeichert!',
-      }
     };
   },
 
@@ -210,7 +204,7 @@ export default {
       this.isLoading = true;
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "projects" });
-        this.$notify({ type: "success", text: this.messages.created });
+        this.$notify({ type: "success", text: this.translate('Projekt erfasst') });
         this.isLoading = false;
       });
     },
@@ -219,7 +213,7 @@ export default {
       this.isLoading = true;
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$router.push({ name: "projects" });
-        this.$notify({ type: "success", text: this.messages.updated });
+        this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.isLoading = false;
       });
     },

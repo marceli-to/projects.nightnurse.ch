@@ -25,7 +25,7 @@
     </list-item>
   </list>
   <list-empty v-else>
-    {{messages.emptyData}}
+    {{translate('Es sind noch keine Daten vorhanden')}}
   </list-empty>
 </div>
 </template>
@@ -40,6 +40,7 @@ import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Pill from "@/components/ui/misc/Pill.vue";
+import i18n from "@/i18n";
 
 export default {
 
@@ -57,7 +58,7 @@ export default {
     Pill
   },
 
-  mixins: [ErrorHandling, Helpers],
+  mixins: [ErrorHandling, Helpers, i18n],
 
   data() {
     return {
@@ -75,13 +76,6 @@ export default {
       // States
       isLoading: false,
       isFetched: false,
-
-      // Messages
-      messages: {
-        emptyData: 'Es sind noch keine Firmen vorhanden...',
-        confirmDestroy: 'Bitte löschen bestätigen!',
-        updated: 'Status geändert',
-      }
     };
   },
 
@@ -103,13 +97,13 @@ export default {
       this.axios.get(`${this.routes.toggle}/${uuid}`).then(response => {
         const index = this.data.findIndex(x => x.uuid === uuid);
         this.data[index].publish = response.data;
-        this.$notify({ type: "success", text: this.messages.updated });
+        this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.isLoading = false;
       });
     },
 
     destroy(uuid, event) {
-      if (confirm(this.messages.confirmDestroy)) {
+      if (confirm(this.translate('Bitte löschen bestätigen'))) {
         this.isLoading = true;
         this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
           this.fetch();
@@ -121,7 +115,7 @@ export default {
 
   computed: {
     title() {
-      return "Kunden";
+      return this.translate('Kunden');
     }
   }
 }

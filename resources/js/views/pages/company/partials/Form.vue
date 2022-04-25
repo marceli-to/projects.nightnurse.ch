@@ -5,29 +5,20 @@
     <content-header :title="title"></content-header>
 
     <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
-      <label>Name <asterisk /></label>
+      <label>{{translate('Name')}} <asterisk /></label>
       <input type="text" v-model="data.name">
-      <required />
+      <required :text="translate('Pflichtfeld')" />
     </div>
 
     <div class="form-group">
-      <label>City</label>
+      <label>{{translate('Ort')}}</label>
       <input type="text" v-model="data.city">
     </div>
-    
-    <!-- <div class="form-group">
-      <form-radio 
-        :label="'Owner?'"
-        v-bind:owner.sync="data.owner"
-        :model="data.owner"
-        :name="'owner'">
-      </form-radio>
-    </div> -->
        
     <content-footer>
-      <button type="submit" class="btn-primary">Speichern</button>
+      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
       <router-link :to="{ name: 'companies' }" class="form-helper form-helper-footer">
-        <span>Zurück</span>
+        <span>{{translate('Zurück')}}</span>
       </router-link>
     </content-footer>
 
@@ -41,6 +32,7 @@ import ContentFooter from "@/components/ui/layout/Footer.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
+import i18n from "@/i18n";
 
 export default {
   components: {
@@ -51,7 +43,7 @@ export default {
     Asterisk
   },
 
-  mixins: [ErrorHandling],
+  mixins: [ErrorHandling, i18n],
 
   props: {
     type: String
@@ -83,12 +75,6 @@ export default {
       // States
       isFetched: true,
       isLoading: false,
-
-      // Messages
-      messages: {
-        created: 'Firma erfasst!',
-        updated: 'Änderungen gespeichert!',
-      }
     };
   },
 
@@ -122,7 +108,7 @@ export default {
       this.isLoading = true;
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "companies" });
-        this.$notify({ type: "success", text: this.messages.created });
+        this.$notify({ type: "success", text: this.translate('Firma erfasst') });
         this.isLoading = false;
       });
     },
@@ -131,7 +117,7 @@ export default {
       this.isLoading = true;
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$router.push({ name: "companies" });
-        this.$notify({ type: "success", text: this.messages.updated });
+        this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.isLoading = false;
       });
     },
@@ -140,7 +126,7 @@ export default {
 
   computed: {
     title() {
-      return this.$props.type == "update" ? "Kunde bearbeiten"  : "Kunde hinzufügen";
+      return this.$props.type == "update" ? this.translate('Kunde bearbeiten')  : this.translate('Kunde hinzufügen');
     }
   }
 };

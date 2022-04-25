@@ -3,13 +3,13 @@
     <div class="form-group">
       <label>{{label}}</label>
       <select name="companies" @change="change($event)">
-        <option value="null">Bitte wählen...</option>
+        <option value="null">{{translate('Bitte wählen')}}</option>
         <option v-for="c in companies" :key="c.id" :value="c.id">{{ c.name }}</option>
       </select>
     </div>
 
     <div v-if="$props.data" class="form-group">
-      <label class="block mb-4">Kunden</label>
+      <label class="block mb-4">{{translate('Kunden')}}</label>
       <div class="flex">
         <a 
           href="javascript:;"
@@ -25,7 +25,11 @@
   </div>
 </template>
 <script>
+import i18n from "@/i18n";
+
 export default {
+  
+  mixins: [ErrorHandling, i18n],
   
   props: {
     label: {

@@ -7,14 +7,14 @@
       {{errors.message}}
     </div>
     <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
-      <label>E-Mail <asterisk /></label>
+      <label>{{translate('E-Mail')}} <asterisk /></label>
       <input type="email" v-model="data.email">
-      <required />
+      <required :text="translate('Pflichtfeld')" />
     </div>
     <content-footer>
-      <button type="submit" class="btn-primary">Speichern</button>
+      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
       <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
-        <span>Zurück</span>
+        <span>{{translate('Zurück')}}</span>
       </router-link>
     </content-footer>
   </form>
@@ -30,6 +30,7 @@ import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import Loader from "@/components/ui/LoadingIndicator.vue";
+import i18n from "@/i18n";
 
 export default {
   components: {
@@ -43,7 +44,7 @@ export default {
     Loader
   },
 
-  mixins: [ErrorHandling],
+  mixins: [ErrorHandling, i18n],
 
   props: {
     type: String
@@ -73,11 +74,6 @@ export default {
       isFetched: true,
       isLoading: false,
       hasErrors: false,
-
-      // Messages
-      messages: {
-        created: 'Benutzer erfasst!',
-      }
     };
   },
 
@@ -92,7 +88,7 @@ export default {
       this.errors.message = null;
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "users" });
-        this.$notify({ type: "success", text: this.messages.created });
+        this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
         this.isLoading = false;
       })
       .catch(error => {

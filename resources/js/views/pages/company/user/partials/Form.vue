@@ -3,29 +3,29 @@
   <content-header :title="title"></content-header>
   <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-width-content">
     <div :class="[errors.firstname ? 'is-invalid' : '', 'form-group']">
-      <label>Vorname <asterisk /></label>
+      <label>{{translate('Vorname')}} <asterisk /></label>
       <input type="text" v-model="data.firstname">
-      <required />
+      <required :text="translate('Pflichtfeld')" />
     </div>
     <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
-      <label>Name <asterisk /></label>
+      <label>{{translate('Name')}} <asterisk /></label>
       <input type="text" v-model="data.name">
-      <required />
+      <required :text="translate('Pflichtfeld')" />
     </div>
     <div class="form-group">
-      <label>Telefon</label>
+      <label>{{translate('Telefon')}}</label>
       <input type="text" v-model="data.phone">
     </div>
 
     <content-grid class="mt-6 lg:mt-8">
     <div :class="[errors.gender_id ? 'is-invalid' : '', 'form-group']">
-        <label>Geschlecht <asterisk /></label>
+        <label>{{translate('Geschlecht')}} <asterisk /></label>
         <select v-model="data.gender_id">
           <option :value="g.id" v-for="g in settings.genders" :key="g.id">{{g.description}}</option>
         </select>
       </div>
     <div :class="[errors.language_id ? 'is-invalid' : '', 'form-group']">
-        <label>Sprache <asterisk /></label>
+        <label>{{translate('Sprache')}} <asterisk /></label>
         <select v-model="data.language_id">
           <option :value="l.id" v-for="l in settings.languages" :key="l.id">{{l.description}}</option>
         </select>
@@ -33,20 +33,20 @@
     </content-grid>
 
     <div class="form-group">
-      <label>Kunde</label>
+      <label>{{translate('Kunde')}}</label>
       <select v-model="data.company_id">
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
     </div>
 
-    <h4 class="mb-3 lg:mb-4">Zugangsdaten</h4>
+    <h4 class="mb-3 lg:mb-4">{{translate('Zugangsdaten')}}</h4>
     <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
-      <label>E-Mail <asterisk /></label>
+      <label>{{translate('E-Mail')}} <asterisk /></label>
       <input type="email" v-model="data.email">
-      <required />
+      <required :text="translate('Pflichtfeld')" />
     </div>
     <div :class="[errors.password ? 'is-invalid' : '', 'form-group']">
-      <label>Passwort</label>
+      <label>{{translate('Passwort')}}</label>
       <input type="password" v-model="data.password" data-field-password autocomplete="off">
       <a href="javascript:;" @click.prevent="togglePassword()" class="absolute right-0 bottom-4">
         <eye-icon class="w-5 h-5 icon-list" />
@@ -55,24 +55,24 @@
         href="" 
         @click.prevent="generatePassword()" 
         class="absolute left-0 font-mono text-xs underline pt-2 text-gray-400 hover:text-highlight hover:no-underline">
-        Passwort vorschlagen
+        {{translate('Passwort vorschlagen')}}
       </a>
     </div>
     <div :class="[errors.password_confirmation ? 'is-invalid' : '', 'form-group mt-12 lg:mt-16']">
-      <label>Passwort wiederholen</label>
+      <label>{{translate('Passwort wiederholen')}}</label>
       <input type="password" v-model="data.password_confirmation" data-field-password autocomplete="off">
     </div>
     <div :class="[errors.role_id ? 'is-invalid' : '', 'form-group']">
-      <label>Rolle</label>
+      <label>{{translate('Rolle')}}</label>
       <select v-model="data.role_id">
         <option :value="r.id" v-for="r in settings.roles" :key="r.id">{{r.description}}</option>
       </select>
     </div>
 
     <content-footer>
-      <button type="submit" class="btn-primary">Speichern</button>
+      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
       <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
-        <span>Zurück</span>
+        <span>{{translate('Zurück')}}</span>
       </router-link>
     </content-footer>
 
@@ -88,6 +88,7 @@ import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
+import i18n from "@/i18n";
 
 export default {
   components: {
@@ -100,7 +101,7 @@ export default {
     Asterisk
   },
 
-  mixins: [ErrorHandling],
+  mixins: [ErrorHandling, i18n],
 
   props: {
     type: String
@@ -151,13 +152,6 @@ export default {
       isFetched: true,
       isFetchedSettings: true,
       isLoading: false,
-
-      // Messages
-      messages: {
-        created: 'Benutzer erfasst!',
-        updated: 'Änderungen gespeichert!',
-        password_match_error: 'Passwörter stimmen nicht überein!'
-      }
     };
   },
 
@@ -182,7 +176,7 @@ export default {
 
 
       if (this.data.password && this.data.password_confirmation && (this.data.password !== this.data.password_confirmation)) {
-        this.$notify({ type: "danger", text: this.messages.password_match_error });
+        this.$notify({ type: "danger", text: this.translate('Passwörter stimmen nicht überein') });
         return false;
       }
 
@@ -199,7 +193,7 @@ export default {
       this.isLoading = true;
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "users" });
-        this.$notify({ type: "success", text: this.messages.created });
+        this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
         this.isLoading = false;
       });
     },
@@ -208,7 +202,7 @@ export default {
       this.isLoading = true;
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$router.push({ name: "users" });
-        this.$notify({ type: "success", text: this.messages.updated });
+        this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.isLoading = false;
       });
     },
@@ -285,7 +279,7 @@ export default {
 
   computed: {
     title() {
-      return this.$props.type == "update" ? "Benutzer bearbeiten"  : "Benutzer hinzufügen";
+      return this.$props.type == "update" ? this.translate('Benutzer bearbeiten')  : this.translate('Benutzer hinzufügen');
     }
   }
 };

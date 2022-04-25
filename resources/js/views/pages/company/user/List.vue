@@ -1,9 +1,6 @@
 <template>
 <div v-if="isFetched">
   <content-header :title="title">
-    <!-- <router-link :to="{ name: 'user-create', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon" v-if="isOwner">
-      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-    </router-link> -->
     <router-link :to="{ name: 'user-register', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon">
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
     </router-link>
@@ -14,11 +11,11 @@
         <div v-if="d.register_complete">
           {{d.firstname}} {{ d.name }}
           <span class="hidden sm:inline"><separator />{{ d.email }}</span>
-          <pill v-if="d.role_id == 1">Admin</pill>
+          <pill v-if="d.role_id == 1">{{translate('Admin')}}</pill>
         </div>
         <div v-else>
           {{ d.email }}
-          <pill v-if="d.register_complete == 0" class="bg-yellow-500">Pending</pill>
+          <pill v-if="d.register_complete == 0" class="bg-yellow-500">{{translate('Pendent')}}</pill>
         </div>
       </div>
       <list-action>
@@ -32,11 +29,11 @@
     </list-item>
   </list>
   <list-empty v-else>
-    {{messages.emptyData}}
+    {{translate('Es sind noch keine Daten vorhanden')}}
   </list-empty>
   <content-footer>
     <router-link :to="{ name: 'companies'}" class="btn-primary">
-      <span>Zurück</span>
+      <span>{{translate('Zurück')}}</span>
     </router-link>
   </content-footer>
 </div>
@@ -53,6 +50,7 @@ import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Pill from "@/components/ui/misc/Pill.vue";
+import i18n from "@/i18n";
 
 export default {
 
@@ -70,7 +68,7 @@ export default {
     Pill
   },
 
-  mixins: [ErrorHandling, Helpers],
+  mixins: [ErrorHandling, Helpers, i18n],
 
   data() {
     return {
@@ -89,13 +87,6 @@ export default {
       isLoading: false,
       isFetched: false,
       isOwner: false,
-
-      // Messages
-      messages: {
-        emptyData: 'Es sind noch keine Benutzer vorhanden...',
-        confirmDestroy: 'Bitte löschen bestätigen!',
-        updated: 'Status geändert',
-      }
     };
   },
 
@@ -120,13 +111,13 @@ export default {
       this.axios.get(`${this.routes.toggle}/${uuid}`).then(response => {
         const index = this.data.findIndex(x => x.uuid === uuid);
         this.data[index].publish = response.data;
-        this.$notify({ type: "success", text: this.messages.updated });
+        this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.isLoading = false;
       });
     },
 
     destroy(uuid, event) {
-      if (confirm(this.messages.confirmDestroy)) {
+      if (confirm(this.translate('Bitte löschen bestätigen'))) {
         this.isLoading = true;
         this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
           this.fetch();
@@ -139,9 +130,9 @@ export default {
   computed: {
     title() {
       if (this.data.length > 0) {
-        return `Benutzer für <span class="text-highlight">${this.data[0].company.name}</span>`
+        return `${this.translate('Benutzer für')} <span class="text-highlight">${this.data[0].company.name}</span>`
       }
-      return "Benutzer";
+      return this.translate('Benutzer');
     }
   }
 }

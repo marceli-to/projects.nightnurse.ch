@@ -161,13 +161,13 @@ export default {
       this.axios.get(`${this.routes.toggle}/${uuid}`).then(response => {
         const index = this.data.findIndex(x => x.uuid === uuid);
         this.data[index].publish = response.data;
-        this.$notify({ type: "success", text: this.messages.updated });
+        this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.isLoading = false;
       });
     },
 
     destroy(uuid, event) {
-      if (confirm(this.messages.confirmDestroy)) {
+      if (confirm(this.translate('Bitte löschen bestätigen'))) {
         this.isLoading = true;
         this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
           this.fetch();

@@ -8,15 +8,15 @@
       </div>
       <div class="flex">
         <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-          <div class="text-xs font-mono pb-0.5">Projektleiter</div>
+          <div class="text-xs font-mono pb-0.5">{{translate('Projektleiter')}}</div>
           <div class="text-sm text-dark">{{project.manager.full_name}}</div>
         </div>
         <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-          <div class="text-xs font-mono pb-0.5">Projektstart</div>
+          <div class="text-xs font-mono pb-0.5">{{translate('Projektstart')}}</div>
           <div class="text-sm text-dark">{{project.date_start}}</div>
         </div>
         <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-          <div class="text-xs font-mono pb-0.5">Abgabetermin</div>
+          <div class="text-xs font-mono pb-0.5">{{translate('Abgabetermin')}}</div>
           <div class="text-sm text-dark">{{project.date_end}}</div>
         </div>
       </div>
@@ -38,8 +38,8 @@
 
           <feed-item-header :class="[message.private ? 'text-slate-100': '', 'relative']">
             <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
-            <span v-else>[deleted user]</span>
-            an 
+            <span v-else>[{{translate('gelöschter Benutzer')}}]</span>
+            {{translate('an')}}
             <span v-if="message.users.length == 1">{{message.users[0].full_name}}</span>
             <span v-else class="has-tooltip">
               <div class='tooltip'>
@@ -47,9 +47,9 @@
                   {{user.full_name}}<span v-if="idx < message.users.length-1">,</span>
                 </span>
               </div>
-              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} Empfänger</a>
+              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} {{translate('Empfänger')}}</a>
             </span>
-            um {{message.message_time}} Uhr
+            {{translate('um')}} {{message.message_time}}
           </feed-item-header>
 
           <feed-item-body v-if="message.subject || message.body">
@@ -75,7 +75,7 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
                 v-if="message.truncate_files">
                 <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">Mehr anzeigen ({{message.files.length - 3}})</span>
+                <span class="inline-block ml-2">{{translate('Mehr anzeigen')}} ({{message.files.length - 3}})</span>
               </a>
               <a
                 href="javascript:;" 
@@ -83,14 +83,14 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
                 v-else-if="message.files.length > 3">
                 <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">Weniger anzeigen</span>
+                <span class="inline-block ml-2">{{translate('Weniger anzeigen')}}</span>
               </a>
               <a 
                 :href="`/download/zip/${message.uuid}`" 
                 target="_blank" 
                 :class="[message.private ? 'text-white' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']">
                 <folder-download-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">Download als ZIP</span>
+                <span class="inline-block ml-2">{{translate('Download als ZIP')}}</span>
               </a>
             </span>
 
@@ -101,7 +101,7 @@
         <div v-else>
           <feed-item-body>
             <div class="text-xs text-gray-400 font-mono italic sm:pt-1">
-              Nachricht gelöscht durch {{message.sender.full_name}}
+              {{translate('Nachricht gelöscht durch')}} {{message.sender.full_name}}
             </div>
           </feed-item-body>
         </div>
@@ -110,7 +110,7 @@
           @click.prevent="destroy(message.uuid)" 
           class="feed-item-delete" 
           v-if="message.can_delete && !message.deleted_at">
-          Nachricht löschen
+          {{translate('Nachricht löschen')}}
         </a>
       </feed-item>
 
@@ -119,10 +119,10 @@
   <content-footer>
     <router-link :to="{ name: 'message-create' }" class="btn-create">
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-      <span class="block ml-2">Erstellen</span>
+      <span class="block ml-2">{{translate('Erstellen')}}</span>
     </router-link>
     <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
-      <span>Zurück</span>
+      <span>{{translate('Zurück')}}</span>
     </router-link>
   </content-footer>
 </div>
@@ -137,10 +137,8 @@ import {
   FolderDownloadIcon,
   ChevronDownIcon,
   ChevronUpIcon
-
 } 
 from "@vue-hero-icons/outline";
-
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -157,6 +155,7 @@ import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
 import FeedItemAttachement from "@/components/ui/feed/Attachement.vue";
 import FeedItemBody from "@/components/ui/feed/Body.vue";
 import FileType from "@/components/ui/misc/FileType.vue";
+import i18n from "@/i18n";
 
 export default {
 
@@ -185,7 +184,7 @@ export default {
     FileType
   },
 
-  mixins: [ErrorHandling, Helpers],
+  mixins: [ErrorHandling, Helpers, i18n],
 
   data() {
     return {
@@ -236,7 +235,7 @@ export default {
     },
 
     destroy(uuid, event) {
-      if (confirm(this.messages.confirmDestroy)) {
+      if (confirm(this.translate('Bitte löschen bestätigen'))) {
         this.isLoading = true;
         this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
           this.fetch();
