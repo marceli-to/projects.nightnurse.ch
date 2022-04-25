@@ -3,7 +3,7 @@
   <div v-if="isVisible">
     <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 border-bottom" v-if="isFetched">
       <div class="sm:grid sm:grid-cols-12 gap-6 lg:gap-12">
-        <div class="sm:col-span-8">
+        <div class="sm:col-span-6 lg:col-span-7">
           <div class="form-group">
             <label>{{translate('Betreff')}}</label>
             <input type="text" v-model="data.subject">
@@ -66,121 +66,127 @@
 
           </div>
         </div>
-        <div class="sm:col-span-4">
-          <div class="form-group" v-if="$store.state.user.admin">
-            <form-radio 
-              :label="translate('Private Nachricht?')"
-              v-bind:private.sync="data.private"
-              :model="data.private"
-              :labelTrue="translate('Ja')"
-              :labelFalse="translate('Nein')"
-              :name="'private'">
-            </form-radio>
-          </div>
-          <!-- private message: show owner company only -->
-          <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
-            <label class="mb-1">{{translate('Empfänger')}} *</label>
-            <div v-for="company in project.companies" :key="company.uuid">
-              <div v-if="company.users.length > 0 && company.owner">
-                <div class="form-check mb-1">
+        <div class="sm:col-span-6 lg:col-span-5">
+          <div class="bg-light p-2 px-4 pb-1">
+            <div class="form-group" v-if="$store.state.user.admin">
+              <form-radio 
+                :label="translate('Private Nachricht?')"
+                v-bind:private.sync="data.private"
+                :model="data.private"
+                :labelTrue="translate('Ja')"
+                :labelFalse="translate('Nein')"
+                :name="'private'">
+              </form-radio>
+            </div>
+            <!-- private message: show owner company only -->
+            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
+              <label class="mb-1">{{translate('Empfänger')}} *</label>
+              <div v-for="company in project.companies" :key="company.uuid">
+                <div v-if="company.users.length > 0 && company.owner">
+                  <div class="form-check mb-2">
+                    <input 
+                      type="checkbox" 
+                      class="checkbox" 
+                      :id="company.uuid" 
+                      @change="toggleAll($event, company.uuid)">
+                    <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+                      {{ company.name }} ({{translate('Alle')}})
+                    </label>
+                  </div>
+                  <div class="sm:grid sm:grid-cols-12 sm:gap-4">
+                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-1">
+                      <div class="form-check mb-1">
+                        <input 
+                          type="checkbox" 
+                          class="checkbox" 
+                          :value="user.uuid" 
+                          :id="user.uuid" 
+                          :data-company-uuid="company.uuid"
+                          @change="toggleOne($event, user.uuid)">
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                          {{ user.firstname }} {{ user.name }}
+                        </label>
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                          {{ user.email }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- non private message: show all companies -->
+            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
+              <label class="mb-1">{{translate('Empfänger')}} *</label>
+              <div v-for="company in project.companies" :key="company.uuid">
+                <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
+                  <div class="form-check mb-2">
+                    <input 
+                      type="checkbox" 
+                      class="checkbox" 
+                      :id="company.uuid" 
+                      @change="toggleAll($event, company.uuid)">
+                    <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+                      {{ company.name }} ({{translate('Alle')}})
+                    </label>
+                  </div>
+                  <div class="mb-1 sm:grid sm:grid-cols-12 sm:gap-4">
+                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-1">
+                      <div class="form-check">
+                        <input 
+                          type="checkbox" 
+                          class="checkbox" 
+                          :value="user.uuid" 
+                          :id="user.uuid" 
+                          :data-company-uuid="company.uuid"
+                          @change="toggleOne($event, user.uuid)">
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                          {{ user.firstname }} {{ user.name }}
+                        </label>
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                          {{ user.email }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div v-if="project.company.users.length > 0">
+                <div class="form-check mb-2">
                   <input 
                     type="checkbox" 
                     class="checkbox" 
-                    :id="company.uuid" 
-                    @change="toggleAll($event, company.uuid)">
-                  <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-                    {{ company.name }} ({{translate('Alle')}})
+                    :id="project.company.uuid" 
+                    @change="toggleAll($event, project.company.uuid)">
+                  <label class="inline-block text-gray-800 font-bold" :for="project.company.uuid">
+                    {{ project.company.name }} ({{translate('Alle')}})
                   </label>
                 </div>
-                <div v-for="user in company.users" :key="user.uuid" class="mb-1">
+                <div v-for="user in project.company.users" :key="user.uuid">
                   <div class="form-check">
                     <input 
                       type="checkbox" 
                       class="checkbox" 
                       :value="user.uuid" 
                       :id="user.uuid" 
-                      :data-company-uuid="company.uuid"
+                      :data-company-uuid="project.company.uuid"
                       @change="toggleOne($event, user.uuid)">
-                    <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                    <label class="inline-block text-gray-800" :for="user.uuid">
                       {{ user.firstname }} {{ user.name }}
                     </label>
-                    <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                      {{ user.email }}
-                    </label>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--non private message: show all companies -->
-          <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
-            <label class="mb-1">{{translate('Empfänger')}} *</label>
-            <div v-for="company in project.companies" :key="company.uuid">
-              <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
-                <div class="form-check mb-1">
-                  <input 
-                    type="checkbox" 
-                    class="checkbox" 
-                    :id="company.uuid" 
-                    @change="toggleAll($event, company.uuid)">
-                  <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-                    {{ company.name }} ({{translate('Alle')}})
-                  </label>
-                </div>
-                <div v-for="user in company.users" :key="user.uuid" class="mb-1">
-                  <div class="form-check">
-                    <input 
-                      type="checkbox" 
-                      class="checkbox" 
-                      :value="user.uuid" 
-                      :id="user.uuid" 
-                      :data-company-uuid="company.uuid"
-                      @change="toggleOne($event, user.uuid)">
-                    <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                      {{ user.firstname }} {{ user.name }}
-                    </label>
-                    <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                      {{ user.email }}
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div v-if="project.company.users.length > 0">
-              <div class="form-check mb-1">
-                <input 
-                  type="checkbox" 
-                  class="checkbox" 
-                  :id="project.company.uuid" 
-                  @change="toggleAll($event, project.company.uuid)">
-                <label class="inline-block text-gray-800 font-bold" :for="project.company.uuid">
-                  {{ project.company.name }} ({{translate('Alle')}})
-                </label>
-              </div>
-              <div v-for="user in project.company.users" :key="user.uuid">
-                <div class="form-check">
-                  <input 
-                    type="checkbox" 
-                    class="checkbox" 
-                    :value="user.uuid" 
-                    :id="user.uuid" 
-                    :data-company-uuid="project.company.uuid"
-                    @change="toggleOne($event, user.uuid)">
-                  <label class="inline-block text-gray-800" :for="user.uuid">
-                    {{ user.firstname }} {{ user.name }}
-                  </label>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-between">
+      <div class="mt-6 mb-4 sm:mt-0 sm:mb-0 flex items-center">
         <button type="submit" class="btn-send">
           <mail-icon class="h-5 w-5" aria-hidden="true" />
           <span class="block ml-2">{{translate('Senden')}}</span>
         </button>
-        <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
+        <a href="javascript:;" class="form-helper form-helper-footer l-4 lg:ml-8" @click="hide()">
           <span>{{translate('Abbrechen')}}</span>
         </a>
       </div>
@@ -190,7 +196,7 @@
     <div class="flex justify-center">
       <a href="javascript:;" @click="show()" class="btn-create">
         <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-        <span class="block ml-2">{{translate('Erstellen')}}</span>
+        <span class="block ml-2">{{translate('Neue Nachricht')}}</span>
       </a>
     </div>
   </div>

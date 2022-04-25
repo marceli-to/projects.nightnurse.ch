@@ -66,6 +66,7 @@ export default {
         'Nachricht gelöscht durch': 'Message deleted by',
         'Nachricht löschen': 'Delete message',
         'Erstellen': 'Create',
+        'Neue Nachricht': 'New message',
         'Profil bearbeiten': 'Edit profile',
         'Private Nachricht?': 'Private message?',
         'Ja': 'Yes',
