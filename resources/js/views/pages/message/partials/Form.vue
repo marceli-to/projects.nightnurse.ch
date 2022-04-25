@@ -144,7 +144,7 @@
                           {{ user.firstname }} {{ user.name }}
                         </label>
                         <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email | truncate(15, '...') }}
+                          {{ user.email | truncate(10, '...') }}
                         </label>
                       </div>
                     </div>
