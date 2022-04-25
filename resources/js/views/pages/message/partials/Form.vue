@@ -180,7 +180,7 @@
                   </label>
                 </div>
                 <div v-for="user in project.company.users" :key="user.uuid">
-                  <div class="form-check mb-1">
+                  <div class="form-check mb-2">
                     <input 
                       type="checkbox" 
                       class="checkbox" 
