@@ -65,7 +65,7 @@
   }
 
   input[type="checkbox"].checkbox {
-    @apply appearance-none h-4 w-4 !border-2 !border-gray-200 bg-white checked:bg-dark checked:!border-dark focus:outline-none transition duration-100 mr-2 cursor-pointer
+    @apply appearance-none h-4 w-4 flex-none !border-2 !border-gray-200 bg-white checked:bg-dark checked:!border-dark focus:outline-none transition duration-100 mr-2 cursor-pointer
   }
 }
 

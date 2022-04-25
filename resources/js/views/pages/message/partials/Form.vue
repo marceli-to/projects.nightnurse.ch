@@ -94,7 +94,7 @@
                     </label>
                   </div>
                   <div class="sm:grid sm:grid-cols-12 sm:gap-4">
-                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-1">
+                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-0">
                       <div class="form-check mb-1">
                         <input 
                           type="checkbox" 
@@ -107,7 +107,7 @@
                           {{ user.firstname }} {{ user.name }}
                         </label>
                         <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email | truncate(15, '...') }}
+                          {{ user.email | truncate(10, '...') }}
                         </label>
                       </div>
                     </div>
@@ -131,7 +131,7 @@
                     </label>
                   </div>
                   <div class="mb-1 sm:grid sm:grid-cols-12 sm:gap-4">
-                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-1">
+                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-0">
                       <div class="form-check">
                         <input 
                           type="checkbox" 
