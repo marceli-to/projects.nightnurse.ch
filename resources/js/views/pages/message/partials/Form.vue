@@ -131,9 +131,8 @@
                     </label>
                   </div>
                   <div class="mb-1">
-                    <div v-for="user in company.users" :key="user.uuid" class="mb-2">
-                      <!-- <div :class="[index < 1 ? 'flex' : 'hidden', 'form-check']" :data-company="company.uuid"> -->
-                      <div class="form-check">
+                    <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
+                      <div :class="[index < 10 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.uuid" :data-truncatable-index="index">
                         <input 
                           type="checkbox" 
                           class="checkbox" 
@@ -145,19 +144,28 @@
                           {{ user.firstname }} {{ user.name }}
                         </label>
                         <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email | truncate(10, '...') }}
+                          {{ user.email | truncate(20, '...') }}
                         </label>
                       </div>
                     </div>
                   </div>
-                  <!-- <a 
+                  <a 
                     href="javascript:;" 
-                    @click=""
+                    @click="showOverflow(company.uuid)"
+                    :data-truncatable-more="company.uuid"
                     class="text-dark flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                    v-if="company.users.length > 1">
+                    v-if="company.users.length > 10">
                     <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                     <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
-                  </a> -->
+                  </a>
+                  <a
+                    href="javascript:;" 
+                    @click="hideOverflow(company.uuid)"
+                    :data-truncatable-less="company.uuid"
+                    class="text-dark hidden items-center no-underline hover:underline mt-3 sm:mt-0">
+                    <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
+                    <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
+                  </a>
                 </div>
               </div>
               <div v-if="project.company.users.length > 0">
@@ -212,7 +220,7 @@
 </div>
 </template>
 <script>
-import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon, ChevronDownIcon } from "@vue-hero-icons/outline";
+import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon, ChevronDownIcon, ChevronUpIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -248,6 +256,7 @@ export default {
     PlusCircleIcon,
     MailIcon,
     ChevronDownIcon,
+    ChevronUpIcon,
     List,
     ListItem,
     ListAction,
@@ -401,6 +410,41 @@ export default {
     toggleOne(event, uuid) {
       const state = event.target.checked ? true : false;
       this.addOrRemove(state, uuid);
+    },
+
+    showOverflow(uuid) {
+      const recipients = document.querySelectorAll('[data-truncatable="'+uuid+'"]');
+      recipients.forEach(function(recipient){
+        recipient.classList.remove('hidden');
+        recipient.classList.add('flex');
+      });
+
+      const btnMore = document.querySelector('[data-truncatable-more="'+uuid+'"]');
+      btnMore.classList.remove('flex');
+      btnMore.classList.add('hidden');
+
+      const btnLess = document.querySelector('[data-truncatable-less="'+uuid+'"]');
+      btnLess.classList.remove('hidden');
+      btnLess.classList.add('flex');
+    },
+
+    hideOverflow(uuid) {
+      const recipients = document.querySelectorAll('[data-truncatable="'+uuid+'"]');
+      recipients.forEach(function(recipient){
+        if (recipient.dataset.truncatableIndex >= 10) {
+          recipient.classList.remove('flex');
+          recipient.classList.add('hidden');
+        }
+      });
+
+      const btnLess = document.querySelector('[data-truncatable-less="'+uuid+'"]');
+      btnLess.classList.remove('flex');
+      btnLess.classList.add('hidden');
+
+      const btnMore = document.querySelector('[data-truncatable-more="'+uuid+'"]');
+      btnMore.classList.remove('hidden');
+      btnMore.classList.add('flex');
+
     },
 
     addOrRemove(state, value) {
