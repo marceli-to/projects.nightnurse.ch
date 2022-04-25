@@ -54,7 +54,7 @@ class ProfileController extends Controller
   public function switchLanguage()
   {
     $user = User::findOrFail(auth()->user()->id);
-    $user->language_id == 1 ? 2 : 1;
+    $user->language_id = $user->language_id == 1 ? 2 : 1;
     $user->save();
     return redirect()->back();
   }
