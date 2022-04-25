@@ -2,14 +2,14 @@
 <div>
   <div v-if="isVisible">
     <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 border-bottom" v-if="isFetched">
-      <div class="sm:grid sm:grid-cols-12 gap-6 lg:gap-12">
-        <div class="sm:col-span-6 lg:col-span-7">
+      <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-6">
+        <div class="sm:col-span-6 lg:col-span-8">
           <div class="form-group">
             <label>{{translate('Betreff')}}</label>
             <input type="text" v-model="data.subject">
           </div>
           <div class="form-group mt-6 lg:mt-8">
-            <label class="mb-3 lg:mb-3">{{translate('Mitteilung')}}</label>
+            <label class="mb-2">{{translate('Mitteilung')}}</label>
             <tinymce-editor
               :api-key="tinyApiKey"
               :init="tinyConfig"
@@ -26,9 +26,9 @@
               @vdropzone-complete="uploadComplete"
               @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
               :useCustomSlot=true>
-              <div>
-                <div><strong>{{translate('Datei auswählen oder hierhin ziehen')}}</strong></div>
-                <small>{{translate('max. Grösse 250 MB')}}</small>
+              <div class="text-gray-400 text-sm">
+                <div>{{translate('Datei auswählen oder hierhin ziehen')}}</div>
+                <div>{{translate('max. Grösse 250 MB')}}</div>
               </div>
             </vue-dropzone>
 
@@ -66,7 +66,7 @@
 
           </div>
         </div>
-        <div class="sm:col-span-6 lg:col-span-5">
+        <div class="sm:col-span-6 lg:col-span-4">
           <div class="bg-light p-2 px-4 pb-1">
             <div class="form-group" v-if="$store.state.user.admin">
               <form-radio 
@@ -80,7 +80,7 @@
             </div>
             <!-- private message: show owner company only -->
             <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
-              <label class="mb-1">{{translate('Empfänger')}} *</label>
+              <label class="mb-2">{{translate('Empfänger')}} *</label>
               <div v-for="company in project.companies" :key="company.uuid">
                 <div v-if="company.users.length > 0 && company.owner">
                   <div class="form-check mb-2">
@@ -93,8 +93,8 @@
                       {{ company.name }} ({{translate('Alle')}})
                     </label>
                   </div>
-                  <div class="sm:grid sm:grid-cols-12 sm:gap-4">
-                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-0">
+                  <div>
+                    <div v-for="user in company.users" :key="user.uuid" class="mb-2">
                       <div class="form-check mb-1">
                         <input 
                           type="checkbox" 
@@ -117,7 +117,7 @@
             </div>
             <!-- non private message: show all companies -->
             <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
-              <label class="mb-1">{{translate('Empfänger')}} *</label>
+              <label class="mb-2">{{translate('Empfänger')}} *</label>
               <div v-for="company in project.companies" :key="company.uuid">
                 <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
                   <div class="form-check mb-2">
@@ -130,8 +130,9 @@
                       {{ company.name }} ({{translate('Alle')}})
                     </label>
                   </div>
-                  <div class="mb-1 sm:grid sm:grid-cols-12 sm:gap-4">
-                    <div v-for="user in company.users" :key="user.uuid" class="sm:col-span-6 mb-2 sm:mb-0">
+                  <div class="mb-1">
+                    <div v-for="user in company.users" :key="user.uuid" class="mb-2">
+                      <!-- <div :class="[index < 1 ? 'flex' : 'hidden', 'form-check']" :data-company="company.uuid"> -->
                       <div class="form-check">
                         <input 
                           type="checkbox" 
@@ -149,6 +150,14 @@
                       </div>
                     </div>
                   </div>
+                  <!-- <a 
+                    href="javascript:;" 
+                    @click=""
+                    class="text-dark flex items-center no-underline hover:underline mt-3 sm:mt-0"
+                    v-if="company.users.length > 1">
+                    <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
+                    <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
+                  </a> -->
                 </div>
               </div>
               <div v-if="project.company.users.length > 0">
@@ -203,7 +212,7 @@
 </div>
 </template>
 <script>
-import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon } from "@vue-hero-icons/outline";
+import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon, ChevronDownIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -238,6 +247,7 @@ export default {
     CloudDownloadIcon,
     PlusCircleIcon,
     MailIcon,
+    ChevronDownIcon,
     List,
     ListItem,
     ListAction,
@@ -355,10 +365,23 @@ export default {
     store() {
       this.isLoading = true;
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
-        this.$router.push({ name: 'messages', params: { uuid: this.$route.params.uuid }});
+        //this.$router.push({ name: 'messages', params: { uuid: this.$route.params.uuid }});
         this.$notify({ type: "success", text: this.messages.created });
         this.isLoading = false;
+        this.reset();
       });
+    },
+
+    reset() {
+      this.hide();
+      this.data = {
+        subject: null,
+        body: null,
+        private: 0,
+        users: [],
+        files: [],
+      };
+      this.$parent.fetch();
     },
 
     /**
