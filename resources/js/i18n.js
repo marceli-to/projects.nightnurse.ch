@@ -71,6 +71,8 @@ export default {
         'Ja': 'Yes',
         'Nein': 'No',
         'Neue Nachricht': 'New message',
+        'Schliessen': 'close',
+        'Abbrechen': 'cancel',
       },
 
       defaultLang: 'de',

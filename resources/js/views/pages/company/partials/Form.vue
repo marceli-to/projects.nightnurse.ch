@@ -18,6 +18,7 @@
     <content-footer>
       <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
       <router-link :to="{ name: 'companies' }" class="form-helper form-helper-footer">
+        <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
         <span>{{translate('Zurück')}}</span>
       </router-link>
     </content-footer>
@@ -26,6 +27,7 @@
 </div>
 </template>
 <script>
+import { ArrowLeftIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
@@ -35,7 +37,9 @@ import Asterisk from "@/components/ui/form/Asterisk.vue";
 import i18n from "@/i18n";
 
 export default {
+  
   components: {
+    ArrowLeftIcon,
     ContentHeader,
     ContentFooter,
     FormRadio,

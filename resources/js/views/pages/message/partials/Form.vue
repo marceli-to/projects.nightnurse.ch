@@ -1,198 +1,203 @@
 <template>
 <div>
-  <form @submit.prevent="submit" v-if="isFetched">
-    
-    <content-header :title="title"></content-header>
-    
-    <div class="form-group">
-      <label>{{translate('Betreff')}}</label>
-      <input type="text" v-model="data.subject">
-    </div>
+  <div v-if="isVisible">
+    <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 border-bottom" v-if="isFetched">
+      <div class="sm:grid sm:grid-cols-12 gap-6 lg:gap-12">
+        <div class="sm:col-span-8">
+          <div class="form-group">
+            <label>{{translate('Betreff')}}</label>
+            <input type="text" v-model="data.subject">
+          </div>
+          <div class="form-group mt-6 lg:mt-8">
+            <label class="mb-3 lg:mb-3">{{translate('Mitteilung')}}</label>
+            <tinymce-editor
+              :api-key="tinyApiKey"
+              :init="tinyConfig"
+              v-model="data.body"
+            ></tinymce-editor>
+          </div>
+          <div class="form-group">
+            <label>{{translate('Dateien')}}</label>
+            <vue-dropzone
+              ref="dropzone"
+              id="dropzone"
+              :options="dropzoneConfig"
+              @vdropzone-success="uploadSuccess"
+              @vdropzone-complete="uploadComplete"
+              @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
+              :useCustomSlot=true>
+              <div>
+                <div><strong>{{translate('Datei auswählen oder hierhin ziehen')}}</strong></div>
+                <small>{{translate('max. Grösse 250 MB')}}</small>
+              </div>
+            </vue-dropzone>
 
-    <div class="form-group mt-6 lg:mt-8">
-      <label class="mb-3 lg:mb-3">{{translate('Mitteilung')}}</label>
-      <tinymce-editor
-        :api-key="tinyApiKey"
-        :init="tinyConfig"
-        v-model="data.body"
-      ></tinymce-editor>
-    </div>
+            <list v-if="hasUpload && data.files.length" class="my-4 sm:my-6 lg:my-8">
 
-    <div class="form-group">
-      <label>{{translate('Dateien')}}</label>
-      <vue-dropzone
-        ref="dropzone"
-        id="dropzone"
-        :options="dropzoneConfig"
-        @vdropzone-success="uploadSuccess"
-        @vdropzone-complete="uploadComplete"
-        @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
-        :useCustomSlot=true>
-        <div>
-          <div><strong>{{translate('Datei auswählen oder hierhin ziehen')}}</strong></div>
-          <small>{{translate('max. Grösse 250 MB')}}</small>
+
+              <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
+                <div class="flex items-center no-underline hover:text-highlight py-2">
+                  <img 
+                    :src="`/img/thumbnail/${d.name}`" 
+                    height="100" 
+                    width="100"
+                    class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[40px] bg-light rounded-sm"
+                    v-if="d.preview" />
+                  <div class="mr-2 lg:mr-3 py-1" v-else>
+                    <file-type :extension="d.extension" />
+                  </div>
+                  <div class="font-mono text-xs">
+                    {{ d.original_name | truncate(25, '...') }} – {{ d.size | filesize(d.size) }}
+                  </div>
+                </div>
+                <list-action>
+                  <a :href="`/img/original/${d.name}`" target="_blank" class="mr-2" v-if="d.preview">
+                    <cloud-download-icon class="icon-list" aria-hidden="true" />
+                  </a>
+                  <a :href="`/storage/uploads/temp/${d.name}`" target="_blank" class="mr-2" v-else>
+                    <cloud-download-icon class="icon-list" aria-hidden="true" />
+                  </a>
+                  <a href="javascript:;" @click.prevent="uploadDelete(d.name)">
+                    <trash-icon class="icon-list" aria-hidden="true" />
+                  </a>
+                </list-action>
+              </list-item>
+            </list>
+
+          </div>
         </div>
-      </vue-dropzone>
-
-      <list v-if="hasUpload && data.files.length" class="my-4 sm:my-6 lg:my-8">
-        <list-item v-for="(d, i) in data.files" :key="i">
-          <div class="flex items-center font-mono text-sm">
-            <img 
-            :src="`/img/thumbnail/${d.name}`" 
-            height="100" 
-            width="100"
-            class="!mt-0 !mb-0 mr-2 sm:mr-3 lg:mr-4 block h-auto max-w-[50px] bg-light rounded-sm"
-            v-if="d.preview" />
-            <div>{{ d.original_name | truncate(50, '...')}}</div>
-            <separator />
-            <div>{{d.size | filesize(d.size)}}</div>
-            <separator />
-            <file-type :extension="d.extension" />
+        <div class="sm:col-span-4">
+          <div class="form-group" v-if="$store.state.user.admin">
+            <form-radio 
+              :label="translate('Private Nachricht?')"
+              v-bind:private.sync="data.private"
+              :model="data.private"
+              :labelTrue="translate('Ja')"
+              :labelFalse="translate('Nein')"
+              :name="'private'">
+            </form-radio>
           </div>
-          <list-action>
-            <a :href="`/img/original/${d.name}`" target="_blank" class="mr-2" v-if="d.preview">
-              <cloud-download-icon class="icon-list" aria-hidden="true" />
-            </a>
-            <a :href="`/storage/uploads/temp/${d.name}`" target="_blank" class="mr-2" v-else>
-              <cloud-download-icon class="icon-list" aria-hidden="true" />
-            </a>
-            <a href="javascript:;" @click.prevent="uploadDelete(d.name)">
-              <trash-icon class="icon-list" aria-hidden="true" />
-            </a>
-          </list-action>
-        </list-item>
-      </list>
-
-    </div>
-
-    <div class="form-group" v-if="$store.state.user.admin">
-      <form-radio 
-        :label="translate('Private Nachricht?')"
-        v-bind:private.sync="data.private"
-        :model="data.private"
-        :labelTrue="translate('Ja')"
-        :labelFalse="translate('Nein')"
-        :name="'private'">
-      </form-radio>
-    </div>
-
-    <!-- private message: show owner company only -->
-    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
-      <label class="mb-2">{{translate('Empfänger')}} *</label>
-      <div v-for="company in project.companies" :key="company.uuid">
-        <div v-if="company.users.length > 0 && company.owner">
-          <div class="form-check mb-2">
-            <input 
-              type="checkbox" 
-              class="checkbox" 
-              :id="company.uuid" 
-              @change="toggleAll($event, company.uuid)">
-            <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-              {{ company.name }} ({{translate('Alle')}})
-            </label>
+          <!-- private message: show owner company only -->
+          <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
+            <label class="mb-1">{{translate('Empfänger')}} *</label>
+            <div v-for="company in project.companies" :key="company.uuid">
+              <div v-if="company.users.length > 0 && company.owner">
+                <div class="form-check mb-1">
+                  <input 
+                    type="checkbox" 
+                    class="checkbox" 
+                    :id="company.uuid" 
+                    @change="toggleAll($event, company.uuid)">
+                  <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+                    {{ company.name }} ({{translate('Alle')}})
+                  </label>
+                </div>
+                <div v-for="user in company.users" :key="user.uuid" class="mb-1">
+                  <div class="form-check">
+                    <input 
+                      type="checkbox" 
+                      class="checkbox" 
+                      :value="user.uuid" 
+                      :id="user.uuid" 
+                      :data-company-uuid="company.uuid"
+                      @change="toggleOne($event, user.uuid)">
+                    <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                      {{ user.firstname }} {{ user.name }}
+                    </label>
+                    <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                      {{ user.email }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="grid lg:grid-cols-4 mb-6">
-            <div v-for="user in company.users" :key="user.uuid">
-              <div class="form-check">
+          <!--non private message: show all companies -->
+          <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
+            <label class="mb-1">{{translate('Empfänger')}} *</label>
+            <div v-for="company in project.companies" :key="company.uuid">
+              <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
+                <div class="form-check mb-1">
+                  <input 
+                    type="checkbox" 
+                    class="checkbox" 
+                    :id="company.uuid" 
+                    @change="toggleAll($event, company.uuid)">
+                  <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+                    {{ company.name }} ({{translate('Alle')}})
+                  </label>
+                </div>
+                <div v-for="user in company.users" :key="user.uuid" class="mb-1">
+                  <div class="form-check">
+                    <input 
+                      type="checkbox" 
+                      class="checkbox" 
+                      :value="user.uuid" 
+                      :id="user.uuid" 
+                      :data-company-uuid="company.uuid"
+                      @change="toggleOne($event, user.uuid)">
+                    <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                      {{ user.firstname }} {{ user.name }}
+                    </label>
+                    <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                      {{ user.email }}
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="project.company.users.length > 0">
+              <div class="form-check mb-1">
                 <input 
                   type="checkbox" 
                   class="checkbox" 
-                  :value="user.uuid" 
-                  :id="user.uuid" 
-                  :data-company-uuid="company.uuid"
-                  @change="toggleOne($event, user.uuid)">
-                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                  {{ user.firstname }} {{ user.name }}
+                  :id="project.company.uuid" 
+                  @change="toggleAll($event, project.company.uuid)">
+                <label class="inline-block text-gray-800 font-bold" :for="project.company.uuid">
+                  {{ project.company.name }} ({{translate('Alle')}})
                 </label>
-                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                  {{ user.email }}
-                </label>
+              </div>
+              <div v-for="user in project.company.users" :key="user.uuid">
+                <div class="form-check">
+                  <input 
+                    type="checkbox" 
+                    class="checkbox" 
+                    :value="user.uuid" 
+                    :id="user.uuid" 
+                    :data-company-uuid="project.company.uuid"
+                    @change="toggleOne($event, user.uuid)">
+                  <label class="inline-block text-gray-800" :for="user.uuid">
+                    {{ user.firstname }} {{ user.name }}
+                  </label>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-
-    <!--non private message: show all companies -->
-    <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
-      <label class="mb-2">{{translate('Empfänger')}} *</label>
-      <div v-for="company in project.companies" :key="company.uuid">
-        <div v-if="company.users.length > 0">
-          <div class="form-check mb-2">
-            <input 
-              type="checkbox" 
-              class="checkbox" 
-              :id="company.uuid" 
-              @change="toggleAll($event, company.uuid)">
-            <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-              {{ company.name }} ({{translate('Alle')}})
-            </label>
-          </div>
-          <div class="grid lg:grid-cols-4 mb-6">
-            <div v-for="user in company.users" :key="user.uuid">
-              <div class="form-check">
-                <input 
-                  type="checkbox" 
-                  class="checkbox" 
-                  :value="user.uuid" 
-                  :id="user.uuid" 
-                  :data-company-uuid="company.uuid"
-                  @change="toggleOne($event, user.uuid)">
-                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                  {{ user.firstname }} {{ user.name }}
-                </label>
-                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                  {{ user.email }}
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="flex items-center justify-between">
+        <button type="submit" class="btn-send">
+          <mail-icon class="h-5 w-5" aria-hidden="true" />
+          <span class="block ml-2">{{translate('Senden')}}</span>
+        </button>
+        <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
+          <span>{{translate('Abbrechen')}}</span>
+        </a>
       </div>
-      <div v-if="project.company.users.length > 0">
-        <div class="form-check mb-2">
-          <input 
-            type="checkbox" 
-            class="checkbox" 
-            :id="project.company.uuid" 
-            @change="toggleAll($event, project.company.uuid)">
-          <label class="inline-block text-gray-800 font-bold" :for="project.company.uuid">
-            {{ project.company.name }} ({{translate('Alle')}})
-          </label>
-        </div>
-        <div class="grid lg:grid-cols-4 mb-6">
-          <div v-for="user in project.company.users" :key="user.uuid">
-            <div class="form-check">
-              <input 
-                type="checkbox" 
-                class="checkbox" 
-                :value="user.uuid" 
-                :id="user.uuid" 
-                :data-company-uuid="project.company.uuid"
-                @change="toggleOne($event, user.uuid)">
-              <label class="inline-block text-gray-800" :for="user.uuid">
-                {{ user.firstname }} {{ user.name }}
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
+    </form>
+  </div>
+  <div v-else>
+    <div class="flex justify-center">
+      <a href="javascript:;" @click="show()" class="btn-create">
+        <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+        <span class="block ml-2">{{translate('Erstellen')}}</span>
+      </a>
     </div>
-
-    <content-footer>
-      <button type="submit" class="btn-primary">{{translate('Senden')}}</button>
-      <router-link :to="{ name: 'messages', params: { uuid: this.$route.params.uuid }}" class="form-helper form-helper-footer">
-        <span>{{translate('Zurück')}}</span>
-      </router-link>
-    </content-footer>
-
-  </form>
+  </div>
 </div>
 </template>
 <script>
-import ErrorHandling from "@/mixins/ErrorHandling";
-import { TrashIcon, CloudDownloadIcon } from "@vue-hero-icons/outline";
+import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -225,6 +230,8 @@ export default {
     FileType,
     TrashIcon,
     CloudDownloadIcon,
+    PlusCircleIcon,
+    MailIcon,
     List,
     ListItem,
     ListAction,
@@ -233,7 +240,7 @@ export default {
   },
 
   
-  mixins: [ErrorHandling, i18n],
+  mixins: [i18n],
 
   props: {
     type: String
@@ -278,6 +285,7 @@ export default {
       // States
       isFetched: true,
       isLoading: false,
+      isVisible: false,
       hasUpload: false,
 
       // Messages
@@ -312,7 +320,6 @@ export default {
 
   created() {
     this.fetch();
-
   },
 
   methods: {
@@ -445,6 +452,15 @@ export default {
               <div class="dz-error-mark"><i class="fa fa-close"></i></div>
           </div>`;
     },
+
+    show() {
+      this.isVisible = true;
+    },
+
+    hide() {
+      this.isVisible = false;
+    },
+
 
   },
 

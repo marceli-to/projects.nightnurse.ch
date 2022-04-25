@@ -65,7 +65,7 @@
   }
 
   input[type="checkbox"].checkbox {
-    @apply appearance-none h-4 w-4 !border !border-gray-200 bg-white checked:bg-dark checked:!border-dark focus:outline-none transition duration-100 mr-2 cursor-pointer
+    @apply appearance-none h-5 w-5 !border-2 !border-gray-200 bg-white checked:bg-dark checked:!border-dark focus:outline-none transition duration-100 mr-2 cursor-pointer
   }
 }
 
@@ -100,5 +100,13 @@ a.form-helper {
 }
 
 a.form-helper-footer {
-  @apply text-sm lg:text-base sm:ml-6 lg:ml-12
+  @apply text-sm font-mono flex items-center
+}
+
+a.form-helper-footer span {
+  @apply block ml-2
+}
+
+.btn-primary + a.form-helper-footer {
+  @apply ml-4 lg:ml-8
 }

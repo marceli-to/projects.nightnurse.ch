@@ -10,6 +10,7 @@ a.btn-icon {
   @apply inline-flex items-center w-auto text-base text-dark hover:text-highlight no-underline mt-1.5 sm:mt-0 mr-2 lg:mr-3
 }
 
-a.btn-create {
+a.btn-create,
+button.btn-send {
   @apply inline-flex items-center w-auto max-w-xs p-4 md:py-4 md:px-4 md:pr-6 font-mono no-underline text-white text-xs sm:text-sm bg-highlight hover:bg-dark active:bg-dark focus:outline-none transition ease-in-out duration-150 rounded-sm
 }

@@ -95,6 +95,7 @@
     <content-footer>
       <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
       <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
+        <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
         <span>{{translate('Zurück')}}</span>
       </router-link>
     </content-footer>
@@ -104,7 +105,7 @@
 </template>
 <script>
 import ErrorHandling from "@/mixins/ErrorHandling";
-import { XIcon } from "@vue-hero-icons/outline";
+import { XIcon, ArrowLeftIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -123,7 +124,8 @@ export default {
     Required,
     TheMask,
     Asterisk,
-    XIcon
+    XIcon,
+    ArrowLeftIcon
   },
 
   mixins: [ErrorHandling, i18n],

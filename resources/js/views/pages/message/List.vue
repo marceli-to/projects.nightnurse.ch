@@ -1,5 +1,6 @@
 <template>
-<div v-if="isFetched">
+<div v-if="isFetched" class="max-width-content">
+
   <header class="mb-4 sm:mb-8 lg:mb-9 pt-4 sm:pt-5 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom sm:max-w-4xl relative -ml-[1px] pl-[1px]">
     <div>
       <div class="text-2xl font-bold mb-2 sm:mb-3 flex items-center">
@@ -22,6 +23,9 @@
       </div>
     </div>
   </header>
+
+  <message-form ref="messageForm"></message-form>
+
   <feed>
     <div v-for="(items, day) in feedItems" :key="day" class="relative">
 
@@ -117,11 +121,8 @@
     </div>
   </feed>
   <content-footer>
-    <router-link :to="{ name: 'message-create' }" class="btn-create">
-      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-      <span class="block ml-2">{{translate('Erstellen')}}</span>
-    </router-link>
     <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
+      <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{translate('Zurück')}}</span>
     </router-link>
   </content-footer>
@@ -136,7 +137,8 @@ import {
   CloudDownloadIcon, 
   FolderDownloadIcon,
   ChevronDownIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
+  ArrowLeftIcon,
 } 
 from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
@@ -154,6 +156,7 @@ import FeedItemHeader from "@/components/ui/feed/Header.vue";
 import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
 import FeedItemAttachement from "@/components/ui/feed/Attachement.vue";
 import FeedItemBody from "@/components/ui/feed/Body.vue";
+import MessageForm from "@/views/pages/message/partials/Form.vue";
 import FileType from "@/components/ui/misc/FileType.vue";
 import i18n from "@/i18n";
 
@@ -168,6 +171,7 @@ export default {
     FolderDownloadIcon,
     ChevronUpIcon,
     ChevronDownIcon,
+    ArrowLeftIcon,
     ContentHeader,
     ContentFooter,
     Separator,
@@ -181,7 +185,8 @@ export default {
     FeedItemTimestamp,
     FeedItemAttachement,
     FeedItemBody,
-    FileType
+    FileType,
+    MessageForm
   },
 
   mixins: [ErrorHandling, Helpers, i18n],
@@ -205,12 +210,8 @@ export default {
       // States
       isLoading: false,
       isFetched: false,
+      hasForm: false,
 
-      // Messages
-      messages: {
-        emptyData: 'Es sind noch keine Nachrichten vorhanden...',
-        confirmDestroy: 'Bitte löschen bestätigen!',
-      }
     };
   },
 
@@ -263,6 +264,10 @@ export default {
       }
       return cls;
     },
+
+    toggleForm() {
+      this.$refs.messageForm.show();
+    }
   },
 
   computed: {
