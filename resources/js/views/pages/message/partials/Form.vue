@@ -132,7 +132,7 @@
                   </div>
                   <div class="mb-1">
                     <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
-                      <div :class="[index < 10 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.uuid" :data-truncatable-index="index">
+                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.uuid" :data-truncatable-index="index">
                         <input 
                           type="checkbox" 
                           class="checkbox" 
@@ -434,7 +434,7 @@ export default {
     hideOverflow(uuid) {
       const recipients = document.querySelectorAll('[data-truncatable="'+uuid+'"]');
       recipients.forEach(function(recipient){
-        if (recipient.dataset.truncatableIndex >= 10) {
+        if (recipient.dataset.truncatableIndex >= 6) {
           recipient.classList.remove('flex');
           recipient.classList.add('hidden');
         }
