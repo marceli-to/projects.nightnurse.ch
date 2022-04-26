@@ -78,7 +78,6 @@ export default {
     switchLanguage() {
       this.isLoading = true;
       this.axios.post(`${this.routes.post}`).then(response => {
-        this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.isLoading = false;
         let user = this.$store.state.user;
         user.language = user.language == 'de' ? 'en' : 'de';

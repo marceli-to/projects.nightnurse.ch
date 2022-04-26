@@ -2,14 +2,14 @@
 <div>
   <div v-if="isVisible">
     <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 border-bottom" v-if="isFetched">
-      <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-6">
-        <div class="sm:col-span-6 lg:col-span-8">
+      <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-8">
+        <div class="sm:col-span-7 lg:col-span-8">
           <div class="form-group">
             <label>{{translate('Betreff')}}</label>
             <input type="text" v-model="data.subject">
           </div>
           <div class="form-group mt-6 lg:mt-8">
-            <label class="mb-2">{{translate('Mitteilung')}}</label>
+            <label class="mb-2 lg:mb-3">{{translate('Mitteilung')}}</label>
             <tinymce-editor
               :api-key="tinyApiKey"
               :init="tinyConfig"
@@ -17,7 +17,7 @@
             ></tinymce-editor>
           </div>
           <div class="form-group">
-            <label>{{translate('Dateien')}}</label>
+            <label class="mb-2 lg:mb-3">{{translate('Dateien')}}</label>
             <vue-dropzone
               ref="dropzone"
               id="dropzone"
@@ -26,8 +26,8 @@
               @vdropzone-complete="uploadComplete"
               @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
               :useCustomSlot=true>
-              <div class="text-gray-400 text-sm">
-                <div>{{translate('Datei auswählen oder hierhin ziehen')}}</div>
+              <div class="text-dark text-sm">
+                <div class="font-bold">{{translate('Datei auswählen oder hierhin ziehen')}}</div>
                 <div>{{translate('max. Grösse 250 MB')}}</div>
               </div>
             </vue-dropzone>
@@ -66,7 +66,7 @@
 
           </div>
         </div>
-        <div class="sm:col-span-6 lg:col-span-4">
+        <div class="sm:col-span-5 lg:col-span-4">
           <div class="bg-light p-2 px-4 pb-1">
             <div class="form-group" v-if="$store.state.user.admin">
               <form-radio 
@@ -107,7 +107,7 @@
                           {{ user.firstname }} {{ user.name }}
                         </label>
                         <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email | truncate(20, '...') }}
+                          {{ user.email }}
                         </label>
                       </div>
                     </div>
@@ -144,7 +144,7 @@
                           {{ user.firstname }} {{ user.name }}
                         </label>
                         <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email | truncate(20, '...') }}
+                          {{ user.email }}
                         </label>
                       </div>
                     </div>
@@ -153,7 +153,7 @@
                     href="javascript:;" 
                     @click="showOverflow(company.uuid)"
                     :data-truncatable-more="company.uuid"
-                    class="text-dark flex items-center no-underline hover:underline mt-3 sm:mt-0"
+                    class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
                     v-if="company.users.length > 10">
                     <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                     <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
@@ -162,7 +162,7 @@
                     href="javascript:;" 
                     @click="hideOverflow(company.uuid)"
                     :data-truncatable-less="company.uuid"
-                    class="text-dark hidden items-center no-underline hover:underline mt-3 sm:mt-0">
+                    class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
                     <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
                     <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
                   </a>
@@ -198,14 +198,17 @@
           </div>
         </div>
       </div>
-      <div class="mt-6 mb-4 sm:mt-0 sm:mb-0 flex items-center">
-        <button type="submit" class="btn-send">
-          <mail-icon class="h-5 w-5" aria-hidden="true" />
-          <span class="block ml-2">{{translate('Senden')}}</span>
-        </button>
-        <a href="javascript:;" class="form-helper form-helper-footer l-4 lg:ml-8" @click="hide()">
-          <span>{{translate('Abbrechen')}}</span>
-        </a>
+      <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-8">
+        <div class="sm:col-span-7 lg:col-span-8 flex items-center justify-between mt-4">
+          <button type="submit" class="btn-send">
+            <mail-icon class="h-5 w-5" aria-hidden="true" />
+            <span class="block ml-2">{{translate('Senden')}}</span>
+          </button>
+          <a href="javascript:;" class="form-helper form-helper-footer l-4 lg:ml-8" @click="hide()">
+            <span>{{translate('Abbrechen')}}</span>
+          </a>
+        </div>
+        <div class="sm:col-span-5 lg:col-span-4"></div>
       </div>
     </form>
   </div>

@@ -9,13 +9,13 @@
   input[type=number],
   select,
   textarea {
-    @apply text-dark text-sm lg:text-base mt-0 block w-full px-0 py-1 border-0 border-bottom focus:ring-0 focus:border-dark;
+    @apply text-dark text-sm lg:text-base mt-0 block w-full px-0 py-1 lg:py-2 border-0 border-bottom focus:ring-0 focus:border-dark;
     -webkit-border-radius: 0px;
     border-radius: 0;
   }
 
   select {
-    @apply px-0 py-2 pr-0 !pl-0 border-b-2 border-gray-100 bg-white;
+    @apply px-0 py-2 lg:py-3 pr-0 !pl-0 border-b-2 border-gray-100 bg-white;
   }
 
   select option {
@@ -61,11 +61,11 @@
   /* checked radio buttons */
   input[type="radio"]:checked + label,
   input[type="checkbox"]:checked + label {
-    @apply bg-dark border-dark text-white rounded-sm
+    @apply bg-dark border-dark text-white 
   }
 
   input[type="checkbox"].checkbox {
-    @apply appearance-none h-4 w-4 flex-none !border-2 !border-gray-200 bg-white checked:bg-dark checked:!border-dark focus:outline-none transition duration-100 mr-2 cursor-pointer
+    @apply appearance-none h-4 w-4 flex-none rounded-sm !border-2 !border-gray-200 bg-gray-100 hover:bg-highlight hover:!border-highlight checked:bg-dark checked:!border-dark checked:!border focus:outline-none transition duration-100 mr-2 cursor-pointer
   }
 }
 
@@ -74,7 +74,7 @@
 }
 
 .form-check input[type="checkbox"].checkbox + label {
-  @apply text-xs text-dark font-mono cursor-pointer select-none
+  @apply text-sm text-dark font-sans cursor-pointer select-none
 }
 
 .form-check input[type="checkbox"].checkbox:checked + label {
