@@ -144,12 +144,23 @@ class UserController extends Controller
    * Quick register of a user. User will be sent an email to
    * complete the registering process.
    *
-   * @param  \Illuminate\Http\UserRegisterRequest $request
+   * @param  \Illuminate\Http\Request $request
    * @return \Illuminate\Http\Response
    */
 
-  public function register(UserRegisterRequest $request)
+  public function register(Request $request)
   {
+    // Check for existing but deleted user first
+    $user = User::withTrashed()->where('email', $request->input('email'))->get()->first();
+    
+    if ($user)
+    {
+      $user->deleted_at = NULL;
+      $user->save();
+      $this->invite($user);
+      return response()->json(['userId' => $user->id]);
+    }
+    
     // get company
     $company = Company::where('uuid', $request->input('company_uuid'))->get()->first();
 
@@ -164,17 +175,30 @@ class UserController extends Controller
       'role_id' => $company->owner ? 1 : 2,
     ]);
 
+    $this->invite($user);
+
+    return response()->json(['userId' => $user->id]);
+  }
+
+  /**
+   * Send an invitation e-mail to new users
+   *
+   * @param  User $user
+   * @return \Illuminate\Http\Response
+   */
+
+  public function invite(User $user)
+  {
     if ($user)
     {
       try {
-        \Mail::to($user->email)->send(new \App\Mail\Invitation($user));
+        return \Mail::to($user->email)->send(new \App\Mail\Invitation($user));
       } 
       catch(\Throwable $e) {
         \Log::error($e);
       }     
     }
-
-    return response()->json(['userId' => $user->id]);
+    return false;
   }
 
 }

@@ -9,6 +9,7 @@ export default {
         'Projekt erstellen': 'Create project',
         'Projekt erfasst': 'Project created',
         'Änderungen gespeichert': 'Changes saved',
+        'Einladung versendet': 'Invitation sent',
         'Nummer': 'Number',
         'Name': 'Name',
         'Vorname': 'Firstname',

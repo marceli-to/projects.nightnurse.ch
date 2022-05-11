@@ -22,6 +22,9 @@
         <router-link :to="{name: 'user-update', params: { uuid: d.uuid }}" v-if="d.register_complete">
           <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
+        <a href="" @click.prevent="invite(d.uuid)" v-if="!d.register_complete">
+          <mail-icon class="icon-list mr-2" aria-hidden="true" />
+        </a>
         <a href="" @click.prevent="destroy(d.uuid)">
           <trash-icon class="icon-list" aria-hidden="true" />
         </a>
@@ -39,7 +42,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon, MailIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -58,6 +61,7 @@ export default {
     PlusCircleIcon,
     PencilAltIcon,
     TrashIcon,
+    MailIcon,
     ContentHeader,
     ContentFooter,
     Separator,
@@ -80,7 +84,8 @@ export default {
       routes: {
         list: '/api/users',
         toggle: '/api/user/state',
-        destroy: '/api/user'
+        destroy: '/api/user',
+        invite: '/api/user/invite'
       },
 
       // States
@@ -112,6 +117,14 @@ export default {
         const index = this.data.findIndex(x => x.uuid === uuid);
         this.data[index].publish = response.data;
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
+        this.isLoading = false;
+      });
+    },
+
+    invite(uuid) {
+      this.isLoading = true;
+      this.axios.get(`${this.routes.invite}/${uuid}`).then(response => {
+        this.$notify({ type: "success", text: this.translate('Einladung versendet') });
         this.isLoading = false;
       });
     },
