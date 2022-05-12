@@ -88,22 +88,22 @@
                   <input 
                     type="checkbox" 
                     class="checkbox" 
-                    :id="project.users.owner.data.uuid" 
-                    @change="toggleAll($event, project.users.owner.data.uuid)">
-                  <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.data.uuid">
-                    {{ project.users.owner.data.name }} ({{translate('Alle')}})
+                    :id="project.users.owner.uuid" 
+                    @change="toggleAll($event, project.users.owner.uuid)">
+                  <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.uuid">
+                    {{ project.users.owner.name }} ({{translate('Alle')}})
                   </label>
                 </div>
                 <div class="mb-1">
                   <div v-for="(user, index) in project.users.owner.users" :key="user.uuid" class="mb-2">
-                    <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="project.users.owner.data.uuid" :data-truncatable-index="index">
+                    <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="project.users.owner.uuid" :data-truncatable-index="index">
                       <input 
                         type="checkbox" 
                         class="checkbox" 
                         :value="user.uuid" 
                         :id="user.uuid" 
                         :checked="addProjectLead(user.id, user.uuid)"
-                        :data-company-uuid="project.users.owner.data.uuid"
+                        :data-company-uuid="project.users.owner.uuid"
                         @change="toggleOne($event, user.uuid)">
                       <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
                         {{ user.firstname }} {{ user.name }}
@@ -116,17 +116,17 @@
                 </div>
                 <a 
                   href="javascript:;" 
-                  @click="showOverflow(project.users.owner.data.uuid)"
-                  :data-truncatable-more="project.users.owner.data.uuid"
+                  @click="showOverflow(project.users.owner.uuid)"
+                  :data-truncatable-more="project.users.owner.uuid"
                   class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                  v-if="Object.keys(project.users.owner.users).length > 10">
+                  v-if="project.users.owner.users.length > 10">
                   <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                   <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
                 </a>
                 <a
                   href="javascript:;" 
-                  @click="hideOverflow(project.users.owner.data.uuid)"
-                  :data-truncatable-less="project.users.owner.data.uuid"
+                  @click="hideOverflow(project.users.owner.uuid)"
+                  :data-truncatable-less="project.users.owner.uuid"
                   class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
                   <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
                   <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
@@ -355,6 +355,7 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
         this.project.users = responses[1].data;
+        console.log(this.project.users);
         this.isFetched = true;
       }));
 

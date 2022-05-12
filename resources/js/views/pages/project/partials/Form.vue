@@ -18,7 +18,7 @@
     
     <div :class="[errors.user_id ? 'is-invalid' : '', 'form-group']">
       <label>{{translate('Projektleiter')}} <asterisk /></label>
-      <select v-model="data.user_id" @change="updateManager(data.user_id)">
+      <select v-model="data.user_id">
         <option value="null">{{translate('Bitte wählen...')}}</option>
         <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
       </select>
@@ -93,41 +93,6 @@
     </div>
 
     <h4>{{translate('Zugriffsrechte')}}</h4>
-
-    <!-- owner -->
-    <div class="form-group">
-      <div class="form-check mb-2">
-        <input 
-          type="checkbox" 
-          class="checkbox" 
-          :id="settings.owner.uuid" 
-          @change="toggleAll($event, settings.owner.uuid)">
-        <label class="inline-block text-gray-800 font-bold" :for="settings.owner.uuid">
-          {{ settings.owner.full_name }} ({{translate('Alle')}})
-        </label>
-      </div>
-      <div>
-        <div v-for="user in settings.owner.users" :key="user.uuid" class="mb-2">
-          <div class="form-check mb-1">
-            <input 
-              type="checkbox" 
-              class="checkbox" 
-              :value="user.id" 
-              :id="user.uuid" 
-              :ref="settings.owner.uuid"
-              :disabled="data.manager && user.id == data.manager.id ? true : false"
-              :checked="checkUser(user.id)"
-              @change="toggleOne($event, user.id)">
-            <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-              {{ user.firstname }} {{ user.name }}
-            </label>
-            <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-              {{ user.email }}
-            </label>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <!-- main clients -->
     <h5 class="text-dark !text-sm font-bold mb-2" v-if="data.company">
@@ -389,10 +354,6 @@ export default {
       }
     },
 
-    updateManager(id) {
-      this.data.manager.id = id;
-    },
-
     toggleAll(event, uuid) {
       const _this = this;
       const state = event.target.checked ? true : false;
@@ -426,18 +387,8 @@ export default {
     },
 
     checkUser(id) {
-
-      // Check for manager
-      if (this.data.manager && this.data.manager.id == id)
-      {
-        this.addOrRemove(true, id);
-        return true;
-      }
-      else
-      {
-        const idx = this.data.users.findIndex(x => x.id == id);
-        return idx > -1 ? true : false;
-      }
+      const idx = this.data.users.findIndex(x => x.id == id);
+      return idx > -1 ? true : false;
     },
 
   },

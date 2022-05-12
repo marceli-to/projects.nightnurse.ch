@@ -37,24 +37,7 @@ class ProjectController extends Controller
 
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
     }
-    
-    /*
-    // -- Access by company (v1)
-    // // Get users company id
-    $companyId = auth()->user()->company_id;
-
-    // // Get project with that company (main company)
-    $projects = Project::byCompanyUser($companyId)->get()->pluck('id');
-
-    // // Get projects with that company (associated company)
-    $companyProjects = CompanyProject::where('company_id', $companyId)->get()->pluck('project_id');
-
-    // // Merge array of ids and remove duplicates
-    $ids = array_unique(array_merge($projects->all(), $companyProjects->all()), SORT_REGULAR);
-    // -- Access by company (v1)
-    */
-
-    // Access by user (v2)
+  
     // Get user projects
     $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
     
@@ -101,30 +84,18 @@ class ProjectController extends Controller
 
   public function getUsers(Project $project)
   {
+    // Get associated users
     $project = Project::with('users.company')->findOrFail($project->id);
 
-    // Get users from owner company (NNI)
-    $users = $project->users->filter(function($value, $key) {
-      return $value->company->owner == 1;
-    });
-
-    $owner = [
-      'data' => Company::owner()->get()->first(),
-      'users' => $users->all()
-    ];
-
-    // Get users from clients
-    $users = $project->users->filter(function($value, $key) {
-      return $value->company->owner == 0;
-    });
-
     $clients = [];
-    foreach($users as $user)
+    foreach($project->users as $user)
     {
       $clients[$user->company->id]['data'] = $user->company;
       $clients[$user->company->id]['users'][] = $user;
     }
 
+    // Get users for owner (nni)
+    $owner = Company::owner()->with('users')->get()->first();
     return response()->json(['owner' => $owner, 'clients' => $clients]);
   }
 
@@ -176,8 +147,8 @@ class ProjectController extends Controller
     $this->handleUsers($project, $request->users);
 
     // Make changes in 'Vertec'
-    $vertec = new VertecApi();
-    $vertec->updateProject($project);
+    // $vertec = new VertecApi();
+    // $vertec->updateProject($project);
 
     return response()->json('successfully updated');
   }

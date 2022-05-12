@@ -30,14 +30,6 @@ class MessageController extends Controller
       return $messagesGrouped->all();
     }
 
-    // Access check based on company (v1)
-    // $hasProject = Project::where('company_id', auth()->user()->company_id)->get()->first();
-    // $hasCompanyProject = CompanyProject::where('project_id', $project->id)->where('company_id', auth()->user()->company_id)->get()->first();
-    // if (!$hasProject && !$hasCompanyProject)
-    // {
-    //   return abort(403);
-    // }
-
     // Access check based on projects (v2)
     $hasAccess = ProjectUser::where('project_id', $project->id)->where('user_id', auth()->user()->id)->get()->first();
     if (!$hasAccess)
