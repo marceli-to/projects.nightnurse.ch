@@ -118,6 +118,7 @@ class ProjectController extends Controller
       return $value->company->owner == 0;
     });
 
+    $clients = [];
     foreach($users as $user)
     {
       $clients[$user->company->id]['data'] = $user->company;
