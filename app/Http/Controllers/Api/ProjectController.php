@@ -38,6 +38,7 @@ class ProjectController extends Controller
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
     }
     
+    /*
     // -- Access by company (v1)
     // // Get users company id
     $companyId = auth()->user()->company_id;
@@ -51,12 +52,11 @@ class ProjectController extends Controller
     // // Merge array of ids and remove duplicates
     $ids = array_unique(array_merge($projects->all(), $companyProjects->all()), SORT_REGULAR);
     // -- Access by company (v1)
+    */
 
-
-    // -- Access by user (v2)
+    // Access by user (v2)
     // Get user projects
-    // $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
-    // -- Access by user (v2)
+    $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
     
     // Map fields
     $projects = Project::with('company', 'messages.sender')
