@@ -79,48 +79,8 @@
               </form-radio>
             </div>
             
-            <!-- private message: show owner company only -->
-            <!--
-
-            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
-              <label class="mb-2">{{translate('Empfänger')}} *</label>
-              <div v-if="project.users.owner">
-                <div class="form-check mb-2">
-                  <input 
-                    type="checkbox" 
-                    class="checkbox" 
-                    :id="project.users.owner.data.uuid" 
-                    @change="toggleAll($event, project.users.owner.data.uuid)">
-                  <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.data.uuid">
-                    {{ project.users.owner.data.name }} ({{translate('Alle')}})
-                  </label>
-                </div>
-                <div>
-                  <div v-for="user in project.users.owner.users" :key="user.uuid" class="mb-2">
-                    <div class="form-check mb-1">
-                      <input 
-                        type="checkbox" 
-                        class="checkbox" 
-                        :value="user.uuid" 
-                        :id="user.uuid"
-                        :checked="addProjectLead(user.id)"
-                        :data-company-uuid="project.users.owner.data.uuid"
-                        @change="toggleOne($event, user.uuid)">
-                      <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                        {{ user.firstname }} {{ user.name }}
-                      </label>
-                      <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                        {{ user.email }}
-                      </label>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            -->
             
-            <!-- non private message: show all companies -->
+            
             <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
               <label class="mb-2">{{translate('Empfänger')}} *</label>
               <div v-if="project.users.owner" class="mb-4 lg:mb-8">
