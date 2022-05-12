@@ -129,7 +129,6 @@
                     type="checkbox" 
                     class="checkbox" 
                     :id="project.users.owner.data.uuid" 
-                    :checked="addProjectLead(user.id)"
                     @change="toggleAll($event, project.users.owner.data.uuid)">
                   <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.data.uuid">
                     {{ project.users.owner.data.name }} ({{translate('Alle')}})
