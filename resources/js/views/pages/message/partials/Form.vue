@@ -105,7 +105,6 @@
                         @change="toggleOne($event, user.uuid)">
                       <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
                         {{ user.firstname }} {{ user.name }}
-                        <span v-if="project.user_id == user.id">manager</span>
                       </label>
                       <label class="inline-block text-gray-800" :for="user.uuid" v-else>
                         {{ user.email }}
