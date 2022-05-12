@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use App\Models\Company;
 use App\Models\CompanyProject;
 use App\Services\VertecApi;
 use App\Http\Requests\ProjectStoreRequest;
@@ -38,7 +39,6 @@ class ProjectController extends Controller
     }
     
     // -- Access by company (v1)
-    
     // // Get users company id
     $companyId = auth()->user()->company_id;
 
@@ -50,13 +50,11 @@ class ProjectController extends Controller
 
     // // Merge array of ids and remove duplicates
     $ids = array_unique(array_merge($projects->all(), $companyProjects->all()), SORT_REGULAR);
-
     // -- Access by company (v1)
 
 
-
     // -- Access by user (v2)
-    // Get user project ids
+    // Get user projects
     // $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
     // -- Access by user (v2)
     
@@ -95,6 +93,41 @@ class ProjectController extends Controller
   }
 
   /**
+   * Get a list of users associated with the project
+   * 
+   * @param Project $project
+   * @return \Illuminate\Http\Response
+   */
+
+  public function getUsers(Project $project)
+  {
+    $project = Project::with('users.company')->findOrFail($project->id);
+
+    // Get users from owner company (NNI)
+    $users = $project->users->filter(function($value, $key) {
+      return $value->company->owner == 1;
+    });
+
+    $owner = [
+      'data' => Company::owner()->get()->first(),
+      'users' => $users->all()
+    ];
+
+    // Get users from clients
+    $users = $project->users->filter(function($value, $key) {
+      return $value->company->owner == 0;
+    });
+
+    foreach($users as $user)
+    {
+      $clients[$user->company->id]['data'] = $user->company;
+      $clients[$user->company->id]['users'][] = $user;
+    }
+
+    return response()->json(['owner' => $owner, 'clients' => $clients]);
+  }
+
+  /**
    * Get a single projects for a given projects
    * 
    * @param Project $project
@@ -102,7 +135,7 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager', 'users')->findOrFail($project->id));
+    return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager', 'users.company')->findOrFail($project->id));
   }
 
   /**

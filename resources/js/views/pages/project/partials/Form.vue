@@ -411,10 +411,10 @@ export default {
     },
 
     addOrRemove(state, value) {
-      const idx = this.data.users.findIndex(x => x.id == parseInt(value));
+      const idx = this.data.users.findIndex(x => x.id === parseInt(value));
       if (state == true) {
         if (idx == -1) {
-          let project_user = { id: value };
+          let project_user = { 'id': value };
           this.data.users.push(project_user);
         }
       }
@@ -438,7 +438,7 @@ export default {
         const idx = this.data.users.findIndex(x => x.id == id);
         return idx > -1 ? true : false;
       }
-    }
+    },
 
   },
 

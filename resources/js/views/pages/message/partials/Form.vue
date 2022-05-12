@@ -78,67 +78,66 @@
                 :name="'private'">
               </form-radio>
             </div>
-            <!-- private message: show owner company only -->
-            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
+            
+            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
               <label class="mb-2">{{translate('Empfänger')}} *</label>
-              <div v-for="company in project.companies" :key="company.uuid">
-                <div v-if="company.users.length > 0 && company.owner">
-                  <div class="form-check mb-2">
-                    <input 
-                      type="checkbox" 
-                      class="checkbox" 
-                      :id="company.uuid" 
-                      @change="toggleAll($event, company.uuid)">
-                    <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-                      {{ company.name }} ({{translate('Alle')}})
-                    </label>
-                  </div>
-                  <div>
-                    <div v-for="user in company.users" :key="user.uuid" class="mb-2">
-                      <div class="form-check mb-1">
-                        <input 
-                          type="checkbox" 
-                          class="checkbox" 
-                          :value="user.uuid" 
-                          :id="user.uuid" 
-                          :data-company-uuid="company.uuid"
-                          @change="toggleOne($event, user.uuid)">
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                          {{ user.firstname }} {{ user.name }}
-                        </label>
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email }}
-                        </label>
-                      </div>
+              <div v-if="project.users.owner">
+                <div class="form-check mb-2">
+                  <input 
+                    type="checkbox" 
+                    class="checkbox" 
+                    :id="project.users.owner.data.uuid" 
+                    @change="toggleAll($event, project.users.owner.data.uuid)">
+                  <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.data.uuid">
+                    {{ project.users.owner.data.name }} ({{translate('Alle')}})
+                  </label>
+                </div>
+                <div>
+                  <div v-for="user in project.users.owner.users" :key="user.uuid" class="mb-2">
+                    <div class="form-check mb-1">
+                      <input 
+                        type="checkbox" 
+                        class="checkbox" 
+                        :value="user.uuid" 
+                        :id="user.uuid"
+                        :checked="addProjectLead(user.id)"
+                        :data-company-uuid="project.users.owner.data.uuid"
+                        @change="toggleOne($event, user.uuid)">
+                      <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                        {{ user.firstname }} {{ user.name }}
+                        <span v-if="project.user_id == user.id">manager</span>
+                      </label>
+                      <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                        {{ user.email }}
+                      </label>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- non private message: show all companies -->
-            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
-              <label class="mb-2">{{translate('Empfänger')}} *</label>
-              <div v-for="company in project.companies" :key="company.uuid">
+
+            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="!data.private">
+              <div v-for="company in project.users.clients" :key="company.uuid">
                 <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
                   <div class="form-check mb-2">
                     <input 
                       type="checkbox" 
                       class="checkbox" 
-                      :id="company.uuid" 
-                      @change="toggleAll($event, company.uuid)">
-                    <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-                      {{ company.name }} ({{translate('Alle')}})
+                      :id="company.data.uuid" 
+                      @change="toggleAll($event, company.data.uuid)">
+                    <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
+                      {{ company.data.name }} ({{translate('Alle')}})
                     </label>
                   </div>
                   <div class="mb-1">
                     <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
-                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.uuid" :data-truncatable-index="index">
+                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.data.uuid" :data-truncatable-index="index">
                         <input 
                           type="checkbox" 
                           class="checkbox" 
                           :value="user.uuid" 
                           :id="user.uuid" 
-                          :data-company-uuid="company.uuid"
+                          :data-company-uuid="company.data.uuid"
                           @change="toggleOne($event, user.uuid)">
                         <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
                           {{ user.firstname }} {{ user.name }}
@@ -168,33 +167,8 @@
                   </a>
                 </div>
               </div>
-              <div v-if="project.company.users.length > 0">
-                <div class="form-check mb-2">
-                  <input 
-                    type="checkbox" 
-                    class="checkbox" 
-                    :id="project.company.uuid" 
-                    @change="toggleAll($event, project.company.uuid)">
-                  <label class="inline-block text-gray-800 font-bold" :for="project.company.uuid">
-                    {{ project.company.name }} ({{translate('Alle')}})
-                  </label>
-                </div>
-                <div v-for="user in project.company.users" :key="user.uuid">
-                  <div class="form-check mb-2">
-                    <input 
-                      type="checkbox" 
-                      class="checkbox" 
-                      :value="user.uuid" 
-                      :id="user.uuid" 
-                      :data-company-uuid="project.company.uuid"
-                      @change="toggleOne($event, user.uuid)">
-                    <label class="inline-block text-gray-800" :for="user.uuid">
-                      {{ user.firstname }} {{ user.name }}
-                    </label>
-                  </div>
-                </div>
-              </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -289,12 +263,13 @@ export default {
       project: {
         number: null,
         name: null,
-        company: {
-          users:  []
-        },
+        user: null,
+        users: [],
       },
 
       projectOwner: [],
+
+      projectUsers: [],
 
       user: {},
 
@@ -359,12 +334,11 @@ export default {
       this.isFetched = false;
       this.axios.all([
         this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`),
-        this.axios.get(`/api/company/owner`),
+        this.axios.get(`/api/project/users/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
-        this.project = responses[0].data,
-        this.projectOwner = responses[1].data,
-        // Add owner before all other companies
-        this.project.companies.unshift(this.projectOwner);
+        this.project = responses[0].data;
+        this.project.users = responses[1].data;
+        console.log(this.project.users);
         this.isFetched = true;
       }));
 
@@ -377,7 +351,6 @@ export default {
     store() {
       this.isLoading = true;
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
-        //this.$router.push({ name: 'messages', params: { uuid: this.$route.params.uuid }});
         this.$notify({ type: "success", text: this.messages.created });
         this.isLoading = false;
         this.reset();
@@ -464,6 +437,16 @@ export default {
       }
     },
 
+    addProjectLead(id) {
+
+      if (this.project.user_id == id)
+      {
+        this.addOrRemove(true, id);
+        return true;
+      }
+    },
+
+
     /** 
      * Image/File Upload 
      */
@@ -536,7 +519,6 @@ export default {
     hide() {
       this.isVisible = false;
     },
-
 
   },
 

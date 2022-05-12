@@ -77,6 +77,7 @@ Route::middleware('auth:sanctum')->group(function() {
   // Projects
   Route::get('projects', [ProjectController::class, 'get']);
   Route::get('project/{project:uuid}', [ProjectController::class, 'find']);
+  Route::get('project/users/{project:uuid}', [ProjectController::class, 'getUsers']);
   Route::post('project', [ProjectController::class, 'store']);
   Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
   Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
