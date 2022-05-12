@@ -25,7 +25,7 @@ class CompanyController extends Controller
    */
   public function getClients()
   {
-    return new DataCollection(Company::clients()->orderBy('name')->get());
+    return new DataCollection(Company::clients()->with('users')->orderBy('name')->get());
   }
 
   /**

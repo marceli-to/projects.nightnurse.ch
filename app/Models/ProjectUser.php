@@ -4,36 +4,29 @@ use App\Models\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MessageUser extends Base
+class ProjectUser extends Base
 {
   use HasFactory;
 
-  protected $table = 'message_user';
+  protected $table = 'project_user';
 
 	protected $fillable = [
-		'message_id',
 		'user_id',
-    'message_state_id',
-    'processed'
+		'project_id',
   ];
 
   /**
    * Relations
    */
 
-	public function message()
+	public function project()
 	{
-		return $this->belongsTo(Message::class);
+		return $this->belongsTo(Project::class);
 	}
 
 	public function user()
 	{
 		return $this->belongsTo(User::class);
 	}
-
-  public function state()
-  {
-    return $this->hasOne(MessageState::class, 'id', 'message_state_id');
-  }
 
 }

@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Project;
 use App\Models\CompanyProject;
+use App\Services\VertecApi;
 use App\Http\Requests\ProjectStoreRequest;
 use Illuminate\Http\Request;
 
@@ -89,7 +90,7 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager')->findOrFail($project->id));
+    return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager', 'users')->findOrFail($project->id));
   }
 
   /**
@@ -120,6 +121,12 @@ class ProjectController extends Controller
     $project->update($request->all());
     $project->save();
     $this->handleCompanies($project, $request->companies);
+
+    // Make changes in 'Vertec'
+    $vertec = new VertecApi();
+    $vertec->updateProject($project);
+    
+
     return response()->json('successfully updated');
   }
 

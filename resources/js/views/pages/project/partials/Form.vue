@@ -92,6 +92,42 @@
       <input type="color" name="color" v-model="data.color">
     </div>
 
+    <!-- <h4>Access</h4>
+
+    <div class="form-group">
+      <div v-for="company in data.companies" :key="company.uuid">
+          <div class="form-check mb-2">
+            <input 
+              type="checkbox" 
+              class="checkbox" 
+              :id="company.uuid" 
+              @change="toggleAll($event, company.uuid)">
+            <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+              {{ company.full_name }} ({{translate('Alle')}})
+            </label>
+          </div>
+          <div>
+            <div v-for="user in company.users" :key="user.uuid" class="mb-2">
+              <div class="form-check mb-1">
+                <input 
+                  type="checkbox" 
+                  class="checkbox" 
+                  :value="user.uuid" 
+                  :id="user.uuid" 
+                  :data-company-uuid="company.uuid"
+                  @change="toggleOne($event, user.uuid)">
+                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                  {{ user.firstname }} {{ user.name }}
+                </label>
+                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                  {{ user.email }}
+                </label>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div> -->
+
     <content-footer>
       <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
       <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
@@ -242,14 +278,48 @@ export default {
       let target = event.target, id = target.value, name = target.options[target.selectedIndex].innerHTML;
       const idx = this.data.companies.findIndex(x => x.id === parseInt(id));
       if (idx == -1 && id != "null") {
-        let d = { id: parseInt(id), full_name: name };
-        this.data.companies.push(d);
+
+        // Get company from settings
+        const index = this.settings.companies.findIndex(x => x.id === parseInt(id));
+        if (index > -1) {
+          let d = { id: parseInt(id), full_name: name, users: this.settings.companies[index].users };
+          this.data.companies.push(d);
+        }
       }
     },
 
     removeCompany(id) {
       const idx = this.data.companies.findIndex(x => x.id === id);
       this.data.companies.splice(idx, 1);
+    },
+
+    toggleAll(event, uuid) {
+      const _this = this;
+      const state = event.target.checked ? true : false;
+      const boxes = document.querySelectorAll('[data-company-uuid="'+uuid+'"]');
+      boxes.forEach(function(box){
+        box.checked = state;
+        _this.addOrRemove(state, box.value);
+      });
+    },
+
+    toggleOne(event, uuid) {
+      const state = event.target.checked ? true : false;
+      this.addOrRemove(state, uuid);
+    },
+
+    addOrRemove(state, value) {
+      const idx = this.data.users.findIndex(x => x == value);
+      if (state == true) {
+        if (idx == -1) {
+          this.data.users.push(value);
+        }
+      }
+      else {
+        if (idx > -1) {
+          this.data.users.splice(idx, 1);
+        }
+      }
     },
 
   },

@@ -101,6 +101,11 @@ class User extends Authenticatable implements MustVerifyEmail
 		return $this->belongsToMany(Message::class);
 	}
 
+	public function projects()
+	{
+		return $this->belongsToMany(Project::class);
+	}
+
 	/**
    * Scope for staff (members of company 'Nightnurse')
    */
