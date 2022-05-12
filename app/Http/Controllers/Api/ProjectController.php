@@ -147,8 +147,8 @@ class ProjectController extends Controller
     $this->handleUsers($project, $request->users);
 
     // Make changes in 'Vertec'
-    // $vertec = new VertecApi();
-    // $vertec->updateProject($project);
+    $vertec = new VertecApi();
+    $vertec->updateProject($project);
 
     return response()->json('successfully updated');
   }
