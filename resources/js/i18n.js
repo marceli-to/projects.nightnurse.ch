@@ -10,6 +10,7 @@ export default {
         'Projekt erfasst': 'Project created',
         'Änderungen gespeichert': 'Changes saved',
         'Einladung versendet': 'Invitation sent',
+        'Vertec Id' : 'Vertec Id',
         'Nummer': 'Number',
         'Name': 'Name',
         'Vorname': 'Firstname',

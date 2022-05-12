@@ -18,13 +18,13 @@
     </div>
 
     <content-grid class="mt-6 lg:mt-8">
-    <div :class="[errors.gender_id ? 'is-invalid' : '', 'form-group']">
+      <div :class="[errors.gender_id ? 'is-invalid' : '', 'form-group']">
         <label>{{translate('Geschlecht')}} <asterisk /></label>
         <select v-model="data.gender_id">
           <option :value="g.id" v-for="g in settings.genders" :key="g.id">{{g.description}}</option>
         </select>
       </div>
-    <div :class="[errors.language_id ? 'is-invalid' : '', 'form-group']">
+      <div :class="[errors.language_id ? 'is-invalid' : '', 'form-group']">
         <label>{{translate('Sprache')}} <asterisk /></label>
         <select v-model="data.language_id">
           <option :value="l.id" v-for="l in settings.languages" :key="l.id">{{l.description}}</option>
@@ -67,6 +67,11 @@
       <select v-model="data.role_id">
         <option :value="r.id" v-for="r in settings.roles" :key="r.id">{{r.description}}</option>
       </select>
+    </div>
+
+    <div class="form-group">
+      <label>{{translate('Vertec Id')}} <asterisk /></label>
+      <input type="text" v-model="data.vertec_id">
     </div>
 
     <content-footer>
@@ -122,7 +127,8 @@ export default {
         password_confirmation: null,
         gender_id: null,
         language_id: null,
-        company_id: null
+        company_id: null,
+        vertec_id: null,
       },
 
       // Settings
