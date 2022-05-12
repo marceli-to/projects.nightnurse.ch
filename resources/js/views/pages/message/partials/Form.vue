@@ -355,8 +355,6 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
         this.project.users = responses[1].data;
-        console.log(this.project.users);
-        console.log(this.project.users.owner.users);
         this.isFetched = true;
       }));
 
