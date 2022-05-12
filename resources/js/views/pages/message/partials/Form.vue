@@ -155,7 +155,7 @@
                   @click="showOverflow(project.users.owner.data.uuid)"
                   :data-truncatable-more="project.users.owner.data.uuid"
                   class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                  v-if="project.users.owner.users.length > 10">
+                  v-if="Object.keys(project.users.owner.users).length > 10">
                   <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                   <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
                 </a>
