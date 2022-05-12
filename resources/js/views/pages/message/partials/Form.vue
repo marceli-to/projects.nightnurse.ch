@@ -480,6 +480,7 @@ export default {
     },
 
     addOrRemove(state, value) {
+      console.log(this.data.users);
       const idx = this.data.users.findIndex(x => x == value);
       if (state == true) {
         if (idx == -1) {
@@ -491,6 +492,7 @@ export default {
           this.data.users.splice(idx, 1);
         }
       }
+
     },
 
     addProjectLead(id) {
@@ -501,7 +503,6 @@ export default {
         return true;
       }
     },
-
 
     /** 
      * Image/File Upload 
