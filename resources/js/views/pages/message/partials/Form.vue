@@ -140,7 +140,7 @@
                           :value="user.uuid" 
                           :id="user.uuid" 
                           :checked="addProjectLead(user.id)"
-                          :data-company-uuid="project.users.owner.data.uuid.uuid"
+                          :data-company-uuid="project.users.owner.data.uuid"
                           @change="toggleOne($event, user.uuid)">
                         <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
                           {{ user.firstname }} {{ user.name }}
@@ -160,6 +160,7 @@
                     <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                     <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
                   </a>
+                  {{project.users.owner.users.length}}
                   <a
                     href="javascript:;" 
                     @click="hideOverflow(project.users.owner.data.uuid)"
