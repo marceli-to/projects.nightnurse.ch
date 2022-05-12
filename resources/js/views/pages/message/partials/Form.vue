@@ -132,54 +132,56 @@
                   <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
                 </a>
               </div>
-              <div v-for="company in project.users.clients" :key="company.uuid" v-if="!data.private">
-                <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
-                  <div class="form-check mb-2">
-                    <input 
-                      type="checkbox" 
-                      class="checkbox" 
-                      :id="company.data.uuid" 
-                      @change="toggleAll($event, company.data.uuid)">
-                    <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
-                      {{ company.data.name }} ({{translate('Alle')}})
-                    </label>
-                  </div>
-                  <div class="mb-1">
-                    <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
-                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.data.uuid" :data-truncatable-index="index">
-                        <input 
-                          type="checkbox" 
-                          class="checkbox" 
-                          :value="user.uuid" 
-                          :id="user.uuid" 
-                          :data-company-uuid="company.data.uuid"
-                          @change="toggleOne($event, user.uuid)">
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                          {{ user.firstname }} {{ user.name }}
-                        </label>
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email }}
-                        </label>
+              <div v-if="!data.private">
+                <div v-for="company in project.users.clients" :key="company.uuid">
+                  <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
+                    <div class="form-check mb-2">
+                      <input 
+                        type="checkbox" 
+                        class="checkbox" 
+                        :id="company.data.uuid" 
+                        @change="toggleAll($event, company.data.uuid)">
+                      <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
+                        {{ company.data.name }} ({{translate('Alle')}})
+                      </label>
+                    </div>
+                    <div class="mb-1">
+                      <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
+                        <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.data.uuid" :data-truncatable-index="index">
+                          <input 
+                            type="checkbox" 
+                            class="checkbox" 
+                            :value="user.uuid" 
+                            :id="user.uuid" 
+                            :data-company-uuid="company.data.uuid"
+                            @change="toggleOne($event, user.uuid)">
+                          <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                            {{ user.firstname }} {{ user.name }}
+                          </label>
+                          <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                            {{ user.email }}
+                          </label>
+                        </div>
                       </div>
                     </div>
+                    <a 
+                      href="javascript:;" 
+                      @click="showOverflow(company.data.uuid)"
+                      :data-truncatable-more="company.data.uuid"
+                      class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
+                      v-if="company.users.length > 10">
+                      <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
+                      <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
+                    </a>
+                    <a
+                      href="javascript:;" 
+                      @click="hideOverflow(company.data.uuid)"
+                      :data-truncatable-less="company.data.uuid"
+                      class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
+                      <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
+                      <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
+                    </a>
                   </div>
-                  <a 
-                    href="javascript:;" 
-                    @click="showOverflow(company.data.uuid)"
-                    :data-truncatable-more="company.data.uuid"
-                    class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                    v-if="company.users.length > 10">
-                    <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                    <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
-                  </a>
-                  <a
-                    href="javascript:;" 
-                    @click="hideOverflow(company.data.uuid)"
-                    :data-truncatable-less="company.data.uuid"
-                    class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
-                    <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                    <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
-                  </a>
                 </div>
               </div>
             </div>
@@ -440,7 +442,6 @@ export default {
     },
 
     addOrRemove(state, value) {
-      console.log(this.data.users);
       const idx = this.data.users.findIndex(x => x == value);
       if (state == true) {
         if (idx == -1) {
@@ -456,12 +457,12 @@ export default {
     },
 
     addProjectLead(id) {
-
       if (this.project.user_id == id)
       {
         this.addOrRemove(true, id);
         return true;
       }
+      return false;
     },
 
     /** 
