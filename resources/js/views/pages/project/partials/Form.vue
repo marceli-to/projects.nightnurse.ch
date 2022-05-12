@@ -18,7 +18,7 @@
     
     <div :class="[errors.user_id ? 'is-invalid' : '', 'form-group']">
       <label>{{translate('Projektleiter')}} <asterisk /></label>
-      <select v-model="data.user_id">
+      <select v-model="data.user_id" @change="updateManager(data.user_id)">
         <option value="null">{{translate('Bitte wählen...')}}</option>
         <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
       </select>
@@ -51,7 +51,7 @@
 
     <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group']">
       <label>{{translate('Hauptkunde')}} <asterisk /></label>
-      <select v-model="data.company_id">
+      <select v-model="data.company_id" @change="updateMainCompany($event)">
         <option value="null">{{translate('Bitte wählen...')}}</option>
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
@@ -92,41 +92,118 @@
       <input type="color" name="color" v-model="data.color">
     </div>
 
-    <!-- <h4>Access</h4>
+    <h4>{{translate('Zugriffsrechte')}}</h4>
 
+    <!-- owner -->
     <div class="form-group">
-      <div v-for="company in data.companies" :key="company.uuid">
-          <div class="form-check mb-2">
+      <div class="form-check mb-2">
+        <input 
+          type="checkbox" 
+          class="checkbox" 
+          :id="settings.owner.uuid" 
+          @change="toggleAll($event, settings.owner.uuid)">
+        <label class="inline-block text-gray-800 font-bold" :for="settings.owner.uuid">
+          {{ settings.owner.full_name }} ({{translate('Alle')}})
+        </label>
+      </div>
+      <div>
+        <div v-for="user in settings.owner.users" :key="user.uuid" class="mb-2">
+          <div class="form-check mb-1">
             <input 
               type="checkbox" 
               class="checkbox" 
-              :id="company.uuid" 
-              @change="toggleAll($event, company.uuid)">
-            <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-              {{ company.full_name }} ({{translate('Alle')}})
+              :value="user.id" 
+              :id="user.uuid" 
+              :ref="settings.owner.uuid"
+              :disabled="data.manager && user.id == data.manager.id ? true : false"
+              :checked="checkUser(user.id)"
+              @change="toggleOne($event, user.id)">
+            <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+              {{ user.firstname }} {{ user.name }}
+            </label>
+            <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+              {{ user.email }}
             </label>
           </div>
-          <div>
-            <div v-for="user in company.users" :key="user.uuid" class="mb-2">
-              <div class="form-check mb-1">
-                <input 
-                  type="checkbox" 
-                  class="checkbox" 
-                  :value="user.uuid" 
-                  :id="user.uuid" 
-                  :data-company-uuid="company.uuid"
-                  @change="toggleOne($event, user.uuid)">
-                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                  {{ user.firstname }} {{ user.name }}
-                </label>
-                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                  {{ user.email }}
-                </label>
-              </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- main clients -->
+    <h5 class="text-dark !text-sm font-bold mb-2" v-if="data.company">
+      {{translate('Hauptkunde')}}
+    </h5>
+    <div class="form-group" v-if="data.company">
+      <div class="form-check mb-2">
+        <input 
+          type="checkbox" 
+          class="checkbox" 
+          :id="data.company.uuid" 
+          @change="toggleAll($event, data.company.uuid)">
+        <label class="inline-block text-gray-800 font-bold" :for="data.company.uuid">
+          {{ data.company.full_name }} ({{translate('Alle')}})
+        </label>
+      </div>
+      <div>
+        <div v-for="user in data.company.users" :key="user.uuid" class="mb-2">
+          <div class="form-check mb-1">
+            <input 
+              type="checkbox" 
+              class="checkbox" 
+              :value="user.id" 
+              :id="user.uuid" 
+              :ref="data.company.uuid"
+              :checked="checkUser(user.id)"
+              @change="toggleOne($event, user.id)">
+            <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+              {{ user.firstname }} {{ user.name }}
+            </label>
+            <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+              {{ user.email }}
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- other clients -->
+    <h5 class="text-dark !text-sm font-bold mb-2" v-if="data.companies.length">
+      {{translate('Weitere Kunden')}}
+    </h5>
+    <div class="form-group">
+      <div v-for="company in data.companies" :key="company.uuid" class="mb-4">
+        <div class="form-check mb-2">
+          <input 
+            type="checkbox" 
+            class="checkbox" 
+            :id="company.uuid" 
+            @change="toggleAll($event, company.uuid)">
+          <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+            {{ company.full_name }} ({{translate('Alle')}})
+          </label>
+        </div>
+        <div>
+          <div v-for="user in company.users" :key="user.uuid" class="mb-2">
+            <div class="form-check mb-1">
+              <input 
+                type="checkbox" 
+                class="checkbox" 
+                :value="user.id" 
+                :id="user.uuid" 
+                :ref="company.uuid"
+                :checked="checkUser(user.id)"
+                @change="toggleOne($event, user.id)">
+              <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                {{ user.firstname }} {{ user.name }}
+              </label>
+              <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                {{ user.email }}
+              </label>
             </div>
           </div>
+        </div>
       </div>
-    </div> -->
+    </div>
 
     <content-footer>
       <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
@@ -175,6 +252,7 @@ export default {
       
       // Model
       data: {
+        id: null,
         number: null,
         name: null,
         color: '#ff008b',
@@ -183,7 +261,10 @@ export default {
         user_id: null,
         project_state_id: 1,
         company_id: null,
+        company: null,
+        manager: {},
         companies: [],
+        users: [],
       },
 
       // Settings
@@ -191,6 +272,7 @@ export default {
         staff: [],
         states: [],
         companies: [],
+        owner: {},
       },
 
       // Validation
@@ -263,11 +345,13 @@ export default {
         this.axios.get(`/api/companies/clients`),
         this.axios.get(`/api/users/staff`),
         this.axios.get(`/api/project-states`),
+        this.axios.get(`/api/company/owner`),
       ]).then(axios.spread((...responses) => {
         this.settings = {
           companies: responses[0].data.data,
           staff: responses[1].data.data,
           states: responses[2].data.data,
+          owner: responses[3].data,
         };
         this.isFetched = true;
         this.isLoading = true;
@@ -282,8 +366,7 @@ export default {
         // Get company from settings
         const index = this.settings.companies.findIndex(x => x.id === parseInt(id));
         if (index > -1) {
-          let d = { id: parseInt(id), full_name: name, users: this.settings.companies[index].users };
-          this.data.companies.push(d);
+          this.data.companies.push(this.settings.companies[index]);
         }
       }
     },
@@ -293,26 +376,46 @@ export default {
       this.data.companies.splice(idx, 1);
     },
 
+    updateMainCompany(event)
+    {
+      const idx = this.settings.companies.findIndex(x => x.id === parseInt(event.target.value));
+      if (idx > -1) {
+       this.data.company_id = this.settings.companies[idx].id;
+       this.data.company = this.settings.companies[idx];
+      }
+      else {
+        this.data.company_id = null;
+        this.data.company = null;
+      }
+    },
+
+    updateManager(id) {
+      this.data.manager.id = id;
+    },
+
     toggleAll(event, uuid) {
       const _this = this;
       const state = event.target.checked ? true : false;
-      const boxes = document.querySelectorAll('[data-company-uuid="'+uuid+'"]');
+      const boxes = this.$refs[uuid];
       boxes.forEach(function(box){
-        box.checked = state;
-        _this.addOrRemove(state, box.value);
+        if (!box.disabled) {
+          box.checked = state;
+          _this.addOrRemove(state, box.value);
+        }
       });
     },
 
-    toggleOne(event, uuid) {
+    toggleOne(event, id) {
       const state = event.target.checked ? true : false;
-      this.addOrRemove(state, uuid);
+      this.addOrRemove(state, id);
     },
 
     addOrRemove(state, value) {
-      const idx = this.data.users.findIndex(x => x == value);
+      const idx = this.data.users.findIndex(x => x.id == parseInt(value));
       if (state == true) {
         if (idx == -1) {
-          this.data.users.push(value);
+          let project_user = { id: value };
+          this.data.users.push(project_user);
         }
       }
       else {
@@ -321,6 +424,21 @@ export default {
         }
       }
     },
+
+    checkUser(id) {
+
+      // Check for manager
+      if (this.data.manager && this.data.manager.id == id)
+      {
+        this.addOrRemove(true, id);
+        return true;
+      }
+      else
+      {
+        const idx = this.data.users.findIndex(x => x.id == id);
+        return idx > -1 ? true : false;
+      }
+    }
 
   },
 

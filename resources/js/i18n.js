@@ -76,6 +76,7 @@ export default {
         'Neue Nachricht': 'New message',
         'Schliessen': 'close',
         'Abbrechen': 'cancel',
+        'Zugriffsrechte': 'Access',
       },
 
       defaultLang: 'de',

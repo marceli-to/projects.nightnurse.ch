@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Models\CompanyProject;
 use App\Services\VertecApi;
 use App\Http\Requests\ProjectStoreRequest;
@@ -36,18 +37,29 @@ class ProjectController extends Controller
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
     }
     
-    // Get users company id
+    // -- Access by company (v1)
+    
+    // // Get users company id
     $companyId = auth()->user()->company_id;
 
-    // Get project with that company (main company)
+    // // Get project with that company (main company)
     $projects = Project::byCompanyUser($companyId)->get()->pluck('id');
 
-    // Get projects with that compnay (associated company)
+    // // Get projects with that company (associated company)
     $companyProjects = CompanyProject::where('company_id', $companyId)->get()->pluck('project_id');
 
-    // Merge array of ids and remove duplicates
+    // // Merge array of ids and remove duplicates
     $ids = array_unique(array_merge($projects->all(), $companyProjects->all()), SORT_REGULAR);
 
+    // -- Access by company (v1)
+
+
+
+    // -- Access by user (v2)
+    // Get user project ids
+    // $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
+    // -- Access by user (v2)
+    
     // Map fields
     $projects = Project::with('company', 'messages.sender')
       ->whereIn('id', $ids)
@@ -104,7 +116,11 @@ class ProjectController extends Controller
     $data = $request->all();
     $data['uuid'] = \Str::uuid();
     $project = Project::create($data);
+
+    // Handle companies & users (pivot tables)
     $this->handleCompanies($project, $request->companies);
+    $this->handleUsers($project, $request->users);
+
     return response()->json(['projectId' => $project->id]);
   }
 
@@ -120,12 +136,14 @@ class ProjectController extends Controller
     $project = Project::findOrFail($project->id);
     $project->update($request->all());
     $project->save();
+
+    // Handle companies & users (pivot tables)
     $this->handleCompanies($project, $request->companies);
+    $this->handleUsers($project, $request->users);
 
     // Make changes in 'Vertec'
     $vertec = new VertecApi();
     $vertec->updateProject($project);
-    
 
     return response()->json('successfully updated');
   }
@@ -159,7 +177,7 @@ class ProjectController extends Controller
    * Store or update pivot data
    * 
    * @param Project $project
-   * @param Array $buildings
+   * @param Array $companies
    * 
    * @return void
    */
@@ -171,6 +189,27 @@ class ProjectController extends Controller
       $record = new CompanyProject([
         'company_id' => $c['id'],
         'project_id' => $project->id,
+      ]);
+      $record->save();
+    }
+  }
+
+  /**
+   * Store or update pivot data
+   * 
+   * @param Project $project
+   * @param Array $users
+   * 
+   * @return void
+   */
+  protected function handleUsers(Project $project, $users)
+  {
+    $project->users()->detach();
+    foreach($users as $u)
+    { 
+      $record = new ProjectUser([
+        'project_id' => $project->id,
+        'user_id' => $u['id'],
       ]);
       $record->save();
     }

@@ -6,6 +6,7 @@ use App\Models\Message;
 use App\Models\MessageFile;
 use App\Models\MessageUser;
 use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Models\CompanyProject;
 use App\Models\User;
 use App\Http\Requests\MessageStoreRequest;
@@ -29,13 +30,21 @@ class MessageController extends Controller
       return $messagesGrouped->all();
     }
 
-    // Access check
+    // Access check based on company (v1)
     $hasProject = Project::where('company_id', auth()->user()->company_id)->get()->first();
     $hasCompanyProject = CompanyProject::where('project_id', $project->id)->where('company_id', auth()->user()->company_id)->get()->first();
     if (!$hasProject && !$hasCompanyProject)
     {
       return abort(403);
     }
+
+    // Access check based on projects (v2)
+    // $hasAccess = ProjectUser::where('project_id', $project->id)->where('user_id', auth()->user()->id)->get()->first();
+    // if (!$hasAccess)
+    // {
+    //   return abort(403);
+    // }
+
 
     // Map fields
     $messages = Message::public()
