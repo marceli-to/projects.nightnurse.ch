@@ -102,7 +102,7 @@
                         class="checkbox" 
                         :value="user.uuid" 
                         :id="user.uuid" 
-                        :checked="addProjectLead(user.id)"
+                        :checked="addProjectLead(user.id, user.uuid)"
                         :data-company-uuid="project.users.owner.data.uuid"
                         @change="toggleOne($event, user.uuid)">
                       <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
@@ -454,10 +454,10 @@ export default {
 
     },
 
-    addProjectLead(id) {
+    addProjectLead(id, uuid) {
       if (this.project.user_id == id)
       {
-        this.addOrRemove(true, id);
+        this.addOrRemove(true, uuid);
         return true;
       }
       return false;
