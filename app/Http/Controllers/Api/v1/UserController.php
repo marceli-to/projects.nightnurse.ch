@@ -109,16 +109,19 @@ class UserController extends Controller
   public function register(UserRegisterRequest $request)
   {
     // get company
-    $company = Company::where('uuid', $request->input('company_uuid'))->get()->first();
+    $company = Company::findOrFail($request->input('company_id'));
 
     // create user
     $user = User::create([
       'uuid' => \Str::uuid(),
       'email' => $request->input('email'),
       'email_verified_at' => \Carbon\Carbon::now(),
-      'language_id' => 1,
+      'firstname' => $request->input('firstname') ? $request->input('firstname') : NULL,
+      'name' => $request->input('name') ? $request->input('name') : NULL,
+      'phone' => $request->input('phone') ? $request->input('phone') : NULL,
+      'language_id' => $request->input('language_id') ? $request->input('language_id') : 1,
       'company_id' => $company->id,
-      'gender_id' => 1,
+      'gender_id' => $request->input('gender_id') ? $request->input('gender_id') : 1,
       'role_id' => $company->owner ? 1 : 2,
     ]);
 

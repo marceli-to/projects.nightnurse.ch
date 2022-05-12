@@ -15,7 +15,7 @@ use App\Http\Controllers\Api\Settings\RoleController;
 use App\Http\Controllers\Api\v1\CompanyController as CompanyApiController;
 use App\Http\Controllers\Api\v1\UserController as UserControllerApiController;
 use App\Http\Controllers\Api\v1\ProjectController as ProjectApiController;
-
+use App\Http\Controllers\Api\v1\MessageController as MessageApiController;
 
 // Public API
 Route::middleware('auth:api')->group(function() {
@@ -40,6 +40,8 @@ Route::middleware('auth:api')->group(function() {
   Route::put('v1/project/{project}', [ProjectApiController::class, 'update']);
   Route::get('v1/project/state/{project}', [ProjectApiController::class, 'toggle']);
   Route::delete('v1/project/{project}', [ProjectApiController::class, 'destroy']);
+
+  Route::post('v1/message', [MessageApiController::class, 'store']);
 
 });
 
