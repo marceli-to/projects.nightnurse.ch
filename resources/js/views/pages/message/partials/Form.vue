@@ -80,6 +80,8 @@
             </div>
             
             <!-- private message: show owner company only -->
+            <!--
+
             <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-if="data.private">
               <label class="mb-2">{{translate('Empfänger')}} *</label>
               <div v-if="project.users.owner">
@@ -115,9 +117,11 @@
                 </div>
               </div>
             </div>
+
+            -->
             
             <!-- non private message: show all companies -->
-            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']" v-else>
+            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
               <label class="mb-2">{{translate('Empfänger')}} *</label>
               <div v-if="project.users.owner" class="mb-4 lg:mb-8">
                 <div class="form-check mb-2">
@@ -125,6 +129,7 @@
                     type="checkbox" 
                     class="checkbox" 
                     :id="project.users.owner.data.uuid" 
+                    :checked="addProjectLead(user.id)"
                     @change="toggleAll($event, project.users.owner.data.uuid)">
                   <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.data.uuid">
                     {{ project.users.owner.data.name }} ({{translate('Alle')}})
@@ -168,7 +173,7 @@
                   <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
                 </a>
               </div>
-              <div v-for="company in project.users.clients" :key="company.uuid">
+              <div v-for="company in project.users.clients" :key="company.uuid" v-if="!data.private">
                 <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
                   <div class="form-check mb-2">
                     <input 
