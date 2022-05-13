@@ -302,7 +302,6 @@ export default {
 
     getSettings() {
       this.isFetched = false;
-      NProgress.start();
       this.axios.all([
         this.axios.get(`/api/companies/clients`),
         this.axios.get(`/api/users/staff`),
@@ -316,7 +315,6 @@ export default {
           owner: responses[3].data,
         };
         this.isFetched = true;
-        NProgress.start();
       }));
     },
 
