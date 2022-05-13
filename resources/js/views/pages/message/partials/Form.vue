@@ -79,8 +79,6 @@
               </form-radio>
             </div>
             
-            
-            
             <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
               <label class="mb-2">{{translate('Empfänger')}} *</label>
               <div v-if="project.users.owner" class="mb-4 lg:mb-8">
@@ -95,7 +93,7 @@
                   </label>
                 </div>
                 <div class="mb-1">
-                  <div v-for="(user, index) in project.users.owner.users" :key="user.uuid" class="mb-2">
+                  <div v-for="(user, index) in staff" :key="user.uuid" class="mb-2">
                     <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="project.users.owner.uuid" :data-truncatable-index="index">
                       <input 
                         type="checkbox" 
@@ -132,6 +130,7 @@
                   <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
                 </a>
               </div>
+
               <div v-if="!data.private">
                 <div v-for="company in project.users.clients" :key="company.uuid">
                   <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
@@ -285,10 +284,6 @@ export default {
         user: null,
         users: [],
       },
-
-      projectOwner: [],
-
-      projectUsers: [],
 
       user: {},
 
@@ -541,6 +536,12 @@ export default {
   computed: {
     title() {
       return `${this.translate('Neue Nachricht')} <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
+    },
+
+    staff() {
+      const idx = this.project.users.owner.users.findIndex(x => x.id == this.project.user_id);
+      this.project.users.owner.users.unshift(this.project.users.owner.users.splice(idx, 1)[0]);
+      return this.project.users.owner.users;
     }
   }
 };
