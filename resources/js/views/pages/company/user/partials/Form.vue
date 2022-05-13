@@ -95,6 +95,7 @@ import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
   components: {
@@ -105,7 +106,8 @@ export default {
     ContentGrid,
     FormRadio,
     Required,
-    Asterisk
+    Asterisk,
+    NProgress
   },
 
   mixins: [ErrorHandling, i18n],
@@ -198,27 +200,27 @@ export default {
     },
 
     store() {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "users" });
         this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     update() {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$router.push({ name: "users" });
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     getSettings() {
       this.isFetched = false;
       this.isFetchedSettings = false;
-      this.isLoading = true;
+      NProgress.start();
       this.axios.all([
         this.axios.get(`/api/genders`),
         this.axios.get(`/api/languages`),
@@ -234,7 +236,7 @@ export default {
 
         this.isFetched = true;
         this.isFetchedSettings = true;
-        this.isLoading = false;
+        NProgress.done();
 
         // set default company
         const index = this.settings.companies.findIndex(x => x.uuid === this.$route.params.companyUuid);

@@ -159,6 +159,7 @@ import FeedItemBody from "@/components/ui/feed/Body.vue";
 import MessageForm from "@/views/pages/message/partials/Form.vue";
 import FileType from "@/components/ui/misc/FileType.vue";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
 
@@ -186,7 +187,8 @@ export default {
     FeedItemAttachement,
     FeedItemBody,
     FileType,
-    MessageForm
+    MessageForm,
+    NProgress
   },
 
   mixins: [ErrorHandling, Helpers, i18n],
@@ -223,7 +225,7 @@ export default {
 
     fetch() {
       this.isFetched = false;
-      this.isLoading = true;
+      NProgress.start();
       this.axios.all([
         this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.project}/${this.$route.params.uuid}`),
@@ -231,16 +233,16 @@ export default {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
         this.isFetched = true;
-        this.isLoading = false;
+        NProgress.done();
       }));
     },
 
     destroy(uuid, event) {
       if (confirm(this.translate('Bitte löschen bestätigen'))) {
-        this.isLoading = true;
+        NProgress.start();
         this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
           this.fetch();
-          this.isLoading = false;
+          NProgress.done();
         });
       }
     },

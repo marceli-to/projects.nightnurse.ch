@@ -76,6 +76,7 @@ import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
   
@@ -87,7 +88,8 @@ export default {
     ContentGrid,
     FormRadio,
     Required,
-    Asterisk
+    Asterisk,
+    NProgress
   },
 
   mixins: [ErrorHandling, i18n],
@@ -166,18 +168,18 @@ export default {
     },
 
     update() {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.put(`${this.routes.put}`, this.data).then(response => {
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         this.resetPassword();
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     getSettings() {
       this.isFetched = false;
       this.isFetchedSettings = false;
-      this.isLoading = true;
+      NProgress.start();
       this.axios.all([
         this.axios.get(`/api/genders`),
         this.axios.get(`/api/languages`),
@@ -188,7 +190,7 @@ export default {
         };
         this.isFetched = true;
         this.isFetchedSettings = true;
-        this.isLoading = false;
+        NProgress.done();
       }));
     },
 

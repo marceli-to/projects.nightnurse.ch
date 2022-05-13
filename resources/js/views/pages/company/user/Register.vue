@@ -1,6 +1,5 @@
 <template>
 <div>
-  <loader v-if="isLoading" />
   <content-header :title="title"></content-header>
   <form @submit.prevent="submit" v-if="isFetched" class="max-width-content">
     <div v-if="hasErrors" class="text-sm font-mono mb-2 text-red-500">
@@ -30,8 +29,8 @@ import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
-import Loader from "@/components/ui/LoadingIndicator.vue";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
   components: {
@@ -43,7 +42,7 @@ export default {
     FormRadio,
     Required,
     Asterisk,
-    Loader
+    NProgress
   },
 
   mixins: [ErrorHandling, i18n],
@@ -85,17 +84,17 @@ export default {
   methods: {
 
     submit() {
-      this.isLoading = true;
+      NProgress.start();
       this.hasErrors = false;
       this.errors.message = null;
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "users" });
         this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
-        this.isLoading = false;
+        NProgress.done();
       })
       .catch(error => {
         this.hasErrors = true;
-        this.isLoading = false;
+        NProgress.done();
         this.errors.message = error.response.data.errors.email[0];
       });
 

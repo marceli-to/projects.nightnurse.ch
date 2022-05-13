@@ -54,6 +54,7 @@ import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Pill from "@/components/ui/misc/Pill.vue";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
 
@@ -69,7 +70,8 @@ export default {
     ListItem,
     ListAction,
     ListEmpty,
-    Pill
+    Pill,
+    NProgress
   },
 
   mixins: [ErrorHandling, Helpers, i18n],
@@ -102,39 +104,41 @@ export default {
   methods: {
 
     fetch() {
+      NProgress.start();
       this.axios.get(`${this.routes.list}/${this.$route.params.companyUuid}`).then(response => {
         this.data = response.data.data;
         if (this.data[0] && this.data[0].company.owner) {
           this.isOwner = true;
         }
         this.isFetched = true;
+        NProgress.done();
       });
     },
 
     toggle(uuid,event) {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.get(`${this.routes.toggle}/${uuid}`).then(response => {
         const index = this.data.findIndex(x => x.uuid === uuid);
         this.data[index].publish = response.data;
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     invite(uuid) {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.get(`${this.routes.invite}/${uuid}`).then(response => {
         this.$notify({ type: "success", text: this.translate('Einladung versendet') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     destroy(uuid, event) {
       if (confirm(this.translate('Bitte löschen bestätigen'))) {
-        this.isLoading = true;
+        NProgress.start();
         this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
           this.fetch();
-          this.isLoading = false;
+          NProgress.done();
         });
       }
     },

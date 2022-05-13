@@ -41,6 +41,7 @@ import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Pill from "@/components/ui/misc/Pill.vue";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
 
@@ -55,7 +56,8 @@ export default {
     ListItem,
     ListAction,
     ListEmpty,
-    Pill
+    Pill,
+    NProgress
   },
 
   mixins: [ErrorHandling, Helpers, i18n],
@@ -86,28 +88,30 @@ export default {
   methods: {
 
     fetch() {
+      NProgress.start();
       this.axios.get(this.routes.list).then(response => {
         this.data = response.data.data;
         this.isFetched = true;
+        NProgress.done();
       });
     },
 
     toggle(uuid,event) {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.get(`${this.routes.toggle}/${uuid}`).then(response => {
         const index = this.data.findIndex(x => x.uuid === uuid);
         this.data[index].publish = response.data;
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     destroy(uuid, event) {
       if (confirm(this.translate('Bitte löschen bestätigen'))) {
-        this.isLoading = true;
+        NProgress.start();
         this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
           this.fetch();
-          this.isLoading = false;
+          NProgress.done();
         });
       }
     },

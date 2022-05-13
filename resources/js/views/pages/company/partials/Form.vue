@@ -35,6 +35,7 @@ import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
   
@@ -44,7 +45,8 @@ export default {
     ContentFooter,
     FormRadio,
     Required,
-    Asterisk
+    Asterisk,
+    NProgress
   },
 
   mixins: [ErrorHandling, i18n],
@@ -109,20 +111,20 @@ export default {
     },
 
     store() {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "companies" });
         this.$notify({ type: "success", text: this.translate('Firma erfasst') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     update() {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$router.push({ name: "companies" });
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 

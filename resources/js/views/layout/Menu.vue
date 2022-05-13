@@ -76,9 +76,7 @@ export default {
   
 	methods: {
     switchLanguage() {
-      this.isLoading = true;
       this.axios.post(`${this.routes.post}`).then(response => {
-        this.isLoading = false;
         let user = this.$store.state.user;
         user.language = user.language == 'de' ? 'en' : 'de';
         this.$store.commit('user', user);

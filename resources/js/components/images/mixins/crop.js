@@ -66,12 +66,10 @@ export default {
     },
     
     showCropper(image) {
-      this.isLoading = true;
       this.hasOverlayCropper = true;
       this.overlayItem = image;
       this.axios.get(this.getSource(image, "original")).then(response => {
         this.cropImage = response.config.url;
-        this.isLoading = false;
       });
     },
 

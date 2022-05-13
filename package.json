@@ -30,6 +30,7 @@
         "@vue-hero-icons/outline": "^1.7.2",
         "@vue-hero-icons/solid": "^1.7.2",
         "moment": "^2.26.0",
+        "nprogress": "^0.2.0",
         "vue-advanced-cropper": "^0.16.5",
         "vue-axios": "^2.1.5",
         "vue-axios-interceptors": "^0.3.1",

@@ -186,6 +186,7 @@ import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import { TheMask } from "vue-the-mask";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
   components: {
@@ -197,7 +198,8 @@ export default {
     TheMask,
     Asterisk,
     XIcon,
-    ArrowLeftIcon
+    ArrowLeftIcon,
+    NProgress
   },
 
   mixins: [ErrorHandling, i18n],
@@ -248,7 +250,6 @@ export default {
 
       // States
       isFetched: true,
-      isLoading: false,
     };
   },
 
@@ -262,10 +263,12 @@ export default {
   methods: {
 
     fetch() {
+      NProgress.start();
       this.isFetched = false;
       this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
         this.data = response.data;
         this.isFetched = true;
+        NProgress.done();
       });
     },
 
@@ -280,26 +283,26 @@ export default {
     },
 
     store() {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$router.push({ name: "projects" });
         this.$notify({ type: "success", text: this.translate('Projekt erfasst') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     update() {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$router.push({ name: "projects" });
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
-        this.isLoading = false;
+        NProgress.done();
       });
     },
 
     getSettings() {
       this.isFetched = false;
-      this.isLoading = true;
+      NProgress.start();
       this.axios.all([
         this.axios.get(`/api/companies/clients`),
         this.axios.get(`/api/users/staff`),
@@ -313,7 +316,7 @@ export default {
           owner: responses[3].data,
         };
         this.isFetched = true;
-        this.isLoading = true;
+        NProgress.start();
       }));
     },
 

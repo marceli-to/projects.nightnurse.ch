@@ -26,9 +26,15 @@
 </template>
 <script>
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
   
+  components: {
+    NProgress
+  },
+
+
   mixins: [ErrorHandling, i18n],
   
   props: {
@@ -84,10 +90,10 @@ export default {
     },
 
     destroy(id) {
-      this.isLoading = true;
+      NProgress.start();
       this.axios.delete(`${this.routes.destroy}/${id}`).then(response => {
         this.fetch();
-        this.isLoading = false;
+        NProgress.done();
       });
     },
   }

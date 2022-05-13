@@ -232,6 +232,7 @@ import tinyConfig from "@/config/tiny.js";
 import TinymceEditor from "@tinymce/tinymce-vue";
 import vue2Dropzone from "vue2-dropzone";
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 
 export default {
   components: {
@@ -255,7 +256,8 @@ export default {
     ListItem,
     ListAction,
     TinymceEditor,
-    vueDropzone: vue2Dropzone
+    vueDropzone: vue2Dropzone,
+    NProgress
   },
 
   
@@ -356,7 +358,6 @@ export default {
         this.project = responses[0].data;
         this.project.users = responses[1].data;
         this.isFetched = true;
-        console.log(this.project.users);
       }));
 
     },
@@ -366,10 +367,8 @@ export default {
     },
 
     store() {
-      this.isLoading = true;
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
         this.$notify({ type: "success", text: this.messages.created });
-        this.isLoading = false;
         this.reset();
       });
     },
@@ -508,13 +507,13 @@ export default {
 
     uploadDelete(file) {
       if (confirm(this.messages.confirm)) {
-        this.isLoading = true;
+        NProgress.start();
         this.axios.delete(`${this.routes.destroy}/${file}`).then(response => {
           const idx = this.data.files.findIndex(x => x.name == file);
           if (idx > -1) {
             this.data.files.splice(idx, 1);
           }
-          this.isLoading = false;
+          NProgress.done();
           this.$notify({ type: "success", text: this.messages.deleted, duration: 2000 });
         });
       }

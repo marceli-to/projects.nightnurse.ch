@@ -51,12 +51,12 @@ export default {
       //   errors[key.field] = true;
       // });
       this.errors = data.body;
-      this.isLoading = false;
+      NProgress.done();
       this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
     },
 
     serverError(data) {
-      this.isLoading = false;
+      NProgress.done();
       this.$notify({ type: "danger", text: `${data.status} ${data.code}<br>${data.body.message}`});
     },
 
@@ -66,12 +66,12 @@ export default {
     },
 
     notAllowed(data) {
-      this.isLoading = false;
+      NProgress.done();
       this.$notify({ type: "danger", text: `${data.status} ${data.code}`});
     },
 
     forbiddenError(data) {
-      this.isLoading = false;
+      NProgress.done();
       this.$notify({ type: "danger", text: `${data.status} - Zugriff verweigert!`});
       this.$router.push({ name: 'forbidden' });
     },
