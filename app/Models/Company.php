@@ -27,7 +27,7 @@ class Company extends Base
 
   public function users()
   {
-    return $this->hasMany(User::class, 'company_id', 'id');
+    return $this->hasMany(User::class, 'company_id', 'id')->orderBy('name');
   }
 
 	public function projects()
