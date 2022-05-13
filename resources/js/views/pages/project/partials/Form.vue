@@ -94,10 +94,7 @@
 
     <h4>{{translate('Zugriffsrechte')}}</h4>
 
-    <!-- main clients -->
-    <h5 class="text-dark !text-sm font-bold mb-2" v-if="data.company">
-      {{translate('Hauptkunde')}}
-    </h5>
+    <!-- main client -->
     <div class="form-group" v-if="data.company">
       <div class="form-check mb-2">
         <input 
@@ -132,10 +129,7 @@
     </div>
 
     <!-- other clients -->
-    <h5 class="text-dark !text-sm font-bold mb-2" v-if="data.companies.length">
-      {{translate('Weitere Kunden')}}
-    </h5>
-    <div class="form-group">
+    <div class="form-group" v-if="data.companies.length">
       <div v-for="company in data.companies" :key="company.uuid" class="mb-4">
         <div class="form-check mb-2">
           <input 
