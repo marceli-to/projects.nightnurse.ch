@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\ProjectUser;
 use App\Http\Requests\ProjectStoreRequest;
 use Illuminate\Http\Request;
 
@@ -39,6 +40,9 @@ class ProjectController extends Controller
     $data = $request->all();
     $data['uuid'] = \Str::uuid();
     $project = Project::create($data);
+
+    $this->handleUsers($project, $request->users);
+
     return response()->json(['projectId' => $project->id]);
   }
 
@@ -54,6 +58,8 @@ class ProjectController extends Controller
     $project = Project::findOrFail($project->id);
     $project->update($request->all());
     $project->save();
+
+    $this->handleUsers($project, $request->input('users'));
     return response()->json('successfully updated');
   }
 
@@ -80,5 +86,26 @@ class ProjectController extends Controller
   {
     $project->delete();
     return response()->json('successfully deleted');
+  }
+
+  /**
+   * Store or update pivot data
+   * 
+   * @param Project $project
+   * @param Array $users
+   * 
+   * @return void
+   */
+  protected function handleUsers(Project $project, $users)
+  {
+    $project->users()->detach();
+    foreach($users as $u)
+    { 
+      $record = new ProjectUser([
+        'project_id' => $project->id,
+        'user_id' => $u,
+      ]);
+      $record->save();
+    }
   }
 }

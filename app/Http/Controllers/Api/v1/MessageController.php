@@ -42,7 +42,7 @@ class MessageController extends Controller
         {
           MessageUser::create([
             'message_id' => $message->id,
-            'user_id' => $user,
+            'user_id' => $user->id,
             'message_state_id' => 1
           ]);          
         }
