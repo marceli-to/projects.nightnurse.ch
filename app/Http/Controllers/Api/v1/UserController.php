@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Company;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UserRegisterRequest;

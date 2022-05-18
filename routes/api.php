@@ -13,7 +13,7 @@ use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
 use App\Http\Controllers\Api\Settings\RoleController;
 use App\Http\Controllers\Api\v1\CompanyController as CompanyApiController;
-use App\Http\Controllers\Api\v1\UserController as UserControllerApiController;
+use App\Http\Controllers\Api\v1\UserController as UserApiController;
 use App\Http\Controllers\Api\v1\ProjectController as ProjectApiController;
 use App\Http\Controllers\Api\v1\MessageController as MessageApiController;
 
@@ -26,13 +26,13 @@ Route::middleware('auth:api')->group(function() {
   Route::post('v1/company', [CompanyApiController::class, 'store']);
   Route::delete('v1/company/{company}', [CompanyApiController::class, 'destroy']);
 
-  Route::get('v1/users', [UserControllerApiController::class, 'get']);
-  Route::get('v1/user/{user}', [UserControllerApiController::class, 'find']);
-  Route::post('v1/user', [UserControllerApiController::class, 'store']);
-  Route::post('v1/user/register', [UserControllerApiController::class, 'register']);
-  Route::put('v1/user/{user:uuid}', [UserControllerApiController::class, 'update']);
-  Route::get('v1/user/state/{user:uuid}', [UserControllerApiController::class, 'toggle']);
-  Route::delete('v1/user/{user:uuid}', [UserControllerApiController::class, 'destroy']);
+  Route::get('v1/users', [UserApiController::class, 'get']);
+  Route::get('v1/user/{user}', [UserApiController::class, 'find']);
+  Route::post('v1/user/register', [UserApiController::class, 'register']);
+  Route::post('v1/user', [UserApiController::class, 'store']);
+  Route::put('v1/user/{user:uuid}', [UserApiController::class, 'update']);
+  Route::get('v1/user/state/{user:uuid}', [UserApiController::class, 'toggle']);
+  Route::delete('v1/user/{user:uuid}', [UserApiController::class, 'destroy']);
 
   Route::get('v1/projects', [ProjectApiController::class, 'get']);
   Route::get('v1/project/{project}', [ProjectApiController::class, 'find']);

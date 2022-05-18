@@ -18,7 +18,7 @@ class RegisterController extends Controller
 
   public function index(User $user)
   {
-    return view($this->viewPath . 'register', ['uuid' => $user->uuid]);
+    return view($this->viewPath . 'register', ['uuid' => $user->uuid, 'user' => $user]);
   }
 
   /**

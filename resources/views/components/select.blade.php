@@ -12,8 +12,12 @@
     >
     @if ($options)
       <option value="">Bitte wählen...</option>
-      @foreach($options as $key => $value)
-        <option value="{{$key}}">{{$value}}</option>
+      @foreach($options as $key => $val)
+        @if (isset($value) && $key == $value)
+          <option value="{{$key}}" selected>{{$val}}</option>
+        @else
+          <option value="{{$key}}">{{$val}}</option>
+        @endif
       @endforeach
     @endif
     </select>

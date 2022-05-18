@@ -40,6 +40,13 @@ class Select extends Component
   public $css;
 
   /**
+   * Value
+   *
+   * @var string
+   */
+  public $value;
+
+  /**
    * Create a new component instance.
    *
    * @param $name
@@ -47,16 +54,18 @@ class Select extends Component
    * @param $options
    * @param $required
    * @param $css
+   * @param $value
    * 
    * @return void
    */
-  public function __construct($name, $label, $options = [], $required = true, $css = NULL)
+  public function __construct($name, $label, $options = [], $required = true, $css = NULL, $value = NULL)
   {
     $this->name = $name;
     $this->label = $label;
     $this->options = $options;
     $this->required = $required;
     $this->css = $css;
+    $this->value = $value;
   }
 
   /**
