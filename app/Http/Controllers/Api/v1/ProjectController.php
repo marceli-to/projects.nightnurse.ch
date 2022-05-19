@@ -26,7 +26,7 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    return response()->json(Project::findOrFail($project->id));
+    return response()->json(Project::with('users')->findOrFail($project->id));
   }
 
   /**
@@ -42,7 +42,6 @@ class ProjectController extends Controller
     $project = Project::create($data);
 
     $this->handleUsers($project, $request->users);
-
     return response()->json(['projectId' => $project->id]);
   }
 
