@@ -63,10 +63,10 @@ class UserController extends Controller
    * Update a user for a given user
    *
    * @param User $user
-   * @param  \Illuminate\Http\UserUpdateRequest $request
+   * @param  \Illuminate\Http\Request $request
    * @return \Illuminate\Http\Response
    */
-  public function update(User $user, UserUpdateRequest $request)
+  public function update(User $user, Request $request)
   {
     $user = User::findOrFail($user->id);
     $user->update($request->all());

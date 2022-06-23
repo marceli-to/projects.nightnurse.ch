@@ -63,10 +63,10 @@ class CompanyController extends Controller
    * Update a company for a given company
    *
    * @param Company $company
-   * @param  \Illuminate\Http\CompanyStoreRequest $request
+   * @param  \Illuminate\Http\Request $request
    * @return \Illuminate\Http\Response
    */
-  public function update(Company $company, CompanyStoreRequest $request)
+  public function update(Company $company, Request $request)
   {
     $company = Company::findOrFail($company->id);
     $company->update($request->all());

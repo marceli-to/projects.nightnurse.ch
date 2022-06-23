@@ -40,7 +40,6 @@ class ProjectController extends Controller
     $data = $request->all();
     $data['uuid'] = \Str::uuid();
     $project = Project::create($data);
-
     $this->handleUsers($project, $request->users);
     return response()->json(['projectId' => $project->id]);
   }
@@ -49,16 +48,20 @@ class ProjectController extends Controller
    * Update a project for a given project
    *
    * @param Project $project
-   * @param  \Illuminate\Http\ProjectStoreRequest $request
+   * @param  \Illuminate\Http\Request $request
    * @return \Illuminate\Http\Response
    */
-  public function update(Project $project, ProjectStoreRequest $request)
+  public function update(Project $project, Request $request)
   {
     $project = Project::findOrFail($project->id);
     $project->update($request->all());
     $project->save();
 
-    $this->handleUsers($project, $request->input('users'));
+    if ($request->input('users'))
+    {
+      $this->handleUsers($project, $request->input('users'));
+    }
+
     return response()->json('successfully updated');
   }
 
