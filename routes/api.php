@@ -30,9 +30,9 @@ Route::middleware('auth:api')->group(function() {
   Route::get('v1/user/{user}', [UserApiController::class, 'find']);
   Route::post('v1/user/register', [UserApiController::class, 'register']);
   Route::post('v1/user', [UserApiController::class, 'store']);
-  Route::put('v1/user/{user:uuid}', [UserApiController::class, 'update']);
-  Route::get('v1/user/state/{user:uuid}', [UserApiController::class, 'toggle']);
-  Route::delete('v1/user/{user:uuid}', [UserApiController::class, 'destroy']);
+  Route::put('v1/user/{user}', [UserApiController::class, 'update']);
+  Route::get('v1/user/state/{user}', [UserApiController::class, 'toggle']);
+  Route::delete('v1/user/{user}', [UserApiController::class, 'destroy']);
 
   Route::get('v1/projects', [ProjectApiController::class, 'get']);
   Route::get('v1/project/{project}', [ProjectApiController::class, 'find']);
