@@ -77,6 +77,8 @@ export default {
         'Schliessen': 'close',
         'Abbrechen': 'cancel',
         'Zugriffsrechte': 'Access',
+        'archivierte Projekte': 'show archive',
+        'aktive Projekte': 'show active projects',
       },
 
       defaultLang: 'de',

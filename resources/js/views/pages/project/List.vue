@@ -84,8 +84,8 @@
   <div class="max-width-content">
     <a href="" @click.prevent="archived()" class="text-gray-600 text-sm font-mono flex items-center">
       <archive-icon class="mr-2" aria-hidden="true" />
-      <span v-if="isArchive">{{ translate('Show archive') }}</span>
-      <span v-else>{{ translate('Show active') }}</span>
+      <span v-if="isArchive">{{ translate('aktive Projekte') }}</span>
+      <span v-else>{{ translate('archivierte Projekte') }}</span>
     </a>
   </div>
 </div>
@@ -136,7 +136,7 @@ export default {
       // Routes
       routes: {
         list: '/api/projects',
-        listArchive: '/api/projects/archive',
+        listArchive: '/api/projects/1',
         toggle: '/api/project/state',
         destroy: '/api/project'
       },
