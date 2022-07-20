@@ -29,6 +29,8 @@ class ProjectController extends Controller
         $query = Project::archive();
       }
 
+      dd($archive);
+
       $user_projects = $query->with('state', 'company', 'companies', 'manager', 'messages.sender')
                       ->orderBy('last_activity', 'DESC')
                       ->orderBy('number', 'DESC')
