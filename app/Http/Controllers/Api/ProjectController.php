@@ -24,7 +24,7 @@ class ProjectController extends Controller
       // Get 'users projects'
       $query = Project::active();
 
-      if ($archive)
+      if ($archive == '1')
       {
         $query = Project::archive();
       }
