@@ -31,7 +31,7 @@ class ProjectController extends Controller
 
       //dd($archive);
 
-      $user_projects = $query->with('state', 'company', 'companies', 'manager', 'messages.sender')
+      $user_projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
                       ->orderBy('last_activity', 'DESC')
                       ->orderBy('number', 'DESC')
                       ->where('user_id', auth()->user()->id)
@@ -39,7 +39,7 @@ class ProjectController extends Controller
         
 
       // Get 'all projects'
-     $projects = $query->with('state', 'company', 'companies', 'manager', 'messages.sender')
+     $projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
                     ->orderBy('last_activity', 'DESC')
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
