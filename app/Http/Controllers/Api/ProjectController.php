@@ -24,10 +24,10 @@ class ProjectController extends Controller
       // Get 'users projects'
       $query = Project::active();
 
-      if ($archive == '1')
-      {
-        $query = Project::archive();
-      }
+      // if ($archive == '1')
+      // {
+      //   $query = Project::archive();
+      // }
 
       $user_projects = $query->with('state', 'company', 'companies', 'manager', 'messages.sender')
                       ->orderBy('last_activity', 'DESC')
