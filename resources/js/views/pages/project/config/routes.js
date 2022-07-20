@@ -1,4 +1,5 @@
 import ProjectIndex from '@/views/pages/project/List.vue';
+import ProjectArchive from '@/views/pages/project/List.vue';
 import ProjectCreate from '@/views/pages/project/Create.vue';
 import ProjectUpdate from '@/views/pages/project/Update.vue';
 
@@ -11,8 +12,14 @@ const routes = [
   },
   {
     name: 'projects',
-    path: '/projects',
+    path: '/projects/:archive?',
     component: ProjectIndex,
+  },
+
+  {
+    name: 'projects-archive',
+    path: '/projects/archive',
+    component: ProjectArchive,
   },
 
   {

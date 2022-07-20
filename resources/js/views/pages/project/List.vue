@@ -80,10 +80,18 @@
       </div>
     </div>
   </div>
+
+  <div class="max-width-content">
+    <a href="" @click.prevent="archived()" class="text-gray-600 text-sm font-mono flex items-center">
+      <archive-icon class="mr-2" aria-hidden="true" />
+      <span v-if="isArchive">{{ translate('Show archive') }}</span>
+      <span v-else>{{ translate('Show active') }}</span>
+    </a>
+  </div>
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon, AnnotationIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PencilAltIcon, TrashIcon, AnnotationIcon, ArchiveIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -103,6 +111,7 @@ export default {
     PencilAltIcon,
     TrashIcon,
     AnnotationIcon,
+    ArchiveIcon,
     ContentHeader,
     Separator,
     List,
@@ -127,6 +136,7 @@ export default {
       // Routes
       routes: {
         list: '/api/projects',
+        listArchive: '/api/projects/archive',
         toggle: '/api/project/state',
         destroy: '/api/project'
       },
@@ -134,6 +144,7 @@ export default {
       // States
       isLoading: false,
       isFetched: false,
+      isArchive: false,
 
       // Messages
       messages: {
@@ -151,8 +162,13 @@ export default {
   methods: {
 
     fetch() {
+      let route = this.routes.list;
+      if (this.isArchive) {
+        route = this.routes.listArchive;
+      }
+
       NProgress.start();
-      this.axios.get(this.routes.list).then(response => {
+      this.axios.get(route).then(response => {
         this.data.user_projects = response.data.user_projects ? response.data.user_projects : [];
         this.data.projects = response.data.projects ? response.data.projects : [];
         this.isFetched = true;
@@ -179,6 +195,11 @@ export default {
         });
       }
     },
+
+    archived() {
+      this.isArchive = this.isArchive ? false : true;
+      this.fetch();
+    }
   },
 
   computed: {

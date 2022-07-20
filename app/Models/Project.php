@@ -76,6 +76,16 @@ class Project extends Base
     return $query->where('project_state_id', 1)->where('company_id', $companyId);
   }
 
+  public function scopeActive($query)
+  {
+    return $query->where('project_state_id', 1);
+  }
+
+  public function scopeArchive($query)
+  {
+    return $query->where('project_state_id', 2);
+  }
+
   /**
    * Accessor for date_start
    * @param Date $value

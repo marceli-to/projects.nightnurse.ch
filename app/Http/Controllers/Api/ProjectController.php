@@ -17,19 +17,29 @@ class ProjectController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function get()
+  public function get($archive = FALSE)
   {
     if (auth()->user()->isAdmin())
     {
       // Get 'users projects'
-      $user_projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
-                    ->orderBy('last_activity', 'DESC')
-                    ->orderBy('number', 'DESC')
-                    ->where('user_id', auth()->user()->id)
-                    ->get();
+      $query = Project::active();
+
+      if ($archive)
+      {
+        $query = Project::archive();
+      }
+
+      //dd($archive);
+
+      $user_projects = $query->with('state', 'company', 'companies', 'manager', 'messages.sender')
+                      ->orderBy('last_activity', 'DESC')
+                      ->orderBy('number', 'DESC')
+                      ->where('user_id', auth()->user()->id)
+                      ->get();
+        
 
       // Get 'all projects'
-      $projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
+     $projects = $query->with('state', 'company', 'companies', 'manager', 'messages.sender')
                     ->orderBy('last_activity', 'DESC')
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
