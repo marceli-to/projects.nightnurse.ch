@@ -17,17 +17,17 @@ class ProjectController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function get($archive = FALSE)
+  public function get($archive = NULL)
   {
     if (auth()->user()->isAdmin())
     {
       // Get 'users projects'
       $query = Project::active();
 
-      // if ($archive == '1')
-      // {
-      //   $query = Project::archive();
-      // }
+      if ($archive)
+      {
+        $query = Project::archive();
+      }
 
       $user_projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
                       ->orderBy('last_activity', 'DESC')
