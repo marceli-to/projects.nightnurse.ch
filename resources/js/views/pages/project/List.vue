@@ -81,7 +81,7 @@
     </div>
   </div>
 
-  <div class="max-width-content">
+  <div class="max-width-content" v-if="$store.state.user.admin">
     <a href="" @click.prevent="archived()" class="text-gray-600 text-sm font-mono flex items-center">
       <archive-icon class="mr-2" aria-hidden="true" />
       <span v-if="isArchive">{{ translate('aktive Projekte') }}</span>
@@ -136,7 +136,7 @@ export default {
       // Routes
       routes: {
         list: '/api/projects',
-        listArchive: '/api/projects/1',
+        listArchive: '/api/projects-archive',
         toggle: '/api/project/state',
         destroy: '/api/project'
       },

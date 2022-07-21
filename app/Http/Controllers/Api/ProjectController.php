@@ -17,7 +17,7 @@ class ProjectController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function get($archive = NULL)
+  public function get()
   {
     if (auth()->user()->isAdmin())
     {
@@ -81,6 +81,34 @@ class ProjectController extends Controller
         ];
     });
     return response()->json(['projects' => collect($projects)]);
+  }
+
+  /**
+   * Get a list of archived projects
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getArchive()
+  {
+    if (auth()->user()->isAdmin())
+    {
+      $user_projects = Project::archive()->with('state', 'company', 'companies', 'manager', 'messages.sender')
+                      ->orderBy('last_activity', 'DESC')
+                      ->orderBy('number', 'DESC')
+                      ->where('user_id', auth()->user()->id)
+                      ->get();
+        
+
+      // Get 'all projects'
+     $projects = Project::archive()->with('state', 'company', 'companies', 'manager', 'messages.sender')
+                    ->orderBy('last_activity', 'DESC')
+                    ->orderBy('number', 'DESC')
+                    ->where('user_id', '!=', auth()->user()->id)
+                    ->get();
+
+      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+    }
+
   }
 
   /**
