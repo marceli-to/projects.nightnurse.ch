@@ -37,7 +37,7 @@ class ProjectController extends Controller
         
 
       // Get 'all projects'
-     $projects = Project::archive()->with('state', 'company', 'companies', 'manager', 'messages.sender')
+     $projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
                     ->orderBy('last_activity', 'DESC')
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
