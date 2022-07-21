@@ -21,14 +21,6 @@ class ProjectController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      // Get 'users projects'
-      $query = Project::active();
-
-      if ($archive !== NULL)
-      {
-        $query = Project::archive();
-      }
-
       $user_projects = Project::with('state', 'company', 'companies', 'manager', 'messages.sender')
                       ->orderBy('last_activity', 'DESC')
                       ->orderBy('number', 'DESC')
