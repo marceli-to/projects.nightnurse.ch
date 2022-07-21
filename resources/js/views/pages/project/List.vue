@@ -81,13 +81,13 @@
     </div>
   </div>
 
-  <!-- <div class="max-width-content">
+  <div class="max-width-content">
     <a href="" @click.prevent="archived()" class="text-gray-600 text-sm font-mono flex items-center">
       <archive-icon class="mr-2" aria-hidden="true" />
       <span v-if="isArchive">{{ translate('aktive Projekte') }}</span>
       <span v-else>{{ translate('archivierte Projekte') }}</span>
     </a>
-  </div> -->
+  </div>
 </div>
 </template>
 <script>
