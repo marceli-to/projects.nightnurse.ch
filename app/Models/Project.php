@@ -4,10 +4,11 @@ use App\Models\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Project extends Base
 {
-  use HasFactory, SoftDeletes;
+  use HasFactory, SoftDeletes, HasEagerLimit;
 
 	protected $fillable = [
     'uuid',

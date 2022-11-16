@@ -21,7 +21,10 @@ class ProjectController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      $user_projects = Project::active()->with('state', 'company', 'companies', 'manager', 'messages.sender')
+      $user_projects = Project::active()->with('state', 'company', 'companies', 'manager')
+                      ->with(['messages' => function ($query) {
+                        $query->with('sender')->limit(3);
+                      }])
                       ->orderBy('last_activity', 'DESC')
                       ->orderBy('number', 'DESC')
                       ->where('user_id', auth()->user()->id)
@@ -29,12 +32,14 @@ class ProjectController extends Controller
         
 
       // Get 'all projects'
-     $projects = Project::active()->with('state', 'company', 'companies', 'manager', 'messages.sender')
+     $projects = Project::active()->with('state', 'company', 'companies', 'manager')
+                    ->with(['messages' => function ($query) {
+                      $query->with('sender')->limit(3);
+                    }])
                     ->orderBy('last_activity', 'DESC')
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
                     ->get();
-
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
     }
   

@@ -4,10 +4,11 @@ use App\Models\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Message extends Base
 {
-  use HasFactory, SoftDeletes;
+  use HasFactory, SoftDeletes, HasEagerLimit;
 
   protected $casts = [
     'created_at' => 'datetime:d.m.Y H:i',
@@ -30,7 +31,7 @@ class Message extends Base
     'message_date_string',
     'body_preview',
     'can_delete',
-    'truncate_files'
+    //'truncate_files'
   ];
 
   public function sender()
@@ -83,7 +84,7 @@ class Message extends Base
    */
   public function getTruncateFilesAttribute($value)
   {
-    return $this->files->count() > 3 ? TRUE : FALSE;
+    //return $this->files->count() > 3 ? TRUE : FALSE;
   }
 
 
