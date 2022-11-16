@@ -9,7 +9,7 @@ return [
   |
   */
 
-  'company' => env('NIGHTNURSE_COMPANY_NAME', 'Projects Nightnurse'),
+  'company' => env('APP_NAME', 'Projects Nightnurse'),
 
   /*
   |--------------------------------------------------------------------------
@@ -19,10 +19,8 @@ return [
   */
 
   'email' => [
-    'from' => env('NIGHTNURSE_MAIL_FROM', 'noreply@nightnurse.ch'),
-    'recipient' => env('NIGHTNURSE_MAIL_RECIPIENT', 'm@marceli.to'),
-    'bcc' => env('NIGHTNURSE_MAIL_BCC', 'm@marceli.to'),
-    'recipient_test' => env('NIGHTNURSE_MAIL_RECIPIENT_TEST', 'm@marceli.to')
+    'from' => env('MAIL_FROM_ADDRESS', 'noreply@nightnurse.ch'),
+    'recipient' => env('MAIL_TO', 'm@marceli.to'),
   ],
 
   /*

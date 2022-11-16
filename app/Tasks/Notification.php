@@ -10,8 +10,9 @@ class Notification
 
     foreach($messageUsers->all() as $m)
     {
+      $recipient = ($env == 'production' && $m->user->email) ? $m->user->email : env('MAIL_TO');
       try {
-        \Mail::to($m->user->email)->send(new \App\Mail\Notification($m->message));
+        \Mail::to($recipient)->send(new \App\Mail\Notification($m->message));
         $m->processed = 1;
         $m->save();
       } 

@@ -29,7 +29,7 @@ class Invitation extends Mailable
    */
   public function build()
   {
-    return $this->from(\Config::get('client.email.from'), 'Nightnurse Images - Project Room')
+    return $this->from(env('MAIL_FROM_ADDRESS'), 'Nightnurse Images - Project Room')
                 ->subject($this->subject)
                 ->with(['user' => $this->user])
                 ->markdown('notifications.invitation');
