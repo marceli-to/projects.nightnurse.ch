@@ -8,13 +8,13 @@
         :src="`/img/thumbnail/${file.name}`" 
         height="100" 
         width="100"
-        class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[40px] bg-light rounded-sm"
+        class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[70px] bg-light rounded-sm"
         v-if="file.preview" />
       <div class="mr-2 lg:mr-3 py-1" v-else>
         <file-type :extension="file.extension" />
       </div>
       <div class="font-mono text-xs">
-        {{ file.original_name | truncate(25, '...') }} – {{ file.size | filesize(file.size) }}
+        {{ file.original_name | truncate(45, '...') }} – {{ file.size | filesize(file.size) }}
       </div>
     </a>
   </div>

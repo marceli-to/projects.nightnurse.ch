@@ -6,14 +6,12 @@ export default {
   external_plugins: {
     link: '/assets/js/tinymce/plugins/link/plugin.min.js',
   },
-  plugins: ['lists', 'code', 'link'],
+  plugins: ['lists', 'code', 'link', 'paste'],
   toolbar: 'undo redo | bold | italic | bullist | link | removeformat | code',
   paste_as_text: true,
-  height: "240px",
+  height: "360px",
   style_formats_merge: false,
   force_br_newlines : true,
-  force_p_newlines : false,
-  forced_root_block : '',
   style_formats: [{
     title: 'Text',
     items: [

@@ -1,46 +1,50 @@
 <template>
 <div>
-  <content-header :title="translate('Profil bearbeiten')"></content-header>
+  <content-header>
+    <template #title>
+      {{ translate('Profil bearbeiten') }}
+    </template>
+  </content-header>
   <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-w-5xl">
     <div :class="[errors.firstname ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Vorname')}} <asterisk /></label>
+      <label>{{ translate('Vorname') }} <asterisk /></label>
       <input type="text" v-model="data.firstname">
       <required :text="translate('Pflichtfeld')" />
     </div>
     <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Name')}} <asterisk /></label>
+      <label>{{ translate('Name') }} <asterisk /></label>
       <input type="text" v-model="data.name">
       <required :text="translate('Pflichtfeld')" />
     </div>
     <div class="form-group">
-      <label>{{translate('Telefon')}}</label>
+      <label>{{ translate('Telefon') }}</label>
       <input type="text" v-model="data.phone">
     </div>
 
     <content-grid class="mt-6 lg:mt-8">
       <div :class="[errors.gender_id ? 'is-invalid' : '', 'form-group']">
-        <label>{{translate('Geschlecht')}} <asterisk /></label>
+        <label>{{ translate('Geschlecht') }} <asterisk /></label>
         <select v-model="data.gender_id">
           <option :value="g.id" v-for="g in settings.genders" :key="g.id">{{g.description}}</option>
         </select>
       </div>
       <div :class="[errors.language_id ? 'is-invalid' : '', 'form-group']">
-        <label>{{translate('Sprache')}} <asterisk /></label>
+        <label>{{ translate('Sprache') }} <asterisk /></label>
         <select v-model="data.language_id">
           <option :value="l.id" v-for="l in settings.languages" :key="l.id">{{l.description}}</option>
         </select>
       </div>
     </content-grid>
 
-    <h4 class="mb-3 lg:mb-4">{{translate('Zugangsdaten')}}</h4>
+    <h4 class="mb-3 lg:mb-4">{{ translate('Zugangsdaten') }}</h4>
     <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('E-Mail')}} <asterisk /></label>
+      <label>{{ translate('E-Mail') }} <asterisk /></label>
       <input type="email" v-model="data.email">
       <required :text="translate('Pflichtfeld')" />
     </div>
 
     <div :class="[errors.password ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Passwort (min. 8 Zeichen)')}}</label>
+      <label>{{ translate('Passwort (min. 8 Zeichen)') }}</label>
       <input type="password" v-model="data.password" data-field-password autocomplete="off">
       <a href="javascript:;" @click.prevent="togglePassword()" class="absolute right-0 bottom-4">
         <eye-icon class="w-5 h-5 icon-list" />
@@ -49,18 +53,18 @@
         href="" 
         @click.prevent="generatePassword()" 
         class="absolute left-0 font-mono text-xs underline pt-2 text-gray-400 hover:text-highlight hover:no-underline">
-        {{translate('Passwort vorschlagen')}}
+        {{ translate('Passwort vorschlagen') }}
       </a>
     </div>
     <div :class="[errors.password ? 'is-invalid' : '', 'form-group mt-12 lg:mt-16']">
-      <label>{{translate('Passwort wiederholen')}}</label>
+      <label>{{ translate('Passwort wiederholen') }}</label>
       <input type="password" v-model="data.password_confirmation" data-field-password autocomplete="off">
     </div>
     <content-footer>
-      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
+      <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
       <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
         <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
-        <span>{{translate('Zurück')}}</span>
+        <span>{{ translate('Zurück') }}</span>
       </router-link>
     </content-footer>
   </form>

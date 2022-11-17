@@ -5,11 +5,22 @@
       <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-8">
         <div class="sm:col-span-7 lg:col-span-8">
           <div class="form-group">
-            <label>{{translate('Betreff')}}</label>
+            <label>{{ translate('Betreff') }}</label>
             <input type="text" v-model="data.subject">
           </div>
           <div class="form-group mt-6 lg:mt-8">
-            <label class="mb-2 lg:mb-3">{{translate('Mitteilung')}}</label>
+            <label class="mb-2 lg:mb-3 !flex justify-between w-full">
+              <div>{{ translate('Mitteilung') }}</div>
+              <div class="flex items-center">
+                <div class="text-dark text-xs mr-2">{{ translate('Übersetzen') }}</div>
+                <a :href="`https://translate.google.com/?sl=auto&tl=en&text=${translation}&op=translate`" target="_blank" class="block mr-2">
+                  <flag-en-icon />
+                </a>
+                <a :href="`https://translate.google.com/?sl=auto&tl=de&text=${translation}&op=translate`" target="_blank" class="block">
+                  <flag-de-icon />
+                </a>
+              </div>
+            </label>
             <tinymce-editor
               :api-key="tinyApiKey"
               :init="tinyConfig"
@@ -17,7 +28,7 @@
             ></tinymce-editor>
           </div>
           <div class="form-group">
-            <label class="mb-2 lg:mb-3">{{translate('Dateien')}}</label>
+            <label class="mb-2 lg:mb-3">{{ translate('Dateien') }}</label>
             <vue-dropzone
               ref="dropzone"
               id="dropzone"
@@ -27,14 +38,11 @@
               @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
               :useCustomSlot=true>
               <div class="text-dark text-sm">
-                <div class="font-bold">{{translate('Datei auswählen oder hierhin ziehen')}}</div>
-                <div>{{translate('max. Grösse 250 MB')}}</div>
+                <div class="font-bold">{{ translate('Datei auswählen oder hierhin ziehen') }}</div>
+                <div>{{ translate('max. Grösse 250 MB') }}</div>
               </div>
             </vue-dropzone>
-
             <list v-if="hasUpload && data.files.length" class="my-4 sm:my-6 lg:my-8">
-
-
               <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
                 <div class="flex items-center no-underline hover:text-highlight py-2">
                   <img 
@@ -63,7 +71,6 @@
                 </list-action>
               </list-item>
             </list>
-
           </div>
         </div>
         <div class="sm:col-span-5 lg:col-span-4">
@@ -80,7 +87,7 @@
             </div>
             
             <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
-              <label class="mb-2">{{translate('Empfänger')}} *</label>
+              <label class="mb-2">{{ translate('Empfänger') }} *</label>
               <div v-if="project.users.owner" class="mb-4 lg:mb-8">
                 <div class="form-check mb-2">
                   <input 
@@ -89,7 +96,7 @@
                     :id="project.users.owner.uuid" 
                     @change="toggleAll($event, project.users.owner.uuid)">
                   <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.uuid">
-                    {{ project.users.owner.name }} ({{translate('Alle')}})
+                    {{ project.users.owner.name }} ({{ translate('Alle') }})
                   </label>
                 </div>
                 <div class="mb-1">
@@ -119,7 +126,7 @@
                   class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
                   v-if="project.users.owner.users.length > 10">
                   <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                  <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
+                  <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
                 </a>
                 <a
                   href="javascript:;" 
@@ -127,7 +134,7 @@
                   :data-truncatable-less="project.users.owner.uuid"
                   class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
                   <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                  <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
+                  <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
                 </a>
               </div>
 
@@ -141,7 +148,7 @@
                         :id="company.data.uuid" 
                         @change="toggleAll($event, company.data.uuid)">
                       <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
-                        {{ company.data.name }} ({{translate('Alle')}})
+                        {{ company.data.name }} ({{ translate('Alle') }})
                       </label>
                     </div>
                     <div class="mb-1">
@@ -170,7 +177,7 @@
                       class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
                       v-if="company.users.length > 10">
                       <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                      <span class="inline-block ml-2 text-xs font-mono">{{translate('Mehr anzeigen')}}</span>
+                      <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
                     </a>
                     <a
                       href="javascript:;" 
@@ -178,7 +185,7 @@
                       :data-truncatable-less="company.data.uuid"
                       class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
                       <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                      <span class="inline-block ml-2 text-xs font-mono">{{translate('Weniger anzeigen')}}</span>
+                      <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
                     </a>
                   </div>
                 </div>
@@ -192,10 +199,10 @@
         <div class="sm:col-span-7 lg:col-span-8 flex items-center justify-between mt-4">
           <button type="submit" class="btn-send">
             <mail-icon class="h-5 w-5" aria-hidden="true" />
-            <span class="block ml-2">{{translate('Senden')}}</span>
+            <span class="block ml-2">{{ translate('Senden') }}</span>
           </button>
           <a href="javascript:;" class="form-helper form-helper-footer l-4 lg:ml-8" @click="hide()">
-            <span>{{translate('Abbrechen')}}</span>
+            <span>{{ translate('Abbrechen') }}</span>
           </a>
         </div>
         <div class="sm:col-span-5 lg:col-span-4"></div>
@@ -206,7 +213,7 @@
     <div class="flex justify-center">
       <a href="javascript:;" @click="show()" class="btn-create">
         <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-        <span class="block ml-2">{{translate('Neue Nachricht')}}</span>
+        <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
       </a>
     </div>
   </div>
@@ -230,6 +237,8 @@ import { TheMask } from "vue-the-mask";
 import tinyConfig from "@/config/tiny.js";
 import TinymceEditor from "@tinymce/tinymce-vue";
 import vue2Dropzone from "vue2-dropzone";
+import FlagDeIcon from '@/components/ui/icons/flag-de';
+import FlagEnIcon from '@/components/ui/icons/flag-en';
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
 
@@ -255,6 +264,8 @@ export default {
     ListItem,
     ListAction,
     TinymceEditor,
+    FlagDeIcon,
+    FlagEnIcon,
     vueDropzone: vue2Dropzone,
     NProgress
   },
@@ -332,6 +343,10 @@ export default {
       // TinyMCE
       tinyConfig: tinyConfig,
       tinyApiKey: 'vuaywur9klvlt3excnrd9xki1a5lj25v18b2j0d0nu5tbwro',
+
+      // Deepl
+      deeplApiKey: '86b707ef-e41d-2645-71b1-b0e62e6126ef:fx',
+      deeplApi: 'https://api-free.deepl.com/v2/translate',
     };
   },
 
@@ -531,6 +546,12 @@ export default {
       this.isVisible = false;
     },
 
+    decodeHTMLEntities(text) {
+      let textArea = document.createElement('textarea');
+      textArea.innerHTML = text;
+      return textArea.value;
+    }
+
   },
 
   computed: {
@@ -542,6 +563,13 @@ export default {
       const idx = this.project.users.owner.users.findIndex(x => x.id == this.project.user_id);
       this.project.users.owner.users.unshift(this.project.users.owner.users.splice(idx, 1)[0]);
       return this.project.users.owner.users;
+    },
+
+    translation() {
+      const str = this.decodeHTMLEntities(this.data.body);
+      if (str && str.length > 0) {
+        return str.toString().replace( /(<([^>]+)>)/ig, ''); 
+      }
     }
   }
 };

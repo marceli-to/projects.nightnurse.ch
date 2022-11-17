@@ -1,21 +1,27 @@
 <template>
 <div v-if="isFetched">
-  <content-header :title="title">
-    <router-link :to="{ name: 'user-register', params: {companyUuid: $route.params.companyUuid} }" class="btn-icon">
-      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-    </router-link>
+  <content-header>
+    <template #icon>
+      <router-link :to="{ name: 'user-register', params: {companyUuid: $route.params.companyUuid} }" class="btn-add">
+        <plus-sm-icon class="h-5 w-5" aria-hidden="true" />
+      </router-link>
+    </template>
+    <template #title>
+      {{ title }}
+    </template>
   </content-header>
+
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
         <div v-if="d.register_complete">
           {{d.firstname}} {{ d.name }}
           <span class="hidden sm:inline"><separator />{{ d.email }}</span>
-          <pill v-if="d.role_id == 1">{{translate('Admin')}}</pill>
+          <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
         </div>
         <div v-else>
           {{ d.email }}
-          <pill v-if="d.register_complete == 0" class="bg-yellow-500">{{translate('Pendent')}}</pill>
+          <pill v-if="d.register_complete == 0" class="bg-yellow-500">{{ translate('Pendent') }}</pill>
         </div>
       </div>
       <list-action>
@@ -32,17 +38,17 @@
     </list-item>
   </list>
   <list-empty v-else>
-    {{translate('Es sind noch keine Daten vorhanden')}}
+    {{ translate('Es sind noch keine Daten vorhanden') }}
   </list-empty>
   <content-footer>
     <router-link :to="{ name: 'companies'}" class="btn-primary">
-      <span>{{translate('Zurück')}}</span>
+      <span>{{ translate('Zurück') }}</span>
     </router-link>
   </content-footer>
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon, MailIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, MailIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -59,6 +65,7 @@ import NProgress from 'nprogress';
 export default {
 
   components: {
+    PlusSmIcon,
     PlusCircleIcon,
     PencilAltIcon,
     TrashIcon,
@@ -147,7 +154,7 @@ export default {
   computed: {
     title() {
       if (this.data.length > 0) {
-        return `${this.translate('Benutzer für')} <span class="text-highlight">${this.data[0].company.name}</span>`
+        return `${this.translate('Benutzer für')} ${this.data[0].company.name}`
       }
       return this.translate('Benutzer');
     }

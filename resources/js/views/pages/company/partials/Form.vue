@@ -2,24 +2,28 @@
 <div>
   <form @submit.prevent="submit" v-if="isFetched">
     
-    <content-header :title="title"></content-header>
+    <content-header>
+      <template #title>
+        {{ title }}
+      </template>
+    </content-header>
 
     <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Name')}} <asterisk /></label>
+      <label>{{ translate('Name') }} <asterisk /></label>
       <input type="text" v-model="data.name">
       <required :text="translate('Pflichtfeld')" />
     </div>
 
     <div class="form-group">
-      <label>{{translate('Ort')}}</label>
+      <label>{{ translate('Ort') }}</label>
       <input type="text" v-model="data.city">
     </div>
        
     <content-footer>
-      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
+      <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
       <router-link :to="{ name: 'companies' }" class="form-helper form-helper-footer">
         <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
-        <span>{{translate('Zurück')}}</span>
+        <span>{{ translate('Zurück') }}</span>
       </router-link>
     </content-footer>
 

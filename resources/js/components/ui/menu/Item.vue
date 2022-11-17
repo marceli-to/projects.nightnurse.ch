@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{name: $props.route}" :active-class="'text-highlight'" class="text-gray-400 hover:text-highlight text-base font-normal no-underline flex items-center p-4 px-0 border-b">
+  <router-link :to="{name: $props.route}" :active-class="'text-highlight'" class="hover:text-highlight text-base font-normal no-underline flex items-center p-4 px-0 border-b">
     <slot />
   </router-link>
 </template>

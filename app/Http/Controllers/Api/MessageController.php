@@ -25,7 +25,7 @@ class MessageController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      $messages = new DataCollection(Message::with('project', 'sender', 'files', 'users')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
+      $messages = new DataCollection(Message::with('project.company', 'sender', 'files', 'users')->withTrashed()->orderBy('created_at', 'DESC')->where('project_id', $project->id)->get());
       $messagesGrouped = $messages->groupBy('message_date_string');
       return $messagesGrouped->all();
     }

@@ -6,15 +6,15 @@
       {{errors.message}}
     </div>
     <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('E-Mail')}} <asterisk /></label>
+      <label>{{ translate('E-Mail') }} <asterisk /></label>
       <input type="email" v-model="data.email">
       <required :text="translate('Pflichtfeld')" />
     </div>
     <content-footer>
-      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
+      <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
       <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
         <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
-        <span>{{translate('Zurück')}}</span>
+        <span>{{ translate('Zurück') }}</span>
       </router-link>
     </content-footer>
   </form>

@@ -1,23 +1,38 @@
 <template>
 <div v-if="isFetched" class="max-w-5xl">
 
-  <header class="mb-4 sm:mb-8 lg:mb-9 pt-2 sm:pt-4 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom  relative -ml-[1px] pl-[1px]">
+  <header class="mb-4 sm:mb-8 lg:mb-9 pt-2 sm:pt-3 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
     <div>
-      <div class="text-xl font-bold mb-2 sm:mb-3 flex items-center sm:max-w-4xl">
-        <span class="text-dark" v-if="project.company">{{project.company.name}} – {{project.number}} {{project.name}}</span>
-        <span class="text-dark" v-else>{{project.number}} {{project.name}}</span>
+      <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-4xl leading-snug sm:leading-normal">
+        <div class="text-dark" v-if="project.company">
+          <div class="font-normal text-sm">
+            {{project.company.name}}
+          </div>
+          <span :style="`color: ${project.color}`">{{project.number}} – {{project.name}}</span>
+        </div>
+        <div class="text-dark" v-else>
+          {{project.number}} {{project.name}}
+        </div>
+        <router-link :to="{name: 'project-update', params: { uuid: project.uuid, redirect: 'messages' }}" v-if="$store.state.user.admin">
+          <pencil-alt-icon class="icon-list mb-1 ml-1 sm:ml-2" aria-hidden="true" />
+        </router-link>
       </div>
       <div class="flex">
         <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-          <div class="text-xs font-mono pb-0.5">{{translate('Projektleiter')}}</div>
-          <div class="text-sm text-dark">{{project.manager.full_name}}</div>
+          <div class="text-xs font-mono pb-0.5">{{ translate('Projektleiter') }}</div>
+          <div class="text-sm text-dark">
+            {{project.manager.full_name}}
+            <a :href="`tel:${project.manager.phone}`" class="flex items-center text-dark hover:text-highlight no-underline" v-if="project.manager.phone">
+              <phone-icon class="w-4 h-4 mr-1" /> {{project.manager.phone}}
+            </a>
+          </div>
         </div>
         <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-          <div class="text-xs font-mono pb-0.5">{{translate('Projektstart')}}</div>
+          <div class="text-xs font-mono pb-0.5">{{ translate('Projektstart') }}</div>
           <div class="text-sm text-dark">{{project.date_start}}</div>
         </div>
         <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
-          <div class="text-xs font-mono pb-0.5">{{translate('Abgabetermin')}}</div>
+          <div class="text-xs font-mono pb-0.5">{{ translate('Abgabetermin') }}</div>
           <div class="text-sm text-dark">{{project.date_end}}</div>
         </div>
       </div>
@@ -42,18 +57,18 @@
 
           <feed-item-header :class="[message.private ? 'text-slate-100': '', 'relative']">
             <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
-            <span v-else>[{{translate('gelöschter Benutzer')}}]</span>
-            {{translate('an')}}
-            <span v-if="message.users.length == 1">{{message.users[0].full_name}}</span>
-            <span v-else class="has-tooltip">
-              <div class='tooltip'>
-                <span v-for="(user, idx) in message.users" :key="user.uuid">
-                  {{user.full_name}}<span v-if="idx < message.users.length-1">,</span>
-                </span>
-              </div>
-              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} {{translate('Empfänger')}}</a>
+            <span v-else>[{{ translate('gelöschter Benutzer') }}]</span>
+            {{ translate('an') }}
+            <span class="has-tooltip" v-if="message.users.length > 2">
+              <span class='tooltip'>
+                {{ message.users.map(x => x.full_name).join(", ") }}
+              </span>
+              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} {{ translate('Empfänger') }}</a>
             </span>
-            {{translate('um')}} {{message.message_time}}
+            <span v-else>
+             {{ message.users.map(x => x.full_name).join(", ") }}
+            </span>
+            {{ translate('um') }} {{message.message_time}}
           </feed-item-header>
 
           <feed-item-body v-if="message.subject || message.body">
@@ -79,7 +94,7 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
                 v-if="message.truncate_files">
                 <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">{{translate('Mehr anzeigen')}} ({{message.files.length - 3}})</span>
+                <span class="inline-block ml-2">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
               </a>
               <a
                 href="javascript:;" 
@@ -87,14 +102,15 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
                 v-else-if="message.files.length > 3">
                 <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">{{translate('Weniger anzeigen')}}</span>
+                <span class="inline-block ml-2">{{ translate('Weniger anzeigen') }}</span>
               </a>
               <a 
                 :href="`/download/zip/${message.uuid}`" 
                 target="_blank" 
-                :class="[message.private ? 'text-white' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']">
+                :class="[message.private ? 'text-white' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
+                v-if="message.files.length > 1">
                 <folder-download-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">{{translate('Download als ZIP')}}</span>
+                <span class="inline-block ml-2">{{ translate('Download als ZIP') }}</span>
               </a>
             </span>
 
@@ -105,16 +121,17 @@
         <div v-else>
           <feed-item-body>
             <div class="text-xs text-gray-400 font-mono italic sm:pt-1">
-              {{translate('Nachricht gelöscht durch')}} {{message.sender.full_name}}
+              {{ translate('Nachricht gelöscht durch') }} {{message.sender.full_name}}
             </div>
           </feed-item-body>
         </div>
 
         <a href="javascript:;" 
           @click.prevent="destroy(message.uuid)" 
-          class="feed-item-delete" 
+          class="feed-item-delete flex items-center leading-none" 
           v-if="message.can_delete && !message.deleted_at">
-          {{translate('Nachricht löschen')}}
+          <trash-icon class="w-4 h-4 mr-2" />
+          {{ translate('Nachricht löschen') }}
         </a>
       </feed-item>
 
@@ -123,7 +140,7 @@
   <content-footer>
     <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
-      <span>{{translate('Zurück')}}</span>
+      <span>{{ translate('Zurück') }}</span>
     </router-link>
   </content-footer>
 </div>
@@ -139,6 +156,7 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   ArrowLeftIcon,
+  PhoneIcon
 } 
 from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
@@ -164,6 +182,7 @@ import NProgress from 'nprogress';
 export default {
 
   components: {
+    PhoneIcon,
     PlusCircleIcon,
     TrashIcon,
     PencilAltIcon,
@@ -271,11 +290,5 @@ export default {
       this.$refs.messageForm.show();
     }
   },
-
-  computed: {
-    title() {
-      return `${this.project.number} – <span class="text-highlight">${this.project.name}</span>`;
-    },
-  }
 }
 </script>

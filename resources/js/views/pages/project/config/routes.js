@@ -30,7 +30,7 @@ const routes = [
   
   {
     name: 'project-update',
-    path: '/projects/project/update/:uuid',
+    path: '/projects/project/update/:uuid/:redirect?',
     component: ProjectUpdate,
   },
 ];

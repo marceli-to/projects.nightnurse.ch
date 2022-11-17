@@ -55,7 +55,7 @@ export default {
 }
 
 .feed-item-delete {
-  @apply absolute -bottom-[25px] text-xs !text-gray-300 no-underline pl-0
+  @apply absolute -bottom-[30px] text-xs !text-gray-400 no-underline pl-0 font-mono
 }
 
 .feed-item-delete:hover {

@@ -1,9 +1,14 @@
 <template>
 <div v-if="isFetched">
-  <content-header :title="title">
-    <router-link :to="{ name: 'company-create' }" class="btn-icon">
-      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-    </router-link>
+  <content-header>
+    <template #icon>
+      <router-link :to="{ name: 'company-create' }" class="btn-add">
+        <plus-sm-icon class="h-5 w-5" aria-hidden="true" />
+      </router-link>
+    </template>
+    <template #title>
+      {{ translate('Kunden') }}
+    </template>
   </content-header>
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
@@ -25,12 +30,12 @@
     </list-item>
   </list>
   <list-empty v-else>
-    {{translate('Es sind noch keine Daten vorhanden')}}
+    {{ translate('Es sind noch keine Daten vorhanden') }}
   </list-empty>
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon, UsersIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, UsersIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -46,6 +51,7 @@ import NProgress from 'nprogress';
 export default {
 
   components: {
+    PlusSmIcon,
     PlusCircleIcon,
     PencilAltIcon,
     UsersIcon,
@@ -117,10 +123,5 @@ export default {
     },
   },
 
-  computed: {
-    title() {
-      return this.translate('Kunden');
-    }
-  }
 }
 </script>

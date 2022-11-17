@@ -1,9 +1,14 @@
 <template>
 <div v-if="isFetched">
-  <content-header :title="title">
-    <router-link :to="{ name: 'project-create' }" class="btn-icon" v-if="$store.state.user.admin">
-      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-    </router-link>
+  <content-header>
+    <template #icon>
+      <router-link :to="{ name: 'project-create' }" class="btn-add" v-if="$store.state.user.admin">
+        <plus-sm-icon class="h-5 w-5" aria-hidden="true" />
+      </router-link>
+    </template>
+    <template #title>
+      {{ translate('Projekte') }}
+    </template>
   </content-header>
 
   <div v-if="data.user_projects.length" class="max-w-5xl">
@@ -81,8 +86,8 @@
     </div>
   </div>
 
-  <div class="max-w-5xl" v-if="$store.state.user.admin">
-    <a href="" @click.prevent="archived()" class="text-gray-600 text-sm font-mono flex items-center">
+  <div v-if="$store.state.user.admin">
+    <a href="" @click.prevent="archived()" class="text-sm flex items-center hover:text-highlight underline underline-offset-2 hover:no-underline">
       <archive-icon class="mr-2" aria-hidden="true" />
       <span v-if="isArchive">{{ translate('aktive Projekte') }}</span>
       <span v-else>{{ translate('archivierte Projekte') }}</span>
@@ -91,7 +96,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PencilAltIcon, TrashIcon, AnnotationIcon, ArchiveIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, AnnotationIcon, ArchiveIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -108,6 +113,7 @@ export default {
 
   components: {
     PlusCircleIcon,
+    PlusSmIcon,
     PencilAltIcon,
     TrashIcon,
     AnnotationIcon,
@@ -201,11 +207,5 @@ export default {
       this.fetch();
     }
   },
-
-  computed: {
-    title() {
-      return this.translate('Projekte');
-    }
-  }
 }
 </script>

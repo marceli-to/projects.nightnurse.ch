@@ -1,32 +1,35 @@
 <template>
 <div>
-  <form @submit.prevent="submit" v-if="isFetched">
-    
-    <content-header :title="title"></content-header>
+  <form @submit.prevent="submit()" v-if="isFetched">
+    <content-header>
+      <template #title>
+        {{ title }}
+      </template>
+    </content-header>
     
     <div :class="[errors.number ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Nummer')}} <asterisk /></label>
+      <label>{{ translate('Nummer') }} <asterisk /></label>
       <input type="text" v-model="data.number">
       <required :text="translate('Pflichtfeld')" />
     </div>
 
     <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Name')}} <asterisk /></label>
+      <label>{{ translate('Name') }} <asterisk /></label>
       <input type="text" v-model="data.name">
       <required :text="translate('Pflichtfeld')" />
     </div>
     
     <div :class="[errors.user_id ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Projektleiter')}} <asterisk /></label>
+      <label>{{ translate('Projektleiter') }} <asterisk /></label>
       <select v-model="data.user_id">
-        <option value="null">{{translate('Bitte wählen...')}}</option>
+        <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
       </select>
     </div>
 
     <content-grid class="mt-6 sm:mt-8">
       <div class="form-group">
-        <label>{{translate('Projektstart')}}</label>
+        <label>{{ translate('Projektstart') }}</label>
         <the-mask
           type="text"
           mask="##.##.####"
@@ -37,7 +40,7 @@
         ></the-mask>
       </div>
       <div class="form-group">
-        <label>{{translate('Abgabetermin')}}</label>
+        <label>{{ translate('Abgabetermin') }}</label>
         <the-mask
           type="text"
           mask="##.##.####"
@@ -50,17 +53,17 @@
     </content-grid>
 
     <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Hauptkunde')}} <asterisk /></label>
+      <label>{{ translate('Hauptkunde') }} <asterisk /></label>
       <select v-model="data.company_id" @change="updateMainCompany($event)">
-        <option value="null">{{translate('Bitte wählen...')}}</option>
+        <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>{{translate('Weitere Kunden')}}</label>
+      <label>{{ translate('Weitere Kunden') }}</label>
       <select name="companies" @change="addCompany($event)">
-        <option value="null">{{translate('Bitte wählen...')}}</option>
+        <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.full_name }}</option>
       </select>
     </div>
@@ -80,19 +83,19 @@
     </div>
 
     <div :class="[errors.project_state_id ? 'is-invalid' : '', 'form-group']">
-      <label>{{translate('Status')}} <asterisk /></label>
+      <label>{{ translate('Status') }} <asterisk /></label>
       <select v-model="data.project_state_id">
-        <option value="null">{{translate('Bitte wählen...')}}</option>
+        <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
       </select>
     </div>
 
     <div class="form-group">
-      <label>{{translate('Farbe')}} <asterisk /></label>
+      <label>{{ translate('Farbe') }} <asterisk /></label>
       <input type="color" name="color" v-model="data.color">
     </div>
 
-    <h4>{{translate('Zugriffsrechte')}}</h4>
+    <h4>{{ translate('Zugriffsrechte') }}</h4>
 
     <!-- main client -->
     <div class="form-group" v-if="data.company">
@@ -103,7 +106,7 @@
           :id="data.company.uuid" 
           @change="toggleAll($event, data.company.uuid)">
         <label class="inline-block text-gray-800 font-bold" :for="data.company.uuid">
-          {{ data.company.full_name }} ({{translate('Alle')}})
+          {{ data.company.full_name }} ({{ translate('Alle') }})
         </label>
       </div>
       <div>
@@ -138,7 +141,7 @@
             :id="company.uuid" 
             @change="toggleAll($event, company.uuid)">
           <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-            {{ company.full_name }} ({{translate('Alle')}})
+            {{ company.full_name }} ({{ translate('Alle') }})
           </label>
         </div>
         <div>
@@ -165,11 +168,19 @@
     </div>
 
     <content-footer>
-      <button type="submit" class="btn-primary">{{translate('Speichern')}}</button>
-      <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
-        <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
-        <span>{{translate('Zurück')}}</span>
-      </router-link>
+      <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
+      <template v-if="$route.params.redirect">
+        <router-link :to="{ name: 'messages', params: { uuid: $route.params.uuid } }" class="form-helper form-helper-footer">
+          <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
+          <span>{{ translate('Zurück') }}</span>
+        </router-link>
+      </template>
+      <template v-else>
+        <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
+          <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
+          <span>{{ translate('Zurück') }}</span>
+        </router-link>
+      </template>
     </content-footer>
 
   </form>
@@ -294,6 +305,14 @@ export default {
     update() {
       NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
+
+        if (this.$route.params.redirect) {
+          this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
+          NProgress.done();
+          this.$router.push({ name: "messages", params: { uuid: this.$route.params.uuid }});
+          return;
+        }
+
         this.$router.push({ name: "projects" });
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         NProgress.done();

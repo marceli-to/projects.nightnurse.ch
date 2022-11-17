@@ -7,6 +7,9 @@ module.exports = {
   theme: {
 
     extend: {
+      fontFamily: {
+        'sans': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans']
+      },
       fontSize: {
         tiny: ['.675rem', '1']
       },
