@@ -1,7 +1,7 @@
 <template>
 <div>
   <content-header :title="title"></content-header>
-  <form @submit.prevent="submit" v-if="isFetched" class="max-width-content">
+  <form @submit.prevent="submit" v-if="isFetched" class="max-w-5xl">
     <div v-if="hasErrors" class="text-sm font-mono mb-2 text-red-500">
       {{errors.message}}
     </div>

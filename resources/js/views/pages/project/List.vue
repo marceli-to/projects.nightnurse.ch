@@ -6,7 +6,7 @@
     </router-link>
   </content-header>
 
-  <div v-if="data.user_projects.length" class="max-width-content">
+  <div v-if="data.user_projects.length" class="max-w-5xl">
     <div v-for="d in data.user_projects" :key="d.uuid" class="grid grid-cols-12 mb-4 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
       <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
@@ -42,10 +42,10 @@
         </div>
       </div>
     </div>
-    <hr class="max-width-content border-bottom !mt-10 !my-8 !lg:mt-12 !my-10">
+    <hr class="max-w-5xl border-bottom !mt-10 !my-8 !lg:mt-12 !my-10">
   </div>
   
-  <div v-if="data.projects.length" class="max-width-content">
+  <div v-if="data.projects.length" class="max-w-5xl">
     <div v-for="d in data.projects" :key="d.uuid" class="grid grid-cols-12 mb-4 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
       <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
@@ -81,7 +81,7 @@
     </div>
   </div>
 
-  <div class="max-width-content" v-if="$store.state.user.admin">
+  <div class="max-w-5xl" v-if="$store.state.user.admin">
     <a href="" @click.prevent="archived()" class="text-gray-600 text-sm font-mono flex items-center">
       <archive-icon class="mr-2" aria-hidden="true" />
       <span v-if="isArchive">{{ translate('aktive Projekte') }}</span>

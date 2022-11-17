@@ -15,6 +15,9 @@ module.exports = {
         'dark': '#222222',
         'light': '#f9f9f9',
       },
+      zIndex: {
+        '1001': '1001',
+      }
     },
   },
 

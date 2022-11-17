@@ -1,5 +1,5 @@
 <template>
-  <div class="max-width-content border-top">
+  <div class="max-w-5xl border-top">
     <slot />
   </div>
 </template>

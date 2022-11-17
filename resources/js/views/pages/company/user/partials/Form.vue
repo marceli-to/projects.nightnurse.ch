@@ -1,7 +1,7 @@
 <template>
 <div>
   <content-header :title="title"></content-header>
-  <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-width-content">
+  <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-w-5xl">
     <div :class="[errors.firstname ? 'is-invalid' : '', 'form-group']">
       <label>{{translate('Vorname')}} <asterisk /></label>
       <input type="text" v-model="data.firstname">

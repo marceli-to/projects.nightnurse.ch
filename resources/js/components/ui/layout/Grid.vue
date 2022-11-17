@@ -1,5 +1,5 @@
 <template>
-  <div :class="`max-width-content sm:grid ${$props.cols} ${$props.gap}`">
+  <div :class="`max-w-5xl sm:grid ${$props.cols} ${$props.gap}`">
     <slot />
   </div>
 </template>

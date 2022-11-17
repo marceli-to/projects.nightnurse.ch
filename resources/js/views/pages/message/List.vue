@@ -1,9 +1,9 @@
 <template>
-<div v-if="isFetched" class="max-width-content">
+<div v-if="isFetched" class="max-w-5xl">
 
-  <header class="mb-4 sm:mb-8 lg:mb-9 pt-4 sm:pt-5 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom sm:max-w-4xl relative -ml-[1px] pl-[1px]">
+  <header class="mb-4 sm:mb-8 lg:mb-9 pt-2 sm:pt-4 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom  relative -ml-[1px] pl-[1px]">
     <div>
-      <div class="text-2xl font-bold mb-2 sm:mb-3 flex items-center">
+      <div class="text-xl font-bold mb-2 sm:mb-3 flex items-center sm:max-w-4xl">
         <span class="text-dark" v-if="project.company">{{project.company.name}} – {{project.number}} {{project.name}}</span>
         <span class="text-dark" v-else>{{project.number}} {{project.name}}</span>
       </div>

@@ -35,8 +35,3 @@
 .border-all {
   @apply border-2 border-gray-100;
 }
-
-/* Theme: Content max width */
-.max-width-content {
-  @apply max-w-4xl;
-}

@@ -31,7 +31,7 @@ class Message extends Base
     'message_date_string',
     'body_preview',
     'can_delete',
-    //'truncate_files'
+    'truncate_files'
   ];
 
   public function sender()

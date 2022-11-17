@@ -32,9 +32,9 @@ export default {
         'Benutzer': 'Users',
         'Benutzer bearbeiten': 'Edit user',
         'Benutzer hinzufügen': 'Add user',
-        'Projektleiter': 'Projectlead',
+        'Projektleiter': 'Project Lead',
         'Bitte wählen...': 'Please choose...',
-        'Projektstart': 'Date start',
+        'Projektstart': 'Project Start',
         'Abgabetermin': 'Deadline',
         'Hauptkunde': 'Main client',
         'Weitere Kunden': 'Other clients',
@@ -79,6 +79,7 @@ export default {
         'Zugriffsrechte': 'Access',
         'archivierte Projekte': 'show archive',
         'aktive Projekte': 'show active projects',
+        'Switch language to': 'Sprache wechseln'
       },
 
       defaultLang: 'de',
