@@ -49,6 +49,9 @@ Route::middleware('auth:api')->group(function() {
 Route::middleware('auth:sanctum')->get('/user/authenticated', function (Request $request) {
   return $request->user();
 });
+Route::middleware('auth:sanctum')->post('/user/authenticated', function (Request $request) {
+  return $request->user();
+});
 
 Route::middleware('auth:sanctum')->group(function() {
 

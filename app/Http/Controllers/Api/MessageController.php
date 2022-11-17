@@ -11,6 +11,8 @@ use App\Models\CompanyProject;
 use App\Models\User;
 use App\Http\Requests\MessageStoreRequest;
 use App\Services\Media;
+use App\Events\MessageSent;
+
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
@@ -157,7 +159,10 @@ class MessageController extends Controller
 
     $project->last_activity = \Carbon\Carbon::now();
     $project->save();
-    
+
+    $user = User::find(auth()->user()->id);
+    broadcast(new MessageSent($user, $message))->toOthers();
+
     return response()->json(['messageId' => $message->id]);
   }
 

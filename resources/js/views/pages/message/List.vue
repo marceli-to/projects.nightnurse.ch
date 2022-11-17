@@ -238,6 +238,16 @@ export default {
 
   created() {
     this.fetch();
+
+    window.Echo.private('timeline').listen('MessageSent', (e) => {
+      alert('d');
+      console.log(e);
+      this.feedItems.push({
+        message: e.message.message,
+        user: e.user
+      });
+    });
+
   },
 
   methods: {

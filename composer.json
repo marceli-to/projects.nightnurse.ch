@@ -19,6 +19,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "nesbot/carbon": "^2.36",
+        "pusher/pusher-php-server": "^7.2",
         "staudenmeir/eloquent-eager-limit": "^1.0"
     },
     "require-dev": {
