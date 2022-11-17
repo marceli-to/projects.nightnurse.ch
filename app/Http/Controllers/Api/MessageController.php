@@ -161,6 +161,9 @@ class MessageController extends Controller
     $project->save();
 
     $user = User::find(auth()->user()->id);
+
+    $message = Message::with('project.company', 'sender', 'files', 'users')->find($message->id);
+
     broadcast(new MessageSent($user, $message))->toOthers();
 
     return response()->json(['messageId' => $message->id]);

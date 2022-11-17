@@ -59,14 +59,14 @@
             <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
             <span v-else>[{{ translate('gelöschter Benutzer') }}]</span>
             {{ translate('an') }}
-            <span class="has-tooltip" v-if="message.users.length > 2">
+            <span class="has-tooltip" v-if="message.users && message.users.length > 2">
               <span class='tooltip'>
-                {{ message.users.map(x => x.full_name).join(", ") }}
+                <!-- {{ message.users.map(x => x.full_name).join(", ") }} -->
               </span>
               <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} {{ translate('Empfänger') }}</a>
             </span>
             <span v-else>
-             {{ message.users.map(x => x.full_name).join(", ") }}
+             <!-- {{ message.users.map(x => x.full_name).join(", ") }} -->
             </span>
             {{ translate('um') }} {{message.message_time}}
           </feed-item-header>
@@ -238,16 +238,9 @@ export default {
 
   created() {
     this.fetch();
-
     window.Echo.private('timeline').listen('MessageSent', (e) => {
-      alert('d');
-      console.log(e);
-      this.feedItems.push({
-        message: e.message.message,
-        user: e.user
-      });
+      this.feedItems['Today'].unshift(e.message);
     });
-
   },
 
   methods: {
@@ -300,5 +293,11 @@ export default {
       this.$refs.messageForm.show();
     }
   },
+
+  watch: {
+    feedItems() {
+      
+    }
+  }
 }
 </script>
