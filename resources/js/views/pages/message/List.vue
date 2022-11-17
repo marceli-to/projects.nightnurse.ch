@@ -61,12 +61,12 @@
             {{ translate('an') }}
             <span class="has-tooltip" v-if="message.users && message.users.length > 2">
               <span class='tooltip'>
-                <!-- {{ message.users.map(x => x.full_name).join(", ") }} -->
+                {{ message.users.map(x => x.full_name).join(", ") }}
               </span>
               <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} {{ translate('Empfänger') }}</a>
             </span>
             <span v-else>
-             <!-- {{ message.users.map(x => x.full_name).join(", ") }} -->
+             {{ message.users.map(x => x.full_name).join(", ") }}
             </span>
             {{ translate('um') }} {{message.message_time}}
           </feed-item-header>
