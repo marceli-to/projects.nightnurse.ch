@@ -9,19 +9,19 @@ class Notification
     $messageUsers = collect($messageUsers)->splice(0, \Config::get('client.cron_chunk_size'));
     $env  = app()->environment();
     
-    foreach($messageUsers->all() as $m)
-    {
-      $recipient = ($env == 'production' && $m->user->email) ? $m->user->email : env('MAIL_TO');
-      try {
-        \Mail::to($recipient)->send(new \App\Mail\Notification($m->message));
-        $m->processed = 1;
-        $m->save();
-      } 
-      catch(\Throwable $e) {
-        $m->processed = 1;
-        $m->save();
-        \Log::error($e);
-      }
-    }
+    // foreach($messageUsers->all() as $m)
+    // {
+    //   $recipient = ($env == 'production' && $m->user->email) ? $m->user->email : env('MAIL_TO');
+    //   try {
+    //     \Mail::to($recipient)->send(new \App\Mail\Notification($m->message));
+    //     $m->processed = 1;
+    //     $m->save();
+    //   } 
+    //   catch(\Throwable $e) {
+    //     $m->processed = 1;
+    //     $m->save();
+    //     \Log::error($e);
+    //   }
+    // }
   }
 }
