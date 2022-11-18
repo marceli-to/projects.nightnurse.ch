@@ -11,8 +11,8 @@
           <div class="form-group mt-6 lg:mt-8">
             <label class="mb-2 lg:mb-3 !flex justify-between w-full">
               <div>{{ translate('Mitteilung') }}</div>
-              <div class="flex items-center">
-                <div class="text-dark text-xs mr-2">{{ translate('Übersetzen') }}</div>
+              <div :class="[data.body.length > 10 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none', 'flex items-center']">
+                <div class="text-dark text-xs mr-2">{{ translate('Mitteilung übersetzen') }}</div>
                 <a :href="`https://translate.google.com/?sl=auto&tl=en&text=${translation}&op=translate`" target="_blank" class="block mr-2">
                   <flag-en-icon />
                 </a>
@@ -283,7 +283,7 @@ export default {
       // Model
       data: {
         subject: null,
-        body: null,
+        body: '',
         private: 0,
         users: [],
         files: [],

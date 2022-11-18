@@ -9,13 +9,13 @@
     </a>
   </div>
   <div class="fixed z-40 w-screen h-screen inset-0 bg-black bg-opacity-60 z-1001" v-if="hasMenu">
-    <nav class="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-xs max-w-md	bg-white rounded-sm p-4 pb-2 sm:pt-3 space-y-5">
+    <nav class="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[300px] sm:max-w-lg bg-white rounded-md p-4 space-y-5">
       <div class="mb-3 sm:mb-4 relative">
         <a href="javascript:;" @click="toggleMenu()" class="text-gray-400 hover:text-highlight block absolute top-0 right-0">
           <x-icon class="h-6 w-6" aria-hidden="true" />
         </a>
       </div>
-      <ul class="list-none !p-0 !m-0">
+      <ul class="list-none !p-0 m-0 !mt-4">
         <li class="block !p-0 !m-0" v-if="$store.state.user.admin">
           <menu-item :route="'projects'">
             <folder-icon class="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-4" aria-hidden="true" />
@@ -34,21 +34,19 @@
             {{ translate('Profil') }}
           </menu-item>
         </li>
-        <li class="block !p-0 !m-0">
-          <a href="/logout" class="hover:text-highlight text-base font-normal no-underline flex items-center p-4 px-0 border-b">
-            <logout-icon class="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-4" aria-hidden="true" />
-            {{ translate('Logout') }}
-          </a>
-        </li>
-        <li class="block !p-0 !m-0">
-          <div class="flex items-center justify-end pt-3 py-2 sm:py-3 sm:pb-0 pr-0">
-            <a href="javascript:;" @click="switchLanguage()" class="text-gray-400 hover:text-highlight text-base font-normal no-underline flex items-center p-1 mr-1">
-              <div class="text-gray-400 text-xs mr-2">{{ translate('Switch language to') }}</div>
+        <li class="block !p-0 m-0 !mt-4">
+          <div class="flex items-center justify-between pt-3 py-2 sm:py-3 sm:pb-0 pr-0">
+            <a href="/logout" class="text-gray-400 hover:text-highlight text-xs font-normal no-underline flex items-center p-1 ml-1">
+              <logout-icon class="h-4 w-4 mr-2" aria-hidden="true" />
+              {{ translate('Logout') }}
+            </a>
+            <a href="javascript:;" @click="switchLanguage()" class="text-gray-400 hover:text-highlight text-xs font-normal no-underline flex items-center p-1 mr-1">
+              {{ translate('Switch language to') }}
               <template v-if="$store.state.user.language == 'en'">
-                <flag-de-icon />
+                <flag-de-icon class="ml-2" />
               </template>
               <template v-if="$store.state.user.language == 'de'">
-                <flag-en-icon />
+                <flag-en-icon class="ml-2" />
               </template>
             </a>
           </div>

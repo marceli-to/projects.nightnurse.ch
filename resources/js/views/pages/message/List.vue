@@ -240,6 +240,24 @@ export default {
     this.fetch();
     window.Echo.private('timeline').listen('MessageSent', (e) => {
       this.feedItems['Today'].unshift(e.message);
+
+      if (! ('Notification' in window)) {
+        console.log('Web Notification is not supported');
+        return;
+      }
+
+      Notification.requestPermission(permission => {
+        let notification = new Notification('Projekte Nightnurse', {
+          body: 'Neue Nachricht...',
+          icon: 'https://staging.projects.nightnurse.ch/notification.png'
+        });
+
+        notification.onclick = () => {
+          window.open(window.location.href);
+        };
+
+      });
+
     });
   },
 
