@@ -19,7 +19,8 @@ class Notification extends Mailable
   public function __construct(Message $message)
   {
     $this->message = $message;
-    $this->subject = $this->message->subject ? $this->message->subject . ' – ' . $this->message->project->title : 'Neue Nachricht – ' .  $this->message->project->title;
+    //$this->subject = $this->message->subject ? $this->message->subject . ' – ' . $this->message->project->title : 'Neue Nachricht – ' .  $this->message->project->title;
+    $this->subject = $this->message->project->title;
   }
 
   /**
