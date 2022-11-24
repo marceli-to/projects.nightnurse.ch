@@ -209,6 +209,7 @@
       </div>
     </form>
   </div>
+  <!-- 
   <div v-else>
     <div class="flex justify-center">
       <a href="javascript:;" @click="show()" class="btn-create">
@@ -217,8 +218,10 @@
       </a>
     </div>
   </div>
+  -->
 </div>
 </template>
+
 <script>
 import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon, ChevronDownIcon, ChevronUpIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
@@ -243,6 +246,7 @@ import i18n from "@/i18n";
 import NProgress from 'nprogress';
 
 export default {
+  
   components: {
     ContentHeader,
     ContentFooter,
@@ -270,7 +274,6 @@ export default {
     NProgress
   },
 
-  
   mixins: [i18n],
 
   props: {
@@ -544,6 +547,10 @@ export default {
 
     hide() {
       this.isVisible = false;
+    },
+
+    toggle() {
+      this.isVisible = this.isVisible ? false : true;
     },
 
     decodeHTMLEntities(text) {

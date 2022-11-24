@@ -1,7 +1,7 @@
 <template>
 <div v-if="isFetched" class="max-w-5xl">
 
-  <header class="mb-4 sm:mb-8 lg:mb-9 pt-2 sm:pt-3 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
+  <header class="mb-4 pt-2 sm:pt-3 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
     <div>
       <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-4xl leading-snug sm:leading-normal">
         <div class="text-dark" v-if="project.company">
@@ -40,8 +40,18 @@
   </header>
 
   <message-form ref="messageForm"></message-form>
+  
+  <div class="flex justify-end">
+    <a href="javascript:;" 
+      class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+      @click="switchViewType()">
+      <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
+      <span class="block ml-2">{{ translate('Ansicht wechseln') }}</span>
+    </a>
+  </div>
 
   <feed>
+
     <div v-for="(items, day) in feedItems" :key="day" class="relative">
 
       <feed-item-timestamp>{{ day }}</feed-item-timestamp>
@@ -50,7 +60,8 @@
         v-for="(message, index) in items" 
         :key="index" 
         :item="message" 
-        :class="getStateClasses(message)">
+        :class="getStateClasses(message)"
+        :data-has-files="message.files.length > 0 && !message.deleted_at ? true : false">
         
         <div v-if="!message.deleted_at" class="relative">
           <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="message.private" />
@@ -142,10 +153,16 @@
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
+    <a href="javascript:;" @click="toggleForm()" class="btn-create">
+      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+      <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
+    </a>
   </content-footer>
 </div>
 </template>
+
 <script>
+
 import { 
   PlusCircleIcon, 
   PencilAltIcon, 
@@ -156,7 +173,8 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   ArrowLeftIcon,
-  PhoneIcon
+  PhoneIcon,
+  SwitchHorizontalIcon
 } 
 from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
@@ -191,6 +209,7 @@ export default {
     FolderDownloadIcon,
     ChevronUpIcon,
     ChevronDownIcon,
+    SwitchHorizontalIcon,
     ArrowLeftIcon,
     ContentHeader,
     ContentFooter,
@@ -231,33 +250,31 @@ export default {
       // States
       isLoading: false,
       isFetched: false,
-      hasForm: false,
+
+      viewType: 'standard',
 
     };
   },
 
   created() {
     this.fetch();
+
+    // Listen to channel 'timeline' an push new messages to the top
     window.Echo.private('timeline').listen('MessageSent', (e) => {
       this.feedItems['Today'].unshift(e.message);
-
-      if (! ('Notification' in window)) {
+      if (!('Notification' in window)) {
         console.log('Web Notification is not supported');
         return;
       }
-
       Notification.requestPermission(permission => {
         let notification = new Notification('Projekte Nightnurse', {
           body: 'Neue Nachricht...',
           icon: 'https://staging.projects.nightnurse.ch/notification.png'
         });
-
         notification.onclick = () => {
           window.open(window.location.href);
         };
-
       });
-
     });
   },
 
@@ -296,6 +313,10 @@ export default {
       });
     },
 
+    switchViewType() {
+      this.viewType = this.viewType == 'standard' ? 'files-only' : 'standard';
+    },
+
     getStateClasses(item) {
       let cls = '';
       if (item.can_delete && !item.deleted_at) {
@@ -308,13 +329,40 @@ export default {
     },
 
     toggleForm() {
-      this.$refs.messageForm.show();
+      this.$refs.messageForm.toggle();
     }
   },
 
   watch: {
-    feedItems() {
-      
+    feedItems() { },
+
+    viewType() {
+
+      // Show only messages with files and hide message body
+      if (this.viewType == 'files-only') {
+        const items = document.querySelectorAll('.feed-item');
+        items.forEach((element) => {
+          if (!element.dataset || !element.dataset.hasFiles) {
+            element.style.display = 'none';
+          }
+          else {
+            const el = element.querySelector('.feed-item__body');
+            el.style.display = 'none';
+          }
+        });
+      }
+      else {
+        const items = document.querySelectorAll('.feed-item');
+        items.forEach((element) => {
+          if (!element.dataset || !element.dataset.hasFiles) {
+            element.style.display = 'block';
+          }
+          else {
+            const el = element.querySelector('.feed-item__body');
+            el.style.display = 'block';
+          }
+        });
+      }
     }
   }
 }
