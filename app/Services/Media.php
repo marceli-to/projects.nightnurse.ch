@@ -14,6 +14,11 @@ class Media
   protected $upload_path;
 
   /**
+   * The storage path
+   */
+  protected $storage_path;
+
+  /**
    *  Force lowercase for filenames
    */
 
@@ -32,6 +37,7 @@ class Media
    */
   public function __construct($opts = array())
   {
+    $this->storage_path = storage_path('app/public/uploads');
     $this->upload_path = storage_path('app/public/uploads/temp');
 
     if (isset($opts['force_lowercase']))
@@ -58,7 +64,13 @@ class Media
     $file = $request->file('file');
     $file_data = getimagesize($request->file('file'));
     $name = $this->sanitize(trim($file->getClientOriginalName()), $this->force_lowercase);
-    $filename = uniqid()  . '_' . $name;
+    
+    
+    // $filename = uniqid()  . '_' . $name;
+    // $filename = $name;
+    $filename = $this->uniqueFileName($name);
+
+
     $file->move($this->upload_path, $filename);
     $filetype = File::extension($this->upload_path . DIRECTORY_SEPARATOR . $filename);
     $filesize = File::size($this->upload_path . DIRECTORY_SEPARATOR . $filename);
@@ -165,5 +177,36 @@ class Media
       }
     }
     return FALSE;
+  }
+
+  /**
+   * Generate a unique filename by adding an incrementable number at the end
+   * 
+   * Expample: 
+   * - file.png => file-1.png
+   * - file-1.png => file-2.png
+   */
+  protected function uniqueFileName($filename)
+  {
+    $current_name = pathinfo($filename, PATHINFO_FILENAME);
+    $name = $current_name;
+    $extension = pathinfo($filename, PATHINFO_EXTENSION);
+
+    // check in destination folder
+    while(file_exists($this->storage_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
+    {           
+      $name = $name. '-' .  uniqid();
+    }
+
+    // check in temp folder
+    $current_name = pathinfo($name, PATHINFO_FILENAME);
+    $name = $current_name;
+
+    while(file_exists($this->upload_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
+    {           
+      $name = $name. '-' .  uniqid();
+    }
+
+    return $name . '.' . $extension;
   }
 }
