@@ -81,7 +81,8 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('projects', [ProjectController::class, 'get']);
   Route::get('projects-archive', [ProjectController::class, 'getArchive']);
   Route::get('project/{project:uuid}', [ProjectController::class, 'find']);
-  Route::get('project/users/{project:uuid}', [ProjectController::class, 'getUsers']);
+  Route::get('project/users/{project:uuid}', [ProjectController::class, 'getProjectUsers']);
+  Route::get('project/companies/{project:uuid}', [ProjectController::class, 'getProjectCompanies']);
   Route::post('project', [ProjectController::class, 'store']);
   Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
   Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);

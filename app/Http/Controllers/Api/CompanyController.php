@@ -46,7 +46,7 @@ class CompanyController extends Controller
    */
   public function find(Company $company)
   {
-    return response()->json(Company::findOrFail($company->id));
+    return response()->json(Company::with('users')->findOrFail($company->id));
   }
 
   /**
@@ -60,7 +60,7 @@ class CompanyController extends Controller
     $data = $request->all();
     $data['uuid'] = \Str::uuid();
     $company = Company::create($data);
-    return response()->json(['companyId' => $company->id]);
+    return response()->json(['company' => $company]);
   }
 
   /**

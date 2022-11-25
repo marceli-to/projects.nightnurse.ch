@@ -52,20 +52,26 @@
       </div>
     </content-grid>
 
-    <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group']">
+    <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group !mb-0']">
       <label>{{ translate('Hauptkunde') }} <asterisk /></label>
       <select v-model="data.company_id" @change="updateMainCompany($event)">
         <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
       </select>
+      <div class="flex justify-end">
+        <button-widget :label="translate('Kunde hinzufügen')" @click="$refs.widgetCompanyCreate.show()" />
+      </div>
     </div>
 
-    <div class="form-group">
+    <div class="form-group !mb-0">
       <label>{{ translate('Weitere Kunden') }}</label>
       <select name="companies" @change="addCompany($event)">
         <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.full_name }}</option>
       </select>
+      <div class="flex justify-end">
+        <button-widget :label="translate('Kunde hinzufügen')" @click="$refs.widgetCompanyCreate.show()" />
+      </div>
     </div>
 
     <div v-if="data.companies" class="form-group">
@@ -106,7 +112,7 @@
           :id="data.company.uuid" 
           @change="toggleAll($event, data.company.uuid)">
         <label class="inline-block text-gray-800 font-bold" :for="data.company.uuid">
-          {{ data.company.full_name }} ({{ translate('Alle') }})
+          {{ data.company.full_name }}
         </label>
       </div>
       <div>
@@ -129,11 +135,12 @@
           </div>
         </div>
       </div>
+      <button-widget :label="translate('Benutzer hinzufügen')" @click="showAddUserForm(data.company.uuid)" />
     </div>
 
     <!-- other clients -->
     <div class="form-group" v-if="data.companies.length">
-      <div v-for="company in data.companies" :key="company.uuid" class="mb-4">
+      <div v-for="company in data.companies" :key="company.uuid" class="mb-4 lg:mb-8">
         <div class="form-check mb-2">
           <input 
             type="checkbox" 
@@ -141,7 +148,7 @@
             :id="company.uuid" 
             @change="toggleAll($event, company.uuid)">
           <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-            {{ company.full_name }} ({{ translate('Alle') }})
+            {{ company.full_name }}
           </label>
         </div>
         <div>
@@ -164,6 +171,7 @@
             </div>
           </div>
         </div>
+        <button-widget :label="translate('Benutzer hinzufügen')" @click="showAddUserForm(company.uuid)" />
       </div>
     </div>
 
@@ -182,22 +190,34 @@
         </router-link>
       </template>
     </content-footer>
-
   </form>
+
+  <lightbox ref="widgetCompanyCreate">
+    <company-create-widget @createdCompany="createdCompany($event)" />
+  </lightbox>
+
+  <lightbox ref="widgetUserCreate">
+    <user-create-widget :companyUuid="companyUuid" @createdUser="createdUser($event)" />
+  </lightbox>
+
 </div>
 </template>
 <script>
+import { TheMask } from "vue-the-mask";
+import i18n from "@/i18n";
+import NProgress from 'nprogress';
 import ErrorHandling from "@/mixins/ErrorHandling";
-import { XIcon, ArrowLeftIcon } from "@vue-hero-icons/outline";
+import { XIcon, ArrowLeftIcon, PlusSmIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
-import { TheMask } from "vue-the-mask";
-import i18n from "@/i18n";
-import NProgress from 'nprogress';
+import Lightbox from "@/components/ui/layout/Lightbox.vue";
+import ButtonWidget from "@/components/ui/ButtonWidget.vue";
+import CompanyCreateWidget from '@/views/pages/company/components/WidgetCreate.vue';
+import UserCreateWidget from '@/views/pages/company/user/components/WidgetCreate.vue';
 
 export default {
   components: {
@@ -210,7 +230,12 @@ export default {
     Asterisk,
     XIcon,
     ArrowLeftIcon,
-    NProgress
+    PlusSmIcon,
+    NProgress,
+    Lightbox,
+    CompanyCreateWidget,
+    UserCreateWidget,
+    ButtonWidget
   },
 
   mixins: [ErrorHandling, i18n],
@@ -239,6 +264,8 @@ export default {
         users: [],
       },
 
+      companyUuid: null,
+
       // Settings
       settings: {
         staff: [],
@@ -255,8 +282,11 @@ export default {
       // Routes
       routes: {
         fetch: '/api/project',
+        fetchProjectCompanies: '/api/project/companies',
+        fetchCompany: '/api/company',
         post: '/api/project',
-        put: '/api/project'
+        put: '/api/project',
+
       },
 
       // States
@@ -265,7 +295,7 @@ export default {
   },
 
   created() {
-    if (this.$props.type == "update") {
+    if (this.isUpdate()) {
       this.fetch();
     }
     this.getSettings();
@@ -284,11 +314,11 @@ export default {
     },
 
     submit() {
-      if (this.$props.type == "update") {
+      if (this.isUpdate()) {
         this.update();
       }
 
-      if (this.$props.type == "create") {
+      if (this.isCreate()) {
         this.store();
       }
     },
@@ -306,6 +336,7 @@ export default {
       NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
 
+        // Redirect if necessary
         if (this.$route.params.redirect) {
           this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
           NProgress.done();
@@ -319,8 +350,15 @@ export default {
       });
     },
 
+    quickSave() {
+      NProgress.start();
+      this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
+        NProgress.done();
+      });
+    },
+
     getSettings() {
-      this.isFetched = false;
+      NProgress.start();
       this.axios.all([
         this.axios.get(`/api/companies/clients`),
         this.axios.get(`/api/users/staff`),
@@ -333,39 +371,75 @@ export default {
           states: responses[2].data.data,
           owner: responses[3].data,
         };
-        this.isFetched = true;
+        NProgress.done();
       }));
     },
 
     addCompany(event) {
-      let target = event.target, id = target.value, name = target.options[target.selectedIndex].innerHTML;
-      const idx = this.data.companies.findIndex(x => x.id === parseInt(id));
+      const id = parseInt(event.target.value);
+      const idx = this.data.companies.findIndex(x => x.id === id);
       if (idx == -1 && id != "null") {
-
-        // Get company from settings
-        const index = this.settings.companies.findIndex(x => x.id === parseInt(id));
+        const index = this.settings.companies.findIndex(x => x.id === id);
         if (index > -1) {
           this.data.companies.push(this.settings.companies[index]);
+          if (this.isUpdate()) {
+            this.quickSave();
+          }
         }
       }
     },
 
     removeCompany(id) {
+
       const idx = this.data.companies.findIndex(x => x.id === id);
+      
+      // remove all company associated users
+      this.data.companies[idx].users.forEach(user => {
+        const i = this.data.users.findIndex(x => x.id === user.id)
+        if (i > -1) {
+          this.data.users.splice(i, 1);
+        }
+      });
+
+      // remove the company
       this.data.companies.splice(idx, 1);
+
+      if (this.isUpdate()) {
+        this.quickSave();
+      }
     },
 
-    updateMainCompany(event)
-    {
-      const idx = this.settings.companies.findIndex(x => x.id === parseInt(event.target.value));
+    updateMainCompany(event) {
+      const id = parseInt(event.target.value);
+      const idx = this.settings.companies.findIndex(x => x.id === id);
       if (idx > -1) {
-       this.data.company_id = this.settings.companies[idx].id;
-       this.data.company = this.settings.companies[idx];
+
+        // remove all company associated users
+        if (this.data.company) {
+          this.data.company.users.forEach(user => {
+            const i = this.data.users.findIndex(x => x.id === user.id)
+            if (i > -1) {
+              this.data.users.splice(i, 1);
+            }
+          });
+        }
+
+        this.data.company_id = this.settings.companies[idx].id;
+        this.data.company = this.settings.companies[idx];
       }
       else {
         this.data.company_id = null;
         this.data.company = null;
       }
+
+      if (this.isUpdate()) {
+        this.quickSave();
+      }
+    },
+
+    createdCompany(company) {
+      this.settings.companies.unshift(company);
+      this.$refs.widgetCompanyCreate.hide();
     },
 
     toggleAll(event, uuid) {
@@ -405,11 +479,39 @@ export default {
       return idx > -1 ? true : false;
     },
 
+    showAddUserForm(companyUuid) {
+      this.companyUuid = companyUuid;
+      this.$refs.widgetUserCreate.show();
+    },
+
+    createdUser(user) {
+      this.$refs.widgetUserCreate.hide();
+
+      // Main company?
+      if (this.data.company && this.data.company.uuid === this.companyUuid) {
+        this.data.company.users.push(user)
+      }
+
+      // Other companies?
+      const index = this.data.companies.findIndex(x => x.uuid === this.companyUuid);
+      if (index > -1) {
+        this.data.companies[index].users.unshift(user);
+      }
+      this.companyUuid = null;
+    },
+
+    isUpdate() {
+      return this.$props.type == "update";
+    },
+
+    isCreate() {
+      return this.$props.type == "create";
+    }
   },
 
   computed: {
     title() {
-      return this.$props.type == "update" ? this.translate('Projekt bearbeiten') : this.translate('Projekt erstellen');
+      return this.isUpdate() ? this.translate('Projekt bearbeiten') : this.translate('Projekt erstellen');
     }
   }
 };

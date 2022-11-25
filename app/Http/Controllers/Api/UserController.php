@@ -7,6 +7,7 @@ use App\Http\Resources\DataCollection;
 use App\Http\Requests\UserStoreRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\UserRegisterRequest;
+use App\Http\Requests\UserInviteRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -145,11 +146,11 @@ class UserController extends Controller
    * Quick register of a user. User will be sent an email to
    * complete the registering process.
    *
-   * @param  \Illuminate\Http\Request $request
+   * @param UserInviteRequest $request
    * @return \Illuminate\Http\Response
    */
 
-  public function register(Request $request)
+  public function register(UserInviteRequest $request)
   {
     // Check for existing but deleted user first
     $user = User::withTrashed()->where('email', $request->input('email'))->get()->first();
@@ -162,10 +163,10 @@ class UserController extends Controller
       return response()->json(['userId' => $user->id]);
     }
     
-    // get company
+    // Get company
     $company = Company::where('uuid', $request->input('company_uuid'))->get()->first();
 
-    // create user
+    // Create user
     $user = User::create([
       'uuid' => \Str::uuid(),
       'email' => $request->input('email'),
@@ -178,7 +179,7 @@ class UserController extends Controller
 
     $this->invite($user);
 
-    return response()->json(['userId' => $user->id]);
+    return response()->json(['user' => $user]);
   }
 
   /**

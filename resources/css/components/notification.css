@@ -3,17 +3,17 @@
 }
 
 .vue-notification-group .vue-notification-wrapper .vue-notification-template {
-  @apply bg-white text-sm font-mono rounded-none border-2 border-neutral-500 mt-3 mr-4 mb-0 ml-0 p-3;
+  @apply bg-transparent text-sm font-mono rounded-none border-2 border-neutral-500 mt-3 mr-4 mb-0 ml-0 p-3;
 }
 
 .vue-notification-group .vue-notification-wrapper .vue-notification-template.danger {
-  @apply border-red-500 text-red-500
+  @apply bg-red-500 border-red-500 text-white
 }
 
 .vue-notification-group .vue-notification-wrapper .vue-notification-template.info {
-  @apply border-sky-500 text-sky-500
+  @apply bg-sky-500 border-sky-500 text-white
 }
 
 .vue-notification-group .vue-notification-wrapper .vue-notification-template.success {
-  @apply border-green-500 text-green-500
+  @apply bg-green-500 border-green-500 text-white
 }

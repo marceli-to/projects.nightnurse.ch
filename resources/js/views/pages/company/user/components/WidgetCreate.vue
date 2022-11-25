@@ -1,7 +1,11 @@
 <template>
 <div>
-  <content-header :title="title"></content-header>
-  <form @submit.prevent="submit" v-if="isFetched" class="max-w-5xl">
+  <form @submit.prevent="submit">
+    <content-header class="border-none !mb-2 !sm:mb-4 !pt-0">
+      <template #title>
+        {{ translate('Benutzer hinzufügen') }}
+      </template>
+    </content-header>
     <div v-if="hasErrors" class="text-sm font-mono mb-2 text-red-500">
       {{errors.message}}
     </div>
@@ -10,22 +14,21 @@
       <input type="email" v-model="data.email">
       <required :text="translate('Pflichtfeld')" />
     </div>
-    <content-footer>
-      <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
-      <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
-        <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
-        <span>{{ translate('Zurück') }}</span>
-      </router-link>
-    </content-footer>
+    <footer>
+      <div class="flex justify-between mt-8 lg:mt-12">
+        <button type="submit" class="btn-primary" @click.prevent="store()">
+          {{ translate('Speichern') }}
+        </button>
+      </div>
+    </footer>
   </form>
 </div>
 </template>
 <script>
-import { EyeIcon, ArrowLeftIcon } from "@vue-hero-icons/outline";
+import { ArrowLeftIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
-import ContentGrid from "@/components/ui/layout/Grid.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
 import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
@@ -33,22 +36,21 @@ import i18n from "@/i18n";
 import NProgress from 'nprogress';
 
 export default {
+  
   components: {
-    EyeIcon,
     ArrowLeftIcon,
     ContentHeader,
     ContentFooter,
-    ContentGrid,
     FormRadio,
     Required,
     Asterisk,
-    NProgress
+    NProgress,
   },
 
-  mixins: [ErrorHandling, i18n],
+  mixins: [i18n],
 
   props: {
-    type: String
+    companyUuid: String
   },
 
   data() {
@@ -57,13 +59,13 @@ export default {
       // Model
       data: {
         email: null,
-        company_uuid: this.$route.params.companyUuid
+        company_uuid: this.$props.companyUuid
       },
 
       // Validation
       errors: {
         email: false,
-        message: null,
+        company_uuid: false,
       },
 
       // Routes
@@ -71,39 +73,33 @@ export default {
         post: '/api/user/register',
       },
 
-      // States
-      isFetched: true,
-      isLoading: false,
+      // State
       hasErrors: false,
     };
   },
 
-  created() {
-  },
-
   methods: {
 
-    submit() {
+    store() {
+
+      if (this.data.email == null) {
+        this.errors.email = true;
+        this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
+        return;
+      }
       NProgress.start();
-      this.hasErrors = false;
-      this.errors.message = null;
       this.axios.post(this.routes.post, this.data).then(response => {
-        this.$router.push({ name: "users" });
         this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
+        this.$emit('createdUser', response.data.user);
         NProgress.done();
-      })
-      .catch(error => {
+      }).catch(error => {
         this.hasErrors = true;
-        NProgress.done();
         this.errors.message = error.response.data.errors.email[0];
+        NProgress.done();
       });
     },
-  },
 
-  computed: {
-    title() {
-      return "Benutzer einladen";
-    }
-  }
+  },
 };
 </script>
+  

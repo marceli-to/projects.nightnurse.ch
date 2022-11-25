@@ -38,7 +38,7 @@ return [
     'digits_between' => ':attribute muss zwischen :min und :max Stellen haben.',
     'dimensions'     => ':attribute hat ungültige Bildabmessungen.',
     'distinct'       => ':attribute beinhaltet einen bereits vorhandenen Wert.',
-    'email'          => ':attribute muss eine gültige E-Mail-Adresse sein.',
+    'email'          => ':attribute ist ungültig.',
     'ends_with'      => ':attribute muss eine der folgenden Endungen aufweisen: :values',
     'exists'         => 'Der gewählte Wert für :attribute ist ungültig.',
     'file'           => ':attribute muss eine Datei sein.',

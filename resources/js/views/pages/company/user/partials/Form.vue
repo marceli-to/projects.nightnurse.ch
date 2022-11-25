@@ -184,7 +184,6 @@ export default {
 
     submit() {
 
-
       if (this.data.password && this.data.password_confirmation && (this.data.password !== this.data.password_confirmation)) {
         this.$notify({ type: "danger", text: this.translate('Passwörter stimmen nicht überein') });
         return false;

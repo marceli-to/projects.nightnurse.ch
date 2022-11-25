@@ -96,7 +96,7 @@
                     :id="project.users.owner.uuid" 
                     @change="toggleAll($event, project.users.owner.uuid)">
                   <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.uuid">
-                    {{ project.users.owner.name }} ({{ translate('Alle') }})
+                    {{ project.users.owner.name }}
                   </label>
                 </div>
                 <div class="mb-1">
@@ -148,7 +148,7 @@
                         :id="company.data.uuid" 
                         @change="toggleAll($event, company.data.uuid)">
                       <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
-                        {{ company.data.name }} ({{ translate('Alle') }})
+                        {{ company.data.name }}
                       </label>
                     </div>
                     <div class="mb-1">

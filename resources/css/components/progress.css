@@ -1,6 +1,6 @@
 /* Make clicks pass-through */
 #nprogress {
-  background-color: rgba(255, 255, 255, 1);
+  background-color: transparent;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -9,11 +9,11 @@
   pointer-events: none;
   top: 0;
   width: 100%;
-  z-index: 2000;
+  z-index: 20000;
 }
 
 #nprogress .bar {
-  background: #222;
+  background: #ff008b;
   position: fixed;
   z-index: 1031;
   top: 0;
@@ -24,7 +24,7 @@
 
 /* Fancy blur effect */
 #nprogress .peg {
-  display: block;
+  display: none;
   position: absolute;
   right: 0px;
   width: 100px;

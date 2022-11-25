@@ -121,7 +121,7 @@ class ProjectController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function getUsers(Project $project)
+  public function getProjectUsers(Project $project)
   {
     // Get associated users
     $project = Project::with('users.company')->findOrFail($project->id);
@@ -136,6 +136,18 @@ class ProjectController extends Controller
     // Get users for owner (nni)
     $owner = Company::owner()->with('users')->get()->first();
     return response()->json(['owner' => $owner, 'clients' => $clients]);
+  }
+
+  /**
+   * Get a project with its associated companies
+   * 
+   * @param Project $project
+   * @return \Illuminate\Http\Response
+   */
+
+  public function getProjectCompanies(Project $project)
+  {
+    return response()->json(Project::with('company.users', 'companies.users')->findOrFail($project->id));
   }
 
   /**
@@ -162,8 +174,11 @@ class ProjectController extends Controller
     $project = Project::create($data);
 
     // Handle companies & users (pivot tables)
-    $this->handleCompanies($project, $request->companies);
-    $this->handleUsers($project, $request->users);
+    $companies = collect($request->input('companies'))->pluck('id');
+    $project->companies()->sync($companies);
+
+    $users = collect($request->input('users'))->pluck('id');
+    $project->users()->sync($users);
 
     return response()->json(['projectId' => $project->id]);
   }
@@ -182,12 +197,18 @@ class ProjectController extends Controller
     $project->save();
 
     // Handle companies & users (pivot tables)
-    $this->handleCompanies($project, $request->companies);
-    $this->handleUsers($project, $request->users);
+    $companies = collect($request->input('companies'))->pluck('id');
+    $project->companies()->sync($companies);
+
+    $users = collect($request->input('users'))->pluck('id');
+    $project->users()->sync($users);
 
     // Make changes in 'Vertec'
-    $vertec = new VertecApi();
-    $vertec->updateProject($project);
+    if (app()->environment() == 'production')
+    {
+      $vertec = new VertecApi();
+      $vertec->updateProject($project);
+    }
 
     return response()->json('successfully updated');
   }

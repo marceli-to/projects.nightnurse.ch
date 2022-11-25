@@ -44,6 +44,9 @@ import profileRoutes from '@/views/pages/profile/config/routes';
 const router = new VueRouter(
   { 
     mode: 'history', 
+    scrollBehavior (to, from, savedPosition) {
+      return { x: 0, y: 0 }
+    },
     routes: [
       ...baseRoutes,
       ...projectRoutes,
