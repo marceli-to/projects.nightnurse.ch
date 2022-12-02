@@ -46,7 +46,8 @@
       class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
       @click="switchViewType()">
       <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
-      <span class="block ml-2">{{ translate('Ansicht wechseln') }}</span>
+      <span class="block ml-2" v-if="viewType == 'standard'">{{ translate('Anhänge Filtern') }}</span>
+      <span class="block ml-2" v-else>{{ translate('Alle Nachrichten') }}</span>
     </a>
   </div>
 
@@ -82,8 +83,14 @@
             {{ translate('um') }} {{message.message_time}}
           </feed-item-header>
 
-          <feed-item-body v-if="message.subject || message.body">
-            <div :class="[message.body ? 'font-bold' : '', 'text-sm']">{{ message.subject }}</div>
+          <feed-item-body v-if="message.subject || message.body" :data-item-uuid="message.uuid">
+            <a href="" 
+              class="no-underline hover:text-highlight flex items-center text-sm mb-2"
+              @click.prevent="toggleMessageBody(message.uuid)"
+              v-if="viewType == 'files-only'">
+              {{ message.body | truncate(25, '...') }}
+            </a>
+            <div :class="[message.body ? 'font-bold' : '', 'text-sm']" v-if="message.subject">{{ message.subject }}</div>
             <div class="text-sm" v-html="message.body"></div>
           </feed-item-body>
 
@@ -171,10 +178,11 @@ import {
   CloudDownloadIcon, 
   FolderDownloadIcon,
   ChevronDownIcon,
+  ChevronRightIcon,
   ChevronUpIcon,
   ArrowLeftIcon,
   PhoneIcon,
-  SwitchHorizontalIcon
+  SwitchHorizontalIcon,
 } 
 from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
@@ -209,6 +217,7 @@ export default {
     FolderDownloadIcon,
     ChevronUpIcon,
     ChevronDownIcon,
+    ChevronRightIcon,
     SwitchHorizontalIcon,
     ArrowLeftIcon,
     ContentHeader,
@@ -330,6 +339,12 @@ export default {
 
     toggleForm() {
       this.$refs.messageForm.toggle();
+    },
+
+    toggleMessageBody(itemUuid) {
+      const item = document.querySelector('[data-item-uuid="'+itemUuid+'"]');
+      item.classList.toggle('is-truncated');
+     
     }
   },
 
@@ -338,7 +353,6 @@ export default {
 
     viewType() {
 
-      // Show only messages with files and hide message body
       if (this.viewType == 'files-only') {
         const items = document.querySelectorAll('.feed-item');
         items.forEach((element) => {
@@ -347,7 +361,7 @@ export default {
           }
           else {
             const el = element.querySelector('.feed-item__body');
-            el.style.display = 'none';
+            el.classList.add('is-truncated');
           }
         });
       }
@@ -359,7 +373,7 @@ export default {
           }
           else {
             const el = element.querySelector('.feed-item__body');
-            el.style.display = 'block';
+            el.classList.remove('is-truncated');
           }
         });
       }

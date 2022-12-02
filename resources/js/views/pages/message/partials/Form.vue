@@ -1,7 +1,7 @@
 <template>
 <div>
   <div v-if="isVisible">
-    <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 border-bottom" v-if="isFetched">
+    <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 mb-4 border-bottom" v-if="isFetched">
       <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-8">
         <div class="sm:col-span-7 lg:col-span-8">
           <div class="form-group">
@@ -85,30 +85,31 @@
                 :name="'private'">
               </form-radio>
             </div>
-            
+
             <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
               <label class="mb-2">{{ translate('Empfänger') }} *</label>
-              <div v-if="project.users.owner" class="mb-4 lg:mb-8">
-                <div class="form-check mb-2">
+              <div v-if="project.users.owner.teams" class="mb-4 lg:mb-8">
+                <div v-for="team in project.users.owner.teams" :key="team.uuid" class="mb-4">
+                  <div class="form-check mb-2">
                   <input 
                     type="checkbox" 
                     class="checkbox" 
-                    :id="project.users.owner.uuid" 
-                    @change="toggleAll($event, project.users.owner.uuid)">
-                  <label class="inline-block text-gray-800 font-bold" :for="project.users.owner.uuid">
-                    {{ project.users.owner.name }}
+                    :id="team.uuid" 
+                    @change="toggleAll($event, team.uuid)">
+                  <label class="inline-block text-gray-800 font-bold" :for="team.uuid">
+                    NNI {{ team.description }}
                   </label>
                 </div>
                 <div class="mb-1">
-                  <div v-for="(user, index) in staff" :key="user.uuid" class="mb-2">
-                    <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="project.users.owner.uuid" :data-truncatable-index="index">
+                  <div v-for="(user, index) in team.users" :key="user.uuid" class="mb-2">
+                    <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">
                       <input 
                         type="checkbox" 
                         class="checkbox" 
                         :value="user.uuid" 
                         :id="user.uuid" 
                         :checked="addProjectLead(user.id, user.uuid)"
-                        :data-company-uuid="project.users.owner.uuid"
+                        :data-team-uuid="team.uuid"
                         @change="toggleOne($event, user.uuid)">
                       <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
                         {{ user.firstname }} {{ user.name }}
@@ -121,77 +122,76 @@
                 </div>
                 <a 
                   href="javascript:;" 
-                  @click="showOverflow(project.users.owner.uuid)"
-                  :data-truncatable-more="project.users.owner.uuid"
+                  @click="showOverflow(team.uuid)"
+                  :data-truncatable-more="team.uuid"
                   class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                  v-if="project.users.owner.users.length > 10">
+                  v-if="team.users.length > 10">
                   <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                   <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
                 </a>
                 <a
                   href="javascript:;" 
-                  @click="hideOverflow(project.users.owner.uuid)"
-                  :data-truncatable-less="project.users.owner.uuid"
+                  @click="hideOverflow(team.uuid)"
+                  :data-truncatable-less="team.uuid"
                   class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
                   <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
                   <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
                 </a>
-              </div>
-
-              <div v-if="!data.private">
-                <div v-for="company in project.users.clients" :key="company.uuid">
-                  <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
-                    <div class="form-check mb-2">
-                      <input 
-                        type="checkbox" 
-                        class="checkbox" 
-                        :id="company.data.uuid" 
-                        @change="toggleAll($event, company.data.uuid)">
-                      <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
-                        {{ company.data.name }}
-                      </label>
-                    </div>
-                    <div class="mb-1">
-                      <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
-                        <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.data.uuid" :data-truncatable-index="index">
-                          <input 
-                            type="checkbox" 
-                            class="checkbox" 
-                            :value="user.uuid" 
-                            :id="user.uuid" 
-                            :data-company-uuid="company.data.uuid"
-                            @change="toggleOne($event, user.uuid)">
-                          <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                            {{ user.firstname }} {{ user.name }}
-                          </label>
-                          <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                            {{ user.email }}
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                    <a 
-                      href="javascript:;" 
-                      @click="showOverflow(company.data.uuid)"
-                      :data-truncatable-more="company.data.uuid"
-                      class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                      v-if="company.users.length > 10">
-                      <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                      <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
-                    </a>
-                    <a
-                      href="javascript:;" 
-                      @click="hideOverflow(company.data.uuid)"
-                      :data-truncatable-less="company.data.uuid"
-                      class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
-                      <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                      <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
-                    </a>
-                  </div>
                 </div>
               </div>
             </div>
-
+            <div v-if="!data.private">
+              <div v-for="company in project.users.clients" :key="company.uuid">
+                <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
+                  <div class="form-check mb-2">
+                    <input 
+                      type="checkbox" 
+                      class="checkbox" 
+                      :id="company.data.uuid" 
+                      @change="toggleAll($event, company.data.uuid)">
+                    <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
+                      {{ company.data.name }}
+                    </label>
+                  </div>
+                  <div class="mb-1">
+                    <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
+                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.data.uuid" :data-truncatable-index="index">
+                        <input 
+                          type="checkbox" 
+                          class="checkbox" 
+                          :value="user.uuid" 
+                          :id="user.uuid" 
+                          :data-company-uuid="company.data.uuid"
+                          @change="toggleOne($event, user.uuid)">
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                          {{ user.firstname }} {{ user.name }}
+                        </label>
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                          {{ user.email }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                  <a 
+                    href="javascript:;" 
+                    @click="showOverflow(company.data.uuid)"
+                    :data-truncatable-more="company.data.uuid"
+                    class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
+                    v-if="company.users.length > 10">
+                    <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
+                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
+                  </a>
+                  <a
+                    href="javascript:;" 
+                    @click="hideOverflow(company.data.uuid)"
+                    :data-truncatable-less="company.data.uuid"
+                    class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
+                    <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
+                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -370,6 +370,7 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
         this.project.users = responses[1].data;
+        this.project.users.owner.teams = this.sortByProjectLead(this.project.users.owner);
         this.isFetched = true;
       }));
 
@@ -405,7 +406,7 @@ export default {
     toggleAll(event, uuid) {
       const _this = this;
       const state = event.target.checked ? true : false;
-      const boxes = document.querySelectorAll('[data-company-uuid="'+uuid+'"]');
+      const boxes = document.querySelectorAll('[data-team-uuid="'+uuid+'"]');
       boxes.forEach(function(box){
         box.checked = state;
         _this.addOrRemove(state, box.value);
@@ -474,6 +475,18 @@ export default {
         return true;
       }
       return false;
+    },
+
+    sortByProjectLead(project) {
+      let teams = [];
+      project.teams.forEach(team => {
+        const user = team.users.findIndex((u) => u.id === this.project.user_id);
+        if (user) {
+          team.users.unshift(team.users.splice(user, 1)[0]);
+        }
+        teams.push(team);
+      });
+      return teams;
     },
 
     /** 
@@ -564,12 +577,6 @@ export default {
   computed: {
     title() {
       return `${this.translate('Neue Nachricht')} <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
-    },
-
-    staff() {
-      const idx = this.project.users.owner.users.findIndex(x => x.id == this.project.user_id);
-      this.project.users.owner.users.unshift(this.project.users.owner.users.splice(idx, 1)[0]);
-      return this.project.users.owner.users;
     },
 
     translation() {

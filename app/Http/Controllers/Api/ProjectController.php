@@ -134,7 +134,7 @@ class ProjectController extends Controller
     }
 
     // Get users for owner (nni)
-    $owner = Company::owner()->with('users')->get()->first();
+    $owner = Company::owner()->with('teams.users', 'users')->get()->first();
     return response()->json(['owner' => $owner, 'clients' => $clients]);
   }
 

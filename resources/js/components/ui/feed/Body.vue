@@ -14,4 +14,17 @@
 .feed-item__body a {
   @apply text-ellipsis
 }
+
+.feed-item__body.is-truncated > div {
+  display: none;
+}
+
+.feed-item__body.is-truncated > a {
+  display: flex;
+}
+
+.feed-item__body > a {
+  display: none;
+}
+
 </style>

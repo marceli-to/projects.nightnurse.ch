@@ -69,6 +69,14 @@
       </select>
     </div>
 
+    <div class="form-group" v-if="data.company.teams">
+      <label>{{ translate('Team') }}</label>
+      <select v-model="data.team_id">
+        <option :value="null">--</option>
+        <option :value="t.id" v-for="t in data.company.teams" :key="t.id">{{t.description}}</option>
+      </select>
+    </div>
+
     <div class="form-group">
       <label>{{ translate('Vertec Id') }} <asterisk /></label>
       <input type="text" v-model="data.vertec_id">
@@ -130,6 +138,7 @@ export default {
         gender_id: null,
         language_id: null,
         company_id: null,
+        team_id: null,
         vertec_id: null,
       },
 

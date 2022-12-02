@@ -30,6 +30,11 @@ class Company extends Base
     return $this->hasMany(User::class, 'company_id', 'id')->orderBy('email')->orderBy('name');
   }
 
+  public function teams()
+  {
+    return $this->hasMany(Team::class, 'company_id', 'id');
+  }
+
 	public function projects()
 	{
 		return $this->belongsToMany(Project::class);
@@ -58,7 +63,6 @@ class Company extends Base
    */
   public function getFullNameAttribute($value)
   {
-    
     return ($this->name && $this->city) ? $this->name . ', ' . $this->city : $this->name;
   }
 

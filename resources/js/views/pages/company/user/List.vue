@@ -18,6 +18,7 @@
           {{d.firstname}} {{ d.name }}
           <span class="hidden sm:inline"><separator />{{ d.email }}</span>
           <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
+          <pill v-if="d.team_id" class="bg-blue-500">{{ getTeam(d.id) }}</pill>
         </div>
         <div v-else>
           {{ d.email }}
@@ -149,6 +150,14 @@ export default {
         });
       }
     },
+
+    getTeam(userId) {
+      const user = this.data.find(x => x.id === userId);
+      if (user) {
+        const team = user.company.teams.find(x => x.id === user.team_id);
+        return team.description
+      }
+    }
   },
 
   computed: {
@@ -157,7 +166,7 @@ export default {
         return `${this.translate('Benutzer für')} ${this.data[0].company.name}`
       }
       return this.translate('Benutzer');
-    }
+    },
   }
 }
 </script>

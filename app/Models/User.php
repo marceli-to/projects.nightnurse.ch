@@ -27,6 +27,7 @@ class User extends Authenticatable implements MustVerifyEmail
     'register_complete',
     'language_id',
     'company_id',
+    'team_id',
     'gender_id',
     'role_id',
     'vertec_id'
@@ -89,6 +90,11 @@ class User extends Authenticatable implements MustVerifyEmail
   public function company()
   {
     return $this->belongsTo(Company::class);
+  }
+
+  public function team()
+  {
+    return $this->belongsTo(Team::class);
   }
 
   public function gender()

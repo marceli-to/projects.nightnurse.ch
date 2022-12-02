@@ -22,7 +22,7 @@ class UserController extends Controller
 
   public function get(Company $company)
   {
-    $users = User::with('company')->orderBy('name')->where('company_id', $company->id)->get();
+    $users = User::with('company.teams')->orderBy('name')->where('company_id', $company->id)->get();
     return new DataCollection($users);
   }
 
@@ -65,7 +65,7 @@ class UserController extends Controller
    */
   public function find(User $user)
   {
-    return response()->json(User::with('company')->findOrFail($user->id));
+    return response()->json(User::with('company.teams')->findOrFail($user->id));
   }
 
   /**
@@ -86,6 +86,7 @@ class UserController extends Controller
       'password' => \Hash::make($request->input('password')),
       'language_id' => $request->input('language_id'),
       'company_id' => $request->input('company_id'),
+      'team_id' => $request->input('company_id') ? $request->input('company_id') : NULL,
       'gender_id' => $request->input('gender_id'),
       'role_id' => $request->input('role_id'),
       'vertec_id' => $request->input('vertec_id') ? $request->input('vertec_id') : NULL,
