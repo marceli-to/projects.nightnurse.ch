@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\Company;
 use App\Models\CompanyProject;
+use App\Models\Team;
 use App\Services\VertecApi;
 use App\Http\Requests\ProjectStoreRequest;
 use Illuminate\Http\Request;
@@ -135,7 +136,63 @@ class ProjectController extends Controller
 
     // Get users for owner (nni)
     $owner = Company::owner()->with('teams.users', 'users')->get()->first();
-    return response()->json(['owner' => $owner, 'clients' => $clients]);
+
+    if (auth()->user()->isAdmin())
+    {
+      return response()->json(['owner' => $owner, 'clients' => $clients]);
+    }
+
+    // Map fields for non-admins
+    $clients = [];
+    foreach($project->users as $user)
+    {
+      $clients[$user->company->uuid]['data'] = [
+        'uuid' => $user->company->uuid,
+        'name' => $user->company->name,
+        'full_name' => $user->company->full_name,
+        'city' => $user->company->city,
+      ];
+      $clients[$user->company->uuid]['users'][] = [
+        'uuid' => $user->uuid,
+        'firstname' => $user->firstname,
+        'name' => $user->name,
+        'full_name' => $user->full_name,
+        'short_name' => $user->short_name,
+        'register_complete' => $user->register_complete,
+        'email' => $user->register_complete ? null : $user->email
+      ];
+    }
+
+    $data = [
+      'owner' => [
+        'uuid' => $owner->uuid,
+        'name' => $owner->name,
+        'full_name' => $owner->full_name,
+        'city' => $owner->city,
+        'teams' => $owner->teams->where('id', TEAM::TEAM_ZURICH)->map(function($t) {
+          return [
+            'uuid' => $t->uuid,
+            'description' => $t->description,
+            'users' => $t->users->map(function($u) {
+              return [
+                'uuid' => $u->uuid,
+                'firstname' => $u->firstname,
+                'name' => $u->name,
+                'full_name' => $u->full_name,
+                'short_name' => $u->short_name,
+                'register_complete' => $u->register_complete,
+                'email' => $u->register_complete ? null : $u->email
+              ];
+            })
+          ];
+        }),
+      ],
+      'clients' => $clients,
+    ];
+
+    return response()->json($data);
+
+
   }
 
   /**
@@ -158,7 +215,44 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager', 'users.company')->findOrFail($project->id));
+    if (auth()->user()->isAdmin())
+    {
+      return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager', 'users.company')->findOrFail($project->id));
+    }
+
+    // Map fields for non-admins
+    $p = Project::with('company.users', 'companies.users', 'manager', 'users.company')->findOrFail($project->id);
+    $data = [
+      'uuid' => $p->uuid,
+      'date_end' => $p->date_end,
+      'date_start' => $p->date_start,
+      'name' => $p->name,
+      'number' => $p->number,
+      'title' => $p->title,
+      'color' => $p->color,
+      'manager' => [
+        'uuid' => $p->manager->uuid,
+        'firstname' => $p->manager->firstname,
+        'name' => $p->manager->name,
+        'full_name' => $p->manager->full_name,
+      ],
+      'company' => $p->company,
+
+      'users' => $p->users->map(function($u) {
+        return [
+          'uuid' => $u->uuid,
+          'full_name' => $u->full_name,
+          'short_name' => $u->short_name,
+          'email' => $u->email,
+          'company' => [
+            'uuid' => $u->company->uuid,
+            'name' => $u->company->name,
+            'city' => $u->company->city,
+          ]
+        ];
+      }),
+    ];
+    return response()->json($data);
   }
 
   /**

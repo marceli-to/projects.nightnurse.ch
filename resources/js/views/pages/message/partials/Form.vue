@@ -90,53 +90,62 @@
               <label class="mb-2">{{ translate('Empfänger') }} *</label>
               <div v-if="project.users.owner.teams" class="mb-4 lg:mb-8">
                 <div v-for="team in project.users.owner.teams" :key="team.uuid" class="mb-4">
-                  <div class="form-check mb-2">
-                  <input 
-                    type="checkbox" 
-                    class="checkbox" 
-                    :id="team.uuid" 
-                    @change="toggleAll($event, team.uuid)">
-                  <label class="inline-block text-gray-800 font-bold" :for="team.uuid">
-                    NNI {{ team.description }}
-                  </label>
-                </div>
-                <div class="mb-1">
-                  <div v-for="(user, index) in team.users" :key="user.uuid" class="mb-2">
-                    <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">
+
+                  <template v-if="$store.state.user.admin">
+                    <div class="form-check mb-2">
                       <input 
                         type="checkbox" 
                         class="checkbox" 
-                        :value="user.uuid" 
-                        :id="user.uuid" 
-                        :checked="addProjectLead(user.id, user.uuid)"
-                        :data-team-uuid="team.uuid"
-                        @change="toggleOne($event, user.uuid)">
-                      <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                        {{ user.firstname }} {{ user.name }}
+                        :id="team.uuid" 
+                        @change="toggleAll($event, team.uuid)">
+                      <label class="inline-block text-gray-800 font-bold" :for="team.uuid">
+                        NNI {{ team.description }}
                       </label>
-                      <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                        {{ user.email }}
-                      </label>
+                    </div>                  
+                  </template>
+                  <template v-else>
+                    <div class="inline-block text-sm text-dark font-sans font-bold">
+                      NNI {{ team.description }}
+                    </div>
+                  </template>
+
+                  <div class="mb-1">
+                    <div v-for="(user, index) in team.users" :key="user.uuid" class="mb-2">
+                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">
+                        <input 
+                          type="checkbox" 
+                          class="checkbox" 
+                          :value="user.uuid" 
+                          :id="user.uuid" 
+                          :checked="addProjectLead(user.uuid)"
+                          :data-team-uuid="team.uuid"
+                          @change="toggleOne($event, user.uuid)">
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                          {{ user.firstname }} {{ user.name }}
+                        </label>
+                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                          {{ user.email }}
+                        </label>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <a 
-                  href="javascript:;" 
-                  @click="showOverflow(team.uuid)"
-                  :data-truncatable-more="team.uuid"
-                  class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                  v-if="team.users.length > 10">
-                  <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                  <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
-                </a>
-                <a
-                  href="javascript:;" 
-                  @click="hideOverflow(team.uuid)"
-                  :data-truncatable-less="team.uuid"
-                  class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
-                  <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                  <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
-                </a>
+                  <a 
+                    href="javascript:;" 
+                    @click="showOverflow(team.uuid)"
+                    :data-truncatable-more="team.uuid"
+                    class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
+                    v-if="team.users.length > 10">
+                    <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
+                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
+                  </a>
+                  <a
+                    href="javascript:;" 
+                    @click="hideOverflow(team.uuid)"
+                    :data-truncatable-less="team.uuid"
+                    class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
+                    <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
+                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -161,7 +170,7 @@
                           class="checkbox" 
                           :value="user.uuid" 
                           :id="user.uuid" 
-                          :data-company-uuid="company.data.uuid"
+                          :data-team-uuid="company.data.uuid"
                           @change="toggleOne($event, user.uuid)">
                         <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
                           {{ user.firstname }} {{ user.name }}
@@ -372,6 +381,7 @@ export default {
         this.project.users = responses[1].data;
         this.project.users.owner.teams = this.sortByProjectLead(this.project.users.owner);
         this.isFetched = true;
+        console.log(this.$store.state.user);
       }));
 
     },
@@ -468,8 +478,8 @@ export default {
 
     },
 
-    addProjectLead(id, uuid) {
-      if (this.project.user_id == id)
+    addProjectLead(uuid) {
+      if (this.project.manager.uuid == uuid)
       {
         this.addOrRemove(true, uuid);
         return true;
@@ -480,7 +490,7 @@ export default {
     sortByProjectLead(project) {
       let teams = [];
       project.teams.forEach(team => {
-        const user = team.users.findIndex((u) => u.id === this.project.user_id);
+        const user = team.users.findIndex((u) => u.uuid === this.project.manager.uuid);
         if (user) {
           team.users.unshift(team.users.splice(user, 1)[0]);
         }

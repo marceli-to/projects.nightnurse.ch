@@ -9,6 +9,9 @@ class Team extends Base
 {
   use HasFactory, SoftDeletes;
 
+  public const TEAM_ZURICH = 1;
+  public const TEAM_BUENOS_AIRES = 2;
+
 	protected $fillable = [
     'uuid',
     'description',
