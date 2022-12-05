@@ -24453,7 +24453,7 @@ var render = function render() {
       staticClass: "mb-1"
     }, _vm._l(team.users, function (user, index) {
       return _c("div", {
-        key: user.uuid,
+        key: index,
         staticClass: "mb-2"
       }, [_c("div", {
         "class": [index < 6 ? "flex" : "hidden", "form-check"],
