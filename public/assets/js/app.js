@@ -20847,7 +20847,7 @@ __webpack_require__.r(__webpack_exports__);
         }
         _this2.project = responses[0].data;
         _this2.project.users = responses[1].data;
-        console.log(_this2.project.users.owner);
+        console.log(_this2.project.users.owner.teams);
         _this2.project.users.owner.teams = _this2.sortByProjectLead(_this2.project.users.owner);
         _this2.isFetched = true;
       }));
