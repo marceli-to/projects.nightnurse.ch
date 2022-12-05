@@ -108,29 +108,28 @@
                       NNI {{ team.description }}
                     </div>
                   </template>
-                  {{ team.users }}
-                  <!--
                   <div class="mb-1" v-if="team.users.length > 0">
                     <div v-for="(user, index) in team.users" :key="index" class="mb-2">
-                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">
-                        <input 
-                          type="checkbox" 
-                          class="checkbox" 
-                          :value="user.uuid" 
-                          :id="user.uuid" 
-                          :checked="addProjectLead(user.uuid)"
-                          :data-team-uuid="team.uuid"
-                          @change="toggleOne($event, user.uuid)">
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                          {{ user.firstname }} {{ user.name }}
-                        </label>
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email }}
-                        </label>
-                      </div>
+                      <template v-if="user">
+                        <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">
+                          <input 
+                            type="checkbox" 
+                            class="checkbox" 
+                            :value="user.uuid" 
+                            :id="user.uuid" 
+                            :checked="addProjectLead(user.uuid)"
+                            :data-team-uuid="team.uuid"
+                            @change="toggleOne($event, user.uuid)">
+                          <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                            {{ user.firstname }} {{ user.name }}
+                          </label>
+                          <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                            {{ user.email }}
+                          </label>
+                        </div>
+                      </template>
                     </div>
                   </div>
-                  -->
                   <a 
                     href="javascript:;" 
                     @click="showOverflow(team.uuid)"
@@ -381,7 +380,6 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
         this.project.users = responses[1].data;
-        console.log(this.project.users.owner.teams);
         this.project.users.owner.teams = this.sortByProjectLead(this.project.users.owner);
         this.isFetched = true;
       }));

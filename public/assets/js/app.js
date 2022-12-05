@@ -20847,7 +20847,6 @@ __webpack_require__.r(__webpack_exports__);
         }
         _this2.project = responses[0].data;
         _this2.project.users = responses[1].data;
-        console.log(_this2.project.users.owner.teams);
         _this2.project.users.owner.teams = _this2.sortByProjectLead(_this2.project.users.owner);
         _this2.isFetched = true;
       }));
@@ -24449,7 +24448,46 @@ var render = function render() {
       }
     }, [_vm._v("\n                        NNI " + _vm._s(team.description) + "\n                      ")])])] : [_c("div", {
       staticClass: "inline-block text-sm text-dark font-sans font-bold"
-    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v("\n                  " + _vm._s(team.users) + "\n                  "), _vm._v(" "), team.users.length > 10 ? _c("a", {
+    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v(" "), team.users.length > 0 ? _c("div", {
+      staticClass: "mb-1"
+    }, _vm._l(team.users, function (user, index) {
+      return _c("div", {
+        key: index,
+        staticClass: "mb-2"
+      }, [user ? [_c("div", {
+        "class": [index < 6 ? "flex" : "hidden", "form-check"],
+        attrs: {
+          "data-truncatable": team.uuid,
+          "data-truncatable-index": index
+        }
+      }, [_c("input", {
+        staticClass: "checkbox",
+        attrs: {
+          type: "checkbox",
+          id: user.uuid,
+          "data-team-uuid": team.uuid
+        },
+        domProps: {
+          value: user.uuid,
+          checked: _vm.addProjectLead(user.uuid)
+        },
+        on: {
+          change: function change($event) {
+            return _vm.toggleOne($event, user.uuid);
+          }
+        }
+      }), _vm._v(" "), user.register_complete ? _c("label", {
+        staticClass: "inline-block text-gray-800",
+        attrs: {
+          "for": user.uuid
+        }
+      }, [_vm._v("\n                            " + _vm._s(user.firstname) + " " + _vm._s(user.name) + "\n                          ")]) : _c("label", {
+        staticClass: "inline-block text-gray-800",
+        attrs: {
+          "for": user.uuid
+        }
+      }, [_vm._v("\n                            " + _vm._s(user.email) + "\n                          ")])])] : _vm._e()], 2);
+    }), 0) : _vm._e(), _vm._v(" "), team.users.length > 10 ? _c("a", {
       staticClass: "text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0",
       attrs: {
         href: "javascript:;",
