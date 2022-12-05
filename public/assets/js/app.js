@@ -24449,7 +24449,7 @@ var render = function render() {
       }
     }, [_vm._v("\n                        NNI " + _vm._s(team.description) + "\n                      ")])])] : [_c("div", {
       staticClass: "inline-block text-sm text-dark font-sans font-bold"
-    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v(" "), team.users ? _c("div", {
+    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v(" "), team.users.length > 0 ? _c("div", {
       staticClass: "mb-1"
     }, _vm._l(team.users, function (user, index) {
       return _c("div", {
