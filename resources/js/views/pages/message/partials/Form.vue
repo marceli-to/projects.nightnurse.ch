@@ -109,6 +109,7 @@
                     </div>
                   </template>
                   {{ team.users.length }}
+                  <!--
                   <div class="mb-1" v-if="team.users.length > 0">
                     <div v-for="(user, index) in team.users" :key="index" class="mb-2">
                       <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">
@@ -129,6 +130,7 @@
                       </div>
                     </div>
                   </div>
+                  -->
                   <a 
                     href="javascript:;" 
                     @click="showOverflow(team.uuid)"
