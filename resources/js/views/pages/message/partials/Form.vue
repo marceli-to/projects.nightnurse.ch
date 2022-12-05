@@ -381,9 +381,9 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
         this.project.users = responses[1].data;
+        console.log(this.project.users.owner);
         this.project.users.owner.teams = this.sortByProjectLead(this.project.users.owner);
         this.isFetched = true;
-        console.log(this.$store.state.user);
       }));
 
     },
