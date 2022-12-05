@@ -108,7 +108,7 @@
                       NNI {{ team.description }}
                     </div>
                   </template>
-                  {{ team.users.length }}
+                  {{ team.users }}
                   <!--
                   <div class="mb-1" v-if="team.users.length > 0">
                     <div v-for="(user, index) in team.users" :key="index" class="mb-2">

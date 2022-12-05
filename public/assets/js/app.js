@@ -24449,7 +24449,7 @@ var render = function render() {
       }
     }, [_vm._v("\n                        NNI " + _vm._s(team.description) + "\n                      ")])])] : [_c("div", {
       staticClass: "inline-block text-sm text-dark font-sans font-bold"
-    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v("\n                  " + _vm._s(team.users.length) + "\n                  "), _vm._v(" "), team.users.length > 10 ? _c("a", {
+    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v("\n                  " + _vm._s(team.users) + "\n                  "), _vm._v(" "), team.users.length > 10 ? _c("a", {
       staticClass: "text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0",
       attrs: {
         href: "javascript:;",
