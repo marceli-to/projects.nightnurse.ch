@@ -108,7 +108,7 @@
                       NNI {{ team.description }}
                     </div>
                   </template>
-                  <div class="mb-1" v-if="team.users.length > 0">
+                  <div class="mb-1">
                     <div v-for="(user, index) in team.users" :key="index" class="mb-2">
                       <template v-if="user">
                         <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">

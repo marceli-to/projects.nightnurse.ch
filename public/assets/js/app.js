@@ -24448,7 +24448,7 @@ var render = function render() {
       }
     }, [_vm._v("\n                        NNI " + _vm._s(team.description) + "\n                      ")])])] : [_c("div", {
       staticClass: "inline-block text-sm text-dark font-sans font-bold"
-    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v(" "), team.users.length > 0 ? _c("div", {
+    }, [_vm._v("\n                      NNI " + _vm._s(team.description) + "\n                    ")])], _vm._v(" "), _c("div", {
       staticClass: "mb-1"
     }, _vm._l(team.users, function (user, index) {
       return _c("div", {
@@ -24487,7 +24487,7 @@ var render = function render() {
           "for": user.uuid
         }
       }, [_vm._v("\n                            " + _vm._s(user.email) + "\n                          ")])])] : _vm._e()], 2);
-    }), 0) : _vm._e(), _vm._v(" "), team.users.length > 10 ? _c("a", {
+    }), 0), _vm._v(" "), team.users.length > 10 ? _c("a", {
       staticClass: "text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0",
       attrs: {
         href: "javascript:;",
