@@ -4,6 +4,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use App\Models\User;
 use App\Models\Company;
 use App\Models\CompanyProject;
 use App\Models\Team;
@@ -134,8 +135,8 @@ class ProjectController extends Controller
       $clients[$user->company->id]['users'][] = $user;
     }
 
-    // Get users for owner (nni)
-    $owner = Company::owner()->with('teams.users', 'users')->get()->first();
+    // Get users for owner
+    $owner = Company::owner()->with('teams.users')->first();
 
     if (auth()->user()->isAdmin())
     {

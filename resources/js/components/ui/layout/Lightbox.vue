@@ -1,6 +1,6 @@
 <template>
   <div class="fixed z-40 w-screen h-screen inset-0 bg-black bg-opacity-60 z-1001" v-if="isOpen">
-    <div class="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[300px] sm:max-w-lg bg-white rounded-md p-4 space-y-5">
+    <div :class="`fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full bg-white rounded-md p-4 ${$props.maxWidth}`">
       <a href="javascript:;" @click="hide()" class="text-gray-400 hover:text-highlight block absolute top-3 right-3">
           <x-icon class="h-6 w-6" aria-hidden="true" />
         </a>
@@ -20,6 +20,13 @@ export default {
   data() {
     return {
       isOpen: false,
+    }
+  },
+
+  props: {
+    maxWidth: {
+      type: String,
+      default: 'max-w-[300px] sm:max-w-lg'
     }
   },
 

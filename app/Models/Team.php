@@ -20,6 +20,6 @@ class Team extends Base
 
   public function users()
   {
-    return $this->hasMany(User::class, 'team_id', 'id');
+    return $this->hasMany(User::class)->orderBy('firstname');
   }
 }

@@ -3,7 +3,31 @@
   <div v-if="isVisible">
     <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 mb-4 border-bottom" v-if="isFetched">
       <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-8">
-        <div class="sm:col-span-7 lg:col-span-8">
+
+        <div class="sm:col-span-7 lg:col-span-12">
+
+          <!-- Message state -->
+          <template v-if="$store.state.user.admin">
+            <div class="form-group border-bottom pb-4">
+              <div class="relative group text-xl hover:cursor-pointer">
+                <label for="isPrivate" class="mb-2 block hover:cursor-pointer relative z-20">{{ translate('Private Nachricht?') }}</label>
+                <input v-model="data.private" type="checkbox" class="hover:cursor-pointer absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md z-10" id="isPrivate" />
+                <span class="w-11 h-6 flex items-center flex-shrink-0 p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-highlight after:h-4 after:w-4 after:bg-white after:rounded-full after:shadow-md after:duration-200 peer-checked:after:translate-x-5"></span>
+              </div>
+            </div>
+          </template>
+
+          <!-- Recepients -->
+          <user-selection-menu
+            :private="data.private"
+            :recipients="data.users"
+            :manager="project.manager"
+            :owner="project.owner"
+            :clients="project.clients"
+            @addOrRemoveRecipient="addOrRemoveRecipient">
+          </user-selection-menu>
+
+          <!-- Message (subject, text) -->
           <div class="form-group">
             <label>{{ translate('Betreff') }}</label>
             <input type="text" v-model="data.subject">
@@ -27,6 +51,8 @@
               v-model="data.body"
             ></tinymce-editor>
           </div>
+
+          <!-- Files -->
           <div class="form-group">
             <label class="mb-2 lg:mb-3">{{ translate('Dateien') }}</label>
             <vue-dropzone
@@ -72,163 +98,24 @@
               </list-item>
             </list>
           </div>
-        </div>
-        <div class="sm:col-span-5 lg:col-span-4">
-          <div class="bg-light p-2 px-4 pb-1">
-            <div class="form-group" v-if="$store.state.user.admin">
-              <form-radio 
-                :label="translate('Private Nachricht?')"
-                v-bind:private.sync="data.private"
-                :model="data.private"
-                :labelTrue="translate('Ja')"
-                :labelFalse="translate('Nein')"
-                :name="'private'">
-              </form-radio>
-            </div>
 
-            <div :class="[errors.users ? 'is-invalid' : '', 'form-group']">
-              <label class="mb-2">{{ translate('Empfänger') }} *</label>
-              <div v-if="project.users.owner.teams" class="mb-4 lg:mb-8">
-                <div v-for="team in project.users.owner.teams" :key="team.uuid" class="mb-4">
-
-                  <template v-if="$store.state.user.admin">
-                    <div class="form-check mb-2">
-                      <input 
-                        type="checkbox" 
-                        class="checkbox" 
-                        :id="team.uuid" 
-                        @change="toggleAll($event, team.uuid)">
-                      <label class="inline-block text-gray-800 font-bold" :for="team.uuid">
-                        NNI {{ team.description }}
-                      </label>
-                    </div>                  
-                  </template>
-                  <template v-else>
-                    <div class="inline-block text-sm text-dark font-sans font-bold">
-                      NNI {{ team.description }}
-                    </div>
-                  </template>
-                  <div class="mb-1">
-                    <div v-for="(user, index) in team.users" :key="index" class="mb-2">
-                      <template v-if="user">
-                        <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="team.uuid" :data-truncatable-index="index">
-                          <input 
-                            type="checkbox" 
-                            class="checkbox" 
-                            :value="user.uuid" 
-                            :id="user.uuid" 
-                            :checked="addProjectLead(user.uuid)"
-                            :data-team-uuid="team.uuid"
-                            @change="toggleOne($event, user.uuid)">
-                          <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                            {{ user.firstname }} {{ user.name }}
-                          </label>
-                          <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                            {{ user.email }}
-                          </label>
-                        </div>
-                      </template>
-                    </div>
-                  </div>
-                  <a 
-                    href="javascript:;" 
-                    @click="showOverflow(team.uuid)"
-                    :data-truncatable-more="team.uuid"
-                    class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                    v-if="team.users.length > 10">
-                    <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
-                  </a>
-                  <a
-                    href="javascript:;" 
-                    @click="hideOverflow(team.uuid)"
-                    :data-truncatable-less="team.uuid"
-                    class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
-                    <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div v-if="!data.private">
-              <div v-for="company in project.users.clients" :key="company.uuid">
-                <div v-if="company.users.length > 0" class="mb-4 lg:mb-8">
-                  <div class="form-check mb-2">
-                    <input 
-                      type="checkbox" 
-                      class="checkbox" 
-                      :id="company.data.uuid" 
-                      @change="toggleAll($event, company.data.uuid)">
-                    <label class="inline-block text-gray-800 font-bold" :for="company.data.uuid">
-                      {{ company.data.name }}
-                    </label>
-                  </div>
-                  <div class="mb-1">
-                    <div v-for="(user, index) in company.users" :key="user.uuid" class="mb-2">
-                      <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="company.data.uuid" :data-truncatable-index="index">
-                        <input 
-                          type="checkbox" 
-                          class="checkbox" 
-                          :value="user.uuid" 
-                          :id="user.uuid" 
-                          :data-team-uuid="company.data.uuid"
-                          @change="toggleOne($event, user.uuid)">
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                          {{ user.firstname }} {{ user.name }}
-                        </label>
-                        <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                          {{ user.email }}
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                  <a 
-                    href="javascript:;" 
-                    @click="showOverflow(company.data.uuid)"
-                    :data-truncatable-more="company.data.uuid"
-                    class="text-gray-400 flex items-center no-underline hover:underline mt-3 sm:mt-0"
-                    v-if="company.users.length > 10">
-                    <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Mehr anzeigen') }}</span>
-                  </a>
-                  <a
-                    href="javascript:;" 
-                    @click="hideOverflow(company.data.uuid)"
-                    :data-truncatable-less="company.data.uuid"
-                    class="text-gray-400 hidden items-center no-underline hover:underline mt-3 sm:mt-0">
-                    <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                    <span class="inline-block ml-2 text-xs font-mono">{{ translate('Weniger anzeigen') }}</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-8">
-        <div class="sm:col-span-7 lg:col-span-8 flex items-center justify-between mt-4">
+
+        <div class="sm:col-span-7 lg:col-span-12 mt-2 flex justify-between">
+          <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
+            <span>{{ translate('Abbrechen') }}</span>
+          </a>
           <button type="submit" class="btn-send">
             <mail-icon class="h-5 w-5" aria-hidden="true" />
             <span class="block ml-2">{{ translate('Senden') }}</span>
           </button>
-          <a href="javascript:;" class="form-helper form-helper-footer l-4 lg:ml-8" @click="hide()">
-            <span>{{ translate('Abbrechen') }}</span>
-          </a>
         </div>
-        <div class="sm:col-span-5 lg:col-span-4"></div>
+
       </div>
     </form>
+
   </div>
-  <!-- 
-  <div v-else>
-    <div class="flex justify-center">
-      <a href="javascript:;" @click="show()" class="btn-create">
-        <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-        <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
-      </a>
-    </div>
-  </div>
-  -->
+
 </div>
 </template>
 
@@ -254,6 +141,8 @@ import FlagDeIcon from '@/components/ui/icons/flag-de';
 import FlagEnIcon from '@/components/ui/icons/flag-en';
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
+import UserSelector from "@/components/ui/form/UserSelector.vue";
+import UserSelection from "@/components/ui/form/UserSelection.vue";
 
 export default {
   
@@ -281,7 +170,9 @@ export default {
     FlagDeIcon,
     FlagEnIcon,
     vueDropzone: vue2Dropzone,
-    NProgress
+    NProgress,
+    UserSelector,
+    UserSelection,
   },
 
   mixins: [i18n],
@@ -305,11 +196,12 @@ export default {
       project: {
         number: null,
         name: null,
-        user: null,
-        users: [],
+        manager: null,
+        owner: {},
+        clients: [],
       },
 
-      user: {},
+      //user: {},
 
       // Validation
       errors: {
@@ -319,6 +211,7 @@ export default {
       // Routes
       routes: {
         fetch: '/api/project',
+        fetchUsers: '/api/project/users',
         post: '/api/message/queue',
         destroy: '/api/upload'
       },
@@ -372,18 +265,19 @@ export default {
     /**
      * Messsage
      */
+
     fetch() {
       this.isFetched = false;
       this.axios.all([
         this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`),
-        this.axios.get(`/api/project/users/${this.$route.params.uuid}`),
+        this.axios.get(`${this.routes.fetchUsers}/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
-        this.project.users = responses[1].data;
-        this.project.users.owner.teams = this.sortByProjectLead(this.project.users.owner);
+        this.project.clients = responses[1].data.clients;
+        this.project.owner = responses[1].data.owner;
+        this.addPreSelected(this.project.manager);
         this.isFetched = true;
       }));
-
     },
 
     submit() {
@@ -413,61 +307,11 @@ export default {
      * Recipients
      */
 
-    toggleAll(event, uuid) {
-      const _this = this;
-      const state = event.target.checked ? true : false;
-      const boxes = document.querySelectorAll('[data-team-uuid="'+uuid+'"]');
-      boxes.forEach(function(box){
-        box.checked = state;
-        _this.addOrRemove(state, box.value);
-      });
-    },
-
-    toggleOne(event, uuid) {
-      const state = event.target.checked ? true : false;
-      this.addOrRemove(state, uuid);
-    },
-
-    showOverflow(uuid) {
-      const recipients = document.querySelectorAll('[data-truncatable="'+uuid+'"]');
-      recipients.forEach(function(recipient){
-        recipient.classList.remove('hidden');
-        recipient.classList.add('flex');
-      });
-
-      const btnMore = document.querySelector('[data-truncatable-more="'+uuid+'"]');
-      btnMore.classList.remove('flex');
-      btnMore.classList.add('hidden');
-
-      const btnLess = document.querySelector('[data-truncatable-less="'+uuid+'"]');
-      btnLess.classList.remove('hidden');
-      btnLess.classList.add('flex');
-    },
-
-    hideOverflow(uuid) {
-      const recipients = document.querySelectorAll('[data-truncatable="'+uuid+'"]');
-      recipients.forEach(function(recipient){
-        if (recipient.dataset.truncatableIndex >= 6) {
-          recipient.classList.remove('flex');
-          recipient.classList.add('hidden');
-        }
-      });
-
-      const btnLess = document.querySelector('[data-truncatable-less="'+uuid+'"]');
-      btnLess.classList.remove('flex');
-      btnLess.classList.add('hidden');
-
-      const btnMore = document.querySelector('[data-truncatable-more="'+uuid+'"]');
-      btnMore.classList.remove('hidden');
-      btnMore.classList.add('flex');
-
-    },
-
-    addOrRemove(state, value) {
-      const idx = this.data.users.findIndex(x => x == value);
+    addOrRemoveRecipient(state, user) {
+      const idx = this.data.users.findIndex(x => x.uuid == user.uuid);
       if (state == true) {
         if (idx == -1) {
-          this.data.users.push(value);
+          this.data.users.push(user);
         }
       }
       else {
@@ -475,28 +319,10 @@ export default {
           this.data.users.splice(idx, 1);
         }
       }
-
     },
 
-    addProjectLead(uuid) {
-      if (this.project.manager.uuid == uuid)
-      {
-        this.addOrRemove(true, uuid);
-        return true;
-      }
-      return false;
-    },
-
-    sortByProjectLead(project) {
-      let teams = [];
-      project.teams.forEach(team => {
-        const user = team.users.findIndex((u) => u.uuid === this.project.manager.uuid);
-        if (user) {
-          team.users.unshift(team.users.splice(user, 1)[0]);
-        }
-        teams.push(team);
-      });
-      return teams;
+    addPreSelected(user) {
+      this.addOrRemoveRecipient(true, user);
     },
 
     /** 
@@ -581,7 +407,6 @@ export default {
       textArea.innerHTML = text;
       return textArea.value;
     }
-
   },
 
   computed: {

@@ -9,6 +9,8 @@ class Company extends Base
 {
   use HasFactory, SoftDeletes;
 
+  public const OWNER = 1;
+
 	protected $fillable = [
     'uuid',
     'name',
@@ -19,7 +21,6 @@ class Company extends Base
 	];
 
   protected $appends = ['full_name'];
-
 
   /**
    * Relations
@@ -32,14 +33,13 @@ class Company extends Base
 
   public function teams()
   {
-    return $this->hasMany(Team::class, 'company_id', 'id');
+    return $this->hasMany(Team::class);
   }
 
 	public function projects()
 	{
 		return $this->belongsToMany(Project::class);
 	}
-
 
 	/**
    * Scope for clients (external companies)
