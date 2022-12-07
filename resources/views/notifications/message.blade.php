@@ -62,8 +62,8 @@ An:
 </table>
 @endif
 @endforeach
-@if ($message['files'])
-<div class="border-top py-10 text-xs text-slate font-mono">
+@if (count($message['files']) > 0)
+<div class="border-top py-20 text-xs text-slate font-mono">
   <span class="text-xs font-mono">
     <a href="{{url('')}}/download/zip/{{$message['uuid']}}" target="_blank" class="font-mono text-xs text-dark">Download ZIP</a>
   </span>

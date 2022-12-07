@@ -339,6 +339,7 @@ export default {
 
     toggleForm() {
       this.$refs.messageForm.toggle();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       this.hasForm = this.hasForm ? false : true;
     },
 

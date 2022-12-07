@@ -25,6 +25,7 @@
             :owner="project.owner"
             :clients="project.clients"
             :associates="project.associates"
+            :hasErrors="errors.users"
             @addOrRemoveRecipient="addOrRemoveRecipient">
           </user-selection>
 
@@ -210,6 +211,7 @@ export default {
       // Validation
       errors: {
         name: false,
+        users: false,
       },
 
       // Routes
@@ -290,10 +292,13 @@ export default {
     },
 
     store() {
-      this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
-        this.$notify({ type: "success", text: this.messages.created });
-        this.reset();
-      });
+
+      if (this.validateRecipients()) {
+        this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
+          this.$notify({ type: "success", text: this.messages.created });
+          this.reset();
+        });
+      }
     },
 
     reset() {
@@ -308,11 +313,21 @@ export default {
       this.$parent.fetch();
     },
 
+    validateRecipients() {
+      if (this.data.users.length == 0) {
+        this.errors.users = true;
+        this.$notify({ type: "danger", text: this.translate('Bitte Empfänger auswählen...') });
+        return false;
+      }
+      return true;
+    },
+
     // Add/remove recipients
     addOrRemoveRecipient(state, user) {
       const idx = this.data.users.findIndex(x => x.uuid == user.uuid);
       if (state == true) {
         if (idx == -1) {
+          this.errors.users = false;
           this.data.users.push(user);
         }
       }

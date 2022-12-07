@@ -39,6 +39,11 @@
   @apply border-2 border-gray-100;
 }
 
+
+body {
+  scroll-behavior: smooth;
+}
+
 ::-webkit-scrollbar {
   height: 6px;
   width: 6px;

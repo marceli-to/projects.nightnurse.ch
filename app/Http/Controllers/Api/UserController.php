@@ -33,7 +33,7 @@ class UserController extends Controller
    */
   public function getStaff()
   {
-    return new DataCollection(User::staff()->get());
+    return new DataCollection(User::staff()->orderBy('firstname')->get());
   }
 
   /**

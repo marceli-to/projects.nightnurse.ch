@@ -79,7 +79,9 @@ export default {
         'Zugriffsrechte': 'Access',
         'archivierte Projekte': 'show archive',
         'aktive Projekte': 'show active projects',
-        'Switch language to': 'Sprache wechseln'
+        'Switch language to': 'Sprache wechseln',
+        'Bitte Empfänger auswählen': 'Please seledt at least one recipient',
+
       },
 
       defaultLang: 'de',

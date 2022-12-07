@@ -1,7 +1,7 @@
 <template>
 <div>
   
-  <div class="form-group relative">
+  <div :class="[$props.hasErrors ? 'is-invalid' : '', 'form-group relative']">
     <a href="" @click.prevent="$refs.widgetUserSelection.show()" class="absolute right-0 top-0 text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight">
       <plus-sm-icon class="h-4 w-4" aria-hidden="true" />
       <span class="block ml-1">{{ translate('Hinzufügen') }}</span>
@@ -93,6 +93,11 @@ export default {
     private: {
       type: [Number, Boolean],
       default: false,
+    },
+
+    hasErrors: {
+      type: [Number, Boolean],
+      default: false,
     }
   },
 
@@ -100,18 +105,9 @@ export default {
   },
 
   methods: {
+    
     addOrRemoveRecipient(state, uuid) {
       this.$emit('addOrRemoveRecipient', state, uuid);
-    },
-
-    getUsersWithoutPreselected(users, teamId = null) {
-      this.$props.recipients.forEach(recipient => {
-        const index = users.findIndex(x => x.uuid === recipient.uuid);
-        if (index > -1) {
-          users.splice(index, 1);
-        }
-      });
-      return users;
     },
 
     getTeamAssociates(users, teamId) {
