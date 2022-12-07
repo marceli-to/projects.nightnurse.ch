@@ -23,4 +23,8 @@ h1 {
 h2 {
   font-size: 18px !important;
 }
+
+.tox .tox-selectfield select {
+  padding-left: 12px !important;
+}
 /*# sourceMappingURL=content.min.css.map */

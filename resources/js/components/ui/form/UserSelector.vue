@@ -1,8 +1,9 @@
 <template>
   <div v-if="$props.users.length > 0" class="mb-4 lg:mb-8">
 
-    <div class="mb-2">
-      <template v-if="canToggleAll">
+    
+    <template v-if="(canToggleAll && $props.users.length > 1)">
+      <div class="mb-2">
         <div class="form-check">
           <input 
             type="checkbox" 
@@ -13,13 +14,13 @@
             {{ $props.client.name }}
           </label>
         </div>
-      </template>
-      <template v-else>
-        <div class="inline-block text-sm text-dark font-sans font-bold">
-          {{ $props.client.name }}
-        </div>
-      </template>
-    </div>
+      </div>
+    </template>
+    <template v-else>
+      <div class="inline-block text-sm text-dark font-sans font-bold mb-1">
+        {{ $props.client.name }}
+      </div>
+    </template>
 
     <div class="mb-1">
       <div v-if="$props.hasManager" class="mb-2">

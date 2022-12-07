@@ -39,7 +39,7 @@
     </div>
   </header>
 
-  <message-form ref="messageForm"></message-form>
+  <message-form ref="messageForm" @cancelMessage="hideForm()"></message-form>
   
   <div class="flex justify-end">
     <a href="javascript:;" 
@@ -155,7 +155,7 @@
 
     </div>
   </feed>
-  <content-footer>
+  <content-footer v-if="!hasForm">
     <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
@@ -259,7 +259,7 @@ export default {
       // States
       isLoading: false,
       isFetched: false,
-
+      hasForm: false,
       viewType: 'standard',
 
     };
@@ -339,12 +339,16 @@ export default {
 
     toggleForm() {
       this.$refs.messageForm.toggle();
+      this.hasForm = this.hasForm ? false : true;
+    },
+
+    hideForm() {
+      this.hasForm = false;
     },
 
     toggleMessageBody(itemUuid) {
       const item = document.querySelector('[data-item-uuid="'+itemUuid+'"]');
       item.classList.toggle('is-truncated');
-     
     }
   },
 

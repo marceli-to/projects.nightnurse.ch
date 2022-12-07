@@ -18,14 +18,14 @@
           </template>
 
           <!-- Recepients -->
-          <user-selection-menu
+          <user-selection
             :private="data.private"
             :recipients="data.users"
             :manager="project.manager"
             :owner="project.owner"
             :clients="project.clients"
             @addOrRemoveRecipient="addOrRemoveRecipient">
-          </user-selection-menu>
+          </user-selection>
 
           <!-- Message (subject, text) -->
           <div class="form-group">
@@ -101,7 +101,7 @@
 
         </div>
 
-        <div class="sm:col-span-7 lg:col-span-12 mt-2 flex justify-between">
+        <content-footer>
           <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
             <span>{{ translate('Abbrechen') }}</span>
           </a>
@@ -109,8 +109,7 @@
             <mail-icon class="h-5 w-5" aria-hidden="true" />
             <span class="block ml-2">{{ translate('Senden') }}</span>
           </button>
-        </div>
-
+        </content-footer>
       </div>
     </form>
 
@@ -396,6 +395,7 @@ export default {
 
     hide() {
       this.isVisible = false;
+      this.$emit('cancelMessage');
     },
 
     toggle() {
