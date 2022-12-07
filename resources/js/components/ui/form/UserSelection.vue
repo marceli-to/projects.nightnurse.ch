@@ -34,7 +34,7 @@
         <div class="mr-6">
           <user-selector 
             :client="{name: `Nightnurse ${team.description}`, uuid: team.uuid}"
-            :users="getUsersWithoutPreselected(team.users)"
+            :users="team.users"
             :associates="getTeamAssociates($props.associates, team.id)"
             :canToggleAll="$store.state.user.admin ? true : false"
             @addOrRemoveRecipient="addOrRemoveRecipient">
@@ -45,7 +45,7 @@
         <div v-for="client in $props.clients" :key="client.uuid">
           <user-selector 
             :client="{name: client.data.name, uuid: client.data.uuid}" 
-            :users="getUsersWithoutPreselected(client.users)"
+            :users="client.users"
             @addOrRemoveRecipient="addOrRemoveRecipient">
           </user-selector>
         </div>
@@ -109,7 +109,7 @@ export default {
       this.$emit('addOrRemoveRecipient', state, uuid);
     },
 
-    getUsersWithoutPreselected(users) {
+    getUsersWithoutPreselected(users, teamId = null) {
       this.$props.recipients.forEach(recipient => {
         const index = users.findIndex(x => x.uuid === recipient.uuid);
         if (index > -1) {

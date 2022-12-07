@@ -305,10 +305,7 @@ export default {
       this.$parent.fetch();
     },
 
-    /**
-     * Recipients
-     */
-
+    // Add/remove recipients
     addOrRemoveRecipient(state, user) {
       const idx = this.data.users.findIndex(x => x.uuid == user.uuid);
       if (state == true) {
@@ -323,11 +320,22 @@ export default {
       }
     },
 
+    // Add preselected recipients
     addPreSelected() {
       this.project.associates.unshift(this.project.manager);
       this.project.associates.forEach(user => {
         this.addOrRemoveRecipient(true, user);
+        this.removePreSelectedUser(user);
       });
+    },
+
+    removePreSelectedUser(user) {
+      this.project.owner.teams.forEach((team, idx) => {
+        team.users.forEach(u => {
+          const index = team.users.findIndex(x => x.uuid === user.uuid);
+          if (index > -1) team.users.splice(index, 1);
+        });
+      })
     },
 
     /** 
