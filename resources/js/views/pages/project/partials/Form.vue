@@ -140,38 +140,61 @@
 
     <!-- other clients -->
     <div class="form-group" v-if="data.companies.length">
-      <div v-for="company in data.companies" :key="company.uuid" class="mb-4 lg:mb-8">
-        <div class="form-check mb-2">
+      <div class="sm:grid sm:grid-cols-2 md:grid-cols-3">
+        <div v-for="company in data.companies" :key="company.uuid" class="mb-4 lg:mb-8">
+          <div class="form-check mb-2">
+            <input 
+              type="checkbox" 
+              class="checkbox" 
+              :id="company.uuid" 
+              @change="toggleAll($event, company.uuid)">
+            <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
+              {{ company.full_name }}
+            </label>
+          </div>
+          <div>
+            <div v-for="user in company.users" :key="user.uuid" class="mb-2">
+              <div class="form-check mb-1">
+                <input 
+                  type="checkbox" 
+                  class="checkbox" 
+                  :value="user.id" 
+                  :id="user.uuid" 
+                  :ref="company.uuid"
+                  :checked="checkUser(user.id)"
+                  @change="toggleOne($event, user.id)">
+                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+                  {{ user.firstname }} {{ user.name }}
+                </label>
+                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+                  {{ user.email }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <button-widget :label="translate('Benutzer hinzufügen')" @click="showAddUserForm(company.uuid)" />
+        </div>
+      </div>
+    </div>
+
+    <h4>{{ translate('Projektbeteiligte') }}</h4>
+    <div class="sm:grid sm:grid-cols-2 md:grid-cols-3 pb-4 sm:pb-8">
+      <div v-for="user in settings.staff" :key="user.id" class="mb-2">
+        <div class="form-check mb-1">
           <input 
             type="checkbox" 
             class="checkbox" 
-            :id="company.uuid" 
-            @change="toggleAll($event, company.uuid)">
-          <label class="inline-block text-gray-800 font-bold" :for="company.uuid">
-            {{ company.full_name }}
+            :value="user.id" 
+            :id="user.uuid" 
+            :checked="checkUser(user.id)"
+            @change="toggleOne($event, user.id)">
+          <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
+            {{ user.firstname }} {{ user.name }}
+          </label>
+          <label class="inline-block text-gray-800" :for="user.uuid" v-else>
+            {{ user.email }}
           </label>
         </div>
-        <div>
-          <div v-for="user in company.users" :key="user.uuid" class="mb-2">
-            <div class="form-check mb-1">
-              <input 
-                type="checkbox" 
-                class="checkbox" 
-                :value="user.id" 
-                :id="user.uuid" 
-                :ref="company.uuid"
-                :checked="checkUser(user.id)"
-                @change="toggleOne($event, user.id)">
-              <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                {{ user.firstname }} {{ user.name }}
-              </label>
-              <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                {{ user.email }}
-              </label>
-            </div>
-          </div>
-        </div>
-        <button-widget :label="translate('Benutzer hinzufügen')" @click="showAddUserForm(company.uuid)" />
       </div>
     </div>
 

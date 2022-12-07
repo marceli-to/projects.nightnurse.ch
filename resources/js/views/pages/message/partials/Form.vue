@@ -24,6 +24,7 @@
             :manager="project.manager"
             :owner="project.owner"
             :clients="project.clients"
+            :associates="project.associates"
             @addOrRemoveRecipient="addOrRemoveRecipient">
           </user-selection>
 
@@ -198,6 +199,7 @@ export default {
         manager: null,
         owner: {},
         clients: [],
+        associates: [],
       },
 
       //user: {},
@@ -274,7 +276,8 @@ export default {
         this.project = responses[0].data;
         this.project.clients = responses[1].data.clients;
         this.project.owner = responses[1].data.owner;
-        this.addPreSelected(this.project.manager);
+        this.project.associates = responses[1].data.associates
+        this.addPreSelected();
         this.isFetched = true;
       }));
     },
@@ -320,8 +323,11 @@ export default {
       }
     },
 
-    addPreSelected(user) {
-      this.addOrRemoveRecipient(true, user);
+    addPreSelected() {
+      this.project.associates.unshift(this.project.manager);
+      this.project.associates.forEach(user => {
+        this.addOrRemoveRecipient(true, user);
+      });
     },
 
     /** 

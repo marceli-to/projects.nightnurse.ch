@@ -34,9 +34,8 @@
         <div class="mr-6">
           <user-selector 
             :client="{name: `Nightnurse ${team.description}`, uuid: team.uuid}"
-            :hasManager="hasManager(team.users)"
-            :users="getUsersWithoutManager(team.users)"
-            :manager="$props.manager"
+            :users="getUsersWithoutPreselected(team.users)"
+            :associates="getTeamAssociates($props.associates, team.id)"
             :canToggleAll="$store.state.user.admin ? true : false"
             @addOrRemoveRecipient="addOrRemoveRecipient">
           </user-selector>
@@ -46,7 +45,7 @@
         <div v-for="client in $props.clients" :key="client.uuid">
           <user-selector 
             :client="{name: client.data.name, uuid: client.data.uuid}" 
-            :users="getUsersWithoutManager(client.users)"
+            :users="getUsersWithoutPreselected(client.users)"
             @addOrRemoveRecipient="addOrRemoveRecipient">
           </user-selector>
         </div>
@@ -78,6 +77,12 @@ export default {
 
     recipients: {
       type: Array,
+      default: () => [],
+    },
+
+    associates: {
+      type: Array,
+      default: () => [],
     },
 
     owner: {
@@ -88,10 +93,6 @@ export default {
     clients: {
       type: Object,
       default: () => {},
-    },
-
-    manager: {
-      type: Object,
     },
 
     private: {
@@ -108,18 +109,21 @@ export default {
       this.$emit('addOrRemoveRecipient', state, uuid);
     },
 
-    getUsersWithoutManager(users) {
-      const index = users.findIndex(x => x.uuid === this.$props.manager.uuid);
-      if (index > -1) {
-        users.splice(index, 1);
-      }
+    getUsersWithoutPreselected(users) {
+      this.$props.recipients.forEach(recipient => {
+        const index = users.findIndex(x => x.uuid === recipient.uuid);
+        if (index > -1) {
+          users.splice(index, 1);
+        }
+      });
       return users;
     },
 
-    hasManager(users) {
-      const index = users.findIndex(x => x.uuid === this.$props.manager.uuid);
-      return index > -1  ? true : false
+    getTeamAssociates(users, teamId) {
+      const filteredUser = users.filter((user) => user.team_id === teamId);
+      return filteredUser;
     }
+
   },
 }
 </script>

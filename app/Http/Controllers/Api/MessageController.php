@@ -145,12 +145,12 @@ class MessageController extends Controller
     {
       foreach($request->input('users') as $user)
       {
-        $user = User::where('uuid', $user)->get()->first();
-        if ($user)
+        $recipient = User::where('uuid', $user['uuid'])->get()->first();
+        if ($recipient)
         {
           MessageUser::create([
             'message_id' => $message->id,
-            'user_id' => $user->id,
+            'user_id' => $recipient->id,
             'message_state_id' => 1
           ]);          
         }
@@ -161,9 +161,7 @@ class MessageController extends Controller
     $project->save();
 
     $user = User::find(auth()->user()->id);
-
     $message = Message::with('project.company', 'sender', 'files', 'users')->find($message->id);
-
     broadcast(new MessageSent($user, $message))->toOthers();
 
     return response()->json(['messageId' => $message->id]);

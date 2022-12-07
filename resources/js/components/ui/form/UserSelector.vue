@@ -1,8 +1,7 @@
 <template>
   <div v-if="$props.users.length > 0" class="mb-4 lg:mb-8">
-
     
-    <template v-if="(canToggleAll && $props.users.length > 1)">
+    <template v-if="canToggleAll">
       <div class="mb-2">
         <div class="form-check">
           <input 
@@ -23,24 +22,27 @@
     </template>
 
     <div class="mb-1">
-      <div v-if="$props.hasManager" class="mb-2">
-        <div class="form-check">
-          <input 
-            type="checkbox" 
-            class="checkbox" 
-            :value="$props.manager.uuid" 
-            :id="$props.manager.uuid" 
-            :checked="true"
-            :data-team-uuid="$props.client.uuid"
-            :data-user-email="$props.manager.email"
-            :data-user-name="$props.manager.name"
-            :data-user-firstname="$props.manager.firstname"
-            @change="toggleOne($event, $props.manager)">
-          <label class="inline-block text-gray-800" :for="$props.manager.uuid">
-            {{ $props.manager.firstname }} {{ $props.manager.name }}
-          </label>
+      <template v-if="$props.associates">
+        <div v-for="(user, index) in $props.associates" :key="user.uuid" class="mb-2">
+          <div class="form-check">
+            <input 
+              type="checkbox" 
+              class="checkbox" 
+              :value="user.uuid" 
+              :id="user.uuid" 
+              :checked="true"
+              :data-team-uuid="$props.client.uuid"
+              :data-user-email="user.email"
+              :data-user-name="user.name"
+              :data-user-firstname="user.firstname"
+              @change="toggleOne($event, user)">
+            <label class="inline-block text-gray-800" :for="user.uuid">
+              {{ user.name ? `${user.name} ${user.firstname}` : user.email }}
+            </label>
+          </div>
         </div>
-      </div>
+      </template>
+
       <div v-for="(user, index) in $props.users" :key="user.uuid" class="mb-2">
         <div :class="[index < 6 ? 'flex' : 'hidden', 'form-check']" :data-truncatable="$props.client.uuid" :data-truncatable-index="index">
           <input 
@@ -53,11 +55,8 @@
             :data-user-name="user.name"
             :data-user-firstname="user.firstname"
             @change="toggleOne($event, user)">
-            <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-              {{ user.firstname }} {{ user.name }}
-            </label>
-            <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-              {{ user.email }}
+            <label class="inline-block text-gray-800" :for="user.uuid">
+              {{ user.name ? `${user.name} ${user.firstname}` : user.email }}
             </label>
         </div>
       </div>
@@ -108,26 +107,20 @@ export default {
       },
     },
 
-    users: {
+    associates: {
       type: Array,
       default: () => [],
     },
 
-    manager: {
-      type: Object,
-      default: () => {},
-    },
-
-    hasManager: {
-      type: Boolean,
-      default: false,
+    users: {
+      type: Array,
+      default: () => [],
     },
 
     canToggleAll: {
       type: Boolean,
       default: true
     }
-
   },
 
   data() {

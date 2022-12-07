@@ -128,11 +128,20 @@ class ProjectController extends Controller
     // Get associated users
     $project = Project::with('users.company')->findOrFail($project->id);
 
-    $clients = [];
+    $project_clients = [];
+    $project_associates = [];
+
     foreach($project->users as $user)
     {
-      $clients[$user->company->id]['data'] = $user->company;
-      $clients[$user->company->id]['users'][] = $user;
+      if ($user->company->id == Company::OWNER)
+      {
+        $project_associates[] = $user;
+      }
+      else
+      {
+        $project_clients[$user->company->id]['data'] = $user->company;
+        $project_clients[$user->company->id]['users'][] = $user;
+      }
     }
 
     // Get users for owner
@@ -140,28 +149,44 @@ class ProjectController extends Controller
 
     if (auth()->user()->isAdmin())
     {
-      return response()->json(['owner' => $owner, 'clients' => $clients]);
+      return response()->json(['owner' => $owner, 'clients' => $project_clients, 'associates' => $project_associates]);
     }
 
     // Map fields for non-admins
-    $clients = [];
+    $project_clients = [];
+    $project_associates = [];
     foreach($project->users as $user)
     {
-      $clients[$user->company->uuid]['data'] = [
-        'uuid' => $user->company->uuid,
-        'name' => $user->company->name,
-        'full_name' => $user->company->full_name,
-        'city' => $user->company->city,
-      ];
-      $clients[$user->company->uuid]['users'][] = [
-        'uuid' => $user->uuid,
-        'firstname' => $user->firstname,
-        'name' => $user->name,
-        'full_name' => $user->full_name,
-        'short_name' => $user->short_name,
-        'register_complete' => $user->register_complete,
-        'email' => $user->register_complete ? null : $user->email
-      ];
+      if ($user->company->id == Company::OWNER)
+      {
+        $project_associates[] = [
+          'uuid' => $user->uuid,
+          'firstname' => $user->firstname,
+          'name' => $user->name,
+          'full_name' => $user->full_name,
+          'short_name' => $user->short_name,
+          'register_complete' => $user->register_complete,
+          'email' => $user->register_complete ? null : $user->email
+        ];
+      }
+      else
+      {
+        $project_clients[$user->company->uuid]['data'] = [
+          'uuid' => $user->company->uuid,
+          'name' => $user->company->name,
+          'full_name' => $user->company->full_name,
+          'city' => $user->company->city,
+        ];
+        $project_clients[$user->company->uuid]['users'][] = [
+          'uuid' => $user->uuid,
+          'firstname' => $user->firstname,
+          'name' => $user->name,
+          'full_name' => $user->full_name,
+          'short_name' => $user->short_name,
+          'register_complete' => $user->register_complete,
+          'email' => $user->register_complete ? null : $user->email
+        ];
+      }
     }
 
     $data = [
@@ -188,7 +213,8 @@ class ProjectController extends Controller
           ];
         }),
       ],
-      'clients' => $clients,
+      'clients' => $project_clients,
+      'associates' => $project_associates
     ];
 
     return response()->json($data);
