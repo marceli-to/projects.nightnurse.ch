@@ -3,6 +3,7 @@ export default {
   branding: false,
   menubar: false,
   statusbar: false,
+  browser_spellcheck: true,
   external_plugins: {
     link: '/assets/js/tinymce/plugins/link/plugin.min.js',
   },
