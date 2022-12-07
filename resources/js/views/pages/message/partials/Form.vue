@@ -76,13 +76,16 @@
                     :src="`/img/thumbnail/${d.name}`" 
                     height="100" 
                     width="100"
-                    class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[40px] bg-light rounded-sm"
+                    class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
                     v-if="d.preview" />
                   <div class="mr-2 lg:mr-3 py-1" v-else>
                     <file-type :extension="d.extension" />
                   </div>
-                  <div class="font-mono text-xs">
+                  <div class="font-mono text-xs lg:hidden">
                     {{ d.original_name | truncate(25, '...') }} – {{ d.size | filesize(d.size) }}
+                  </div>
+                  <div class="font-mono text-xs hidden lg:block">
+                    {{ d.original_name }} – {{ d.size | filesize(d.size) }}
                   </div>
                 </div>
                 <list-action>

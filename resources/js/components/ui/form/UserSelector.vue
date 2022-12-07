@@ -37,7 +37,7 @@
               :data-user-firstname="user.firstname"
               @change="toggleOne($event, user)">
             <label class="inline-block text-gray-800" :for="user.uuid">
-              {{ user.name ? `${user.name} ${user.firstname}` : user.email }}
+              {{ user.name ? `${user.firstname} ${user.name}` : user.email }}
             </label>
           </div>
         </div>
@@ -56,7 +56,7 @@
             :data-user-firstname="user.firstname"
             @change="toggleOne($event, user)">
             <label class="inline-block text-gray-800" :for="user.uuid">
-              {{ user.name ? `${user.name} ${user.firstname}` : user.email }}
+              {{ user.name ? `${user.firstname} ${user.name}` : user.email }}
             </label>
         </div>
       </div>

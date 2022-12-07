@@ -71,10 +71,10 @@ export default {
 }
 
 .feed-item {
-  @apply mb-8 sm:mb-10
+  @apply mb-8 lg:mb-10
 }
 
 .feed-item.can-delete {
-  @apply mb-10 sm:mb-12
+  @apply mb-14 lg:mb-16
 }
 </style>

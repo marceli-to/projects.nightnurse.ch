@@ -14,12 +14,7 @@
           @click.prevent="addOrRemoveRecipient(false, recipient)"
           v-for="recipient in $props.recipients" :key="recipient.uuid">
           <span class="inline-block mr-2">
-            <template v-if="recipient.name">
-              {{ recipient.firstname }} {{ recipient.name }}
-            </template>
-            <template v-else>
-              {{ recipient.email }}
-            </template>
+            {{ recipient.name ? `${recipient.firstname} ${recipient.name}` : recipient.email }}
           </span>
           <x-icon class="h-4 w-4" aria-hidden="true"></x-icon>
         </a>
