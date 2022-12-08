@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
@@ -123,5 +124,7 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('message/{message:uuid}', [MessageController::class, 'find']);
   Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
+
+  Route::post('translate', [TranslationController::class, 'get']);
 
 });

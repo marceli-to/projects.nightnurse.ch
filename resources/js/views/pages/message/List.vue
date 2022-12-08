@@ -39,7 +39,10 @@
     </div>
   </header>
 
-  <message-form ref="messageForm" @cancelMessage="hideForm()"></message-form>
+  <message-form 
+    ref="messageForm" 
+    @cancelMessage="hideForm()">
+  </message-form>
   
   <div class="flex justify-end">
     <a href="javascript:;" 
@@ -52,109 +55,18 @@
   </div>
 
   <feed>
-
     <div v-for="(items, day) in feedItems" :key="day" class="relative">
-
       <feed-item-timestamp>{{ day }}</feed-item-timestamp>
-      
       <feed-item 
-        v-for="(message, index) in items" 
+        v-for="(item, index) in items" 
         :key="index" 
-        :item="message" 
-        :class="getStateClasses(message)"
-        :data-has-files="message.files.length > 0 && !message.deleted_at ? true : false">
-        
-        <div v-if="!message.deleted_at" class="relative">
-          <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="message.private" />
-
-          <feed-item-header :class="[message.private ? 'text-slate-100': '', 'relative']">
-            <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
-            <span v-else>[{{ translate('gelöschter Benutzer') }}]</span>
-            {{ translate('an') }}
-            <span class="has-tooltip" v-if="message.users && message.users.length > 2">
-              <span class='tooltip'>
-                {{ message.users.map(x => x.full_name).join(", ") }}
-              </span>
-              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} {{ translate('Empfänger') }}</a>
-            </span>
-            <span v-else>
-             {{ message.users.map(x => x.full_name).join(", ") }}
-            </span>
-            {{ translate('um') }} {{message.message_time}}
-          </feed-item-header>
-
-          <feed-item-body v-if="message.subject || message.body" :data-item-uuid="message.uuid">
-            <a href="" 
-              class="no-underline hover:text-highlight flex items-center text-sm mb-2"
-              @click.prevent="toggleMessageBody(message.uuid)"
-              v-if="viewType == 'files-only'">
-              {{ message.body | truncate(25, '...') }}
-            </a>
-            <div :class="[message.body ? 'font-bold' : '', 'text-sm']" v-if="message.subject">{{ message.subject }}</div>
-            <div class="text-sm" v-html="message.body"></div>
-          </feed-item-body>
-
-          <div v-if="message.files.length > 0" :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-3']">
-            
-            <feed-item-attachement 
-              v-for="(file, idx) in message.files"
-              :key="file.uuid"
-              :index="idx"
-              :file="file"
-              :truncate="message.truncate_files"
-              :private="message.private">
-            </feed-item-attachement>
-
-            <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4">
-              <a 
-                href="javascript:;" 
-                @click="toggle(message.uuid)"
-                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
-                v-if="message.truncate_files">
-                <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
-              </a>
-              <a
-                href="javascript:;" 
-                @click="toggle(message.uuid)"
-                :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
-                v-else-if="message.files.length > 3">
-                <chevron-up-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">{{ translate('Weniger anzeigen') }}</span>
-              </a>
-              <a 
-                :href="`/download/zip/${message.uuid}`" 
-                target="_blank" 
-                :class="[message.private ? 'text-white' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
-                v-if="message.files.length > 1">
-                <folder-download-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">{{ translate('Download als ZIP') }}</span>
-              </a>
-            </span>
-
-          </div>
-
-        </div>
-
-        <div v-else>
-          <feed-item-body>
-            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">
-              {{ translate('Nachricht gelöscht durch') }} {{message.sender.full_name}}
-            </div>
-          </feed-item-body>
-        </div>
-
-        <a href="javascript:;" 
-          @click.prevent="destroy(message.uuid)" 
-          class="feed-item-delete flex items-center leading-none" 
-          v-if="message.can_delete && !message.deleted_at">
-          <trash-icon class="w-4 h-4 mr-2" />
-          {{ translate('Nachricht löschen') }}
-        </a>
+        :item="item" 
+        :viewType="viewType"
+        @itemDeleted="fetch()">
       </feed-item>
-
     </div>
   </feed>
+
   <content-footer v-if="!hasForm">
     <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
@@ -303,38 +215,8 @@ export default {
       }));
     },
 
-    destroy(uuid, event) {
-      if (confirm(this.translate('Bitte löschen bestätigen'))) {
-        NProgress.start();
-        this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
-          this.fetch();
-          NProgress.done();
-        });
-      }
-    },
-
-    toggle(uuid) {
-      Object.keys(this.feedItems).forEach(key => {
-        const index = this.feedItems[key].findIndex(x => x.uuid === uuid);
-        if (index > -1) {
-          this.feedItems[key][index].truncate_files = this.feedItems[key][index].truncate_files ? false : true;
-        }
-      });
-    },
-
     switchViewType() {
       this.viewType = this.viewType == 'standard' ? 'files-only' : 'standard';
-    },
-
-    getStateClasses(item) {
-      let cls = '';
-      if (item.can_delete && !item.deleted_at) {
-        cls += 'can-delete ';
-      }
-      if (item.private) {
-        cls += 'is-private'
-      }
-      return cls;
     },
 
     toggleForm() {
@@ -347,10 +229,6 @@ export default {
       this.hasForm = false;
     },
 
-    toggleMessageBody(itemUuid) {
-      const item = document.querySelector('[data-item-uuid="'+itemUuid+'"]');
-      item.classList.toggle('is-truncated');
-    }
   },
 
   watch: {

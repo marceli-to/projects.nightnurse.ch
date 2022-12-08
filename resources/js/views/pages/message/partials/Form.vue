@@ -35,18 +35,7 @@
             <input type="text" v-model="data.subject">
           </div>
           <div class="form-group mt-6 lg:mt-8">
-            <label class="mb-2 lg:mb-3 !flex justify-between w-full">
-              <div>{{ translate('Mitteilung') }}</div>
-              <div :class="[data.body.length > 10 ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none', 'flex items-center']">
-                <div class="text-dark text-xs mr-2">{{ translate('Mitteilung übersetzen') }}</div>
-                <a :href="`https://translate.google.com/?sl=auto&tl=en&text=${translation}&op=translate`" target="_blank" class="block mr-2">
-                  <flag-en-icon />
-                </a>
-                <a :href="`https://translate.google.com/?sl=auto&tl=de&text=${translation}&op=translate`" target="_blank" class="block">
-                  <flag-de-icon />
-                </a>
-              </div>
-            </label>
+            <label class="mb-2 lg:mb-3">{{ translate('Mitteilung') }}</label>
             <tinymce-editor
               :api-key="tinyApiKey"
               :init="tinyConfig"
@@ -141,8 +130,6 @@ import { TheMask } from "vue-the-mask";
 import tinyConfig from "@/config/tiny.js";
 import TinymceEditor from "@tinymce/tinymce-vue";
 import vue2Dropzone from "vue2-dropzone";
-import FlagDeIcon from '@/components/ui/icons/flag-de';
-import FlagEnIcon from '@/components/ui/icons/flag-en';
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
 import UserSelector from "@/components/ui/form/UserSelector.vue";
@@ -171,8 +158,6 @@ export default {
     ListItem,
     ListAction,
     TinymceEditor,
-    FlagDeIcon,
-    FlagEnIcon,
     vueDropzone: vue2Dropzone,
     NProgress,
     UserSelector,
@@ -435,25 +420,12 @@ export default {
     toggle() {
       this.isVisible = this.isVisible ? false : true;
     },
-
-    decodeHTMLEntities(text) {
-      let textArea = document.createElement('textarea');
-      textArea.innerHTML = text;
-      return textArea.value;
-    }
   },
 
   computed: {
     title() {
       return `${this.translate('Neue Nachricht')} <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     },
-
-    translation() {
-      const str = this.decodeHTMLEntities(this.data.body);
-      if (str && str.length > 0) {
-        return str.toString().replace( /(<([^>]+)>)/ig, ''); 
-      }
-    }
   }
 };
 </script>
