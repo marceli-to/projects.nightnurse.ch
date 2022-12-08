@@ -329,11 +329,13 @@ export default {
         if (idx == -1) {
           this.errors.users = false;
           this.data.users.push(user);
+          this.$store.commit('recipients', this.data.users);
         }
       }
       else {
         if (idx > -1) {
           this.data.users.splice(idx, 1);
+          this.$store.commit('recipients', this.data.users);
         }
       }
     },

@@ -6,11 +6,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: false,
-    feed: 'standard',
+    recipients: [],
   },
   mutations: {
     user(state, user) {
       state.user = user;
+    },
+    recipients(state, recipients) {
+      state.recipients = recipients;
     },
   }
 });

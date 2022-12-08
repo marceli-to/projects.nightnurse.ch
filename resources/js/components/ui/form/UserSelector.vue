@@ -30,7 +30,7 @@
               class="checkbox" 
               :value="user.uuid" 
               :id="user.uuid" 
-              :checked="true"
+              :checked="isChecked(user)"
               :data-team-uuid="$props.client.uuid"
               :data-user-email="user.email"
               :data-user-name="user.name"
@@ -49,7 +49,8 @@
             type="checkbox" 
             class="checkbox" 
             :value="user.uuid" 
-            :id="user.uuid" 
+            :id="user.uuid"
+            :checked="isChecked(user)" 
             :data-team-uuid="$props.client.uuid"
             :data-user-email="user.email"
             :data-user-name="user.name"
@@ -192,6 +193,10 @@ export default {
       btnMore.classList.add('flex');
 
     },
+
+    isChecked(user) {
+      return this.$store.state.recipients.find(x => x.uuid === user.uuid) ? true : false;
+    }
   }
 }
 </script>
