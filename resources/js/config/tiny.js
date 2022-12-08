@@ -10,7 +10,7 @@ export default {
   plugins: ['lists', 'code', 'link', 'paste'],
   toolbar: 'undo redo | bold | italic | bullist | link | removeformat | code',
   paste_as_text: true,
-  height: "360px",
+  height: "300px",
   style_formats_merge: false,
   force_br_newlines : true,
   style_formats: [{
