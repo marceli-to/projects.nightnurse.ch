@@ -1,5 +1,5 @@
 <template>
-  <div v-if="$props.users.length > 0" class="mb-4 lg:mb-8">
+  <div v-if="$props.users.length > 0" class="mb-6 lg:mb-8">
     
     <template v-if="canToggleAll">
       <div class="mb-2">

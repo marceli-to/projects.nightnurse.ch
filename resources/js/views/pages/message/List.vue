@@ -44,24 +44,51 @@
     @cancelMessage="hideForm()">
   </message-form>
   
-  <div class="flex justify-end">
-    <a href="javascript:;" 
-      class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
-      @click="switchViewType()">
-      <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
-      <span class="block ml-2" v-if="viewType == 'standard'">{{ translate('Anhänge Filtern') }}</span>
-      <span class="block ml-2" v-else>{{ translate('Alle Nachrichten') }}</span>
-    </a>
+  <div :class="[$store.state.user.admin ? 'justify-between' : 'justify-end', 'flex']">
+    <template v-if="filter == 'private'">
+      <a href="javascript:;" 
+        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        @click="resetFilter()">
+        <filter-icon class="h-4 w-4" aria-hidden="true" />
+        <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
+      </a>
+    </template>
+    <template v-else>
+      <a href="javascript:;" 
+        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        @click="setFilter('private')">
+        <filter-icon class="h-4 w-4" aria-hidden="true" />
+        <span class="block ml-2">{{ translate('Private Nachrichten') }}</span>
+      </a>
+    </template>
+
+    <template v-if="filter == 'files'">
+      <a href="javascript:;" 
+        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        @click="resetFilter()">
+        <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
+        <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
+      </a>
+    </template>
+    <template v-else>
+      <a href="javascript:;" 
+        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        @click="setFilter('files')">
+        <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
+        <span class="block ml-2">{{ translate('Anhänge Filtern') }}</span>
+      </a>
+    </template>
+
   </div>
 
   <feed>
     <div v-for="(items, day) in feedItems" :key="day" class="relative">
       <feed-item-timestamp>{{ day }}</feed-item-timestamp>
       <feed-item 
-        v-for="(item, index) in items" 
-        :key="index" 
+        v-for="item in filteredItems(items)" 
+        :key="item.uuid" 
         :item="item" 
-        :viewType="viewType"
+        :filesOnly="filter == 'files' ? true : false"
         @itemDeleted="fetch()">
       </feed-item>
     </div>
@@ -83,6 +110,7 @@
 <script>
 
 import { 
+  FilterIcon,
   PlusCircleIcon, 
   PencilAltIcon, 
   TrashIcon, 
@@ -131,6 +159,7 @@ export default {
     ChevronDownIcon,
     ChevronRightIcon,
     SwitchHorizontalIcon,
+    FilterIcon,
     ArrowLeftIcon,
     ContentHeader,
     ContentFooter,
@@ -172,7 +201,8 @@ export default {
       isLoading: false,
       isFetched: false,
       hasForm: false,
-      viewType: 'standard',
+
+      filter: null,
 
     };
   },
@@ -229,38 +259,28 @@ export default {
       this.hasForm = false;
     },
 
+    setFilter(filterAttribute) {
+      this.filter = filterAttribute;
+    },
+
+    resetFilter() {
+      this.filter = null;
+    },
+
+    filteredItems(items) {
+      if (this.filter == 'private') {
+        return items.filter(item => item.private === 1);
+      }
+      if (this.filter == 'files') {
+        return items.filter(item => item.files.length > 0);
+      }
+      return items;
+    }
+
   },
 
   watch: {
     feedItems() { },
-
-    viewType() {
-
-      if (this.viewType == 'files-only') {
-        const items = document.querySelectorAll('.feed-item');
-        items.forEach((element) => {
-          if (!element.dataset || !element.dataset.hasFiles) {
-            element.style.display = 'none';
-          }
-          else {
-            const el = element.querySelector('.feed-item__body');
-            el.classList.add('is-truncated');
-          }
-        });
-      }
-      else {
-        const items = document.querySelectorAll('.feed-item');
-        items.forEach((element) => {
-          if (!element.dataset || !element.dataset.hasFiles) {
-            element.style.display = 'block';
-          }
-          else {
-            const el = element.querySelector('.feed-item__body');
-            el.classList.remove('is-truncated');
-          }
-        });
-      }
-    }
   }
 }
 </script>

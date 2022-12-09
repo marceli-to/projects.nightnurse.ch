@@ -1,9 +1,9 @@
 <template>
-  <div :class="`flex text-dark relative feed-item ${getStateClasses()}`" :data-has-files="message.files.length > 0 && !message.deleted_at ? true : false" v-if="isLoaded">
+  <div :class="`flex text-dark relative feed-item ${getStateClasses()}`" v-if="isLoaded">
+
     <div class="sm:max-w-[70%] lg:max-w-[60%] w-full p-3 lg:py-2 lg:pb-3 bg-white border-2 border-zinc-100 text-sm sm:text-base text-dark rounded">
       <div v-if="!message.deleted_at" class="relative">
           <shield-check-icon class="icon-card absolute right-1 top-1" aria-hidden="true" v-if="message.private" />
-
 
           <feed-item-header :class="[message.private ? 'text-slate-100': '', 'relative']">
             <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
@@ -21,28 +21,33 @@
             {{ translate('um') }} {{message.message_time}}
           </feed-item-header>
 
-          <feed-item-body v-if="message.subject || message.body" :data-item-uuid="message.uuid">
-            <a href="" 
-              class="no-underline hover:text-highlight flex items-center text-sm mb-2"
-              @click.prevent="toggleMessageBody(message.uuid)"
-              v-if="$props.viewType == 'files-only'">
-              {{ message.body | truncate(25, '...') }}
-            </a>
-            <div 
-              :class="[message.body ? 'font-bold' : '', 'text-sm']" 
-              v-if="message.subject">
-              {{ message.subject }}
-            </div>
-            <div class="text-sm" v-html="message.body"></div>
+          <feed-item-body v-if="message.subject || message.body">
 
-            <div class="flex justify-end w-full">
-              <a href="javascript:;" class="block mr-1" @click.prevent="deeplFy(message.body, 'en-GB')">
-                <flag-en-icon />
-              </a>
-              <a href="javascript:;" class="block" @click.prevent="deeplFy(message.body, 'de')">
-                <flag-de-icon />
-              </a>
-            </div>
+            <a 
+              href="javascript:;"
+              class="no-underline font-mono text-gray-400 text-xs hover:text-highlight flex items-center text-sm mt-1 mb-3" 
+              @click.prevent="toggleMessageBody(message.uuid)"
+              v-if="hideMessageBody">
+              <plus-sm-icon class="h-4 w-4" aria-hidden="true" />
+              <span class="block ml-1">{{ translate('Nachricht anzeigen') }}</span>
+            </a>
+
+            <template v-if="!hideMessageBody">
+              <div :class="[message.body ? 'font-bold' : '', 'text-sm']" v-if="message.subject">
+                {{ message.subject }}
+              </div>
+              <div class="text-sm" v-html="message.body"></div>
+
+              <div class="flex justify-end w-full">
+                <a href="javascript:;" class="block mr-1" @click.prevent="deeplFy(message.body, 'en-GB')">
+                  <flag-en-icon />
+                </a>
+                <a href="javascript:;" class="block" @click.prevent="deeplFy(message.body, 'de')">
+                  <flag-de-icon />
+                </a>
+              </div>
+            </template>
+
           </feed-item-body>
 
           <div v-if="message.files.length > 0" :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-3']">
@@ -52,7 +57,7 @@
               :key="file.uuid"
               :index="idx"
               :file="file"
-              :truncate="truncateFiles"
+              :truncate="hasTruncateFiles"
               :private="message.private">
             </feed-item-attachement>
 
@@ -62,7 +67,7 @@
                 href="javascript:;" 
                 @click="toggle(message.uuid)"
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:underline mt-3 sm:mt-0']"
-                v-if="truncateFiles">
+                v-if="hasTruncateFiles">
                 <chevron-down-icon class="h-5 w-5" aria-hidden="true" />
                 <span class="inline-block ml-2">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
               </a>
@@ -90,7 +95,6 @@
           </div>
 
         </div>
-
         <div v-else>
           <feed-item-body>
             <div class="text-xs text-gray-400 font-mono italic sm:pt-1">
@@ -111,6 +115,7 @@
 </template>
 <script>
 import { 
+  PlusSmIcon,
   TrashIcon, 
   ShieldCheckIcon, 
   CloudDownloadIcon, 
@@ -132,6 +137,7 @@ import NProgress from 'nprogress';
 export default {
 
   components: {
+    PlusSmIcon,
     TrashIcon,
     ShieldCheckIcon,
     FolderDownloadIcon,
@@ -152,7 +158,6 @@ export default {
     return {
 
       message: null,
-      truncateFiles: false,
 
       // Routes
       routes: {
@@ -162,6 +167,9 @@ export default {
 
       // States
       isLoaded: false,
+      hasTruncateFiles: false,
+      hideMessageBody: false,
+      
     };
   },
 
@@ -171,16 +179,17 @@ export default {
       default: null
     },
 
-    viewType: {
-      type: String,
-      default: 'standard'
-    }
+    filesOnly: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   mounted() {
     this.message = this.$props.item;
-    this.truncateFiles = this.message.files.length > 3 ? true : false;
+    this.hasTruncateFiles = this.message.files.length > 3 ? true : false;
     this.isLoaded = true;
+    this.hideMessageBody = this.$props.filesOnly;
   },
 
   methods: {
@@ -196,12 +205,11 @@ export default {
     },
 
     toggle() {
-      this.truncateFiles = this.truncateFiles ? false : true;
+      this.hasTruncateFiles = this.hasTruncateFiles ? false : true;
     },
 
     toggleMessageBody(itemUuid) {
-      const item = document.querySelector('[data-item-uuid="'+itemUuid+'"]');
-      item.classList.toggle('is-truncated');
+      this.hideMessageBody = this.hideMessageBody ? false : true;
     },
 
     getStateClasses() {
@@ -227,8 +235,17 @@ export default {
         this.message.body = response.data.message;
         NProgress.done();
       });
-    }
+    },
   },
+
+  watch: {
+    filesOnly() {
+      this.hideMessageBody = this.$props.filesOnly;
+    },
+    item() {
+      this.message = this.$props.item;
+    }
+  }
 }
 </script>
 <style>
@@ -244,7 +261,8 @@ export default {
   @apply bg-slate-400 border-slate-400 !text-slate-100
 }
 
-.feed-item.is-private a {
+.feed-item.is-private a,
+.feed-item.is-private strong {
   @apply text-slate-100
 }
 

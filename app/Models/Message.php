@@ -64,6 +64,15 @@ class Message extends Base
   }
 
   /**
+   * Scope for public messages
+   * 
+   */
+  public function scopePrivate($query)
+  {
+    return $query->where('private', 1);
+  }
+
+  /**
    * Check if the message belongs to the authorized user
    * and allow them to delete the message
    *

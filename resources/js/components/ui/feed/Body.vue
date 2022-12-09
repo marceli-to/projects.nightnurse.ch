@@ -23,8 +23,4 @@
   display: flex;
 }
 
-.feed-item__body > a {
-  display: none;
-}
-
 </style>

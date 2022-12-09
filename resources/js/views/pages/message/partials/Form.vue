@@ -2,9 +2,9 @@
 <div>
   <div v-if="isVisible">
     <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 mb-4 border-bottom" v-if="isFetched">
-      <div class="sm:grid sm:grid-cols-12 gap-4 lg:gap-8">
+      <div class="sm:grid sm:grid-cols-12 lg:gap-8">
 
-        <div class="sm:col-span-7 lg:col-span-12">
+        <div class="sm:col-span-12">
 
           <!-- Message state -->
           <template v-if="$store.state.user.admin">
@@ -104,6 +104,7 @@
             <span class="block ml-2">{{ translate('Senden') }}</span>
           </button>
         </content-footer>
+        
       </div>
     </form>
 

@@ -22,11 +22,11 @@
     </div>
   </div>
 
-  <lightbox ref="widgetUserSelection" :maxWidth="'w-auto min-w-min sm:min-w-[480px] max-w-[300px] sm:max-w-[70%]'">
-    <h2 class="text-lg lg:text-lg font-bold !mt-0 mb-2 sm:mb-3">{{ translate('Empfänger auswählen') }}</h2>
-    <nav class="flex max-h-96 overflow-auto">
-      <div v-for="team in owner.teams" :key="team.uuid" class="flex-auto pr-6">
-        <div class="mr-6">
+  <lightbox ref="widgetUserSelection" :maxWidth="'w-full max-w-[300px] sm:max-w-[700px] lg:max-w-[60%]'">
+    <h2 class="text-lg lg:text-lg font-bold !mt-0 mb-4 sm:mb-3">{{ translate('Empfänger auswählen') }}</h2>
+    <nav class="sm:flex max-h-96 overflow-auto">
+      <div v-for="team in owner.teams" :key="team.uuid" class="flex flex-auto flex-nowrap pr-6">
+        <div class="sm:mr-6">
           <user-selector 
             :client="{name: `Nightnurse ${team.description}`, uuid: team.uuid}"
             :users="team.users"
@@ -36,7 +36,7 @@
           </user-selector>
         </div>
       </div>
-      <div class="flex-auto pr-6" v-if="!$props.private">
+      <div class="flex-auto sm:pr-6" v-if="!$props.private">
         <div v-for="client in $props.clients" :key="client.uuid">
           <user-selector 
             :client="{name: client.data.name, uuid: client.data.uuid}" 
