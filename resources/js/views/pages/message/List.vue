@@ -45,21 +45,23 @@
   </message-form>
   
   <div :class="[$store.state.user.admin ? 'justify-between' : 'justify-end', 'flex']">
-    <template v-if="filter == 'private'">
-      <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
-        @click="resetFilter()">
-        <filter-icon class="h-4 w-4" aria-hidden="true" />
-        <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
-      </a>
-    </template>
-    <template v-else>
-      <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
-        @click="setFilter('private')">
-        <filter-icon class="h-4 w-4" aria-hidden="true" />
-        <span class="block ml-2">{{ translate('Private Nachrichten') }}</span>
-      </a>
+    <template v-if="$store.state.user.admin">
+      <template v-if="filter == 'private'">
+        <a href="javascript:;" 
+          class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+          @click="resetFilter()">
+          <shield-check-icon class="h-4 w-4" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
+        </a>
+      </template>
+      <template v-else>
+        <a href="javascript:;" 
+          class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+          @click="setFilter('private')">
+          <shield-check-icon class="h-4 w-4" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Private Nachrichten') }}</span>
+        </a>
+      </template>
     </template>
 
     <template v-if="filter == 'files'">
@@ -194,8 +196,12 @@ export default {
       routes: {
         list: '/api/messages',
         destroy: '/api/message',
-        project: '/api/project'
+        project: '/api/project',
+        reactionTypes: '/api/reaction-types',
       },
+
+      // Reaction types
+      reactionTypes: null,
 
       // States
       isLoading: false,
@@ -237,9 +243,12 @@ export default {
       this.axios.all([
         this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.project}/${this.$route.params.uuid}`),
+        this.axios.get(`${this.routes.reactionTypes}`),
       ]).then(axios.spread((...responses) => {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
+        this.reactionTypes = responses[2].data;
+        this.$store.commit('reactionTypes', this.reactionTypes);
         this.isFetched = true;
         NProgress.done();
       }));

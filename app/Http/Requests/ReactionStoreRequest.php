@@ -2,7 +2,7 @@
 namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 
-class ProjectStoreRequest extends FormRequest
+class ReactionStoreRequest extends FormRequest
 {
   /**
    * Determine if the user is authorized to make this request.
@@ -22,12 +22,8 @@ class ProjectStoreRequest extends FormRequest
   public function rules()
   {
     return [
-      'number' => 'required',
-      'name' => 'required',
-      'manager.id' => 'required|exists:App\Models\User,id',
-      'company.id' => 'required|exists:App\Models\Company,id',
-      'state.id' => 'required|exists:App\Models\ProjectState,id',
-      'users' => 'nullable',
+      'message_uuid' => 'required|exists:App\Models\Message,uuid',
+      'type_uuid' => 'required|exists:App\Models\ReactionType,uuid',
     ];
   }
 

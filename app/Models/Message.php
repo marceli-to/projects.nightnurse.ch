@@ -54,6 +54,11 @@ class Message extends Base
     return $this->hasMany(MessageFile::class, 'message_id', 'id');
   }
 
+  public function reactions()
+  {
+    return $this->hasMany(Reaction::class);
+  }
+
   /**
    * Scope for public messages
    * 
@@ -71,6 +76,20 @@ class Message extends Base
   {
     return $query->where('private', 1);
   }
+
+  /**
+   * Scope for public messages
+   * 
+   */
+  public function scopeLimitByRole($query)
+  {
+    if (auth()->user()->isEditor())
+    {
+      return $query->where('private', 0);
+    }
+    return $query;
+  }
+
 
   /**
    * Check if the message belongs to the authorized user

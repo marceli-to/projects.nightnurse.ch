@@ -50,7 +50,7 @@ class Project extends Base
 
   public function state()
   {
-    return $this->hasOne(ProjectState::class, 'id', 'state_id');
+    return $this->hasOne(ProjectState::class, 'id', 'project_state_id');
   }
 
 	public function companies()

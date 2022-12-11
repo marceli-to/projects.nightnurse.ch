@@ -21,7 +21,7 @@
     
     <div :class="[errors.user_id ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('Projektleiter') }} <asterisk /></label>
-      <select v-model="data.user_id">
+      <select v-model="data.manager.id">
         <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
       </select>
@@ -90,7 +90,7 @@
 
     <div :class="[errors.project_state_id ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('Status') }} <asterisk /></label>
-      <select v-model="data.project_state_id">
+      <select v-model="data.state.id">
         <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
       </select>
@@ -278,11 +278,14 @@ export default {
         color: '#ff008b',
         date_start: null,
         date_end: null,
-        user_id: null,
-        project_state_id: 1,
-        company_id: null,
-        company: null,
-        manager: {},
+        manager: {
+          id: null,
+        },
+        state: {
+          id: 1
+        },
+        company: {
+        },
         companies: [],
         users: [],
       },
@@ -439,19 +442,16 @@ export default {
 
         // remove all company associated users
         if (this.data.company) {
-          this.data.company.users.forEach(user => {
+            this.data.company.users.forEach(user => {
             const i = this.data.users.findIndex(x => x.id === user.id)
             if (i > -1) {
               this.data.users.splice(i, 1);
             }
           });
         }
-
-        this.data.company_id = this.settings.companies[idx].id;
         this.data.company = this.settings.companies[idx];
       }
       else {
-        this.data.company_id = null;
         this.data.company = null;
       }
 
@@ -512,7 +512,12 @@ export default {
 
       // Main company?
       if (this.data.company && this.data.company.uuid === this.companyUuid) {
-        this.data.company.users.push(user)
+        if (this.data.company.users) {
+          this.data.company.users.push(user);
+        }
+        else {
+          this.data.company.users = [user];
+        }
       }
 
       // Other companies?

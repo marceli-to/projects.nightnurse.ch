@@ -1,5 +1,5 @@
 <template>
-  <div :class="[$props.private ? 'border-slate-300' : 'border-gray-100', 'first:border-t border-b  last:border-b-0']"
+  <div :class="[$props.private ? 'border-slate-300' : 'border-gray-100', 'first:border-t border-b']"
     v-if="($props.truncate && $props.index < truncateLimit) || !$props.truncate">
     <a :href="[file.preview ? `/img/original/${file.name}` : `/storage/uploads/${file.name}`]" 
       target="_blank" 

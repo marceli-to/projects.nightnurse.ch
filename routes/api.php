@@ -9,6 +9,8 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\TranslationController;
+use App\Http\Controllers\Api\ReactionController;
+use App\Http\Controllers\Api\ReactionTypeController;
 use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
@@ -125,6 +127,11 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
 
+  // Translations
   Route::post('translate', [TranslationController::class, 'get']);
+
+  // Reactions
+  Route::get('reaction-types', [ReactionTypeController::class, 'get']);
+  Route::post('reaction', [ReactionController::class, 'store']);
 
 });

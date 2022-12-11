@@ -7,6 +7,19 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\DownloadController;
 
 
+
+/*
+|--------------------------------------------------------------------------
+| Test Routes
+|--------------------------------------------------------------------------
+|
+*/
+use App\Http\Controllers\TestController;
+Route::get('test/messages/{project:uuid}', [TestController::class, 'getMessages']);
+Route::get('test/project/{project:uuid}', [TestController::class, 'getProject']);
+Route::get('test/projects', [TestController::class, 'getProjects']);
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes

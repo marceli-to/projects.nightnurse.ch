@@ -2,6 +2,8 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
+use App\Http\Resources\ProjectResource;
+use App\Http\Resources\ProjectListResource;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\User;
@@ -31,7 +33,6 @@ class ProjectController extends Controller
                       ->orderBy('number', 'DESC')
                       ->where('user_id', auth()->user()->id)
                       ->get();
-        
 
       // Get 'all projects'
      $projects = Project::active()->with('state', 'company', 'companies', 'manager')
@@ -47,39 +48,16 @@ class ProjectController extends Controller
   
     // Get user projects
     $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
-    
-    // Map fields
-    $projects = Project::with('company', 'messages.sender')
+    $projects = Project::with('company')
+      ->with(['messages' => function ($query) {
+        $query->with('sender')->limit(3);
+      }])
       ->whereIn('id', $ids)
       ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
-      ->get()
-      ->map(function($p) {
-        return [
-          'uuid' => $p->uuid,
-          'number' => $p->number,
-          'color' => $p->color,
-          'name' => $p->name,
-          'company' => [
-              'uuid' => $p->company->uuid,
-              'name' => $p->company->name,
-              'city' => $p->company->city,
-          ],
-          'messages' => $p->messages->map(function($m) {
-            return [
-              'uuid' => $m->uuid,
-              'subject' => $m->subject,
-              'body' => $m->body,
-              'body_preview' => $m->body_preview,
-              'message_date' => $m->message_date,
-              'sender' => [
-                'full_name' => $m->sender ? $m->sender->full_name : '',
-              ]
-            ];
-          }),
-        ];
-    });
-    return response()->json(['projects' => collect($projects)]);
+      ->get();
+
+    return response()->json(['projects' => ProjectListResource::collection($projects)]);
   }
 
   /**
@@ -240,44 +218,14 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    if (auth()->user()->isAdmin())
-    {
-      return response()->json(Project::with('state', 'company.users', 'companies.users', 'manager', 'users.company')->findOrFail($project->id));
-    }
-
-    // Map fields for non-admins
-    $p = Project::with('company.users', 'companies.users', 'manager', 'users.company')->findOrFail($project->id);
-    $data = [
-      'uuid' => $p->uuid,
-      'date_end' => $p->date_end,
-      'date_start' => $p->date_start,
-      'name' => $p->name,
-      'number' => $p->number,
-      'title' => $p->title,
-      'color' => $p->color,
-      'manager' => [
-        'uuid' => $p->manager->uuid,
-        'firstname' => $p->manager->firstname,
-        'name' => $p->manager->name,
-        'full_name' => $p->manager->full_name,
-      ],
-      'company' => $p->company,
-
-      'users' => $p->users->map(function($u) {
-        return [
-          'uuid' => $u->uuid,
-          'full_name' => $u->full_name,
-          'short_name' => $u->short_name,
-          'email' => $u->email,
-          'company' => [
-            'uuid' => $u->company->uuid,
-            'name' => $u->company->name,
-            'city' => $u->company->city,
-          ]
-        ];
-      }),
-    ];
-    return response()->json($data);
+    Project::with(
+      'state', 
+      'company.users', 
+      'companies.users', 
+      'manager', 
+      'users.company'
+    )->findOrFail($project->id);
+    return response()->json(ProjectResource::make($project));
   }
 
   /**

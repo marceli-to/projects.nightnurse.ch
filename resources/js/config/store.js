@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     user: false,
     recipients: [],
+    reactionTypes: [],
   },
   mutations: {
     user(state, user) {
@@ -15,5 +16,8 @@ export default new Vuex.Store({
     recipients(state, recipients) {
       state.recipients = recipients;
     },
+    reactionTypes(state, reactionTypes) {
+      state.reactionTypes = reactionTypes;
+    }
   }
 });

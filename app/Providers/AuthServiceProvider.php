@@ -1,9 +1,6 @@
 <?php
 namespace App\Providers;
-use App\Policies\StudentPolicy;
-use App\Policies\TutorPolicy;
-use App\Models\Student;
-use App\Models\Tutor;
+use App\Policies\ProjectPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -14,7 +11,9 @@ class AuthServiceProvider extends ServiceProvider
    *
    * @var array
    */
-  protected $policies = [];
+  protected $policies = [
+    Project::class => ProjectPolicy::class,
+  ];
 
   /**
    * Register any authentication / authorization services.

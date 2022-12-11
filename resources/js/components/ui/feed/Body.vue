@@ -1,5 +1,5 @@
 <template>
-  <div class="text-base text-sm break-words feed-item__body">
+  <div class="text-base text-sm break-words feed-item__body relative">
     <slot />
   </div>
 </template>
