@@ -21,6 +21,8 @@ class UserResource extends JsonResource
       'short_name' => $this->short_name,
       'full_name' => $this->full_name,
       'register_complete' => $this->register_complete,
+      'company_id' => $this->company_id,
+      'team_id' => $this->team_id
     ];
   }
 }

@@ -12,6 +12,10 @@ use App\Models\Company;
 
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\UserWithCompanyResource;
+use App\Http\Resources\CompanyWithUsersResource;
+use App\Http\Resources\CompanyResource;
 
 class TestController extends Controller
 {
@@ -58,5 +62,51 @@ class TestController extends Controller
 
     $data = ProjectResource::collection($projects);
     return response()->json($projects);
+  }
+
+  public function getProjectUsers(Project $project)
+  {
+    // Get associated users
+    $project = Project::with('users.company')->findOrFail($project->id);
+
+    $project_associates = [];
+    $project_associates = $project->users->filter(function ($user) {
+      return $user->company->id == Company::OWNER;
+    });
+
+    $project_clients = [];
+    $project_clients = $project->users->filter(function ($user) {
+      return $user->company->id != Company::OWNER;
+    });
+    
+    return $project_clients->toJson(JSON_PRETTY_PRINT);
+    return $project->users->toJson(JSON_PRETTY_PRINT);
+
+
+
+    // foreach($project->users as $user)
+    // {
+    //   if ($user->company->id == Company::OWNER)
+    //   {
+    //     $project_associates[] = UserResource::make($user);
+    //   }
+    //   else
+    //   {
+    //     $project_clients[$user->company->id]['data'] = CompanyResource::make($user->company);
+    //     $project_clients[$user->company->id]['users'][] = UserResource::make($user);
+    //   }
+    // }
+
+    return response()->json(['clients' => $project_clients]);
+
+
+
+    // Get users for owner
+    $owner = Company::owner()->with('teams.users')->first();
+
+    return response()->json(['clients' => $project_clients, 'associates' => $project_associates]);
+
+
+    return response()->json(['owner' => $owner, 'clients' => $project_clients, 'associates' => $project_associates]);
   }
 }

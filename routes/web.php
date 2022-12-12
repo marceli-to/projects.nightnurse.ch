@@ -16,6 +16,7 @@ use App\Http\Controllers\DownloadController;
 */
 use App\Http\Controllers\TestController;
 Route::get('test/messages/{project:uuid}', [TestController::class, 'getMessages']);
+Route::get('test/project/users/{project:uuid}', [TestController::class, 'getProjectUsers']);
 Route::get('test/project/{project:uuid}', [TestController::class, 'getProject']);
 Route::get('test/projects', [TestController::class, 'getProjects']);
 

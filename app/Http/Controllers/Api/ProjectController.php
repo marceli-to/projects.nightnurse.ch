@@ -3,6 +3,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\UserResource;
+use App\Http\Resources\CompanyResource;
 use App\Http\Resources\ProjectListResource;
 use App\Models\Project;
 use App\Models\ProjectUser;
@@ -113,12 +115,12 @@ class ProjectController extends Controller
     {
       if ($user->company->id == Company::OWNER)
       {
-        $project_associates[] = $user;
+        $project_associates[] = UserResource::make($user);
       }
       else
       {
-        $project_clients[$user->company->id]['data'] = $user->company;
-        $project_clients[$user->company->id]['users'][] = $user;
+        $project_clients[$user->company->id]['data'] = CompanyResource::make($user->company);
+        $project_clients[$user->company->id]['users'][] = UserResource::make($user);
       }
     }
 
