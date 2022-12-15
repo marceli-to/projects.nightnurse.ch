@@ -46,26 +46,10 @@ export default {
 
   mixins: [i18n],
 
-  data() {
-    return {
-    };
-  },
-
   props: {
-
     reactions: {
       type: [Array, Object],
     },
-
   },
-
-  methods: {
-
-  },
-
-  mounted() {
-    //console.log(this.$props.reactions);
-  }
-
 }
 </script>

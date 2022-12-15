@@ -44,7 +44,7 @@
     @cancelMessage="hideForm()">
   </message-form>
   
-  <div :class="[$store.state.user.admin ? 'justify-between' : 'justify-end', 'flex']">
+  <div :class="[$store.state.user.admin ? 'justify-between' : 'justify-between', 'flex']">
     <template v-if="$store.state.user.admin">
       <template v-if="filter == 'private'">
         <a href="javascript:;" 
@@ -62,6 +62,15 @@
           <span class="block ml-2">{{ translate('Private Nachrichten') }}</span>
         </a>
       </template>
+    </template>
+
+    <template>
+      <a href="javascript:;" 
+        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        @click="toggleTimeline()">
+        <menu-icon class="h-4 w-4" aria-hidden="true" />
+        <span class="block ml-2">{{ translate('Index') }}</span>
+      </a>
     </template>
 
     <template v-if="filter == 'files'">
@@ -83,18 +92,26 @@
 
   </div>
 
-  <feed>
-    <div v-for="(items, day) in feedItems" :key="day" class="relative">
-      <feed-item-timestamp>{{ day }}</feed-item-timestamp>
-      <feed-item 
-        v-for="item in filteredItems(items)" 
-        :key="item.uuid" 
-        :item="item" 
-        :filesOnly="filter == 'files' ? true : false"
-        @itemDeleted="fetch()">
-      </feed-item>
-    </div>
-  </feed>
+  <template v-if="hasTimeline">
+    <feed-index :feedItems="feedItems" @scrollTo="scrollTo"></feed-index>
+  </template>
+
+  <template>
+    <feed>
+      <div v-for="(items, day) in feedItems" :key="day" class="relative">
+        <feed-item-timestamp>{{ day }}</feed-item-timestamp>
+        <feed-item 
+          v-for="item in filteredItems(items)" 
+          :key="item.uuid" 
+          :item="item" 
+          :filesOnly="filter == 'files' ? true : false"
+          @itemDeleted="fetch()"
+          :ref="`message-${item.uuid}`">
+        </feed-item>
+      </div>
+    </feed>
+  </template>
+
 
   <content-footer v-if="!hasForm">
     <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
@@ -125,6 +142,7 @@ import {
   ArrowLeftIcon,
   PhoneIcon,
   SwitchHorizontalIcon,
+  MenuIcon
 } 
 from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
@@ -137,6 +155,7 @@ import ListItem from "@/components/ui/layout/ListItem.vue";
 import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Feed from "@/components/ui/feed/Feed.vue";
+import FeedIndex from "@/components/ui/feed/Index.vue";
 import FeedItem from "@/components/ui/feed/Item.vue";
 import FeedItemHeader from "@/components/ui/feed/Header.vue";
 import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
@@ -162,6 +181,7 @@ export default {
     ChevronRightIcon,
     SwitchHorizontalIcon,
     FilterIcon,
+    MenuIcon,
     ArrowLeftIcon,
     ContentHeader,
     ContentFooter,
@@ -171,6 +191,7 @@ export default {
     ListAction,
     ListEmpty,
     Feed,
+    FeedIndex,
     FeedItem,
     FeedItemHeader,
     FeedItemTimestamp,
@@ -207,7 +228,7 @@ export default {
       isLoading: false,
       isFetched: false,
       hasForm: false,
-
+      hasTimeline: false,
       filter: null,
 
     };
@@ -233,6 +254,7 @@ export default {
         };
       });
     });
+    
   },
 
   methods: {
@@ -264,6 +286,10 @@ export default {
       this.hasForm = this.hasForm ? false : true;
     },
 
+    toggleTimeline() {
+      this.hasTimeline = this.hasTimeline ? false : true;
+    },
+
     hideForm() {
       this.hasForm = false;
     },
@@ -284,8 +310,16 @@ export default {
         return items.filter(item => item.files.length > 0);
       }
       return items;
-    }
+    },
 
+    scrollTo(uuid) {
+      this.hasTimeline = false;
+      this.$nextTick(() => {
+        const message = this.$refs[`message-${uuid}`][0].$el;
+        const offset  = message.getBoundingClientRect().top - 140;
+        window.scrollTo({top: offset, behavior: 'smooth'});
+      });
+    }
   },
 
   watch: {
