@@ -1,29 +1,29 @@
 <template>
   <div 
-    :class="[$props.message.internal ? 'right-0 sm:translate-x-[100%]' : 'left-0 sm:translate-x-[-100%]', 'absolute bottom-0 sm:bottom-auto sm:top-[50%] translate-y-[100%] sm:translate-y-[-50%] p-2 lg:p-3 group/reactions-menu']"
+    :class="[$props.message.internal ? '' : '', 'py-2 group/reactions-menu relative flex']"
     @mouseleave="hide()"
     v-if="!$props.message.deleted_at">
 
-    <a 
-      href="" class="!text-gray-300 group-hover/reactions-menu:opacity-40 relative"
-      @mouseover="show()">
-      <smile-icon class="sm:h-5 sm:w-5" />
-      <plus-sm-icon :class="[$props.message.internal ? 'right-[-5px]' : 'left-[-5px]', 'h-3 w-3 absolute top-[-5px]']" />
-    </a>
-
-    <div v-if="hasReactions" class="flex sm:block">
+    <div v-if="hasReactions" class="flex">
       <a href="" 
-        class="!text-gray-300 hover:!text-highlight block mr-[4px] sm:mt-1 sm:mr-0"
+        class="!text-gray-400 hover:!text-highlight block mr-[4px] sm:mr-1"
         v-for="reactionType in reactionTypes" 
         :key="reactionType.uuid"
         @click.prevent="store(reactionType.uuid)">
-        <smile-icon class="sm:h-5 sm:w-5" v-if="reactionType.name == 'smile'" />
-        <frown-icon class="sm:h-5 sm:w-5" v-if="reactionType.name == 'frown'" />
-        <thumbs-down-icon class="sm:h-5 sm:w-5" v-if="reactionType.name == 'thumbs-down'" />
-        <thumbs-up-icon class="sm:h-5 sm:w-5" v-if="reactionType.name == 'thumbs-up'" />
+        <smile-icon class="h-5 w-5" v-if="reactionType.name == 'smile'" />
+        <frown-icon class="h-5 w-5" v-if="reactionType.name == 'frown'" />
+        <thumbs-down-icon class="h-5 w-5" v-if="reactionType.name == 'thumbs-down'" />
+        <thumbs-up-icon class="h-5 w-5" v-if="reactionType.name == 'thumbs-up'" />
       </a>
     </div>
-
+    <div>
+      <a 
+        href="javascript:;" class="!text-gray-400 group-hover/reactions-menu:opacity-50 relative"
+        @mouseover="show()">
+        <smile-icon class="h-5 w-5" />
+        <plus-sm-icon :class="[$props.message.internal ? 'right-[-5px]' : 'left-[-5px]', 'h-3 w-3 absolute top-[-5px]']" />
+      </a>
+    </div>
   </div>
 </template>
 <script>

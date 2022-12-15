@@ -30,7 +30,7 @@
           <user-selector 
             :client="{name: `Nightnurse ${team.description}`, uuid: team.uuid}"
             :users="team.users"
-            :associates="getTeamAssociates($props.associates, team.id)"
+            :associates="$store.state.user.admin ? getTeamAssociates($props.associates, team.id) : $props.associates"
             :canToggleAll="$store.state.user.admin ? true : false"
             @addOrRemoveRecipient="addOrRemoveRecipient">
           </user-selector>
@@ -90,6 +90,11 @@ export default {
       default: () => {},
     },
 
+    manager: {
+      type: Object,
+      default: () => {},
+    },
+
     private: {
       type: [Number, Boolean],
       default: false,
@@ -111,7 +116,7 @@ export default {
     },
 
     getTeamAssociates(users, teamId) {
-      const filteredUser = users.filter((user) => user.team_id === teamId);
+      const filteredUser = users.filter((user) => user.team_id == teamId);
       return filteredUser;
     }
 

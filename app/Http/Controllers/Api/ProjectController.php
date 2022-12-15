@@ -146,7 +146,8 @@ class ProjectController extends Controller
           'full_name' => $user->full_name,
           'short_name' => $user->short_name,
           'register_complete' => $user->register_complete,
-          'email' => $user->register_complete ? null : $user->email
+          'email' => $user->register_complete ? null : $user->email,
+          'team_id' => $user->team->id
         ];
       }
       else
@@ -179,7 +180,7 @@ class ProjectController extends Controller
           return [
             'uuid' => $t->uuid,
             'description' => $t->description,
-            'users' => $t->users->map(function($u) {
+            'users' => $t->users->map(function($u) use ($t) {
               return [
                 'uuid' => $u->uuid,
                 'firstname' => $u->firstname,
@@ -187,7 +188,8 @@ class ProjectController extends Controller
                 'full_name' => $u->full_name,
                 'short_name' => $u->short_name,
                 'register_complete' => $u->register_complete,
-                'email' => $u->register_complete ? null : $u->email
+                'email' => $u->register_complete ? null : $u->email,
+                'team_id' => $t->id
               ];
             })
           ];
@@ -196,7 +198,6 @@ class ProjectController extends Controller
       'clients' => $project_clients,
       'associates' => $project_associates
     ];
-
     return response()->json($data);
   }
 

@@ -328,6 +328,7 @@ export default {
 
     // Add preselected recipients
     addPreSelected() {
+      this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
       this.project.associates.unshift(this.project.manager);
       this.project.associates.forEach(user => {
         this.addOrRemoveRecipient(true, user);

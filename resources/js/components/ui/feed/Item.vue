@@ -105,26 +105,29 @@
             </span>
           </div>
 
+
           <feed-item-reactions 
             :reactions="message.reactions">
           </feed-item-reactions>
 
-          <feed-item-reactions-menu
-            :message="message"
-            @reactionStored="fetch()"
-            v-if="!message.deleted_at">
-          </feed-item-reactions-menu>
-
         </template>
       </div>
 
-      <feed-item-actions 
-        :message="message"
-        :canDelete="(message.can_delete && !message.deleted_at)"
-        @delete="destroy"
-        @translate="deeplFy"
-        v-if="!message.deleted_at">
-      </feed-item-actions>
+      <div class="flex justify-between">
+        <feed-item-actions 
+          :message="message"
+          :canDelete="(message.can_delete && !message.deleted_at)"
+          @delete="destroy"
+          @translate="deeplFy"
+          v-if="!message.deleted_at">
+        </feed-item-actions>
+
+        <feed-item-reactions-menu
+          :message="message"
+          @reactionStored="fetch()"
+          v-if="!message.deleted_at">
+        </feed-item-reactions-menu>
+      </div>
     </div>
   </div>
 </template>
