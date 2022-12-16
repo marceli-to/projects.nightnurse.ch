@@ -23065,7 +23065,7 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "p-2 mb-2 lg:mb-4 border-2 border-zinc-100 text-sm sm:text-base text-dark relative rounded bg-zinc-50 group-[.is-internal]:bg-white group-[.is-private]:bg-slate-800 group-[.is-private]:border-slate-400 group-[.is-private]:text-slate-100"
+    staticClass: "p-2 mb-2 lg:mb-4 border-2 border-zinc-100 text-sm sm:text-base text-dark relative rounded bg-zinc-50 group-[.is-internal]:bg-white group-[.is-private]:bg-slate-600 group-[.is-private]:border-slate-400 group-[.is-private]:text-slate-100"
   }, [_vm.originalMessage.subject ? _c("div", {
     "class": [_vm.originalMessage.body ? "font-bold" : "", "text-sm italic"]
   }, [_vm._v("\n    " + _vm._s(_vm.originalMessage.subject) + "\n  ")]) : _vm._e(), _vm._v(" "), _c("div", {
