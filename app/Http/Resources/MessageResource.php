@@ -30,6 +30,13 @@ class MessageResource extends JsonResource
       'sender' => UserResource::make($this->sender),
       'users' => UserResource::collection($this->users),
 
+      'is_reply' => $this->message ? true : false,
+      'original_message' => [
+        'subject' => $this->message ? $this->message->subject : null,
+        'body' => $this->message ? $this->message->body : null,
+        'body_preview' => $this->message ? $this->message->body_preview : null,
+      ],
+
       // Group reactions by its type and get the users in an array
       'reactions' => $this->reactions->groupBy('reaction_type_id')->map(function ($reactionGroup) {
 

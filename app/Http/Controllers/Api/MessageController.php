@@ -32,6 +32,7 @@ class MessageController extends Controller
         'sender', 
         'files', 
         'users', 
+        'message',
         'reactions.user', 
         'reactions.type'
       )
@@ -77,6 +78,17 @@ class MessageController extends Controller
       'project_id' => $project->id,
       'user_id' => auth()->user()->id,
     ]);
+
+    // Reply?
+    if ($request->input('message_uuid'))
+    {
+      $m = Message::where('uuid', $request->input('message_uuid'))->first();
+      if ($m)
+      {
+        $message->message_id = $m->id;
+        $message->save();
+      }
+    }
 
     // Move file & create database entry
     if ($request->input('files'))

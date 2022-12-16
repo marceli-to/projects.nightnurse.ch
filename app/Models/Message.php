@@ -23,6 +23,7 @@ class Message extends Base
     'internal',
     'project_id',
     'user_id',
+    'message_id', 
 	];
 
   protected $appends = [
@@ -42,6 +43,11 @@ class Message extends Base
   public function project()
   {
     return $this->hasOne(Project::class, 'id', 'project_id');
+  }
+
+  public function message()
+  {
+    return $this->hasOne(Message::class, 'id', 'message_id');
   }
 
 	public function users()

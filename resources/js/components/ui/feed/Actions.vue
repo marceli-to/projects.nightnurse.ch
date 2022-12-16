@@ -19,6 +19,23 @@
 
         <div>
           <a href="javascript:;" 
+            @click.prevent="$emit('reply', $props.message.uuid)" 
+            class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]">
+            <reply-icon class="w-4 h-4 mr-3" />
+            {{ translate('Antworten') }}
+          </a>
+        </div>
+        <div>
+          <a href="javascript:;" 
+            @click.prevent="$emit('delete', $props.message.uuid)" 
+            class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]" 
+            v-if="$props.canDelete">
+            <trash-icon class="w-4 h-4 mr-3" />
+            {{ translate('Löschen') }}
+          </a>
+        </div>
+        <div>
+          <a href="javascript:;" 
             class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]"
             @click="$emit('translate', 'en-GB')">
             <flag-en-icon class="mr-3" />
@@ -33,22 +50,13 @@
             {{ translate('Übersetzen (DE)') }}
           </a>
         </div>
-        <div>
-          <a href="javascript:;" 
-            @click.prevent="$emit('delete', $props.message.uuid)" 
-            class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]" 
-            v-if="$props.canDelete">
-            <trash-icon class="w-4 h-4 mr-3" />
-            {{ translate('Nachricht löschen') }}
-          </a>
-        </div>
       </div>
     </div>
   </div>
 </div>
 </template>
 <script>
-import { TrashIcon } from "@vue-hero-icons/outline";
+import { TrashIcon, ReplyIcon } from "@vue-hero-icons/outline";
 import i18n from "@/i18n";
 import FlagDeIcon from '@/components/ui/icons/flag-de';
 import FlagEnIcon from '@/components/ui/icons/flag-en';
@@ -57,6 +65,7 @@ export default {
 
   components: {
     TrashIcon,
+    ReplyIcon,
     FlagDeIcon,
     FlagEnIcon,
   },

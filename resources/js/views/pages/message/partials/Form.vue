@@ -1,115 +1,123 @@
 <template>
-<div>
-  <div v-if="isVisible">
-    <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 mb-4 border-bottom" v-if="isFetched">
-      <div class="sm:grid sm:grid-cols-12 lg:gap-8">
+<div v-if="isFetched">
+  <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 mb-4 border-bottom">
+    <div class="sm:grid sm:grid-cols-12 lg:gap-8">
 
-        <div class="sm:col-span-12">
+      <div class="sm:col-span-12">
 
-          <!-- Message state -->
-          <template v-if="$store.state.user.admin">
-            <div class="form-group border-bottom pb-4">
-              <div class="relative group text-xl hover:cursor-pointer">
-                <label for="isPrivate" class="mb-2 block hover:cursor-pointer relative z-20">{{ translate('Private Nachricht?') }}</label>
-                <input v-model="data.private" type="checkbox" class="hover:cursor-pointer absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md z-10" id="isPrivate" />
-                <span class="w-11 h-6 flex items-center flex-shrink-0 p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-highlight after:h-4 after:w-4 after:bg-white after:rounded-full after:shadow-md after:duration-200 peer-checked:after:translate-x-5"></span>
-              </div>
+
+        <!-- is it a reply? -->
+        <template v-if="$props.message">
+          <div class="p-3 lg:py-2 lg:pb-3 bg-zinc-50 border-2 border-zinc-100 text-sm sm:text-base text-dark relative rounded lg:max-w-[60%] mb-6">
+            <div :class="[message.body ? 'font-bold' : '', 'text-sm']" v-if="message.subject">
+              {{ message.subject }}
             </div>
-          </template>
-
-          <!-- Recepients -->
-          <user-selection
-            :private="data.private"
-            :recipients="data.users"
-            :manager="project.manager"
-            :owner="project.owner"
-            :clients="project.clients"
-            :associates="project.associates"
-            :hasErrors="errors.users"
-            @addOrRemoveRecipient="addOrRemoveRecipient">
-          </user-selection>
-
-          <!-- Message (subject, text) -->
-          <div class="form-group">
-            <label>{{ translate('Betreff') }}</label>
-            <input type="text" v-model="data.subject">
+            <div class="text-sm" v-html="message.body"></div>
           </div>
-          <div class="form-group mt-6 lg:mt-8">
-            <label class="mb-2 lg:mb-3">{{ translate('Mitteilung') }}</label>
-            <tinymce-editor
-              :api-key="tinyApiKey"
-              :init="tinyConfig"
-              v-model="data.body"
-            ></tinymce-editor>
-          </div>
+        </template>
 
-          <!-- Files -->
-          <div class="form-group">
-            <label class="mb-2 lg:mb-3">{{ translate('Dateien') }}</label>
-            <vue-dropzone
-              ref="dropzone"
-              id="dropzone"
-              :options="dropzoneConfig"
-              @vdropzone-success="uploadSuccess"
-              @vdropzone-complete="uploadComplete"
-              @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
-              :useCustomSlot=true>
-              <div class="text-dark text-sm">
-                <div class="font-bold">{{ translate('Datei auswählen oder hierhin ziehen') }}</div>
-                <div>{{ translate('max. Grösse 250 MB') }}</div>
-              </div>
-            </vue-dropzone>
-            <list v-if="hasUpload && data.files.length" class="my-4 sm:my-6 lg:my-8">
-              <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
-                <div class="flex items-center no-underline hover:text-highlight py-2">
-                  <img 
-                    :src="`/img/thumbnail/${d.name}`" 
-                    height="100" 
-                    width="100"
-                    class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
-                    v-if="d.preview" />
-                  <div class="mr-2 lg:mr-3 py-1" v-else>
-                    <file-type :extension="d.extension" />
-                  </div>
-                  <div class="font-mono text-xs lg:hidden">
-                    {{ d.original_name | truncate(25, '...') }} – {{ d.size | filesize(d.size) }}
-                  </div>
-                  <div class="font-mono text-xs hidden lg:block">
-                    {{ d.original_name }} – {{ d.size | filesize(d.size) }}
-                  </div>
-                </div>
-                <list-action>
-                  <a :href="`/img/original/${d.name}`" target="_blank" class="mr-2" v-if="d.preview">
-                    <cloud-download-icon class="icon-list" aria-hidden="true" />
-                  </a>
-                  <a :href="`/storage/uploads/temp/${d.name}`" target="_blank" class="mr-2" v-else>
-                    <cloud-download-icon class="icon-list" aria-hidden="true" />
-                  </a>
-                  <a href="javascript:;" @click.prevent="uploadDelete(d.name)">
-                    <trash-icon class="icon-list" aria-hidden="true" />
-                  </a>
-                </list-action>
-              </list-item>
-            </list>
-          </div>
 
+        <!-- Message state -->
+        <template v-if="$store.state.user.admin">
+          <div class="form-group border-bottom pb-4">
+            <div class="relative group text-xl hover:cursor-pointer">
+              <label for="isPrivate" class="mb-2 block hover:cursor-pointer relative z-20">{{ translate('Private Nachricht?') }}</label>
+              <input v-model="data.private" type="checkbox" class="hover:cursor-pointer absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md z-10" id="isPrivate" />
+              <span class="w-11 h-6 flex items-center flex-shrink-0 p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-highlight after:h-4 after:w-4 after:bg-white after:rounded-full after:shadow-md after:duration-200 peer-checked:after:translate-x-5"></span>
+            </div>
+          </div>
+        </template>
+
+        <!-- Recepients -->
+        <user-selection
+          :private="data.private"
+          :recipients="data.users"
+          :manager="project.manager"
+          :owner="project.owner"
+          :clients="project.clients"
+          :associates="project.associates"
+          :hasErrors="errors.users"
+          @addOrRemoveRecipient="addOrRemoveRecipient">
+        </user-selection>
+
+        <!-- Message (subject, text) -->
+        <div class="form-group">
+          <label>{{ translate('Betreff') }}</label>
+          <input type="text" v-model="data.subject">
+        </div>
+        <div class="form-group mt-6 lg:mt-8">
+          <label class="mb-2 lg:mb-3">{{ translate('Mitteilung') }}</label>
+          <tinymce-editor
+            :api-key="tinyApiKey"
+            :init="tinyConfig"
+            v-model="data.body"
+          ></tinymce-editor>
         </div>
 
-        <content-footer>
-          <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
-            <span>{{ translate('Abbrechen') }}</span>
-          </a>
-          <button type="submit" class="btn-send">
-            <mail-icon class="h-5 w-5" aria-hidden="true" />
-            <span class="block ml-2">{{ translate('Senden') }}</span>
-          </button>
-        </content-footer>
-        
+        <!-- Files -->
+        <div class="form-group">
+          <label class="mb-2 lg:mb-3">{{ translate('Dateien') }}</label>
+          <vue-dropzone
+            ref="dropzone"
+            id="dropzone"
+            :options="dropzoneConfig"
+            @vdropzone-success="uploadSuccess"
+            @vdropzone-complete="uploadComplete"
+            @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
+            :useCustomSlot=true>
+            <div class="text-dark text-sm">
+              <div class="font-bold">{{ translate('Datei auswählen oder hierhin ziehen') }}</div>
+              <div>{{ translate('max. Grösse 250 MB') }}</div>
+            </div>
+          </vue-dropzone>
+          <list v-if="hasUpload && data.files.length" class="my-4 sm:my-6 lg:my-8">
+            <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
+              <div class="flex items-center no-underline hover:text-highlight py-2">
+                <img 
+                  :src="`/img/thumbnail/${d.name}`" 
+                  height="100" 
+                  width="100"
+                  class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
+                  v-if="d.preview" />
+                <div class="mr-2 lg:mr-3 py-1" v-else>
+                  <file-type :extension="d.extension" />
+                </div>
+                <div class="font-mono text-xs lg:hidden">
+                  {{ d.original_name | truncate(25, '...') }} – {{ d.size | filesize(d.size) }}
+                </div>
+                <div class="font-mono text-xs hidden lg:block">
+                  {{ d.original_name }} – {{ d.size | filesize(d.size) }}
+                </div>
+              </div>
+              <list-action>
+                <a :href="`/img/original/${d.name}`" target="_blank" class="mr-2" v-if="d.preview">
+                  <cloud-download-icon class="icon-list" aria-hidden="true" />
+                </a>
+                <a :href="`/storage/uploads/temp/${d.name}`" target="_blank" class="mr-2" v-else>
+                  <cloud-download-icon class="icon-list" aria-hidden="true" />
+                </a>
+                <a href="javascript:;" @click.prevent="uploadDelete(d.name)">
+                  <trash-icon class="icon-list" aria-hidden="true" />
+                </a>
+              </list-action>
+            </list-item>
+          </list>
+        </div>
+
       </div>
-    </form>
 
-  </div>
-
+      <content-footer>
+        <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
+          <span>{{ translate('Abbrechen') }}</span>
+        </a>
+        <button type="submit" class="btn-send">
+          <mail-icon class="h-5 w-5" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Senden') }}</span>
+        </button>
+      </content-footer>
+      
+    </div>
+  </form>
 </div>
 </template>
 
@@ -168,7 +176,11 @@ export default {
   mixins: [i18n],
 
   props: {
-    type: String
+
+    message: {
+      type: Object,
+      default: null,
+    },
   },
 
   data() {
@@ -179,6 +191,7 @@ export default {
         subject: null,
         body: '',
         private: 0,
+        message_uuid: null,
         users: [],
         files: [],
       },
@@ -212,6 +225,7 @@ export default {
       isFetched: true,
       isLoading: false,
       isVisible: false,
+      isReply: false,
       hasUpload: false,
 
       // Messages
@@ -250,6 +264,11 @@ export default {
 
   created() {
     this.fetch();
+    if (this.$props.message) {
+      this.isReply = true;
+      this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
+      this.data.message_uuid = this.$props.message.uuid;
+    }
   },
 
   methods: {
@@ -267,7 +286,7 @@ export default {
         this.project = responses[0].data;
         this.project.clients = responses[1].data.clients;
         this.project.owner = responses[1].data.owner;
-        this.project.associates = responses[1].data.associates
+        this.project.associates = responses[1].data.associates;
         this.addPreSelected();
         this.isFetched = true;
       }));
@@ -278,7 +297,6 @@ export default {
     },
 
     store() {
-
       if (this.validateRecipients()) {
         this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
           this.$notify({ type: "success", text: this.messages.created });
@@ -328,12 +346,27 @@ export default {
 
     // Add preselected recipients
     addPreSelected() {
-      this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
-      this.project.associates.unshift(this.project.manager);
-      this.project.associates.forEach(user => {
-        this.addOrRemoveRecipient(true, user);
-        this.removePreSelectedUser(user);
-      });
+
+      // If it is a reply, remove all associated users
+      // and add the sender only
+      if (this.isReply) {
+        this.data.users = [];
+        this.project.associates.unshift(this.project.manager);
+        this.project.associates.forEach(user => {
+          this.addOrRemoveRecipient(false, user);
+          this.removePreSelectedUser(user);
+        });
+        this.addOrRemoveRecipient(true, this.$props.message.sender);
+
+      }
+      else {
+        this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
+        this.project.associates.unshift(this.project.manager);
+        this.project.associates.forEach(user => {
+          this.addOrRemoveRecipient(true, user);
+          this.removePreSelectedUser(user);
+        });
+      }
     },
 
     removePreSelectedUser(user) {
@@ -416,6 +449,7 @@ export default {
 
     hide() {
       this.isVisible = false;
+      this.isReply = false;
       this.$emit('cancelMessage');
     },
 

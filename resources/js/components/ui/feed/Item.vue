@@ -1,6 +1,6 @@
 <template>
   <div 
-    :class="[ message.private ? 'is-private' : message.internal ? 'is-internal' : '', 'feed-item group' ]" 
+    :class="[ message.private ? 'is-private' : message.internal ? 'is-internal' : '', 'feed-item group']" 
     v-if="isLoaded">
     <div class="sm:max-w-[70%] lg:max-w-[60%] w-full relative">
 
@@ -36,6 +36,11 @@
             </span>
             {{ translate('um') }} {{message.message_time}}
           </feed-item-header>
+
+          <feed-item-reply
+            :originalMessage="message.original_message"
+            v-if="message.is_reply">
+          </feed-item-reply>
 
           <feed-item-body v-if="message.subject || message.body">
             <a 
@@ -105,7 +110,6 @@
             </span>
           </div>
 
-
           <feed-item-reactions 
             :reactions="message.reactions">
           </feed-item-reactions>
@@ -119,6 +123,7 @@
           :canDelete="(message.can_delete && !message.deleted_at)"
           @delete="destroy"
           @translate="deeplFy"
+          @reply="$emit('reply', $event)"
           v-if="!message.deleted_at">
         </feed-item-actions>
 
@@ -148,6 +153,7 @@ import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
 import FeedItemAttachement from "@/components/ui/feed/Attachement.vue";
 import FeedItemBody from "@/components/ui/feed/Body.vue";
 import FeedItemActions from "@/components/ui/feed/Actions.vue";
+import FeedItemReply from "@/components/ui/feed/Reply.vue";
 import FeedItemReactions from "@/components/ui/feed/Reactions.vue";
 import FeedItemReactionsMenu from "@/components/ui/feed/ReactionsMenu.vue";
 import i18n from "@/i18n";
@@ -169,7 +175,8 @@ export default {
     FeedItemBody,
     FeedItemActions,
     FeedItemReactions,
-    FeedItemReactionsMenu
+    FeedItemReactionsMenu,
+    FeedItemReply
   },
 
   mixins: [i18n],
@@ -255,7 +262,6 @@ export default {
       this.message = this.$props.item;
     },
     message() {
-
     }
   }
 }

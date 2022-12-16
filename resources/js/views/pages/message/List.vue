@@ -40,8 +40,8 @@
   </header>
 
   <message-form 
-    ref="messageForm" 
-    @cancelMessage="hideForm()">
+    :message="message"
+    @cancelMessage="hideForm()" v-if="hasForm">
   </message-form>
   
   <div class="hidden sm:flex justify-between">
@@ -63,7 +63,6 @@
         </a>
       </template>
     </template>
-
     <template>
       <a href="javascript:;" 
         class="text-xs font-mono text-gray-400 flex justify-center items-center no-underline hover:text-highlight"
@@ -72,7 +71,6 @@
         <span class="block ml-2">{{ translate('Index') }}</span>
       </a>
     </template>
-
     <template v-if="filter == 'files'">
       <a href="javascript:;" 
         class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
@@ -89,7 +87,6 @@
         <span class="block ml-2">{{ translate('Anhänge Filtern') }}</span>
       </a>
     </template>
-
   </div>
 
   <template v-if="hasTimeline">
@@ -106,6 +103,7 @@
           :item="item" 
           :filesOnly="filter == 'files' ? true : false"
           @itemDeleted="fetch()"
+          @reply="reply"
           :ref="`message-${item.uuid}`">
         </feed-item>
       </div>
@@ -212,9 +210,13 @@ export default {
       // Project data
       project: [],
 
+      // Single message
+      message: null,
+
       // Routes
       routes: {
         list: '/api/messages',
+        fetch: '/api/message',
         destroy: '/api/message',
         project: '/api/project',
         reactionTypes: '/api/reaction-types',
@@ -228,6 +230,7 @@ export default {
       isFetched: false,
       hasForm: false,
       hasTimeline: false,
+      isReply: false,
       filter: null,
 
     };
@@ -271,8 +274,16 @@ export default {
         this.reactionTypes = responses[2].data;
         this.$store.commit('reactionTypes', this.reactionTypes);
         this.isFetched = true;
+        this.message = null;
         NProgress.done();
       }));
+    },
+
+    reply(uuid) {
+      this.axios.get(`${this.routes.fetch}/${uuid}`).then(response => {
+        this.message = response.data;
+        this.toggleForm();
+      });
     },
 
     switchViewType() {
@@ -280,17 +291,21 @@ export default {
     },
 
     toggleForm() {
-      this.$refs.messageForm.toggle();
+      this.showForm();
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      this.hasForm = this.hasForm ? false : true;
     },
 
-    toggleTimeline() {
-      this.hasTimeline = this.hasTimeline ? false : true;
+    showForm() {
+      this.hasForm = true;
     },
 
     hideForm() {
       this.hasForm = false;
+      this.message = null;
+    },
+
+    toggleTimeline() {
+      this.hasTimeline = this.hasTimeline ? false : true;
     },
 
     setFilter(filterAttribute) {
