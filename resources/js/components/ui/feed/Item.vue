@@ -293,6 +293,10 @@ export default {
   @apply !mt-1 !mb-1
 }
 
+.feed-item p {
+  @apply !mt-0
+}
+
 
 /* .feed-item--left {
   @apply justify-start
