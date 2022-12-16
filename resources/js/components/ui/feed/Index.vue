@@ -5,8 +5,8 @@
         <div 
           :class="[ message.private ? 'is-private' : message.internal ? 'is-internal' : '', 'group flex justify-center mb-3']" 
           v-for="(message, idx) in messages" :key="idx">
-          <div class="max-w-[280px] sm:max-w-[480px] w-auto inline-block p-2 bg-white border-2 border-zinc-100 text-xs sm:text-sm text-dark relative rounded translate-x-1/3 group-[.is-internal]:bg-zinc-50 group-[.is-internal]:-translate-x-1/3 group-[.is-private]:-translate-x-1/3 group-[.is-private]:bg-slate-400 group-[.is-private]:text-white group-[.is-private]:border-slate-400 group-[.is-private]:text-slate-100 group-hover:opacity-80">
-            <a href="javascript:;" @click="$emit('scrollTo', message.uuid)" class="no-underline text-xs text-gray-400 inline-block w-auto font-mono">
+          <div class="max-w-[280px] sm:max-w-[480px] w-auto inline-block p-2 bg-white border-2 border-zinc-100 text-xs sm:text-sm text-dark relative rounded translate-x-1/3 group-[.is-internal]:bg-zinc-50 group-[.is-internal]:-translate-x-1/3 group-[.is-private]:-translate-x-1/3 group-[.is-private]:bg-slate-400  group-[.is-private]:border-slate-400 group-[.is-private]:text-slate-100 group-hover:opacity-80">
+            <a href="javascript:;" @click="$emit('scrollTo', message.uuid)" class="no-underline text-xs text-gray-400 group-[.is-private]:text-white inline-block w-auto font-mono">
               <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}:</span>
               <!-- {{ message.message_time }}: -->
               <template v-if="message.subject">

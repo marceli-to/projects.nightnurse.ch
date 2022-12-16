@@ -2820,6 +2820,10 @@ body {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
+.group.is-private .group-\[\.is-private\]\:\!text-white{
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+}
 .peer:checked ~ .peer-checked\:bg-highlight{
   --tw-bg-opacity: 1;
   background-color: rgb(255 0 139 / var(--tw-bg-opacity));
