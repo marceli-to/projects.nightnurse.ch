@@ -2308,6 +2308,10 @@ input[type="checkbox"].checkbox:focus{
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
+.bg-zinc-100{
+  --tw-bg-opacity: 1;
+  background-color: rgb(244 244 245 / var(--tw-bg-opacity));
+}
 .bg-opacity-60{
   --tw-bg-opacity: 0.6;
 }
