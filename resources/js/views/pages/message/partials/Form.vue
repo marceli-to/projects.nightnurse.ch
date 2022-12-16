@@ -8,14 +8,8 @@
 
         <!-- is it a reply? -->
         <template v-if="$props.message">
-          <div class="p-3 lg:py-2 lg:pb-3 bg-zinc-50 border-2 border-zinc-100 text-sm sm:text-base text-dark relative rounded lg:max-w-[60%] mb-6">
-            <div :class="[message.body ? 'font-bold' : '', 'text-sm']" v-if="message.subject">
-              {{ message.subject }}
-            </div>
-            <div class="text-sm" v-html="message.body"></div>
-          </div>
+          <feed-item-reply :originalMessage="message" class="md:max-w-[60%]"></feed-item-reply>
         </template>
-
 
         <!-- Message state -->
         <template v-if="$store.state.user.admin">
@@ -143,6 +137,7 @@ import i18n from "@/i18n";
 import NProgress from 'nprogress';
 import UserSelector from "@/components/ui/form/UserSelector.vue";
 import UserSelection from "@/components/ui/form/UserSelection.vue";
+import FeedItemReply from "@/components/ui/feed/Reply.vue";
 
 export default {
   
@@ -171,6 +166,7 @@ export default {
     NProgress,
     UserSelector,
     UserSelection,
+    FeedItemReply
   },
 
   mixins: [i18n],
