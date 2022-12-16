@@ -297,6 +297,10 @@ export default {
   @apply !mt-0
 }
 
+.feed-item p:last-of-type {
+  @apply !mb-0
+}
+
 
 /* .feed-item--left {
   @apply justify-start
