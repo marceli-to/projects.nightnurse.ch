@@ -22704,7 +22704,7 @@ var render = function render() {
       }, [_c("div", {
         staticClass: "max-w-[280px] sm:max-w-[480px] w-auto inline-block p-2 bg-white border-2 border-zinc-100 text-xs sm:text-sm text-dark relative rounded translate-x-1/3 group-[.is-internal]:bg-zinc-50 group-[.is-internal]:-translate-x-1/3 group-[.is-private]:-translate-x-1/3 group-[.is-private]:bg-slate-400 group-[.is-private]:border-slate-400 group-[.is-private]:text-slate-100 group-hover:opacity-80"
       }, [_c("a", {
-        staticClass: "no-underline text-xs text-gray-400 group-[.is-private]:text-white inline-block w-auto font-mono",
+        staticClass: "no-underline text-xs text-gray-400 group-[.is-private]:text-slate-100 inline-block w-auto font-mono",
         attrs: {
           href: "javascript:;"
         },
@@ -22716,9 +22716,9 @@ var render = function render() {
       }, [message.sender ? _c("span", {
         staticClass: "font-bold"
       }, [_vm._v(_vm._s(message.sender.full_name) + ":")]) : _vm._e(), _vm._v(" "), message.subject ? [_c("span", {
-        staticClass: "text-dark group-[.is-private]:text-white"
+        staticClass: "text-dark group-[.is-private]:text-slate-100"
       }, [_vm._v(_vm._s(message.subject))])] : message.body_preview ? [_c("span", {
-        staticClass: "text-dark group-[.is-private]:text-white"
+        staticClass: "text-dark group-[.is-private]:text-slate-100"
       }, [_vm._v(_vm._s(message.body_preview))])] : _vm._e()], 2)])]);
     }) : _vm._e()], 2);
   }), 0);
