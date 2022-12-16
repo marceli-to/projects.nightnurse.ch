@@ -20,6 +20,7 @@ class MessageResource extends JsonResource
       'body' => $this->body,
       'body_preview' => $this->body_preview,
       'internal' => $this->internal,
+      'private' => $this->private,
       'can_delete' => $this->can_delete,
       'truncate_files' => $this->files->count() > 3 ? true : false,
       'message_time' => $this->message_time,
