@@ -10,10 +10,10 @@
               <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}:</span>
               <!-- {{ message.message_time }}: -->
               <template v-if="message.subject">
-                <span class="text-dark">{{ message.subject }}</span>
+                <span class="text-dark group-[.is-private]:text-white">{{ message.subject }}</span>
               </template>
               <template v-else-if="message.body_preview">
-                <span class="text-dark">{{ message.body_preview }}</span>
+                <span class="text-dark group-[.is-private]:text-white">{{ message.body_preview }}</span>
               </template>
             </a>
           </div>

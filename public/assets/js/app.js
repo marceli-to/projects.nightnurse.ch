@@ -22716,9 +22716,9 @@ var render = function render() {
       }, [message.sender ? _c("span", {
         staticClass: "font-bold"
       }, [_vm._v(_vm._s(message.sender.full_name) + ":")]) : _vm._e(), _vm._v(" "), message.subject ? [_c("span", {
-        staticClass: "text-dark"
+        staticClass: "text-dark group-[.is-private]:text-white"
       }, [_vm._v(_vm._s(message.subject))])] : message.body_preview ? [_c("span", {
-        staticClass: "text-dark"
+        staticClass: "text-dark group-[.is-private]:text-white"
       }, [_vm._v(_vm._s(message.body_preview))])] : _vm._e()], 2)])]);
     }) : _vm._e()], 2);
   }), 0);
