@@ -44,11 +44,11 @@
     @cancelMessage="hideForm()">
   </message-form>
   
-  <div :class="[$store.state.user.admin ? 'justify-between' : 'justify-between', 'flex']">
+  <div class="hidden sm:flex justify-between">
     <template v-if="$store.state.user.admin">
       <template v-if="filter == 'private'">
         <a href="javascript:;" 
-          class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+          class="text-xs font-mono text-gray-400 flex justify-start items-center no-underline hover:text-highlight"
           @click="resetFilter()">
           <shield-check-icon class="h-4 w-4" aria-hidden="true" />
           <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
@@ -56,7 +56,7 @@
       </template>
       <template v-else>
         <a href="javascript:;" 
-          class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+          class="text-xs font-mono text-gray-400 flex justify-start items-center no-underline hover:text-highlight"
           @click="setFilter('private')">
           <shield-check-icon class="h-4 w-4" aria-hidden="true" />
           <span class="block ml-2">{{ translate('Private Nachrichten') }}</span>
@@ -66,7 +66,7 @@
 
     <template>
       <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        class="text-xs font-mono text-gray-400 flex justify-center items-center no-underline hover:text-highlight"
         @click="toggleTimeline()">
         <menu-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Index') }}</span>
@@ -75,7 +75,7 @@
 
     <template v-if="filter == 'files'">
       <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
         @click="resetFilter()">
         <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
@@ -83,7 +83,7 @@
     </template>
     <template v-else>
       <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight"
+        class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
         @click="setFilter('files')">
         <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Anhänge Filtern') }}</span>
@@ -111,7 +111,6 @@
       </div>
     </feed>
   </template>
-
 
   <content-footer v-if="!hasForm">
     <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">

@@ -18,6 +18,7 @@ class MessageResource extends JsonResource
       'uuid' => $this->uuid,
       'subject' => $this->subject,
       'body' => $this->body,
+      'body_preview' => $this->body_preview,
       'internal' => $this->internal,
       'can_delete' => $this->can_delete,
       'truncate_files' => $this->files->count() > 3 ? true : false,

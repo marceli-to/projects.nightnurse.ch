@@ -179,7 +179,7 @@ class Message extends Base
    */
   public function getBodyPreviewAttribute($value)
   {
-    return \Str::words(strip_tags(str_replace('&nbsp;', '', html_entity_decode(trim($this->body)))), 4, ' ...');
+    return \Str::words(strip_tags(str_replace(array('&nbsp;', '<br>', '<br />'), array('', ' ', ' '), html_entity_decode(trim($this->body)))), 4, ' ...');
   }
 
 }
