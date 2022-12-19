@@ -285,6 +285,10 @@ table td {
   color: #222 !important;
 }
 
+.text-white {
+  color: #fff !important;
+}
+
 .text-slate {
   color: #74787e !important;
 }
@@ -299,6 +303,10 @@ table td {
 
 .text-center {
   text-align: center;
+}
+
+.no-underline {
+  text-decoration: none !important;
 }
 
 .p-10 {

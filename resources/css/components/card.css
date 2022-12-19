@@ -33,3 +33,7 @@ h2.card-error__heading {
 .card-error__logo {
   @apply mb-4 md:mb-6
 }
+
+p {
+  @apply text-sm md:text-base
+}
