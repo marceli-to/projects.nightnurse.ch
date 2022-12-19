@@ -21,7 +21,7 @@
     
     <div :class="[errors.user_id ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('Projektleiter') }} <asterisk /></label>
-      <select v-model="data.manager.id">
+      <select v-model="data.user_id">
         <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="s.id" v-for="s in settings.staff" :key="s.id">{{s.firstname}} {{s.name}}</option>
       </select>
@@ -90,7 +90,7 @@
 
     <div :class="[errors.project_state_id ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('Status') }} <asterisk /></label>
-      <select v-model="data.state.id">
+      <select v-model="data.project_state_id">
         <option value="null">{{ translate('Bitte wählen...') }}</option>
         <option :value="s.id" v-for="s in settings.states" :key="s.id">{{s.description}}</option>
       </select>
@@ -278,12 +278,8 @@ export default {
         color: '#ff008b',
         date_start: null,
         date_end: null,
-        manager: {
-          id: null,
-        },
-        state: {
-          id: 1
-        },
+        user_id: null,
+        project_state_id: null,
         company: {
         },
         companies: [],
@@ -526,6 +522,10 @@ export default {
         this.data.companies[index].users.unshift(user);
       }
       this.companyUuid = null;
+    },
+
+    setManager() {
+      console.log(this.manager.id);
     },
 
     isUpdate() {

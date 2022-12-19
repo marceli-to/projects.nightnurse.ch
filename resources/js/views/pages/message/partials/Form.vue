@@ -222,6 +222,7 @@ export default {
       isLoading: false,
       isVisible: false,
       isReply: false,
+      isManager: false,
       hasUpload: false,
 
       // Messages
@@ -283,6 +284,7 @@ export default {
         this.project.clients = responses[1].data.clients;
         this.project.owner = responses[1].data.owner;
         this.project.associates = responses[1].data.associates;
+        this.isManager = responses[1].data.isManager;
         this.addPreSelected();
         this.isFetched = true;
       }));
@@ -356,17 +358,22 @@ export default {
       // and add the sender only
       if (this.isReply) {
         this.data.users = [];
-        this.project.associates.unshift(this.project.manager);
+        // Add manager if its not the same as the logged in
+        if (this.isManager === false) {
+          this.project.associates.unshift(this.project.manager);
+        }
         this.project.associates.forEach(user => {
           this.addOrRemoveRecipient(false, user);
           this.removePreSelectedUser(user);
         });
         this.addOrRemoveRecipient(true, this.$props.message.sender);
-
       }
       else {
         this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
-        this.project.associates.unshift(this.project.manager);
+        // Add manager if its not the same as the logged in
+        if (this.isManager === false) {
+          this.project.associates.unshift(this.project.manager);
+        }
         this.project.associates.forEach(user => {
           this.addOrRemoveRecipient(true, user);
           this.removePreSelectedUser(user);

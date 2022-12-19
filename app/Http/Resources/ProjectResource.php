@@ -24,6 +24,8 @@ class ProjectResource extends JsonResource
       'date_end' => $this->date_end,
       'last_activity'=> $this->last_activity,
       'manager' => UserResource::make($this->manager),
+      'user_id' => $this->manager->id,
+      'project_state_id' => $this->state->id,
       'state' => [
         'id' => $this->state->id,
         'description' => $this->state->description

@@ -129,7 +129,14 @@ class ProjectController extends Controller
 
     if (auth()->user()->isAdmin())
     {
-      return response()->json(['owner' => $owner, 'clients' => $project_clients, 'associates' => $project_associates]);
+      return response()->json(
+        [
+          'owner' => $owner, 
+          'clients' => $project_clients, 
+          'associates' => $project_associates,
+          'isManager' => $project->user_id == auth()->user()->id
+        ]
+      );
     }
 
     // Map fields for non-admins
@@ -196,7 +203,8 @@ class ProjectController extends Controller
         }),
       ],
       'clients' => $project_clients,
-      'associates' => $project_associates
+      'associates' => $project_associates,
+      'isManager' => false,
     ];
     return response()->json($data);
   }
