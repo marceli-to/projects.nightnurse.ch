@@ -293,7 +293,7 @@ export default {
     },
 
     store() {
-      if (this.validateRecipients()) {
+      if (this.validate()) {
         this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
           this.$notify({ type: "success", text: this.messages.created });
           this.reset();
@@ -313,7 +313,16 @@ export default {
       this.$parent.fetch();
     },
 
-    validateRecipients() {
+    validate() {
+
+      // If the user is an admin (i.e. belongs to the owner company),
+      // check if at least one recipient is a non-owner-recipient
+      const external = this.data.users.filter((user) => user.company_id != 1);
+      if (this.$store.state.user.admin && external.length == 0) {
+        if (!confirm(this.translate('Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?'))) {
+          return false;
+        }
+      }
       if (this.data.users.length == 0) {
         this.errors.users = true;
         this.$notify({ type: "danger", text: this.translate('Bitte Empfänger auswählen...') });

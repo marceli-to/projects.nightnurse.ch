@@ -81,7 +81,7 @@ export default {
         'aktive Projekte': 'show active projects',
         'Switch language to': 'Sprache wechseln',
         'Bitte Empfänger auswählen': 'Please seledt at least one recipient',
-
+        'Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?': 'No customer-side recipient was selected. Continue anyway?',
       },
 
       defaultLang: 'de',
