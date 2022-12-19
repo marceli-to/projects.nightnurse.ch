@@ -524,9 +524,6 @@ export default {
       this.companyUuid = null;
     },
 
-    setManager() {
-      console.log(this.manager.id);
-    },
 
     isUpdate() {
       return this.$props.type == "update";

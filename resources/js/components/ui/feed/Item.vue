@@ -253,10 +253,6 @@ export default {
         NProgress.done();
       });
     },
-
-    scrollTo(uuid) {
-      console.log(uuid);
-    }
   },
 
   watch: {

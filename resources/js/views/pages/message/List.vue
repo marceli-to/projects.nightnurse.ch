@@ -328,7 +328,6 @@ export default {
     },
 
     scrollTo(uuid) {
-      console.log(uuid);
       this.hasTimeline = false;
       this.$nextTick(() => {
         const message = this.$refs[`message-${uuid}`][0].$el;
