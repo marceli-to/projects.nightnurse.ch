@@ -1,5 +1,5 @@
 <template>
-<span class="has-reaction-tooltip block relative w-full">
+<span class="has-reaction-tooltip block relative w-full group-[.is-private]:!text-white">
   <slot />
   <div class="reaction-tooltip">{{ $props.users.map(x => x.full_name).join(", ") }}</div>
 </span>
