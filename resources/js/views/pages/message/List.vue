@@ -103,6 +103,7 @@
           :item="item" 
           :filesOnly="filter == 'files' ? true : false"
           @itemDeleted="fetch()"
+          @scrollTo="scrollTo"
           @reply="reply"
           :ref="`message-${item.uuid}`">
         </feed-item>
@@ -327,6 +328,7 @@ export default {
     },
 
     scrollTo(uuid) {
+      console.log(uuid);
       this.hasTimeline = false;
       this.$nextTick(() => {
         const message = this.$refs[`message-${uuid}`][0].$el;

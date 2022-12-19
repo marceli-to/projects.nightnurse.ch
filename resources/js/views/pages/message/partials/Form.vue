@@ -8,7 +8,7 @@
 
         <!-- is it a reply? -->
         <template v-if="$props.message">
-          <feed-item-reply :originalMessage="message" class="md:max-w-[60%]"></feed-item-reply>
+          <feed-item-reply :originalMessage="message" class="md:max-w-[60%] !cursor-default"></feed-item-reply>
         </template>
 
         <!-- Message state -->

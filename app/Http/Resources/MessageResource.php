@@ -33,6 +33,7 @@ class MessageResource extends JsonResource
 
       'is_reply' => $this->message ? true : false,
       'original_message' => [
+        'uuid' => $this->message ? $this->message->uuid : null,
         'subject' => $this->message ? $this->message->subject : null,
         'body' => $this->message ? $this->message->body : null,
         'body_preview' => $this->message ? $this->message->body_preview : null,

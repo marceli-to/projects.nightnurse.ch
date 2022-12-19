@@ -39,6 +39,7 @@
 
           <feed-item-reply
             :originalMessage="message.original_message"
+            @scrollTo="$emit('scrollTo', $event)"
             v-if="message.is_reply">
           </feed-item-reply>
 
@@ -252,6 +253,10 @@ export default {
         NProgress.done();
       });
     },
+
+    scrollTo(uuid) {
+      console.log(uuid);
+    }
   },
 
   watch: {
