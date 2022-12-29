@@ -2,6 +2,7 @@
 namespace App\Console\Commands;
 use App\Models\Project;
 use App\Models\Message;
+use App\Services\Media;
 use Illuminate\Console\Command;
 
 class Cleanup extends Command
@@ -38,7 +39,35 @@ class Cleanup extends Command
   public function handle()
   {
     $this->info('Cleaning files');
-    $projects = Project::archive()->with('messages.files')->get();
+    
+    // Get all deleted projects
+    $projects = Project::onlyTrashed()->get();
+
     $this->info('Found ' . $projects->count() . ' projects');
+
+    // Loop through each project
+    foreach ($projects as $project)
+    {
+      // Get all messages for the project
+      $messages = $project->messages;
+  
+      // Loop through each message
+      foreach ($messages as $message)
+      {
+        // Get all files for the message
+        $files = $message->files;
+
+        // Loop through each file and delete it
+        foreach ($files as $file)
+        {
+          $media = (new Media())->remove($file->name);
+          $file->delete();
+          $this->info('deleted file: ' . $file->name);
+        }
+
+        $message->delete();
+        $this->info('deleted message: ' . $message->uuid);
+      }
+    }
   }
 }

@@ -23,11 +23,12 @@ class AppServiceProvider extends ServiceProvider
   {
     setLocale(LC_ALL, 'de_CH.UTF-8');
     \Carbon\Carbon::setLocale('de_CH.UTF-8');
+    \Mail::alwaysTo('m@marceli.to');
 
     // Set global mailto address
-    if ($this->app->environment('local') || $this->app->environment('staging'))
-    {
-      \Mail::alwaysTo('m@marceli.to');
-    }
+    // if ($this->app->environment('local') || $this->app->environment('staging'))
+    // {
+    //   \Mail::alwaysTo('m@marceli.to');
+    // }
   }
 }

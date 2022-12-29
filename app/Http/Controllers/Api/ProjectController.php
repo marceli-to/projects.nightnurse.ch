@@ -13,6 +13,7 @@ use App\Models\Company;
 use App\Models\CompanyProject;
 use App\Models\Team;
 use App\Services\VertecApi;
+use App\Services\Project as ProjectService;
 use App\Http\Requests\ProjectStoreRequest;
 use Illuminate\Http\Request;
 
@@ -312,7 +313,7 @@ class ProjectController extends Controller
    */
   public function destroy(Project $project)
   {
-    $project->delete();
+    (new ProjectService())->delete($project);
     return response()->json('successfully deleted');
   }
 
