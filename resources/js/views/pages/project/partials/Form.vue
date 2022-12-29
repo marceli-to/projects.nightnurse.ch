@@ -438,12 +438,15 @@ export default {
 
         // remove all company associated users
         if (this.data.company) {
+          
+          if (this.data.company.users) {
             this.data.company.users.forEach(user => {
-            const i = this.data.users.findIndex(x => x.id === user.id)
-            if (i > -1) {
-              this.data.users.splice(i, 1);
-            }
-          });
+              const i = this.data.users.findIndex(x => x.id === user.id)
+              if (i > -1) {
+                this.data.users.splice(i, 1);
+              }
+            });
+          }
         }
         this.data.company = this.settings.companies[idx];
       }
