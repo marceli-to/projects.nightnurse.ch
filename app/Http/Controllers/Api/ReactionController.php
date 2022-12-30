@@ -20,7 +20,6 @@ class ReactionController extends Controller
     $message = Message::where('uuid', $request->input('message_uuid'))->first();
     $reactionType = ReactionType::where('uuid', $request->input('type_uuid'))->first();
 
-    // Todo: check for existing and destroy instead of create
     $reaction = Reaction::where('message_id', $message->id)
         ->where('user_id', auth()->user()->id)
         ->where('reaction_type_id', $reactionType->id)
@@ -38,7 +37,9 @@ class ReactionController extends Controller
       'user_id' => auth()->user()->id,
       'reaction_type_id' => $reactionType->id,
     ];
+
+    $reaction = Reaction::create($data);
     
-    return response()->json(Reaction::create($data));
+    return response()->json($reaction);
   }
 }

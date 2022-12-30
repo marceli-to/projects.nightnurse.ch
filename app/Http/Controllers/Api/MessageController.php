@@ -141,12 +141,13 @@ class MessageController extends Controller
    * Remove a message
    *
    * @param  Message $message
+   * @param  Media $media
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Message $message)
+  public function destroy(Message $message, Media $media)
   {
     $message = Message::with('files')->findOrFail($message->id);
-    (new Media())->removeMany($message->files);
+    $media->removeMany($message->files);
     $message->delete();
     return response()->json('successfully deleted');
   }

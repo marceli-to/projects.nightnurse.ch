@@ -1,18 +1,25 @@
 <?php
 namespace App\Services;
-use App\Models\Project as ProjectModel;
-use App\Models\Message;
+use App\Models\Project;
 use App\Services\Media;
 
-class Project
+class ProjectService
 { 
+
+  protected $media;
+
+  public function __construct(Media $media)
+  {
+    $this->media = $media;
+  }
   /**
    * Delete a project entirely
    *
-   * @param  ProjectModel $project
+   * @param  Project $project
+   * @param  Media $media
    */
 
-  public function delete(ProjectModel $project)
+  public function delete(Project $project)
   {
     // Get and delete all messages
     $messages = $project->messages;
@@ -26,7 +33,7 @@ class Project
       // Loop through each file and delete it
       foreach ($files as $file)
       {
-        $media = (new Media())->remove($file->name);
+        $this->media->remove($file->name);
         $file->delete();
       }
 
@@ -36,5 +43,7 @@ class Project
 
     // Delete the project
     $project->delete();
+
+    return TRUE;
   }
 }
