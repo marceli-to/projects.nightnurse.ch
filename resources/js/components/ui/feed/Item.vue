@@ -295,7 +295,7 @@ export default {
 }
 
 .feed-item p {
-  @apply !mt-0
+  @apply !mt-0 !text-sm
 }
 
 .feed-item p:last-of-type {
