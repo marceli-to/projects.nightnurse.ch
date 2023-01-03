@@ -280,6 +280,7 @@ export default {
         date_end: null,
         user_id: null,
         project_state_id: null,
+        company_id: null,
         company: {
         },
         companies: [],

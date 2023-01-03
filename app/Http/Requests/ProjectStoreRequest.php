@@ -25,7 +25,7 @@ class ProjectStoreRequest extends FormRequest
       'number' => 'required',
       'name' => 'required',
       'user_id' => 'required|exists:App\Models\User,id',
-      'company.id' => 'required|exists:App\Models\Company,id',
+      'company_id' => 'required|exists:App\Models\Company,id',
       'project_state_id' => 'required|exists:App\Models\ProjectState,id',
       'users' => 'nullable',
     ];
