@@ -241,22 +241,25 @@ export default {
     this.fetch();
 
     // Listen to channel 'timeline' an push new messages to the top
-    // window.Echo.private('timeline').listen('MessageSent', (e) => {
-    //   this.feedItems['Today'].unshift(e.message);
-    //   if (!('Notification' in window)) {
-    //     console.log('Web Notification is not supported');
-    //     return;
-    //   }
-    //   Notification.requestPermission(permission => {
-    //     let notification = new Notification('Projekte Nightnurse', {
-    //       body: 'Neue Nachricht...',
-    //       icon: 'https://projects.nightnurse.ch/notification.png'
-    //     });
-    //     notification.onclick = () => {
-    //       window.open(window.location.href);
-    //     };
-    //   });
-    // });
+    window.Echo.private('timeline').listen('MessageSent', (e) => {
+
+      if (e.message.project.uuid == this.project.uuid) {
+        this.feedItems['Today'].unshift(e.message);
+        if (!('Notification' in window)) {
+          console.log('Web Notification is not supported');
+          return;
+        }
+        Notification.requestPermission(permission => {
+          let notification = new Notification('Projekte Nightnurse', {
+            body: 'Neue Nachricht...',
+            icon: 'https://projects.nightnurse.ch/notification.png'
+          });
+          notification.onclick = () => {
+            window.open(window.location.href);
+          };
+        });
+      }
+    });
     
   },
 
