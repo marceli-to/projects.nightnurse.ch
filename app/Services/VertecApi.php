@@ -11,29 +11,29 @@ class VertecApi
   protected $xml_url  = 'https://nightnurse.vertec-mobile.com/xml';
   private $token;
 
-  public function __construct()
-  {
-    $this->authorize();
-  }
+  // public function __construct()
+  // {
+  //   $this->authorize();
+  // }
 
-  public function authorize()
-  {
-    $authxml = '&vertec_username='.$this->username.'&password='.$this->password;
-    $authcurl = curl_init($this->auth_url);
-    curl_setopt ($authcurl, CURLOPT_HTTPHEADER, array("Content-Type: text/xml"));
-    curl_setopt($authcurl, CURLOPT_POST, true);
-    curl_setopt($authcurl, CURLOPT_POSTFIELDS, $authxml);
-    curl_setopt($authcurl, CURLOPT_RETURNTRANSFER, true);
-    $token = curl_exec($authcurl);
+  // public function authorize()
+  // {
+  //   $authxml = '&vertec_username='.$this->username.'&password='.$this->password;
+  //   $authcurl = curl_init($this->auth_url);
+  //   curl_setopt ($authcurl, CURLOPT_HTTPHEADER, array("Content-Type: text/xml"));
+  //   curl_setopt($authcurl, CURLOPT_POST, true);
+  //   curl_setopt($authcurl, CURLOPT_POSTFIELDS, $authxml);
+  //   curl_setopt($authcurl, CURLOPT_RETURNTRANSFER, true);
+  //   $token = curl_exec($authcurl);
     
-    if(curl_errno($authcurl))
-    {
-      throw new Exception(curl_error($authcurl));
-    }
-    curl_close($authcurl);
-    $this->setToken($token);
-    return $token;
-  }
+  //   if(curl_errno($authcurl))
+  //   {
+  //     throw new Exception(curl_error($authcurl));
+  //   }
+  //   curl_close($authcurl);
+  //   $this->setToken($token);
+  //   return $token;
+  // }
 
   public function updateProject(Project $project)
   {
@@ -80,14 +80,9 @@ class VertecApi
     curl_close($curl);
   }
 
-  public function setToken($token = NULL)
-  {
-    $this->token = $token;
-  }
-
   public function getToken()
   {
-    return $this->token;
+    return env('VERTEC_TOKEN');
   }
 
 }
