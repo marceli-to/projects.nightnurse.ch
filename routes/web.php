@@ -15,10 +15,10 @@ use App\Http\Controllers\DownloadController;
 |
 */
 use App\Http\Controllers\TestController;
-Route::get('test/messages/{project:uuid}', [TestController::class, 'getMessages']);
-Route::get('test/project/users/{project:uuid}', [TestController::class, 'getProjectUsers']);
-Route::get('test/project/{project:uuid}', [TestController::class, 'getProject']);
-Route::get('test/projects', [TestController::class, 'getProjects']);
+// Route::get('test/messages/{project:uuid}', [TestController::class, 'getMessages']);
+// Route::get('test/project/users/{project:uuid}', [TestController::class, 'getProjectUsers']);
+// Route::get('test/project/{project:uuid}', [TestController::class, 'getProject']);
+// Route::get('test/projects', [TestController::class, 'getProjects']);
 
 
 /*
@@ -35,10 +35,18 @@ Route::get('/logout', 'Auth\LoginController@logout');
 // Frontend
 Route::get('/', [PageController::class, 'index']);
 
+// Set locale
+Route::get('language/{locale}', function ($locale) {
+  app()->setLocale($locale);
+  session()->put('locale', $locale);
+  return redirect()->back();
+});
+
 // Frontend register
 Route::get('/register/complete', [RegisterController::class, 'complete'])->name('complete');
 Route::get('/register/{user:uuid}', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'update'])->name('register');
+
 
 // Frontend download
 Route::get('/download/zip/{message:uuid}', [DownloadController::class, 'download']);
