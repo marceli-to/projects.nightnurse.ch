@@ -75,8 +75,6 @@ export default {
         'Anhänge Filtern': 'Filter attachements',
         'Aktionen': 'Actions',
         'Antworten': 'Reply',
-        'Übersetzen (EN)': 'Translate (EN)',
-        'Übersetzen (DE)': 'Translate (DE)',
         'Empfänger auswählen': 'Select recipients',
         'Ja': 'Yes',
         'Nein': 'No',

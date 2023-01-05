@@ -229,21 +229,29 @@ export default {
       // States
       isLoading: false,
       isFetched: false,
+      isReply: false,
       hasForm: false,
       hasTimeline: false,
-      isReply: false,
       filter: null,
+
+      // Access
+      canAccessPrivateMessages: false,
 
     };
   },
 
-  created() {
+  mounted() {
     this.fetch();
 
     // Listen to channel 'timeline' an push new messages to the top
     window.Echo.private('timeline').listen('MessageSent', (e) => {
 
       if (e.message.project.uuid == this.project.uuid) {
+
+        if (e.message.private === 1 && !this.canAccessPrivateMessages) {
+          return;
+        }
+
         this.feedItems['Today'].unshift(e.message);
         if (!('Notification' in window)) {
           console.log('Web Notification is not supported');
@@ -279,6 +287,7 @@ export default {
         this.$store.commit('reactionTypes', this.reactionTypes);
         this.isFetched = true;
         this.message = null;
+        this.canAccessPrivateMessages = this.$store.state.user.admin ? true : false;
         NProgress.done();
       }));
     },

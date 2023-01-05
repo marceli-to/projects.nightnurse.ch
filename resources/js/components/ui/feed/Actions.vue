@@ -39,7 +39,7 @@
             class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]"
             @click="$emit('translate', 'en-GB')">
             <flag-en-icon class="mr-3" />
-            {{ translate('Übersetzen (EN)') }}
+            {{ translate('Translate') }}
           </a>
         </div>
         <div>
@@ -47,7 +47,7 @@
             class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]"
             @click="$emit('translate', 'de')">
             <flag-de-icon class="mr-3" />
-            {{ translate('Übersetzen (DE)') }}
+            {{ translate('Übersetzen') }}
           </a>
         </div>
       </div>
