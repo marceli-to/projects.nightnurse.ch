@@ -48,7 +48,7 @@ Route::middleware('auth:api')->group(function() {
 
 });
 
-// Protected API
+// Protected API routes
 Route::middleware('auth:sanctum')->get('/user/authenticated', function (Request $request) {
   return $request->user();
 });
@@ -58,56 +58,28 @@ Route::middleware('auth:sanctum')->post('/user/authenticated', function (Request
 
 Route::middleware('auth:sanctum')->group(function() {
 
+  // User
+  Route::get('user/authenticated', [UserController::class, 'getAuthenticated']);
+  
   // Uploads
   Route::post('upload', [UploadController::class, 'store']);
   Route::delete('upload/{filename}', [UploadController::class, 'destroy']);
 
-  // Users
-  Route::get('users/staff', [UserController::class, 'getStaff']);
-  Route::get('users/{company:uuid}', [UserController::class, 'get']);
-  Route::get('user/authenticated', [UserController::class, 'getAuthenticated']);
-  Route::get('user/{user:uuid}', [UserController::class, 'find']);
-  Route::post('user', [UserController::class, 'store']);
-  Route::post('user/register', [UserController::class, 'register']);
-  Route::get('user/invite/{user:uuid}', [UserController::class, 'invite']);
-  Route::put('user/{user:uuid}', [UserController::class, 'update']);
-  Route::get('user/state/{user:uuid}', [UserController::class, 'toggle']);
-  Route::delete('user/{user:uuid}', [UserController::class, 'destroy']);
+  // Projects
+  Route::get('projects', [ProjectController::class, 'get']);
+  Route::get('project/users/{project:uuid}', [ProjectController::class, 'getProjectUsers']);
+  Route::get('project/{project:uuid}', [ProjectController::class, 'find']);
+
+  // Messages
+  Route::get('messages/{project:uuid}', [MessageController::class, 'get']);
+  Route::get('message/{message:uuid}', [MessageController::class, 'find']);
+  Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
+  Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
 
   // Profile
   Route::post('profile/switch-language', [ProfileController::class, 'switchLanguage']);
   Route::get('profile', [ProfileController::class, 'find']);
   Route::put('profile', [ProfileController::class, 'update']);
-
-
-  // Projects
-  Route::get('projects', [ProjectController::class, 'get']);
-  Route::get('projects-archive', [ProjectController::class, 'getArchive']);
-  Route::get('project/{project:uuid}', [ProjectController::class, 'find']);
-  Route::get('project/users/{project:uuid}', [ProjectController::class, 'getProjectUsers']);
-  Route::get('project/companies/{project:uuid}', [ProjectController::class, 'getProjectCompanies']);
-  Route::post('project', [ProjectController::class, 'store']);
-  Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
-  Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
-  Route::delete('project/{project:uuid}', [ProjectController::class, 'destroy']);
-
-  // Project states
-  Route::get('project-states', [ProjectStateController::class, 'get']);
-
-
-  // Project companies
-  Route::get('project-companies/{project}', [CompanyProjectController::class, 'findByProject']);
-  Route::delete('project-company/{companyProject}', [CompanyProjectController::class, 'destroy']);
-
-  // Companies
-  Route::get('companies', [CompanyController::class, 'get']);
-  Route::get('companies/clients', [CompanyController::class, 'getClients']);
-  Route::get('company/owner', [CompanyController::class, 'getOwner']);
-  Route::get('company/{company:uuid}', [CompanyController::class, 'find']);
-  Route::post('company', [CompanyController::class, 'store']);
-  Route::put('company/{company:uuid}', [CompanyController::class, 'update']);
-  Route::get('company/state/{company:uuid}', [CompanyController::class, 'toggle']);
-  Route::delete('company/{company:uuid}', [CompanyController::class, 'destroy']);
 
   // Genders
   Route::get('genders', [GenderController::class, 'get']);
@@ -117,21 +89,57 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('languages', [LanguageController::class, 'get']);
   Route::get('language/{language}', [LanguageController::class, 'find']);
 
-  // Roles
-  Route::get('roles', [RoleController::class, 'get']);
-  Route::get('role/{role}', [RoleController::class, 'find']);
-
-  // Companies
-  Route::get('messages/{project:uuid}', [MessageController::class, 'get']);
-  Route::get('message/{message:uuid}', [MessageController::class, 'find']);
-  Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
-  Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
-
   // Translations
   Route::post('translate', [TranslationController::class, 'get']);
 
   // Reactions
   Route::get('reaction-types', [ReactionTypeController::class, 'get']);
   Route::post('reaction', [ReactionController::class, 'store']);
+
+  
+  // Routes for admins only
+  Route::middleware('role:admin')->group(function() {
+
+    // Projects
+    Route::get('projects-archive', [ProjectController::class, 'getArchive']);
+    Route::get('project/companies/{project:uuid}', [ProjectController::class, 'getProjectCompanies']);
+    Route::post('project', [ProjectController::class, 'store']);
+    Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
+    Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
+    Route::delete('project/{project:uuid}', [ProjectController::class, 'destroy']);
+
+    // Project states
+    Route::get('project-states', [ProjectStateController::class, 'get']);
+
+    // Project companies
+    Route::get('project-companies/{project}', [CompanyProjectController::class, 'findByProject']);
+    Route::delete('project-company/{companyProject}', [CompanyProjectController::class, 'destroy']);
+
+    // Companies
+    Route::get('companies', [CompanyController::class, 'get']);
+    Route::get('companies/clients', [CompanyController::class, 'getClients']);
+    Route::get('company/owner', [CompanyController::class, 'getOwner']);
+    Route::get('company/{company:uuid}', [CompanyController::class, 'find']);
+    Route::post('company', [CompanyController::class, 'store']);
+    Route::put('company/{company:uuid}', [CompanyController::class, 'update']);
+    Route::get('company/state/{company:uuid}', [CompanyController::class, 'toggle']);
+    Route::delete('company/{company:uuid}', [CompanyController::class, 'destroy']);
+
+    // Users
+    Route::get('users/staff', [UserController::class, 'getStaff']);
+    Route::get('users/{company:uuid}', [UserController::class, 'get']);
+    Route::get('user/{user:uuid}', [UserController::class, 'find']);
+    Route::post('user', [UserController::class, 'store']);
+    Route::post('user/register', [UserController::class, 'register']);
+    Route::get('user/invite/{user:uuid}', [UserController::class, 'invite']);
+    Route::put('user/{user:uuid}', [UserController::class, 'update']);
+    Route::get('user/state/{user:uuid}', [UserController::class, 'toggle']);
+    Route::delete('user/{user:uuid}', [UserController::class, 'destroy']);
+
+    // Roles
+    Route::get('roles', [RoleController::class, 'get']);
+    Route::get('role/{role}', [RoleController::class, 'find']);
+
+  });
 
 });

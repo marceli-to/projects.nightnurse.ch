@@ -20,6 +20,12 @@ class CheckRole
     {
       return abort(403);
     }
+
+    if ($role == 'admin' && !Auth::user()->isAdmin())
+    {
+      return abort(403);
+    }
+
     return $next($request);
   }
 }
