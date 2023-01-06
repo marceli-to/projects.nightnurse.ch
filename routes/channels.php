@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('timeline', function ($user) {
+Broadcast::channel('timeline.{uuid}', function ($user) {
   return true;
 });
 

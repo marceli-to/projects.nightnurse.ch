@@ -18,10 +18,10 @@
     </div>
     <div>
       <a 
-        href="javascript:;" class="!text-gray-400 group-hover/reactions-menu:opacity-50 relative"
+        href="javascript:;" class="!text-gray-400 group-hover/reactions-menu:opacity-50 block relative"
         @mouseover="show()">
         <smile-icon class="h-5 w-5" />
-        <plus-sm-icon :class="[$props.message.internal ? 'right-[-5px]' : 'left-[-5px]', 'h-3 w-3 absolute top-[-5px]']" />
+        <plus-sm-icon :class="[$props.message.internal ? 'right-[-6px]' : 'left-[-6px]', 'h-3 w-3 absolute top-[-6px]']" />
       </a>
     </div>
   </div>

@@ -243,30 +243,27 @@ export default {
   mounted() {
     this.fetch();
 
-    // Listen to channel 'timeline' an push new messages to the top
-    window.Echo.private('timeline').listen('MessageSent', (e) => {
-
-      if (e.message.project.uuid == this.project.uuid) {
-
-        if (e.message.private === 1 && !this.canAccessPrivateMessages) {
-          return;
-        }
-
-        this.feedItems['Today'].unshift(e.message);
-        if (!('Notification' in window)) {
-          console.log('Web Notification is not supported');
-          return;
-        }
-        Notification.requestPermission(permission => {
-          let notification = new Notification('Projekte Nightnurse', {
-            body: 'Neue Nachricht...',
-            icon: 'https://projects.nightnurse.ch/notification.png'
-          });
-          notification.onclick = () => {
-            window.open(window.location.href);
-          };
-        });
+    window.Echo.private(`timeline.${this.$route.params.uuid}`).listen('MessageSent', (e) => {
+      if (e.message.private === 1 && !this.canAccessPrivateMessages) {
+        return;
       }
+      e.message.can_delete = false;
+
+      this.feedItems['Today'].unshift(e.message);
+
+      if (!('Notification' in window)) {
+        return;
+      }
+
+      Notification.requestPermission(permission => {
+        let notification = new Notification('Projekte Nightnurse', {
+          body: 'Neue Nachricht...',
+          icon: 'https://projects.nightnurse.ch/assets/img/logo-nightnurse.png'
+        });
+        notification.onclick = () => {
+          window.open(window.location.href);
+        };
+      });
     });
     
   },
