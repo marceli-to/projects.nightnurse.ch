@@ -30,7 +30,6 @@ class MessageResource extends JsonResource
       'files' => FileResource::collection($this->files),
       'sender' => UserResource::make($this->sender),
       'users' => UserResource::collection($this->users),
-
       'is_reply' => $this->message ? true : false,
       'original_message' => [
         'uuid' => $this->message ? $this->message->uuid : null,
@@ -38,6 +37,7 @@ class MessageResource extends JsonResource
         'body' => $this->message ? $this->message->body : null,
         'body_preview' => $this->message ? $this->message->body_preview : null,
       ],
+      'uri' => env('APP_URL') . '/projects/project/'. $this->project->uuid .'/messages',
 
       // Group reactions by its type and get the users in an array
       'reactions' => $this->reactions->groupBy('reaction_type_id')->map(function ($reactionGroup) {
