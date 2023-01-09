@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectUser;
-use App\Services\Project as ProjectService;
+use App\Services\ProjectService;
 use App\Http\Requests\ProjectStoreRequest;
 use Illuminate\Http\Request;
 
@@ -85,9 +85,9 @@ class ProjectController extends Controller
    * @param  Project $project
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Project $project)
+  public function destroy(Project $project, ProjectService $projectService)
   {
-    (new ProjectService())->delete($project);
+    $projectService->delete($project);
     return response()->json('successfully deleted');
   }
 
