@@ -31,7 +31,9 @@ class Project extends Base
   ];
 
   protected $appends = [
-    'title'
+    'title',
+    'iso_date_start',
+    'iso_date_end',
   ];
 
   /**
@@ -127,6 +129,26 @@ class Project extends Base
     return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
   }
 
+  /**
+   * Mutator for iso_date_start
+   * @param Date $value
+   */
+
+  public function getIsoDateStartAttribute($value)
+  {
+    return $value;
+  }
+
+  /**
+   * Mutator for iso_date_end
+   * @param Date $value
+   */
+
+  public function getIsoDateEndAttribute($value)
+  {
+    return $value;
+  }
+ 
   /**
    * Get project title (Number + Name)
    *
