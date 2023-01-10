@@ -136,7 +136,7 @@ class Project extends Base
 
   public function getIsoDateStartAttribute($value)
   {
-    return $value;
+    return $this->date_start;
   }
 
   /**
