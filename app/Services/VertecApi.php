@@ -52,6 +52,7 @@ class VertecApi
     }
     curl_close($curl);
 
+    dd($output);
     return $output;
   }
 
