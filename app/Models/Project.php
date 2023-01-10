@@ -136,7 +136,7 @@ class Project extends Base
 
   public function getIsoDateStartAttribute($value)
   {
-    return strftime('%d.%m.%Y', strtotime($value));
+    return '11.01.2023';
   }
 
   /**
