@@ -20,7 +20,7 @@ class VertecApi
 
     if ($project->date_start)
     {
-      $xml .= "<xstartdatum>{$project->date_start}</xstartdatum>";
+      $xml .= "<xstartdatum>{$project->iso_date_start}</xstartdatum>";
     }
     else
     {
@@ -28,7 +28,7 @@ class VertecApi
     }
     if ($project->date_end)
     {
-      $xml .= "<xenddatum>{$project->date_end}</xenddatum>";
+      $xml .= "<xenddatum>{$project->iso_date_start}</xenddatum>";
     }
     else
     {
