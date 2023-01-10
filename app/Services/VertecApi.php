@@ -51,8 +51,6 @@ class VertecApi
       throw new Exception(curl_error($curl));
     }
     curl_close($curl);
-
-    dd($output);
     return $output;
   }
 
