@@ -137,7 +137,8 @@ class Project extends Base
 
   public function getIsoDateStartAttribute($value)
   {
-    return '11.01.2023';
+    $datetime = new DateTime($value);
+    return $datetime->format(DateTime::ATOM);
   }
 
   /**
