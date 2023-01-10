@@ -90,7 +90,7 @@ class Project extends Base
   }
 
   /**
-   * Accessor for date_start
+   * Mutator for date_start
    * @param Date $value
    */
 
@@ -100,7 +100,7 @@ class Project extends Base
   }
 
   /**
-   * Accessor for date_end
+   * Mutator for date_end
    * @param Date $value
    */
 
@@ -110,8 +110,9 @@ class Project extends Base
   }
 
   /**
-   * Mutator for date_start
+   * Accessor for date_start
    * @param Date $value
+   * @return string
    */
 
   public function getDateStartAttribute($value)
@@ -120,7 +121,7 @@ class Project extends Base
   }
 
   /**
-   * Mutator for date_end
+   * Accessor for date_end
    * @param Date $value
    */
 
@@ -130,7 +131,7 @@ class Project extends Base
   }
 
   /**
-   * Mutator for iso_date_start
+   * Accessor for iso_date_start
    * @param Date $value
    */
 
@@ -140,7 +141,7 @@ class Project extends Base
   }
 
   /**
-   * Mutator for iso_date_end
+   * Accessor for iso_date_end
    * @param Date $value
    */
 
