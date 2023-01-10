@@ -117,7 +117,7 @@ class Project extends Base
 
   public function getDateStartAttribute($value)
   {
-    return $value;
+    return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
   }
 
   /**
