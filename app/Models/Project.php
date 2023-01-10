@@ -137,8 +137,8 @@ class Project extends Base
 
   public function getIsoDateStartAttribute($value)
   {
-    $datetime = new DateTime($value);
-    return $datetime->format(DateTime::ATOM);
+
+    return \Carbon\Carbon::parse($value)->toIso8601String();
   }
 
   /**
