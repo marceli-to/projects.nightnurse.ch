@@ -282,7 +282,7 @@ class ProjectController extends Controller
     $users = collect($request->input('users'))->pluck('id');
     $project->users()->sync($users);
 
-    dd($project->date_start);
+    dd($project);
 
     // Make changes in 'Vertec'
     if (app()->environment() == 'production' || app()->environment() == 'staging')
