@@ -5,25 +5,22 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\DownloadController;
-
+use App\Http\Controllers\QuoteController;
 
 
 /*
 |--------------------------------------------------------------------------
-| Test Routes
+| Routes for my.nightnurse.ch
 |--------------------------------------------------------------------------
 |
 */
-use App\Http\Controllers\TestController;
-// Route::get('test/messages/{project:uuid}', [TestController::class, 'getMessages']);
-// Route::get('test/project/users/{project:uuid}', [TestController::class, 'getProjectUsers']);
-// Route::get('test/project/{project:uuid}', [TestController::class, 'getProject']);
-// Route::get('test/projects', [TestController::class, 'getProjects']);
 
+Route::get('/offerte/{slug?}/{key}', [QuoteController::class, 'index']);
+Route::get('/offerte/{key}', [QuoteController::class, 'index']);
 
 /*
 |--------------------------------------------------------------------------
-| Web Routes
+| Routes for projects.nightnurse.ch
 |--------------------------------------------------------------------------
 |
 */
@@ -47,10 +44,8 @@ Route::get('/register/complete', [RegisterController::class, 'complete'])->name(
 Route::get('/register/{user:uuid}', [RegisterController::class, 'index']);
 Route::post('/register', [RegisterController::class, 'update'])->name('register');
 
-
 // Frontend download
 Route::get('/download/zip/{message:uuid}', [DownloadController::class, 'download']);
-
 
 // Url based images
 Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageController::class, 'getResponse']);
@@ -63,11 +58,9 @@ Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageControl
 */
 
 Route::middleware('auth:sanctum', 'verified')->group(function() {
-  
   Route::get('{any?}', function () {
     return view('layout.authenticated');
   })->where('any', '^((?!storage).)*$')->name('projects');
-
 });
 
 

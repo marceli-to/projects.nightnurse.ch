@@ -1,0 +1,27 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: components/typo/webfonts
+ * -----------------------------------------------------------------------------
+ *
+ * Typography - Webfonts
+ *
+ */
+
+@import url("//fast.fonts.net/t/1.css?apiType=css&projectid=b8b481e0-9a18-4db7-8cf5-cbfc90813a46");
+@font-face{
+  font-family:"MetaLight";
+  src:url("fonts/ff5015a8-a7c1-4d56-ab03-aea0691a57d3.eot?#iefix");
+  src:url("fonts/ff5015a8-a7c1-4d56-ab03-aea0691a57d3.eot?#iefix") format("eot"),url("fonts/34badce7-ec0d-43bb-83c0-8fb9f628b807.woff2") format("woff2"),url("fonts/f3778d5a-00a6-4842-b6b2-5bf9b72d7aa7.woff") format("woff"),url("fonts/5d752621-0c66-4e68-9cbb-f1d22aeae23c.ttf") format("truetype");
+}
+
+@font-face{
+  font-family:"MetaNormal";
+  src:url("fonts/ff7aa537-8e40-4f5e-9c8f-c5bd078c58db.eot?#iefix");
+  src:url("fonts/ff7aa537-8e40-4f5e-9c8f-c5bd078c58db.eot?#iefix") format("eot"),url("fonts/4ce43a49-0d61-4c34-8054-465d5981fd0b.woff2") format("woff2"),url("fonts/d7b73a86-9fc7-41b4-a367-cbbd20039787.woff") format("woff"),url("fonts/7fc1eb11-127b-4452-9067-a7e4b1b321d6.ttf") format("truetype"),url("fonts/883aaf64-976f-4072-bd04-1284a07164df.svg#883aaf64-976f-4072-bd04-1284a07164df") format("svg");
+}
+
+@font-face{
+  font-family:"MetaBold";
+  src:url("fonts/ffa70b6d-1f49-44a8-a728-1869c881510f.eot?#iefix");
+  src:url("fonts/ffa70b6d-1f49-44a8-a728-1869c881510f.eot?#iefix") format("eot"),url("fonts/94400875-1ce0-47f5-b278-c6ccfa287f52.woff2") format("woff2"),url("fonts/3acf28fb-87d9-4146-b959-a0e26918dc14.woff") format("woff"),url("fonts/a2e92583-d34d-4e2a-9b1b-ffa7a1ab4fb3.ttf") format("truetype"),url("fonts/326632ff-6fcc-4b8f-88e0-63c10ae46c57.svg#326632ff-6fcc-4b8f-88e0-63c10ae46c57") format("svg");
+}

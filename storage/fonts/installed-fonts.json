@@ -1,0 +1,27 @@
+{
+    "ocrbregular": {
+        "normal": "\/Users\/marceli.to\/Jamon.digital\/Webroot\/projects.nightnurse.ch\/storage\/fonts\/\/ocrbregular-normal_52b74ff25e66b8272cd810f48714ec8a"
+    },
+    "calibriregular": {
+        "normal": "\/Users\/marceli.to\/Jamon.digital\/Webroot\/projects.nightnurse.ch\/storage\/fonts\/\/calibriregular_normal_d0c601ed89fe6fb1ddc7b680a26306f5"
+    },
+    "calibribold": {
+        "normal": "\/Users\/marceli.to\/Jamon.digital\/Webroot\/projects.nightnurse.ch\/storage\/fonts\/\/calibribold_normal_0ee0a87666611571ab0d1fa1298a0f5e",
+        "bold": "\/Users\/marceli.to\/Jamon.digital\/Webroot\/projects.nightnurse.ch\/storage\/fonts\/\/calibribold_bold_edd4e62e65ad1d10f9a6a1dd0521a923"
+    },
+    "effraregular": {
+        "normal": "\/Users\/marceli.to\/Jamon.digital\/Webroot\/projects.nightnurse.ch\/storage\/fonts\/\/effraregular_normal_70b9da2dcc7f4d7ada5836f9559b9d64"
+    },
+    "effrabold": {
+        "bold": "\/Users\/marceli.to\/Jamon.digital\/Webroot\/projects.nightnurse.ch\/storage\/fonts\/\/effrabold_bold_f077803178fd74236d4536c99aae9f54"
+    },
+    "metaregular": {
+        "normal": "metaregular_normal_8b12138d958a41a527453f718a291bf5"
+    },
+    "metabold": {
+        "bold": "metabold_bold_90527bb96af92992d5fff02add7db8cb"
+    },
+    "metalight": {
+        "300": "metalight_300_26c7d24e3e86033ec8751c8595f26b0b"
+    }
+}

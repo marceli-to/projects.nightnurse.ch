@@ -36,4 +36,9 @@ class AppHelper
     return number_format(round($amount * 20) / 20, 2, '.', '');
   }
 
+  public static function formatedDate($value)
+  {
+    return \Carbon\Carbon::parse($value)->translatedFormat('j. F Y');
+  }
+
 }

@@ -19,6 +19,8 @@
         "popper.js": "^1.12",
         "postcss": "^8.4.19",
         "postcss-import": "^14.1.0",
+        "sass": "^1.57.1",
+        "sass-loader": "^12.1.0",
         "tailwindcss": "^3.2.4",
         "vue": "^2.7.14",
         "vue-loader": "^15.10.1",

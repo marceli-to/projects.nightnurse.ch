@@ -1,0 +1,21 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: component/blocks
+ * -----------------------------------------------------------------------------
+ *
+ */
+
+%content-block {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+  padding-left: $space-3x;
+  padding-right: $space-3x;
+
+  @include bp-md() {
+    padding-left: $space-6x;
+    padding-right: $space-6x;
+  }
+}
+
+

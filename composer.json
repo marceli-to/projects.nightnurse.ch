@@ -9,10 +9,13 @@
     "license": "MIT",
     "require": {
         "php": "^7.3",
+        "barryvdh/laravel-dompdf": "^2.0",
         "deeplcom/deepl-php": "^1.2",
+        "ehaerer/php-salesforce-rest-api": "*",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^1.0",
-        "guzzlehttp/guzzle": "^7.0.1",
+        "gecche/laravel-multidomain": "^4.2",
+        "guzzlehttp/guzzle": "^7.4",
         "intervention/image": "^2.5",
         "intervention/imagecache": "^2.4",
         "laravel/framework": "^8.0",
@@ -20,6 +23,7 @@
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "nesbot/carbon": "^2.36",
+        "omniphx/forrest": "2.*",
         "pusher/pusher-php-server": "^7.2",
         "rakutentech/laravel-request-docs": "^1.30",
         "staudenmeir/eloquent-eager-limit": "^1.0"

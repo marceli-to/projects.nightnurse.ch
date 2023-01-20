@@ -1,0 +1,180 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: views/quote
+ * -----------------------------------------------------------------------------
+ *
+ */
+
+section.quote {
+  background-color: transparent;
+  width: 100%;
+
+  h1 {
+    @include font-light();
+    font-size: 15pt;
+  }
+
+  .quote-header h1 {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .quote-header__brand {
+    display: flex;
+    margin-bottom: 50px;
+    margin-top: 20px;
+    justify-content: flex-end;
+
+    svg {
+      display: block;
+      height: auto;
+      width: 100%;
+      max-width: 50px;
+    }
+  }
+
+  .quote-header__address {
+    margin-bottom: 50px;
+  }
+
+  // Tables
+  .quote-items {
+    border-top: 1px solid #000;
+    margin-bottom: 30px;
+    width: 100%;
+
+    &.is-total {
+      margin-bottom: 60px;
+
+      tr {
+        &:nth-child(1),
+        &:nth-child(3) {
+          border-top: 2px solid #000;
+        }
+        &:last-of-type {
+          border-bottom: none;
+        }
+      }
+    }
+
+    tr {
+      border-bottom: 1px solid #000;
+    }
+
+    td {
+      padding: 3px 0 5px 0;
+      vertical-align: top;
+    }
+
+    .quote-items__description {
+      width: 70%;
+    }
+
+    .quote-items__quantity {
+      width: 50px;
+
+      em {
+        font-size: 8pt;
+      }
+    }
+
+    .quote-items__line-price {
+      width: calc(15% - 25px);
+    }
+
+    .quote-items__line-total {
+      @include font-bold();
+      text-align: right;
+      width: calc(15% - 25px);
+    }
+  }
+
+  // Additional text
+  .quote-details {
+    p {
+      margin-bottom: 0 !important;
+    }
+  }
+}
+
+@media print {
+
+  @page {
+    size: A4;
+    margin-top: 12mm;
+    margin-bottom: 18mm;
+  }
+
+  body {
+    padding: 0 9mm 0 22mm;
+    max-width: none;
+    font-size: 9pt; 
+  }
+
+  footer.site-footer {
+    padding-bottom: 0 !important;
+  }
+
+  section.quote {
+    background-color: transparent;
+    width: 100%;
+  
+    h1 {
+      @include font-light();
+      font-size: 13pt;
+    }
+
+    .quote-header__brand {
+      margin-bottom: 20mm;
+      margin-top: 6mm;
+
+      svg {
+        max-width: none;
+        width: 11mm;
+      }
+    }
+
+    .quote-body {
+      max-width: 135mm;
+    }
+
+    // Tables
+    .quote-items {
+      border-top: 0.3pt solid #333;
+      page-break-after: auto;
+      width: 100%;
+
+      &.is-total {
+
+        tr {
+          &:nth-child(1),
+          &:nth-child(3) {
+            border-top: 0.3pt solid #333;
+          }
+          &:last-of-type {
+            border-bottom: none;
+          }
+        }
+      }
+
+      .quote-items__description {
+        width: 66%;
+      }
+
+      .quote-items__line-price {
+        width: calc(17% - 25px);
+      }
+  
+      .quote-items__line-total {
+        width: calc(17% - 25px);
+      }
+
+      tr {
+        //border-top: 0.3pt solid #333;
+        border-bottom: 0.3pt solid #333 !important;
+      }
+
+    }
+  }
+
+}

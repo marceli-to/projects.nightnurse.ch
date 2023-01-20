@@ -1,0 +1,39 @@
+/**
+ * -----------------------------------------------------------------------------
+ * File: component/alerts
+ * -----------------------------------------------------------------------------
+ *
+ */
+
+.alert {
+  @include font-regular();
+  max-width: 480px;
+
+  &.alert--danger {
+    color: $color-danger;
+  }
+
+  &.alert--success {
+    border-color: $color-success;
+    color: $color-success;
+  }
+
+  ul {
+    @include font-regular();
+    margin-bottom: 0;
+  }
+}
+
+.alert-warning {
+  border: 2px solid $color-black;
+  color: $color-black;
+  @include font-regular();
+
+  a {
+    color: $color-black;
+    text-decoration: underline;
+    &:hover {
+      text-decoration: none;
+    }
+  }
+}

@@ -1,11 +1,14 @@
 /node_modules
 /public/hot
 /public/storage
+/public/storage-quote
 public/.htaccess
 /storage/*.key
+/storage/quote
 /vendor
 .env
 .env.backup
+.env*
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml

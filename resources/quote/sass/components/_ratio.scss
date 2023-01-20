@@ -1,0 +1,55 @@
+%ratio-16x10,
+%ratio-16x9,
+%ratio-slideshow,
+%ratio-map {
+  height: 0;
+  overflow: hidden;
+  padding-top: 62.5%;
+  position: relative;
+  width: 100%;
+
+  > div {
+    background-color: $color-light;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+}
+
+%ratio-slideshow,
+%ratio-16x9,
+%ratio-16x10 {
+
+  img:not(.is-contain) {
+    @extend %is-object-fit;
+  }
+
+  img.is-contain {
+    @extend %is-object-contain;
+  }
+}
+
+%ratio-16x9 {
+  padding-top: 56.25%;
+}
+
+%ratio-16x10 {
+  padding-top: 62.5%;
+}
+
+%ratio-slideshow {
+  padding-top: 66.6666%;
+
+  @include bp-md() {
+    padding-top: 56.25%;
+  }
+}
+
+%ratio-map {
+  padding-top: 125%;
+  @include bp-md() {
+    padding-top: 56.25%;
+  }
+}
