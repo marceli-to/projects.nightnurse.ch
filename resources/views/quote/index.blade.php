@@ -3,12 +3,10 @@
 @section('content')
 <section class="quote">
   <div class="quote-actions">
-    <div>
-      <a href="{{ $pdf['download_uri'] }}" class="btn-download" target="_blank">{{ __('Download') }}</a>
-      @auth
-        <a href="{{ $pdf['download_uri'] }}" class="btn-accept" target="_blank">{{ __('Akzeptieren') }}</a>
-      @endauth
-    </div>
+    <a href="{{ $pdf['download_uri'] }}" class="btn-download" target="_blank">{{ __('Download') }}</a>
+    @auth
+      <a href="{{ $pdf['download_uri'] }}" class="btn-accept" target="_blank">{{ __('Akzeptieren') }}</a>
+    @endauth
   </div>
   <header class="quote-header">
     <h1>
