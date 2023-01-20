@@ -1,0 +1,16 @@
+.btn-accept {
+  background-color: $color-black;
+  border-radius: 2px;
+  color: $color-white;
+  display: block;
+  @include font-bold();
+  @include font-size($fs-xs);
+  line-height: 1 !important;
+  height: auto;
+  padding: $space-2x $space-3x;
+
+  &:hover {
+    background-color: lighten($color-black, 40);
+    transition: background-color .1s ease-in;
+  }
+}
