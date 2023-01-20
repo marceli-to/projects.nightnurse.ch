@@ -1798,6 +1798,7 @@ section.quote .quote-actions {
 }
 section.quote .quote-actions a {
   display: block;
+  text-align: center;
   margin: 0 10px;
 }
 section.quote .quote-header__brand {
