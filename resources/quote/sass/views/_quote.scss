@@ -18,8 +18,13 @@ section.quote {
     display: flex;
     justify-content: space-between;
     position: fixed;
-    right: 0;
-    top: 0;
+    right: 10px;
+    top: 20px;
+
+    a {
+      display: block;
+      margin: 0 10px;
+    }
   }
 
   .quote-header__brand {

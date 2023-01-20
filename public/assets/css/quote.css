@@ -1793,8 +1793,12 @@ section.quote .quote-actions {
   display: flex;
   justify-content: space-between;
   position: fixed;
-  right: 0;
-  top: 0;
+  right: 10px;
+  top: 20px;
+}
+section.quote .quote-actions a {
+  display: block;
+  margin: 0 10px;
 }
 section.quote .quote-header__brand {
   display: flex;
