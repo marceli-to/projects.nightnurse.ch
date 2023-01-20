@@ -2,17 +2,19 @@
 @section('seo_title', 'Offerte – ' . $data['quote']['Name'])
 @section('content')
 <section class="quote">
+  <div class="quote-actions">
+    <div>
+      <a href="{{ $pdf['download_uri'] }}" class="btn-download" target="_blank">{{ __('Download') }}</a>
+      @auth
+        <a href="{{ $pdf['download_uri'] }}" class="btn-accept" target="_blank">{{ __('Akzeptieren') }}</a>
+      @endauth
+    </div>
+  </div>
   <header class="quote-header">
     <h1>
       {{ __('Offerte') }} {{$data['quote']['QuoteNumber']}}<br>
       {{ $data['quote']['Name'] }}<br>
       Zürich, {!! AppHelper::formatedDate($data['quote']['LastModifiedDate']) !!}
-      <div>
-        <a href="{{ $pdf['download_uri'] }}" class="btn-download" target="_blank">{{ __('Download') }}</a>
-        @auth
-          <a href="{{ $pdf['download_uri'] }}" class="btn-accept" target="_blank">{{ __('Akzeptieren') }}</a>
-        @endauth
-      </div>
     </h1>
     <div class="quote-header__brand">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.14 44.9">

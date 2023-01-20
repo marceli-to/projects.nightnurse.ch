@@ -14,9 +14,12 @@ section.quote {
     font-size: 15pt;
   }
 
-  .quote-header h1 {
+  .quote-actions {
     display: flex;
     justify-content: space-between;
+    position: fixed;
+    right: 0;
+    top: 0;
   }
 
   .quote-header__brand {
