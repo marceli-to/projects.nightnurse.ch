@@ -1,5 +1,5 @@
 .btn-accept {
-  background-color: $color-black;
+  background-color: $color-success;
   border-radius: 2px;
   color: $color-white;
   display: block;
@@ -10,7 +10,7 @@
   padding: $space-2x $space-3x;
 
   &:hover {
-    background-color: lighten($color-black, 40);
+    background-color: darken($color-success, 40);
     transition: background-color .1s ease-in;
   }
 }

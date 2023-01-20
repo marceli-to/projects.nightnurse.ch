@@ -1,5 +1,5 @@
 .btn-download {
-  background-color: $color-success;
+  background-color: $color-black;
   border-radius: 2px;
   color: $color-white;
   display: block;
@@ -10,7 +10,7 @@
   padding: $space-2x $space-3x;
 
   &:hover {
-    background-color: darken($color-success, 40);
+    background-color: lighten($color-black, 40);
     transition: background-color .1s ease-in;
   }
 }
