@@ -19,7 +19,7 @@ return [
   */
 
   'email' => [
-    'from' => env('MAIL_FROM_ADDRESS', 'noreply@nightnurse.ch'),
+    'from' => env('MAIL_FROM_ADDRESS', 'beeper@nightnurse.ch'),
     'recipient' => env('MAIL_TO', 'm@marceli.to'),
   ],
 
