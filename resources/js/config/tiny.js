@@ -4,6 +4,7 @@ export default {
   menubar: false,
   statusbar: false,
   browser_spellcheck: true,
+  contextmenu: '',
   external_plugins: {
     link: '/assets/js/tinymce/plugins/link/plugin.min.js',
   },
