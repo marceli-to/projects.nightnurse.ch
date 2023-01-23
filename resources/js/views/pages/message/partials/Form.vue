@@ -265,7 +265,6 @@ export default {
       this.isReply = true;
       this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
       this.data.message_uuid = this.$props.message.uuid;
-      console.log(this.$props.message.users);
     }
   },
 

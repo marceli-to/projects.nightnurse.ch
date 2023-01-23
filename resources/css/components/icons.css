@@ -5,5 +5,5 @@
 }
 
 .icon-card {
-  @apply h-5 w-5 text-white 
+  @apply h-5 w-5 text-dark
 }

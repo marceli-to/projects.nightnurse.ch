@@ -4,7 +4,7 @@
     v-if="isLoaded">
     <div class="sm:max-w-[70%] lg:max-w-[60%] w-full relative">
 
-      <div class="p-3 lg:py-2 lg:pb-3 bg-white border-2 border-zinc-100 text-sm sm:text-base text-dark relative rounded group-[.is-internal]:bg-zinc-50 group-[.is-private]:bg-slate-400 group-[.is-private]:border-slate-400 group-[.is-private]:text-slate-100">
+      <div class="p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark relative rounded group-[.is-internal]:border-transparent group-[.is-internal]:bg-gray-100 group-[.is-private]:bg-alice-blue group-[.is-private]:border-alice-blue">
         
         <template v-if="message.deleted_at">
           <feed-item-body>
@@ -21,7 +21,7 @@
             v-if="message.private">
           </shield-check-icon>
 
-          <feed-item-header :class="[message.private ? 'text-slate-100': '', 'relative']">
+          <feed-item-header :class="[message.private ? 'text-dark': '', 'relative']">
             <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
             <span v-else>[{{ translate('gelöschter Benutzer') }}]</span>
             {{ translate('an') }}
@@ -277,14 +277,14 @@ export default {
   @apply flex justify-start
 }
 
-.feed-item.is-private a,
+/* .feed-item.is-private a,
 .feed-item.is-private strong {
   @apply text-slate-100
 }
 
 .feed-item.is-private .feed-item__body > div {
   @apply !text-slate-100
-}
+} */
 
 .feed-item ul {
   @apply mb-4
@@ -301,41 +301,4 @@ export default {
 .feed-item p:last-of-type {
   @apply !mb-0
 }
-
-
-/* .feed-item--left {
-  @apply justify-start
-}
-
-.feed-item--right {
-  @apply justify-end
-} */
-
-/* .feed-item--left > div {
-  @apply bg-zinc-50
-} */
-
-/* .feed-item-delete {
-  @apply absolute -bottom-[30px] text-xs !text-gray-400 no-underline pl-0 font-mono
-}
-
-.feed-item-delete:hover {
-  @apply !text-highlight
-}
-
-.feed-item--right .feed-item-delete {
-  @apply right-0
-}
-
-.feed-item--left .feed-item-delete {
-  @apply left-0
-} */
-
-/* .feed-item {
-  @apply mb-8 lg:mb-10
-} */
-
-/* .feed-item.can-delete {
-  @apply mb-14 lg:mb-16
-} */
 </style>

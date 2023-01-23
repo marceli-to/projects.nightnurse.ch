@@ -101,7 +101,9 @@
       <input type="color" name="color" v-model="data.color">
     </div>
 
-    <h4>{{ translate('Zugriffsrechte') }}</h4>
+    <h4 v-if="data.company || data.companies.length > 0">
+      {{ translate('Zugriffsrechte') }}
+    </h4>
 
     <!-- main client -->
     <div class="form-group" v-if="data.company">
@@ -281,8 +283,7 @@ export default {
         user_id: null,
         project_state_id: null,
         company_id: null,
-        company: {
-        },
+        company: null,
         companies: [],
         users: [],
       },
@@ -413,9 +414,8 @@ export default {
     },
 
     removeCompany(id) {
-
       const idx = this.data.companies.findIndex(x => x.id === id);
-      
+     
       // remove all company associated users
       this.data.companies[idx].users.forEach(user => {
         const i = this.data.users.findIndex(x => x.id === user.id)
@@ -436,10 +436,8 @@ export default {
       const id = parseInt(event.target.value);
       const idx = this.settings.companies.findIndex(x => x.id === id);
       if (idx > -1) {
-
         // remove all company associated users
         if (this.data.company) {
-          
           if (this.data.company.users) {
             this.data.company.users.forEach(user => {
               const i = this.data.users.findIndex(x => x.id === user.id)
@@ -527,7 +525,6 @@ export default {
       }
       this.companyUuid = null;
     },
-
 
     isUpdate() {
       return this.$props.type == "update";

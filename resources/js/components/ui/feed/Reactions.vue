@@ -3,22 +3,22 @@
     <div v-for="reaction in $props.reactions" :key="reaction.type.uuid">
       <template v-if="reaction.type.name == 'thumbs-up'">
         <reaction-tool-tip :users="reaction.users">
-          <thumbs-up-icon class="text-dark group-[.is-private]:text-white sm:h-5 sm:w-5 mr-1" />
+          <thumbs-up-icon class="text-dark sm:h-5 sm:w-5 mr-1" />
         </reaction-tool-tip>
       </template>
       <template v-if="reaction.type.name == 'thumbs-down'">
         <reaction-tool-tip :users="reaction.users">
-          <thumbs-down-icon class="text-dark group-[.is-private]:text-white sm:h-5 sm:w-5 mr-1" />
+          <thumbs-down-icon class="text-dark sm:h-5 sm:w-5 mr-1" />
         </reaction-tool-tip>
       </template>
       <template v-if="reaction.type.name == 'smile'">
         <reaction-tool-tip :users="reaction.users">
-          <smile-icon class="text-dark group-[.is-private]:text-white sm:h-5 sm:w-5 mr-1" />
+          <smile-icon class="text-dark sm:h-5 sm:w-5 mr-1" />
         </reaction-tool-tip>
       </template>
       <template v-if="reaction.type.name == 'frown'">
         <reaction-tool-tip :users="reaction.users">
-          <frown-icon class="text-dark group-[.is-private]:text-white sm:h-5 sm:w-5 mr-1" />
+          <frown-icon class="text-dark sm:h-5 sm:w-5 mr-1" />
         </reaction-tool-tip>
       </template>
     </div>
