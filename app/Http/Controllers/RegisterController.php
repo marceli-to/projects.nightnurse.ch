@@ -18,6 +18,10 @@ class RegisterController extends Controller
 
   public function index(User $user)
   {
+    if ($user->register_complete)
+    {
+      return redirect(route('complete'));
+    }
     return view($this->viewPath . 'register', ['uuid' => $user->uuid, 'user' => $user]);
   }
 
@@ -48,6 +52,4 @@ class RegisterController extends Controller
   {
     return view($this->viewPath . 'register-complete');
   }
-
-
 }
