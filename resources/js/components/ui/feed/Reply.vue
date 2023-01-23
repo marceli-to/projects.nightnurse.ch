@@ -1,7 +1,7 @@
 <template>
   <a href="javascript:;" 
     @click="$emit('scrollTo', originalMessage.uuid)"
-    class="block !no-underline px-2 py-1 mb-2 lg:mb-4 border-l-2 border-gray-300 text-xs sm:text-sm text-gray-500 relative">
+    class="block !no-underline px-2 py-1 mb-2 lg:mb-4 border-l-2 border-gray-300 text-xs text-gray-500 relative">
     <div :class="[originalMessage.body ? 'font-bold' : '', 'text-sm italic']" v-if="originalMessage.subject">
       {{ originalMessage.subject }}
     </div>
