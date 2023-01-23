@@ -29,9 +29,14 @@
         <router-link :to="{name: 'user-update', params: { uuid: d.uuid }}" v-if="d.register_complete">
           <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
         </router-link>
-        <a href="" @click.prevent="invite(d.uuid)" v-if="!d.register_complete">
-          <mail-icon class="icon-list mr-2" aria-hidden="true" />
-        </a>
+        <template v-if="!d.register_complete">
+          <a href="" @click.prevent="invite(d.uuid)">
+            <mail-icon class="icon-list mr-2" aria-hidden="true" />
+          </a>
+          <a href="" @click.prevent="copy(d.uuid)" target="_blank" :title="translate('Einladungslink kopieren')">
+            <link-icon class="icon-list mr-2" aria-hidden="true" />
+          </a>
+        </template>
         <a href="" @click.prevent="destroy(d.uuid)">
           <trash-icon class="icon-list" aria-hidden="true" />
         </a>
@@ -49,7 +54,7 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, MailIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, MailIcon, LinkIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import Separator from "@/components/ui/misc/Separator.vue";
@@ -71,6 +76,7 @@ export default {
     PencilAltIcon,
     TrashIcon,
     MailIcon,
+    LinkIcon,
     ContentHeader,
     ContentFooter,
     Separator,
@@ -149,6 +155,13 @@ export default {
           NProgress.done();
         });
       }
+    },
+
+    copy(uuid) {
+      let APP_URL = process.env.MIX_APP_URL;
+      navigator.clipboard.writeText(`${APP_URL}/register/${uuid}`).then(() => {
+        this.$notify({ type: "success", text: this.translate('Einladungslink kopiert') });
+      });
     },
 
     getTeam(userId) {
