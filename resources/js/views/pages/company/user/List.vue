@@ -57,6 +57,7 @@
 import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, MailIcon, LinkIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
+import PageTitle from "@/mixins/PageTitle";
 import Separator from "@/components/ui/misc/Separator.vue";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
@@ -88,7 +89,7 @@ export default {
     NProgress
   },
 
-  mixins: [ErrorHandling, Helpers, i18n],
+  mixins: [ErrorHandling, Helpers, i18n, PageTitle],
 
   data() {
     return {
@@ -113,6 +114,7 @@ export default {
 
   created() {
     this.fetch();
+    this.setPageTitle('Benutzer');
   },
 
   methods: {

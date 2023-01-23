@@ -11,7 +11,7 @@ return [
   |
   */
 
-  'title' => 'Project Room • Nightnurse',
+  'title' => 'Project Room - Nightnurse',
 
   /*
   |--------------------------------------------------------------------------

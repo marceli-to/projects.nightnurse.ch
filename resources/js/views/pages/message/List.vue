@@ -145,6 +145,7 @@ import {
 from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
+import PageTitle from "@/mixins/PageTitle";
 import Separator from "@/components/ui/misc/Separator.vue";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
@@ -200,7 +201,7 @@ export default {
     NProgress
   },
 
-  mixins: [ErrorHandling, Helpers, i18n],
+  mixins: [ErrorHandling, Helpers, PageTitle, i18n],
 
   data() {
     return {
@@ -236,12 +237,6 @@ export default {
 
       // Access
       canAccessPrivateMessages: false,
-
-      // Page title
-      pageTitle: document.querySelector('title'),
-      pageTitlePrefix: 'Project Room',
-      pageTitleSuffix: '- Nightnurse',
-
     };
   },
 
@@ -347,10 +342,6 @@ export default {
         window.scrollTo({top: offset, behavior: 'smooth'});
       });
     },
-
-    setPageTitle(title) {
-      this.pageTitle.textContent = `${this.pageTitlePrefix} - ${title} - ${this.pageTitleSuffix}`;
-    }
   },
 
   watch: {

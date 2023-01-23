@@ -73,6 +73,7 @@
 <script>
 import { EyeIcon, ArrowLeftIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
+import PageTitle from "@/mixins/PageTitle";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -96,7 +97,7 @@ export default {
     NProgress
   },
 
-  mixins: [ErrorHandling, i18n],
+  mixins: [ErrorHandling, i18n, PageTitle],
 
   props: {
     type: String
@@ -149,6 +150,7 @@ export default {
   created() {
     this.fetch();
     this.getSettings();
+    this.setPageTitle(this.translate('Profil'));
   },
 
   methods: {

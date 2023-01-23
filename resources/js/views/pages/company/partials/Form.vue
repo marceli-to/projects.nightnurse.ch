@@ -33,6 +33,7 @@
 <script>
 import { ArrowLeftIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
+import PageTitle from "@/mixins/PageTitle";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
@@ -53,7 +54,7 @@ export default {
     NProgress
   },
 
-  mixins: [ErrorHandling, i18n],
+  mixins: [ErrorHandling, i18n, PageTitle],
 
   props: {
     type: String
@@ -92,6 +93,7 @@ export default {
     if (this.$props.type == "update") {
       this.fetch();
     }
+    this.setPageTitle('Kunden');
   },
 
   methods: {
