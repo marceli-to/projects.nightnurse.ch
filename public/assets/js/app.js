@@ -21252,7 +21252,11 @@ __webpack_require__.r(__webpack_exports__);
       hasTimeline: false,
       filter: null,
       // Access
-      canAccessPrivateMessages: false
+      canAccessPrivateMessages: false,
+      // Page title
+      pageTitle: document.querySelector('title'),
+      pageTitlePrefix: 'Project Room',
+      pageTitleSuffix: '- Nightnurse'
     };
   },
   mounted: function mounted() {
@@ -21304,6 +21308,9 @@ __webpack_require__.r(__webpack_exports__);
         _this2.isFetched = true;
         _this2.message = null;
         _this2.canAccessPrivateMessages = _this2.$store.state.user.admin ? true : false;
+
+        _this2.setPageTitle(_this2.project.title);
+
         nprogress__WEBPACK_IMPORTED_MODULE_20___default().done();
       }));
     },
@@ -21370,6 +21377,9 @@ __webpack_require__.r(__webpack_exports__);
           behavior: 'smooth'
         });
       });
+    },
+    setPageTitle: function setPageTitle(title) {
+      this.pageTitle.textContent = "".concat(this.pageTitlePrefix, " - ").concat(title, " - ").concat(this.pageTitleSuffix);
     }
   },
   watch: {

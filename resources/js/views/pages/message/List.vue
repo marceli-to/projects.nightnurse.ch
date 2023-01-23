@@ -237,6 +237,11 @@ export default {
       // Access
       canAccessPrivateMessages: false,
 
+      // Page title
+      pageTitle: document.querySelector('title'),
+      pageTitlePrefix: 'Project Room',
+      pageTitleSuffix: '- Nightnurse',
+
     };
   },
 
@@ -248,13 +253,10 @@ export default {
         return;
       }
       e.message.can_delete = false;
-
       this.feedItems['Today'].unshift(e.message);
-
       if (!('Notification' in window)) {
         return;
       }
-
       Notification.requestPermission(permission => {
         let notification = new Notification('Projekte Nightnurse', {
           body: 'Neue Nachricht...',
@@ -285,6 +287,7 @@ export default {
         this.isFetched = true;
         this.message = null;
         this.canAccessPrivateMessages = this.$store.state.user.admin ? true : false;
+        this.setPageTitle(this.project.title);
         NProgress.done();
       }));
     },
@@ -343,6 +346,10 @@ export default {
         const offset  = message.getBoundingClientRect().top - 140;
         window.scrollTo({top: offset, behavior: 'smooth'});
       });
+    },
+
+    setPageTitle(title) {
+      this.pageTitle.textContent = `${this.pageTitlePrefix} - ${title} - ${this.pageTitleSuffix}`;
     }
   },
 
