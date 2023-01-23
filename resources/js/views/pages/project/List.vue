@@ -21,16 +21,27 @@
       </div>
       <div class="col-span-8 md:col-span-9">
         <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
-         <span class="font-bold">{{ d.name }}</span><span v-if="d.company"><separator />{{ d.company.name }}</span>
+          <span class="font-bold">{{ d.name }}</span>
+          <span v-if="d.company">
+            <separator class="hidden sm:inline-block" />
+            <br class="sm:hidden">{{ d.company.name }}
+          </span>
         </router-link>
         <div v-if="d.messages">
           <div v-for="(message, iteration) in d.messages" :key="message.uuid">
-            <div v-if="iteration < 3" class="pt-1">
+            <div v-if="iteration < 3" class="pt-1.5 mt-1.5">
               <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
-                <span v-if="message.subject">{{message.subject}}</span>
-                <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
-                <span v-else>–</span>
-                <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}</span>
+                <span class="text-gray-400 text-xs sm:text-sm">
+                  <span class="">{{ message.message_date_time }}</span><separator />
+                  <span v-if="message.sender">{{message.sender.full_name | truncate(15, '...')}}</span>
+                  <separator class="hidden sm:inline" />
+                  <br class="sm:hidden">
+                </span>
+                <span class="block mt-0.5 sm:inline-block sm:mt-0">
+                  <span v-if="message.subject">{{message.subject}}</span>
+                  <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
+                  <span v-else>–</span>
+                </span>
               </router-link>
             </div>
           </div>
@@ -51,7 +62,7 @@
   </div>
   
   <div v-if="data.projects.length" class="max-w-5xl">
-    <div v-for="d in data.projects" :key="d.uuid" class="grid grid-cols-12 mb-4 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
+    <div v-for="d in data.projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
       <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
         <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
@@ -60,15 +71,26 @@
       </div>
       <div class="col-span-8 md:col-span-9">
         <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
-         <span class="font-bold">{{ d.name }}</span><span v-if="d.company"><separator />{{ d.company.name }}</span>
+          <span class="font-bold">{{ d.name }}</span>
+          <span v-if="d.company">
+            <separator class="hidden sm:inline-block" />
+            <br class="sm:hidden">{{ d.company.name }}
+          </span>
         </router-link>
         <div v-if="d.messages">
           <div v-for="(message, iteration) in d.messages" :key="message.uuid">
-            <div v-if="iteration < 3" class="pt-1.5">
-              <span v-if="message.subject">{{message.subject}}</span>
-              <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
-              <span v-else>–</span>
-              <span v-if="message.sender" class="text-gray-400 text-xs font-mono"><separator />{{message.sender.full_name}}</span>
+            <div v-if="iteration < 3" class="pt-1.5 mt-1.5">
+              <span class="text-gray-400 text-xs sm:text-sm">
+                <span class="">{{ message.message_date_time }}</span><separator />
+                <span v-if="message.sender">{{message.sender.full_name | truncate(15, '...')}}</span>
+                <separator class="hidden sm:inline" />
+                <br class="sm:hidden">
+              </span>
+              <span class="block mt-1 sm:inline-block sm:mt-0">
+                <span v-if="message.subject">{{message.subject}}</span>
+                <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
+                <span v-else>–</span>
+              </span>
             </div>
           </div>
         </div>

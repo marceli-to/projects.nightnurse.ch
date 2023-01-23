@@ -28,6 +28,7 @@ class Message extends Base
 
   protected $appends = [
     'message_time',
+    'message_date_time',
     'message_date',
     'message_date_string',
     'body_preview',
@@ -142,6 +143,17 @@ class Message extends Base
   public function getMessageTimeAttribute($value)
   {
     return date('H:i', strtotime($this->created_at));
+  }
+
+  /**
+   * Get the time attribute of a message (hours, minutes)
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getMessageDateTimeAttribute($value)
+  {
+    return date('d.m.Y H:i', strtotime($this->created_at));
   }
 
   /**
