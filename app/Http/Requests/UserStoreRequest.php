@@ -24,7 +24,7 @@ class UserStoreRequest extends FormRequest
     return [
       'firstname' => 'required',
       'name' => 'required',
-      'email' => 'unique:App\Models\User,email|required|email',
+      'email' => 'email|required|email',
       'password' => 'min:8|required_with:password_confirmation|same:password_confirmation',
       'password_confirmation' => 'min:8',
       'language_id' => 'required|exists:App\Models\Language,id',

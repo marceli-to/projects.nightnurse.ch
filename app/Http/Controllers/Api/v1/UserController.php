@@ -42,6 +42,15 @@ class UserController extends Controller
    */
   public function store(UserStoreRequest $request)
   {
+    // Check for existing but deleted user
+    $user = User::withTrashed()->where('email', $request->input('email'))->get()->first();
+    if ($user)
+    {
+      $user->deleted_at = NULL;
+      $user->save();
+      return response()->json(['userId' => $user->id]);
+    }
+
     $user = User::create([
       'uuid' => \Str::uuid(),
       'firstname' => $request->input('firstname'),

@@ -22,7 +22,7 @@ class UserInviteRequest extends FormRequest
   public function rules()
   {
     return [
-      'email' => 'unique:App\Models\User,email|required|email',
+      'email' => 'email|required|email',
     ];
   }
 

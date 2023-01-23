@@ -49,9 +49,11 @@ export default {
 
     validationError(data) {
       let errors = {};
-      data.body.forEach(function(key) {
-        errors[key.field] = true;
-      });
+      for (var key in data.body) {
+        if (data.body.hasOwnProperty(key)) {
+          errors[key.field] = true;
+        }
+      }
       this.errors = data.body;
       NProgress.done();
       this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
