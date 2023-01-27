@@ -38,7 +38,7 @@ class Message extends Base
 
   public function sender()
   {
-    return $this->hasOne(User::class, 'id', 'user_id');
+    return $this->hasOne(User::class, 'id', 'user_id')->withTrashed();
   }
 
   public function project()
@@ -53,7 +53,7 @@ class Message extends Base
 
 	public function users()
 	{
-		return $this->belongsToMany(User::class);
+		return $this->belongsToMany(User::class)->withTrashed();
 	}
 
   public function files()

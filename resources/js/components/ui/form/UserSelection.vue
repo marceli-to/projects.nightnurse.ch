@@ -1,8 +1,7 @@
 <template>
 <div>
-  
   <div :class="[$props.hasErrors ? 'is-invalid' : '', 'form-group relative']">
-    <a href="" @click.prevent="$refs.widgetUserSelection.show()" class="absolute right-0 top-0 text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight">
+    <a href="" @click.prevent="show()" class="absolute right-0 top-0 text-xs font-mono text-gray-400 flex items-center no-underline hover:text-highlight">
       <plus-sm-icon class="h-4 w-4" aria-hidden="true" />
       <span class="block ml-1">{{ translate('Hinzufügen') }}</span>
     </a>
@@ -14,7 +13,7 @@
           @click.prevent="addOrRemoveRecipient(false, recipient)"
           v-for="recipient in $props.recipients" :key="recipient.uuid">
           <span class="inline-block mr-2">
-            {{ recipient.name ? `${recipient.firstname} ${recipient.name}` : recipient.email }} {{ recipient.email }}
+            {{ recipient.name ? `${recipient.firstname} ${recipient.name}` : recipient.email }}
           </span>
           <x-icon class="h-4 w-4" aria-hidden="true"></x-icon>
         </a>
@@ -22,29 +21,35 @@
     </div>
   </div>
 
-  <lightbox ref="widgetUserSelection" :maxWidth="'w-full max-w-[300px] sm:max-w-[700px] lg:max-w-[60%]'">
+  <lightbox ref="widgetUserSelection" :maxWidth="'w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[500px]'" :styles="'top-4 lg:top-12 translate-y-0'">
     <h2 class="text-lg lg:text-lg font-bold !mt-0 mb-4 sm:mb-3">{{ translate('Empfänger auswählen') }}</h2>
-    <nav class="sm:flex max-h-96 overflow-auto">
-      <div v-for="team in owner.teams" :key="team.uuid" class="flex flex-auto flex-nowrap pr-6">
-        <div class="sm:mr-6">
-          <user-selector 
-            :client="{name: `Nightnurse ${team.description}`, uuid: team.uuid}"
-            :users="team.users"
-            :associates="$store.state.user.admin ? getTeamAssociates($props.associates, team.id) : $props.associates"
-            :canToggleAll="$store.state.user.admin ? true : false"
-            @addOrRemoveRecipient="addOrRemoveRecipient">
-          </user-selector>
-        </div>
+    <div class="mt-3 mb-6 pr-5 relative">
+      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center">
+        <search-icon class="w-5 h-5 text-gray-400" />
+      </div>  
+      <input type="text" v-model="keyword" :placeholder="translate('Suche...')" class="!text-base placeholder:text-sm placeholder:text-gray-400 !pl-7 !border-b !border-t !border-gray-200 focus:!border-gray-200" />
+    </div>
+    <nav class="max-h-96 lg:max-h-[42rem] overflow-auto pr-4">
+      <div v-for="team in owner.teams" :key="team.uuid">
+        <user-selector 
+          :keyword="keyword"
+          :client="{name: `Nightnurse ${team.description}`, uuid: team.uuid}"
+          :users="team.users"
+          :associates="$store.state.user.admin ? getTeamAssociates($props.associates, team.id) : $props.associates"
+          :canToggleAll="$store.state.user.admin ? true : false"
+          @addOrRemoveRecipient="addOrRemoveRecipient">
+        </user-selector>
       </div>
-      <div class="flex-auto sm:pr-6" v-if="!$props.private">
+      <template v-if="!$props.private">
         <div v-for="client in $props.clients" :key="client.uuid">
           <user-selector 
+            :keyword="keyword"
             :client="{name: client.data.name, uuid: client.data.uuid}" 
             :users="client.users"
             @addOrRemoveRecipient="addOrRemoveRecipient">
           </user-selector>
         </div>
-      </div>
+      </template>
     </nav>
   </lightbox>
 
@@ -52,7 +57,7 @@
 </template>
 
 <script>
-import { XIcon, PlusSmIcon } from "@vue-hero-icons/outline";
+import { XIcon, PlusSmIcon, SearchIcon } from "@vue-hero-icons/outline";
 import Lightbox from "@/components/ui/layout/Lightbox.vue";
 import UserSelector from "@/components/ui/form/UserSelector.vue";
 import i18n from "@/i18n";
@@ -64,8 +69,15 @@ export default {
   components: {
     Lightbox,
     PlusSmIcon,
+    SearchIcon,
     XIcon,
     UserSelector
+  },
+
+  data() {
+    return {
+      keyword: null,
+    }
   },
 
   props: {
@@ -107,6 +119,7 @@ export default {
   },
 
   mounted() {
+    this.keyword = null;
   },
 
   methods: {
@@ -118,6 +131,11 @@ export default {
     getTeamAssociates(users, teamId) {
       const filteredUser = users.filter((user) => user.team_id == teamId);
       return filteredUser;
+    },
+
+    show() {
+      this.keyword = null;
+      this.$refs.widgetUserSelection.show()
     }
 
   },

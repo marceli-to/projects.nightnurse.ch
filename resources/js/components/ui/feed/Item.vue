@@ -22,8 +22,7 @@
           </shield-check-icon>
 
           <feed-item-header :class="[message.private ? 'text-dark': '', 'relative']">
-            <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}</span>
-            <span v-else>[{{ translate('gelöschter Benutzer') }}]</span>
+            <span class="font-bold">{{message.sender.full_name}}</span>
             {{ translate('an') }}
             <span class="has-tooltip" v-if="message.users && message.users.length > 2">
               <span class='tooltip'>

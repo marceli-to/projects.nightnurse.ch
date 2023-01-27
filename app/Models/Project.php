@@ -47,7 +47,7 @@ class Project extends Base
 
   public function manager()
   {
-    return $this->hasOne(User::class, 'id', 'user_id');
+    return $this->hasOne(User::class, 'id', 'user_id')->withTrashed();
   }
 
   public function state()
