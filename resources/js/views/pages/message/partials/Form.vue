@@ -353,10 +353,10 @@ export default {
     // Add preselected recipients
     addPreSelected() {
 
-      // Filter out project manager from the associates to prevent double entries
+      // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
       
-      // Preselect the project manager if its not the same user as the logged in user
+      // Remove project manager from the associates to prevent double entries
       if (this.isManager === false) {
         this.project.associates.unshift(this.project.manager);
       }
@@ -383,7 +383,6 @@ export default {
           }
         });
       }
-
     },
 
     removePreSelectedUser(user) {
