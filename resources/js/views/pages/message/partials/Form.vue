@@ -5,7 +5,6 @@
 
       <div class="sm:col-span-12">
 
-
         <!-- is it a reply? -->
         <template v-if="$props.message">
           <feed-item-reply :originalMessage="message" class="md:max-w-[60%] !cursor-default"></feed-item-reply>
@@ -354,48 +353,38 @@ export default {
     // Add preselected recipients
     addPreSelected() {
 
-      // Filter out project manager form associats to prevent double entries
+      // Filter out project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
       
-      // Add manager if its not the same as the logged in
+      // Preselect the project manager if its not the same user as the logged in user
       if (this.isManager === false) {
         this.project.associates.unshift(this.project.manager);
       }
       
+      // Preselect the sender of the original message if its a reply
+      if (this.isReply) {
+        this.addOrRemoveRecipient(true, this.$props.message.sender);
+      }
+
+      // Preselect project associates
       this.project.associates.forEach(user => {
         this.addOrRemoveRecipient(true, user);
         this.removePreSelectedUser(user);
       });
 
-      if (this.isReply) {
-        this.addOrRemoveRecipient(true, this.$props.message.sender);
+      // Preselect all client users for the first message (only for admins)
+      if (this.$store.state.user.admin && this.project.is_first_message) {
+        Object.entries(this.project.clients).forEach(client => {
+          const users = client[1].users && client[1].users.length ? client[1].users : null;
+          if (users) {
+            users.forEach(user => {
+              this.addOrRemoveRecipient(true, user);
+              this.removePreSelectedUser(user);
+            });
+          }
+        });
       }
 
-      // If it is a reply, remove all associated users
-      // and add the sender only
-      // if (this.isReply) {
-      //   this.data.users = [];
-      //   // Add manager if its not the same as the logged in
-      //   if (this.isManager === false) {
-      //     this.project.associates.unshift(this.project.manager);
-      //   }
-      //   this.project.associates.forEach(user => {
-      //     this.addOrRemoveRecipient(false, user);
-      //     this.removePreSelectedUser(user);
-      //   });
-      //   this.addOrRemoveRecipient(true, this.$props.message.sender);
-      // }
-      // else {
-      //   this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
-      //   // Add manager if its not the same as the logged in
-      //   if (this.isManager === false) {
-      //     this.project.associates.unshift(this.project.manager);
-      //   }
-      //   this.project.associates.forEach(user => {
-      //     this.addOrRemoveRecipient(true, user);
-      //     this.removePreSelectedUser(user);
-      //   });
-      // }
     },
 
     removePreSelectedUser(user) {

@@ -230,12 +230,13 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    Project::with(
+    $project = Project::with(
       'state', 
       'company.users', 
       'companies.users', 
       'manager', 
-      'users.company'
+      'users.company',
+      'messages',
     )->findOrFail($project->id);
     return response()->json(ProjectResource::make($project));
   }

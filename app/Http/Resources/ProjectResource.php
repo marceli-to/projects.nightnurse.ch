@@ -33,7 +33,8 @@ class ProjectResource extends JsonResource
       'company_id' => $this->company->id,
       'company' => CompanyWithUsersResource::make($this->company),
       'companies' => CompanyWithUsersResource::collection($this->companies),
-      'users' => UserWithCompanyResource::collection($this->users)
+      'users' => UserWithCompanyResource::collection($this->users),
+      'is_first_message' => $this->messages->count() == 0 ? TRUE : FALSE,
     ];
   }
 }
