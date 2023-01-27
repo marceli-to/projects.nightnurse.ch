@@ -1,11 +1,11 @@
 <template>
   <a href="javascript:;" 
     @click="$emit('scrollTo', originalMessage.uuid)"
-    class="block !no-underline px-2 py-1 mb-2 lg:mb-4 border-l-2 border-gray-300 text-sm sm:text-base text-gray-500 relative">
+    class="block !no-underline px-2 py-1 mb-2 lg:mb-4 border-l-2 border-gray-300 group-[.is-private]:border-alice-blue-dark text-sm sm:text-base text-gray-500 relative">
     <div :class="[originalMessage.body ? 'font-bold' : '', 'text-sm italic']" v-if="originalMessage.subject">
-      {{ originalMessage.subject }}
+      {{ originalMessage.subject | truncate(100, '...') }}
     </div>
-    <div class="text-sm italic" v-html="originalMessage.body"></div>
+    <div class="text-sm italic" :inner-html.prop="originalMessage.body | truncateHtml(100, '...')"></div>
   </a>
 </template>
 <script>
@@ -15,10 +15,6 @@ import NProgress from 'nprogress';
 
 export default {
 
-  components: {
-    
-  },
-
   mixins: [ErrorHandling, i18n],
 
   props: {
@@ -27,5 +23,9 @@ export default {
       default: null
     }
   },
+
+  mounted() {
+    console.log(this.$props.originalMessage);
+  }
 }
 </script>

@@ -56,16 +56,6 @@
                 {{ message.subject }}
               </div>
               <div class="text-sm" v-html="message.body"></div>
-              <!--
-                <div class="flex justify-end w-full">
-                  <a href="javascript:;" class="block mr-1" @click.prevent="deeplFy(message.body, 'en-GB')">
-                    <flag-en-icon />
-                  </a>
-                  <a href="javascript:;" class="block" @click.prevent="deeplFy(message.body, 'de')">
-                    <flag-de-icon />
-                  </a>
-                </div>
-              -->
             </template>
           </feed-item-body>
 

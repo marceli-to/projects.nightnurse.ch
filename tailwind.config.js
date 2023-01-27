@@ -18,6 +18,7 @@ module.exports = {
         'dark': '#222222',
         'light': '#f9f9f9',
         'alice-blue': '#e8f1ff',
+        'alice-blue-dark': '#c7dbfe',
       },
       zIndex: {
         '1001': '1001',
