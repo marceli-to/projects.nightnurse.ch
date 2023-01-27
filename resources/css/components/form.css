@@ -65,7 +65,7 @@
   }
 
   input[type="checkbox"].checkbox {
-    @apply accent-dark h-4 w-4 border border-highlight rounded-sm bg-white focus:outline-none mr-2 cursor-pointer
+    @apply accent-dark h-4 w-4 border !border-gray-200 border-highlight rounded bg-white focus:outline-none mr-2 cursor-pointer
   }
 }
 
