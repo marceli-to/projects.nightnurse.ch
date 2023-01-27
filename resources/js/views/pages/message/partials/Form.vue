@@ -379,7 +379,6 @@ export default {
           if (users) {
             users.forEach(user => {
               this.addOrRemoveRecipient(true, user);
-              this.removePreSelectedUser(user);
             });
           }
         });

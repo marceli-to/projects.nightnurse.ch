@@ -35,6 +35,9 @@ class ProjectController extends Controller
                       ->orderBy('last_activity', 'DESC')
                       ->orderBy('number', 'DESC')
                       ->where('user_id', auth()->user()->id)
+                      ->orWhereHas('users', function ($query) {
+                        $query->where('user_id', auth()->user()->id);
+                      })
                       ->get();
 
       // Get 'all projects'
