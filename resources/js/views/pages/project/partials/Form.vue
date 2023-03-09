@@ -104,22 +104,29 @@
     <div class="form-group">
       <label>{{ translate('Offerten') }}</label>
 
-      <div v-for="quote in data.quotes" :key="quote.id">
-        <div class="flex justify-between items-center px-0 py-1 lg:py-2 border-0 border-bottom">
-          <a 
-            :href="quote.uri" 
-            target="_blank"
-            class="text-dark text-sm lg:text-base flex items-center w-full no-underline hover:text-highlight group">
-            <external-link-icon class="icon-list mr-2 group-hover:text-highlight" />
-            {{ quote.description }}
-          </a>
-          <div class="flex items-center">
-            <a href="javascript:;" @click.prevent="deleteQuote(quote.uuid)" class="block">
-              <trash-icon class="icon-list" />
+      <template v-if="data.quotes.length">
+        <div v-for="quote in data.quotes" :key="quote.id">
+          <div class="flex justify-between items-center px-0 py-1 lg:py-2 border-0 border-bottom">
+            <a 
+              :href="quote.uri" 
+              target="_blank"
+              class="text-dark text-sm lg:text-base flex items-center w-full no-underline hover:text-highlight group">
+              <external-link-icon class="icon-list mr-2 group-hover:text-highlight" />
+              {{ quote.description }}
             </a>
+            <div class="flex items-center">
+              <a href="javascript:;" @click.prevent="deleteQuote(quote.uuid)" class="block">
+                <trash-icon class="icon-list" />
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
+      <template v-else>
+        <div class="flex justify-between items-center px-0 py-1 lg:py-2 border-0 border-bottom text-sm text-gray-400 italic">
+          Es sind noch keine Offerten vorhanden.
+        </div>
+      </template>
 
       <div class="flex justify-end">
         <button-widget :label="translate('Offerte hinzufügen')" @click="$refs.widgetProjectQuote.show()" />

@@ -68,7 +68,7 @@
         <div class="text-gray-400 mt-4">
           <div class="text-xs font-mono pb-0.5">{{ translate('Projektbeteiligte') }}</div>
           <div 
-            v-for="(associate, index) in project.users"
+            v-for="(associate, index) in projectAssociates"
             :key="index"
             class="text-sm text-dark py-1 sm:py-0.5">
             {{ associate.full_name }}, {{ associate.company.name }}{{ associate.phone ? `, ${associate.phone}` : '' }}
@@ -81,8 +81,6 @@
             <chevron-up-icon class="w-4 h-4 ml-1" />
           </a>
         </div>
-
-
       </template>
     </div>
   </header>
@@ -330,6 +328,7 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
+        this.projectAssociates = this.getProjectAssociates();
         this.reactionTypes = responses[2].data;
         this.$store.commit('reactionTypes', this.reactionTypes);
         this.isFetched = true;
@@ -398,6 +397,10 @@ export default {
 
     toggleInfo() {
       this.showInfo = this.showInfo ? false : true;
+    },
+
+    getProjectAssociates() {
+      return this.project.users.filter(user => user.company.owner !== 1);
     },
 
   },

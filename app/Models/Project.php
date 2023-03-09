@@ -177,6 +177,11 @@ class Project extends Base
    */
   public function getWorkflowUriAttribute($value)
   {
+    if (!$this->workflow)
+    {
+      return;
+    }
+    
     $url = $this->workflow;
     if (!preg_match("~^(?:f|ht)tps?://~i", $url))
     {
