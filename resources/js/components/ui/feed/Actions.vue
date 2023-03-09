@@ -1,5 +1,4 @@
 <template>
-<!--<div :class="`absolute bottom-[-30px] ${$props.message.internal ? 'left-0' : 'right-0'}`">-->
 <div class="mt-.5">
   <div class="relative inline-block text-left">
     <div>

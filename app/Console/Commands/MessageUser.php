@@ -38,7 +38,6 @@ class MessageUser extends Command
    */
   public function handle()
   {
-   
     $messageUsers = \App\Models\MessageUser::with('user.language', 'message.project.manager', 'message.files', 'message.sender', 'message.users')->where('processed', '=', 0)->get();
     $messageUsers = collect($messageUsers)->splice(0, \Config::get('client.cron_chunk_size'));
     $env = app()->environment();

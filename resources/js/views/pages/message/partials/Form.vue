@@ -177,11 +177,6 @@ export default {
       type: Object,
       default: null,
     },
-
-    feedType: {
-      type: String,
-      default: 'public'
-    }
   },
 
   data() {
@@ -266,7 +261,7 @@ export default {
 
   created() {
     this.fetch();
-    this.data.private = this.$props.feedType === 'private' ? 1 : 0;
+    this.data.private = this.$store.state.feedType === 'private' ? 1 : 0;
 
     if (this.$props.message) {
       this.isReply = true;
@@ -315,7 +310,7 @@ export default {
       this.data = {
         subject: null,
         body: null,
-        private: this.$props.feedType === 'private' ? 1 : 0,
+        private: this.$store.state.feedType === 'private' ? 1 : 0,
         users: [],
         files: [],
       };

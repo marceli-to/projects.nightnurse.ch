@@ -6,6 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: false,
+    feedType: 'public',
     recipients: [],
     reactionTypes: [],
   },
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     reactionTypes(state, reactionTypes) {
       state.reactionTypes = reactionTypes;
+    },
+    feedType(state, feedType) {
+      state.feedType = feedType;
     }
   }
 });

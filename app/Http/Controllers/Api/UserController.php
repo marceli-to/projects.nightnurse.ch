@@ -46,12 +46,18 @@ class UserController extends Controller
       'firstname' => $user->firstname, 
       'name' => $user->name,
       'email' => $user->email,
-      'language' => $user->language->acronym
+      'language' => $user->language->acronym,
     ];
 
     if ($user->isAdmin())
     {
       $data['admin'] = TRUE;
+      $data['can'] = [
+        'create_private_message' => TRUE,
+        'create_public_message' => $user->team_id == 1 ? TRUE : FALSE,
+        'access_private_messages' => TRUE,
+        'access_public_messages' => TRUE,
+      ];
     }
 
     return response()->json($data);

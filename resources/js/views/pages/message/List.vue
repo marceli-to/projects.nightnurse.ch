@@ -1,7 +1,7 @@
 <template>
 <div v-if="isFetched" class="max-w-5xl">
 
-  <header class="mb-4 pt-2 sm:pt-3 pb-2 sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
+  <header class="mb-4 md:mb-6 pt-2 sm:pt-3 pb-2 md:pb-4 sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
     <div>
       <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-4xl leading-snug sm:leading-normal">
         <div class="text-dark" v-if="project.company">
@@ -37,7 +37,7 @@
         </div>
       </div>
       <template v-if="!showInfo">
-        <div class="mt-2">
+        <div class="mt-2 md:mt-4">
           <a href="" @click.prevent="toggleInfo()" class="py-1 font-mono text-gray-400 no-underline text-xs flex items-center w-auto">
             {{ translate('Mehr anzeigen') }}
             <chevron-down-icon class="w-4 h-4 ml-1" />
@@ -87,13 +87,12 @@
 
   <message-form 
     :message="message"
-    :feedType="feedType"
     @cancelMessage="hideForm()" v-if="hasForm">
   </message-form>
   
   <div class="hidden sm:flex justify-between">
     <template v-if="$store.state.user.admin">
-      <template v-if="feedType == 'private'">
+      <template v-if="$store.state.feedType == 'private'">
         <a href="javascript:;" 
           class="text-xs font-mono text-gray-400 flex justify-start items-center no-underline hover:text-highlight"
           @click="setFeedType('public')">
@@ -118,7 +117,7 @@
         <span class="block ml-2">{{ translate('Index') }}</span>
       </a>
     </template>
-    <template v-if="feedType == 'files'">
+    <template v-if="$store.state.feedType == 'files'">
       <a href="javascript:;" 
         class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
         @click="setFeedType('public')">
@@ -137,7 +136,7 @@
   </div>
 
   <template v-if="hasTimeline">
-    <feed-index :feedItems="feedItems" :feedType="feedType" @scrollTo="scrollTo"></feed-index>
+    <feed-index :feedItems="feedItems" @scrollTo="scrollTo"></feed-index>
   </template>
 
   <template>
@@ -148,7 +147,7 @@
           v-for="item in filteredItems(items)" 
           :key="item.uuid" 
           :item="item" 
-          :filesOnly="feedType == 'files' ? true : false"
+          :filesOnly="$store.state.feedType == 'files' ? true : false"
           @itemDeleted="fetch()"
           @scrollTo="scrollTo"
           @reply="reply"
@@ -163,10 +162,23 @@
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
-    <a href="javascript:;" @click="toggleForm()" class="btn-create" v-if="project.project_state_id == 1">
-      <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-      <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
-    </a>
+
+    <!--
+      hide the button if:
+      a) project state description is not 'active'
+      b) feed type is public and the user can not create public messages
+    -->
+
+    <template v-if="project.state.description == 'active' && ($store.state.feedType == 'private' || ($store.state.feedType == 'public' && $store.state.user.can.create_public_message))">
+      <a href="javascript:;" @click="toggleForm()" class="btn-create">
+        <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+        <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
+      </a>
+    </template>
+
+
+
+
   </content-footer>
 </div>
 </template>
@@ -258,7 +270,6 @@ export default {
 
       // Data
       feedItems: [],
-      feedType: 'public',
 
       // Project data
       project: [],
@@ -297,6 +308,7 @@ export default {
 
   mounted() {
     this.fetch();
+
 
     window.Echo.private(`timeline.${this.$route.params.uuid}`).listen('MessageSent', (e) => {
       if (e.message.private === 1 && !this.canAccessPrivateMessages) {
@@ -337,8 +349,10 @@ export default {
         this.$store.commit('reactionTypes', this.reactionTypes);
         this.isFetched = true;
         this.message = null;
-        this.canAccessPrivateMessages = this.$store.state.user.admin ? true : false;
+        this.canAccessPrivateMessages = this.$store.state.user.can ? this.$store.state.user.can.access_private_messages : false;
         this.setPageTitle(this.project.title);
+        console.log(this.$store.state.feedType, this.project.state);
+
         NProgress.done();
       }));
     },
@@ -373,21 +387,21 @@ export default {
     },
 
     setFeedType(attribute) {
-      this.feedType = attribute;
+      this.$store.commit('feedType', attribute);
     },
 
     resetFeedType() {
-      this.feedType = 'public';
+      this.$store.commit('feedType', 'public');
     },
 
     filteredItems(items) {
-      if (this.feedType == 'private') {
+      if (this.$store.state.feedType == 'private') {
         return items.filter(item => item.private === 1);
       }
-      if (this.feedType == 'public') {
+      if (this.$store.state.feedType == 'public') {
         return items.filter(item => item.private === 0);
       }
-      if (this.feedType == 'files') {
+      if (this.$store.state.feedType == 'files') {
         return items.filter(item => item.files.length > 0);
       }
       return items;

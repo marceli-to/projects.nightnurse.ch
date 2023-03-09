@@ -39,14 +39,9 @@ export default {
   },
 
   props: {
-
     feedItems: {
       type: [Array, Object],
     },
-
-    feedType: {
-      type: String
-    }
   },
 
   methods: {
@@ -56,10 +51,10 @@ export default {
     },
 
     filteredItems(items) {
-      if (this.$props.feedType == 'private') {
+      if (this.$store.state.feedType == 'private') {
         return items.filter(item => item.private === 1);
       }
-      if (this.$props.feedType == 'public') {
+      if (this.$store.state.feedType == 'public') {
         return items.filter(item => item.private === 0);
       }
       return items;

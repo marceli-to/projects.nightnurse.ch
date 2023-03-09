@@ -141,6 +141,9 @@ export default {
         company_id: null,
         team_id: null,
         vertec_id: null,
+        company: {
+          teams: null
+        }
       },
 
       // Settings
