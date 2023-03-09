@@ -8,6 +8,7 @@ use App\Http\Resources\CompanyResource;
 use App\Http\Resources\ProjectListResource;
 use App\Models\Project;
 use App\Models\ProjectUser;
+use App\Models\ProjectQuote;
 use App\Models\User;
 use App\Models\Company;
 use App\Models\CompanyProject;
@@ -240,6 +241,7 @@ class ProjectController extends Controller
       'manager', 
       'users.company',
       'messages',
+      'quotes',
     )->findOrFail($project->id);
     return response()->json(ProjectResource::make($project));
   }

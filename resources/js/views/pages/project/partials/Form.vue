@@ -97,6 +97,36 @@
     </div>
 
     <div class="form-group">
+      <label>{{ translate('Workflow') }}</label>
+      <input type="text" name="workflow" v-model="data.workflow">
+    </div>
+
+    <div class="form-group">
+      <label>{{ translate('Offerten') }}</label>
+
+      <div v-for="quote in data.quotes" :key="quote.id">
+        <div class="flex justify-between items-center px-0 py-1 lg:py-2 border-0 border-bottom">
+          <a 
+            :href="quote.uri" 
+            target="_blank"
+            class="text-dark text-sm lg:text-base flex items-center w-full no-underline hover:text-highlight group">
+            <external-link-icon class="icon-list mr-2 group-hover:text-highlight" />
+            {{ quote.description }}
+          </a>
+          <div class="flex items-center">
+            <a href="javascript:;" @click.prevent="deleteQuote(quote.uuid)" class="block">
+              <trash-icon class="icon-list" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-end">
+        <button-widget :label="translate('Offerte hinzufügen')" @click="$refs.widgetProjectQuote.show()" />
+      </div>
+    </div>
+
+    <div class="form-group">
       <label>{{ translate('Farbe') }} <asterisk /></label>
       <input type="color" name="color" v-model="data.color">
     </div>
@@ -225,6 +255,10 @@
     <user-create-widget :companyUuid="companyUuid" @createdUser="createdUser($event)" />
   </lightbox>
 
+  <lightbox ref="widgetProjectQuote">
+    <project-quote-widget :id="data.id" @createdQuote="createdQuote($event)" />
+  </lightbox>
+
 </div>
 </template>
 <script>
@@ -232,7 +266,7 @@ import { TheMask } from "vue-the-mask";
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
 import ErrorHandling from "@/mixins/ErrorHandling";
-import { XIcon, ArrowLeftIcon, PlusSmIcon } from "@vue-hero-icons/outline";
+import { XIcon, ArrowLeftIcon, PlusSmIcon, PencilAltIcon, TrashIcon, ExternalLinkIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -243,6 +277,7 @@ import Lightbox from "@/components/ui/layout/Lightbox.vue";
 import ButtonWidget from "@/components/ui/ButtonWidget.vue";
 import CompanyCreateWidget from '@/views/pages/company/components/WidgetCreate.vue';
 import UserCreateWidget from '@/views/pages/company/user/components/WidgetCreate.vue';
+import ProjectQuoteWidget from '@/views/pages/project/components/WidgetQuote.vue';
 
 export default {
   components: {
@@ -255,11 +290,15 @@ export default {
     Asterisk,
     XIcon,
     ArrowLeftIcon,
+    PencilAltIcon,
     PlusSmIcon,
+    ExternalLinkIcon,
+    TrashIcon,
     NProgress,
     Lightbox,
     CompanyCreateWidget,
     UserCreateWidget,
+    ProjectQuoteWidget,
     ButtonWidget
   },
 
@@ -280,12 +319,14 @@ export default {
         color: '#ff008b',
         date_start: null,
         date_end: null,
+        workflow: null,
         user_id: null,
         project_state_id: null,
         company_id: null,
         company: null,
         companies: [],
         users: [],
+        quotes: [],
       },
 
       companyUuid: null,
@@ -310,7 +351,9 @@ export default {
         fetchCompany: '/api/company',
         post: '/api/project',
         put: '/api/project',
-
+        quote: {
+          delete: '/api/project/quote',
+        }
       },
 
       // States
@@ -461,6 +504,27 @@ export default {
     createdCompany(company) {
       this.settings.companies.unshift(company);
       this.$refs.widgetCompanyCreate.hide();
+    },
+
+    createdQuote(quote) {
+      this.data.quotes.unshift(quote);
+      this.$refs.widgetProjectQuote.hide();
+    },
+
+    updatedQuote(quote) {
+      this.$refs.widgetProjectQuote.hide();
+    },
+
+    deleteQuote(uuid, event) {
+      if (confirm(this.translate('Bitte löschen bestätigen'))) {
+        NProgress.start();
+        this.axios.delete(`${this.routes.quote.delete}/${uuid}`).then(response => {
+          const idx = this.data.quotes.findIndex(x => x.uuid === uuid);
+          this.data.quotes.splice(idx, 1);
+          this.$notify({ type: "success", text: this.translate('Offerte gelöscht') });
+          NProgress.done();
+        });
+      }
     },
 
     toggleAll(event, uuid) {

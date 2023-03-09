@@ -176,6 +176,7 @@ class UserController extends Controller
       'company_id' => $company->id,
       'gender_id' => 1,
       'role_id' => $company->owner ? 1 : 2,
+      'team_id' => $company->owner ? $company->id : NULL,
     ]);
 
     $this->invite($user);

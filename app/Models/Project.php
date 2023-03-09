@@ -17,6 +17,7 @@ class Project extends Base
     'color',
     'date_start',
     'date_end',
+    'workflow',
     'company_id',
     'project_state_id',
     'user_id',
@@ -34,6 +35,7 @@ class Project extends Base
     'title',
     'iso_date_start',
     'iso_date_end',
+    'workflow_uri',
   ];
 
   /**
@@ -68,6 +70,11 @@ class Project extends Base
   public function messages()
   {
     return $this->hasMany(Message::class, 'project_id', 'id')->orderBy('created_at', 'DESC');
+  }
+
+  public function quotes()
+  {
+    return $this->hasMany(ProjectQuote::class, 'project_id', 'id')->orderBy('created_at', 'DESC');
   }
 
   /**
@@ -160,6 +167,22 @@ class Project extends Base
   public function getTitleAttribute($value)
   {
     return $this->number . ' ' . $this->name;
+  }
+
+  /**
+   * Get a valid workflow uri
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getWorkflowUriAttribute($value)
+  {
+    $url = $this->workflow;
+    if (!preg_match("~^(?:f|ht)tps?://~i", $url))
+    {
+      $url = "https://" . $url;
+    }
+    return $url;
   }
 
 }

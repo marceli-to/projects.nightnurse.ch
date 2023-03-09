@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\ProjectQuoteController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
 use App\Http\Controllers\Api\MessageController;
@@ -101,6 +102,10 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::middleware('role:admin')->group(function() {
 
     // Projects
+    Route::post('project/quote', [ProjectQuoteController::class, 'store']);
+    Route::delete('project/quote/{projectQuote:uuid}', [ProjectQuoteController::class, 'destroy']);
+
+
     Route::get('projects-archive', [ProjectController::class, 'getArchive']);
     Route::get('project/companies/{project:uuid}', [ProjectController::class, 'getProjectCompanies']);
     Route::post('project', [ProjectController::class, 'store']);

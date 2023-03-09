@@ -1,7 +1,7 @@
 <template>
 <div v-if="isFetched" class="max-w-5xl">
 
-  <header class="mb-4 pt-2 sm:pt-3 pb-2 sm:pb-4 flex items-start sm:items-start sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
+  <header class="mb-4 pt-2 sm:pt-3 pb-2 sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
     <div>
       <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-4xl leading-snug sm:leading-normal">
         <div class="text-dark" v-if="project.company">
@@ -17,8 +17,8 @@
           <pencil-alt-icon class="icon-list mb-1 ml-1 sm:ml-2" aria-hidden="true" />
         </router-link>
       </div>
-      <div class="flex">
-        <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+      <div class="grid grid-cols-12 sm:gap-2 max-w-sm md:max-w-lg">
+        <div class="col-span-4 text-gray-400">
           <div class="text-xs font-mono pb-0.5">{{ translate('Projektleiter') }}</div>
           <div class="text-sm text-dark">
             {{project.manager.full_name}}
@@ -27,15 +27,63 @@
             </a>
           </div>
         </div>
-        <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+        <div class="col-span-4 text-gray-400">
           <div class="text-xs font-mono pb-0.5">{{ translate('Projektstart') }}</div>
           <div class="text-sm text-dark">{{project.date_start}}</div>
         </div>
-        <div class="text-gray-400 mr-4 sm:mr-6 lg:mr-10">
+        <div class="col-span-4 text-gray-400">
           <div class="text-xs font-mono pb-0.5">{{ translate('Abgabetermin') }}</div>
           <div class="text-sm text-dark">{{project.date_end}}</div>
         </div>
       </div>
+      <template v-if="!showInfo">
+        <div class="mt-2">
+          <a href="" @click.prevent="toggleInfo()" class="py-1 font-mono text-gray-400 no-underline text-xs flex items-center w-auto">
+            {{ translate('Mehr anzeigen') }}
+            <chevron-down-icon class="w-4 h-4 ml-1" />
+          </a>
+        </div>
+      </template>
+      <template v-if="showInfo">
+        <div class="grid grid-cols-12 sm:gap-2 max-w-sm md:max-w-lg">
+          <div class="col-span-4 text-gray-400 mt-4" v-if="project.workflow">
+            <div class="text-xs font-mono pb-0.5">{{ translate('Workflow') }}</div>
+            <div class="text-sm text-dark">
+              <a :href="project.workflow" target="_blank" class="flex items-center no-underline hover:text-highlight group">
+                {{ translate('Anzeigen') }}
+                <external-link-icon class="w-4 h-4 ml-1 text-gray-400 group-hover:text-highlight" />
+              </a>
+            </div>
+          </div>
+          <div class="col-span-4 text-gray-400 mt-4" v-if="project.quotes.length">
+            <div class="text-xs font-mono pb-0.5">{{ translate('Offerten') }}</div>
+            <div v-for="(quote, index) in project.quotes" :key="index" class="text-sm text-dark">
+              <a :href="quote.uri" target="_blank" class="flex items-center no-underline hover:text-highlight group">
+                {{ quote.description }}
+                <external-link-icon class="w-4 h-4 ml-1 text-gray-400 group-hover:text-highlight" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="text-gray-400 mt-4">
+          <div class="text-xs font-mono pb-0.5">{{ translate('Projektbeteiligte') }}</div>
+          <div 
+            v-for="(associate, index) in project.users"
+            :key="index"
+            class="text-sm text-dark py-1 sm:py-0.5">
+            {{ associate.full_name }}, {{ associate.company.name }}{{ associate.phone ? `, ${associate.phone}` : '' }}
+          </div>
+        </div>
+
+        <div class="flex justify-start mt-2">
+          <a href="" @click.prevent="toggleInfo()" class="py-1 font-mono text-gray-400 no-underline text-xs flex items-center">
+            {{ translate('Weniger anzeigen') }}
+            <chevron-up-icon class="w-4 h-4 ml-1" />
+          </a>
+        </div>
+
+
+      </template>
     </div>
   </header>
 
@@ -125,7 +173,6 @@
 </template>
 
 <script>
-
 import { 
   FilterIcon,
   PlusCircleIcon, 
@@ -140,7 +187,8 @@ import {
   ArrowLeftIcon,
   PhoneIcon,
   SwitchHorizontalIcon,
-  MenuIcon
+  MenuIcon,
+  ExternalLinkIcon
 } 
 from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
@@ -182,6 +230,7 @@ export default {
     FilterIcon,
     MenuIcon,
     ArrowLeftIcon,
+    ExternalLinkIcon,
     ContentHeader,
     ContentFooter,
     Separator,
@@ -212,6 +261,9 @@ export default {
       // Project data
       project: [],
 
+      // Project associates
+      projectAssociates: [],
+
       // Single message
       message: null,
 
@@ -233,6 +285,7 @@ export default {
       isReply: false,
       hasForm: false,
       hasTimeline: false,
+      showInfo: false,
       filter: null,
 
       // Access
@@ -342,6 +395,11 @@ export default {
         window.scrollTo({top: offset, behavior: 'smooth'});
       });
     },
+
+    toggleInfo() {
+      this.showInfo = this.showInfo ? false : true;
+    },
+
   },
 
   watch: {

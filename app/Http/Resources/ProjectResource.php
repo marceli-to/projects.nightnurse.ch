@@ -22,6 +22,7 @@ class ProjectResource extends JsonResource
       'color' => $this->color,
       'date_start' => $this->date_start,
       'date_end' => $this->date_end,
+      'workflow' => $this->workflow_uri,
       'last_activity'=> $this->last_activity,
       'manager' => UserResource::make($this->manager),
       'user_id' => $this->manager->id,
@@ -34,6 +35,7 @@ class ProjectResource extends JsonResource
       'company' => CompanyWithUsersResource::make($this->company),
       'companies' => CompanyWithUsersResource::collection($this->companies),
       'users' => UserWithCompanyResource::collection($this->users),
+      'quotes' => ProjectQuoteResource::collection($this->quotes),
       'is_first_message' => $this->messages->count() == 0 ? TRUE : FALSE,
     ];
   }

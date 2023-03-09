@@ -13,19 +13,20 @@ class UserWithCompanyResource extends JsonResource
   public function toArray($request)
   {
     return [
-      'id' => $this->id,
+      'id' => auth()->user()->isAdmin() ? $this->id : null,
       'uuid' => $this->uuid,
       'name' => $this->name,
       'firstname' => $this->firstname,
       'email' => $this->email,
+      'phone' => $this->phone,
       'short_name' => $this->short_name,
       'full_name' => $this->full_name,
       'register_complete' => $this->register_complete,
       'company' => [
-        'uuid' => $this->uuid,
-        'name' => $this->name,
-        'city' => $this->city,
-        'owner' => $this->owner,
+        'uuid' => $this->company->uuid,
+        'name' => $this->company->name,
+        'city' => $this->company->city,
+        'owner' => $this->company->owner,
       ]
     ];
   }
