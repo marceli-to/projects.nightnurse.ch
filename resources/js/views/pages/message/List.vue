@@ -162,7 +162,7 @@
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
-    <a href="javascript:;" @click="toggleForm()" class="btn-create">
+    <a href="javascript:;" @click="toggleForm()" class="btn-create" v-if="project.project_state_id == 1">
       <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
       <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
     </a>
@@ -328,6 +328,7 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
+        console.log(this.project);
         this.projectAssociates = this.getProjectAssociates();
         this.reactionTypes = responses[2].data;
         this.$store.commit('reactionTypes', this.reactionTypes);
