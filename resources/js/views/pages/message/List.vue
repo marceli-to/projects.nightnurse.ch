@@ -169,16 +169,20 @@
       b) feed type is public and the user can not create public messages
     -->
 
-    <template v-if="project.state.description == 'active' && ($store.state.feedType == 'private' || ($store.state.feedType == 'public' && $store.state.user.can.create_public_message))">
-      <a href="javascript:;" @click="toggleForm()" class="btn-create">
-        <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-        <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
-      </a>
+    <template v-if="project.state.description == 'active' && $store.state.user">
+      <template v-if="$store.state.user.admin && ($store.state.feedType == 'private' || ($store.state.feedType == 'public' && $store.state.user.can.create_public_message))">
+        <a href="javascript:;" @click="toggleForm()" class="btn-create">
+          <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
+        </a>
+      </template>
+      <template v-else>
+        <a href="javascript:;" @click="toggleForm()" class="btn-create">
+          <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
+        </a>
+      </template>
     </template>
-
-
-
-
   </content-footer>
 </div>
 </template>
