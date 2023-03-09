@@ -1,26 +1,12 @@
 <template>
 <div v-if="isFetched">
-  <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 border-b-2 mb-4 border-bottom">
+  <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 mb-4 lg:mb-8 border-bottom">
     <div class="sm:grid sm:grid-cols-12 lg:gap-8">
-
       <div class="sm:col-span-12">
-
         <!-- is it a reply? -->
         <template v-if="$props.message">
           <feed-item-reply :originalMessage="message" class="md:max-w-[60%] !cursor-default"></feed-item-reply>
         </template>
-
-        <!--
-        <template v-if="$store.state.user.admin">
-          <div class="form-group border-bottom pb-4">
-            <div class="relative group text-xl hover:cursor-pointer">
-              <label for="isPrivate" class="mb-2 block hover:cursor-pointer relative z-20">{{ translate('Private Nachricht?') }}</label>
-              <input v-model="data.private" type="checkbox" class="hover:cursor-pointer absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md z-10" id="isPrivate" />
-              <span class="w-11 h-6 flex items-center flex-shrink-0 p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-highlight after:h-4 after:w-4 after:bg-white after:rounded-full after:shadow-md after:duration-200 peer-checked:after:translate-x-5"></span>
-            </div>
-          </div>
-        </template>
-        -->
         
         <!-- Recipients -->
         <user-selection
@@ -297,6 +283,19 @@ export default {
     },
 
     store() {
+
+      // Next upgrade: store the last recipients in local storage
+      //---------------------------------------------------------------------------
+
+      // Store this.data.private and this.data.users to local storage as one object
+      // so that we can pre-select the values when the user returns to the page
+      // const storage = {
+      //   private: this.data.private,
+      //   users: this.data.users,
+      // };
+      // const storageName = `default-recipients-${this.data.private ? 'private' : 'public'}`;
+      // localStorage.setItem(storageName, JSON.stringify(storage));
+
       if (this.validate()) {
         this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
           this.$notify({ type: "success", text: this.messages.created });
@@ -356,6 +355,18 @@ export default {
 
     // Add preselected recipients
     addPreSelected() {
+
+      // Next upgrade: check if there are any preselected recipients in local storage
+      //-----------------------------------------------------------------------------
+      // const storageName = `default-recipients-${this.$store.state.feedType}`;
+      // const storage = JSON.parse(localStorage.getItem(storageName));
+      // // If there are users, loop over them and add them to the recipients array
+      // if (storage && !this.isReply) {
+      //   storage.users.forEach(user => {
+      //     this.addOrRemoveRecipient(true, user);
+      //   });
+      //   return;
+      // }
 
       // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);

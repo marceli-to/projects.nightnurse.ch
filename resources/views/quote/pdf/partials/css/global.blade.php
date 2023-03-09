@@ -23,7 +23,7 @@
 
 @page {
   size: A4;
-  margin: 10mm 9mm 10mm 28mm;
+  margin: 8mm 12mm 10mm 28mm;
 }
 
 @media print {
@@ -112,7 +112,7 @@ li {
 }
 
 .quote-header__brand {
-  margin-top: 5mm;
+  margin-top: 0;
   text-align: right;
 }
 

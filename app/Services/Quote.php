@@ -5,6 +5,8 @@ use Illuminate\Http\Request;
 class Quote
 {
   protected $salesforceFunctions;
+  protected $instance_url;
+  protected $access_token;
 
   public function __construct()
   {
@@ -20,9 +22,9 @@ class Quote
     $salesforce->setEndpoint(config('salesforce.login_url'));
     $salesforce->authenticate();
 
-    $access_token = $salesforce->getAccessToken();
-    $instance_url = $salesforce->getInstanceUrl();
-    $this->salesforceFunctions = new \EHAERER\Salesforce\SalesforceFunctions($instance_url, $access_token, "v52.0");
+    $this->access_token = $salesforce->getAccessToken();
+    $this->instance_url = $salesforce->getInstanceUrl();
+    $this->salesforceFunctions = new \EHAERER\Salesforce\SalesforceFunctions($this->instance_url, $this->access_token, "v52.0");
   }
 
   public function get($quoteId = NULL)
@@ -31,6 +33,11 @@ class Quote
       'quote'      => $this->getQuote($quoteId),
       'quoteItems' => $this->getQuoteLineItemsAndProduct2($quoteId),
     ];
+  }
+
+  public function accept($quoteId = NULL)
+  {
+    $this->salesforceFunctions->update('Quote', $quoteId, ['Status' => 'Accepted']);
   }
 
   private function getQuote($quoteId)

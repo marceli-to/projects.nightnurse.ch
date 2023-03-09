@@ -29,7 +29,7 @@
       </div>  
       <input type="text" v-model="keyword" :placeholder="translate('Suche...')" class="!text-base placeholder:text-sm placeholder:text-gray-400 !pl-7 !border-b !border-t !border-gray-200 focus:!border-gray-200" />
     </div>
-    <nav class="max-h-96 lg:max-h-[42rem] overflow-auto pr-4">
+    <nav class="max-h-96 lg:max-h-[42rem] pr-4">
       <div v-for="team in filterOwnerTeams(owner.teams)" :key="team.uuid">
         <user-selector 
           :keyword="keyword"

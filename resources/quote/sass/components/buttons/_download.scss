@@ -7,10 +7,10 @@
   @include font-size($fs-xs);
   line-height: 1 !important;
   height: auto;
-  padding: $space-2x $space-3x;
+  padding: 10px $space-2x 12px $space-2x;
 
   &:hover {
-    background-color: lighten($color-black, 40);
+    background-color: lighten($color-black, 30);
     transition: background-color .1s ease-in;
   }
 }

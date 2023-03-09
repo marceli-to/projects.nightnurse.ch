@@ -39,7 +39,7 @@
         <table class="quote-items is-total">
           <tr>
             <td class="quote-items__description">
-              <strong>{{ __('') }}Total exkl. MwSt.</strong>
+              <strong>{{ __('Total exkl. MwSt.') }}</strong>
             </td>
             <td class="quote-items__quantity"></td>
             <td class="quote-items__line-price"></td>
@@ -48,14 +48,14 @@
             </td>
           </tr>
           <tr>
-            <td class="quote-items__description">{{ __('') }}MwSt.</td>
+            <td class="quote-items__description">{{ __('MwSt.') }}</td>
             <td class="quote-items__quantity">7.7%</td>
             <td class="quote-items__line-price">{!! QuoteHelper::moneyFormat($data['quote']['Subtotal']) !!}</td>
             <td class="quote-items__line-total">{!! QuoteHelper::moneyFormat($data['quote']['VAT_7_7__c']) !!}</td>
           </tr>
           <tr>
             <td class="quote-items__description">
-              <strong>{{ __('') }}Total inkl. MWST (alle Beträge in CHF)</strong>
+              <strong>{{ __('Total inkl. MwSt. (alle Beträge in CHF)') }}</strong>
             </td>
             <td class="quote-items__quantity"></td>
             <td class="quote-items__line-price"></td>

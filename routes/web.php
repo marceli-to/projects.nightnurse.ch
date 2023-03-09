@@ -15,6 +15,7 @@ use App\Http\Controllers\QuoteController;
 |
 */
 
+Route::get('/offerte/annehmen/{key}', [QuoteController::class, 'accept'])->name('quote.accept');
 Route::get('/offerte/{slug?}/{key}', [QuoteController::class, 'index']);
 Route::get('/offerte/{key}', [QuoteController::class, 'index']);
 

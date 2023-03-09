@@ -25,6 +25,7 @@ class QuoteController extends Controller
   { 
     // @todo: get language param and set locale
     // \App::setLocale('en');
+
     // Get quote
     $data = $this->quote->get($request->key);
 
@@ -34,9 +35,26 @@ class QuoteController extends Controller
       abort(404);
     }
 
+    // Create readable date from LastModifiedDate
+    // if the quote has been accepted
+    $state['accepted'] = false;
+    if (isset($data['quote']['Status']) && $data['quote']['Status'] == 'Accepted')
+    {
+      $state = [
+        'accepted' => true,
+        'date' => \Carbon\Carbon::parse($data['quote']['LastModifiedDate'])->format('d.m.Y')
+      ];
+    }
+
     // Create PDF
     $pdf = $createPdf->execute($data);
+    return view($this->viewPath . 'index', ['data' => $data, 'pdf' => $pdf, 'state' => $state]);
+  }
 
-    return view($this->viewPath . 'index', ['data' => $data, 'pdf' => $pdf]);
+  public function accept($key = NULL)
+  {
+    // Get quote
+    $data = $this->quote->accept($key);
+    return redirect()->back();
   }
 }

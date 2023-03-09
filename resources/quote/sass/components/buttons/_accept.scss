@@ -1,5 +1,5 @@
 .btn-accept {
-  background-color: $color-success;
+  background-color: $color-info;
   border-radius: 2px;
   color: $color-white;
   display: block;
@@ -7,10 +7,15 @@
   @include font-size($fs-xs);
   line-height: 1 !important;
   height: auto;
-  padding: $space-2x $space-3x;
+  padding: 10px $space-2x 12px $space-2x;
 
   &:hover {
-    background-color: darken($color-success, 40);
+    background-color: darken($color-success, 10);
     transition: background-color .1s ease-in;
+  }
+
+  &.is-accepted {
+    background-color: $color-success;
+    pointer-events: none;
   }
 }

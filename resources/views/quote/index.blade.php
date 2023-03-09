@@ -1,13 +1,28 @@
 @extends('quote.layout.app')
 @section('seo_title', 'Offerte – ' . $data['quote']['Name'])
 @section('content')
-<section class="quote">
-  <div class="quote-actions">
-    <a href="{{ $pdf['download_uri'] }}" class="btn-download" target="_blank">{{ __('Download') }}</a>
-    @auth
-      <a href="{{ $pdf['download_uri'] }}" class="btn-accept" target="_blank">{{ __('Akzeptieren') }}</a>
-    @endauth
+<div class="quote-actions">
+  @auth
+    <div>
+      @if ($state['accepted'])
+        <a href="{{ route('quote.accept', ['key' => $data['quote']['Id']]) }}" class="btn-accept is-accepted">
+          <span>{{ __('Offerte wurde am :date akzeptiert', ['date' => $state['date']]) }}</span>
+        </a>
+      @else
+        <a href="{{ route('quote.accept', ['key' => $data['quote']['Id']]) }}" class="btn-accept">
+          <span>{{ __('Offerte Akzeptieren') }}</span>
+        </a>
+      @endif
+    </div>
+  @endauth
+  <div>
+    <a href="{{ $pdf['download_uri'] }}" class="btn-download" target="_blank">
+      <span>{{ __('Download Offerte') }}</span>
+    </a>
   </div>
+</div>
+<section class="quote">
+
   <header class="quote-header">
     <h1>
       {{ __('Offerte') }} {{$data['quote']['QuoteNumber']}}<br>
