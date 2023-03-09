@@ -10,7 +10,7 @@
           <feed-item-reply :originalMessage="message" class="md:max-w-[60%] !cursor-default"></feed-item-reply>
         </template>
 
-        <!-- Message state -->
+        <!--
         <template v-if="$store.state.user.admin">
           <div class="form-group border-bottom pb-4">
             <div class="relative group text-xl hover:cursor-pointer">
@@ -20,8 +20,9 @@
             </div>
           </div>
         </template>
-
-        <!-- Recepients -->
+        -->
+        
+        <!-- Recipients -->
         <user-selection
           :private="data.private"
           :recipients="data.users"
@@ -176,6 +177,11 @@ export default {
       type: Object,
       default: null,
     },
+
+    feedType: {
+      type: String,
+      default: 'public'
+    }
   },
 
   data() {
@@ -260,6 +266,8 @@ export default {
 
   created() {
     this.fetch();
+    this.data.private = this.$props.feedType === 'private' ? 1 : 0;
+
     if (this.$props.message) {
       this.isReply = true;
       this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
@@ -307,7 +315,7 @@ export default {
       this.data = {
         subject: null,
         body: null,
-        private: 0,
+        private: this.$props.feedType === 'private' ? 1 : 0,
         users: [],
         files: [],
       };
@@ -317,9 +325,10 @@ export default {
     validate() {
 
       // If the user is an admin (i.e. belongs to the owner company),
-      // check if at least one recipient is a non-owner-recipient
+      // and the array of external recipients is empty, check that
+      // at least one recipient is a non-owner-recipient
       const external = this.data.users.filter((user) => user.company_id != 1);
-      if (this.$store.state.user.admin && external.length == 0) {
+      if (this.$store.state.user.admin && external.length == 0 && this.data.private == 0) {
         if (!confirm(this.translate('Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?'))) {
           return false;
         }

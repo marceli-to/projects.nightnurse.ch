@@ -30,7 +30,7 @@
       <input type="text" v-model="keyword" :placeholder="translate('Suche...')" class="!text-base placeholder:text-sm placeholder:text-gray-400 !pl-7 !border-b !border-t !border-gray-200 focus:!border-gray-200" />
     </div>
     <nav class="max-h-96 lg:max-h-[42rem] overflow-auto pr-4">
-      <div v-for="team in owner.teams" :key="team.uuid">
+      <div v-for="team in filterOwnerTeams(owner.teams)" :key="team.uuid">
         <user-selector 
           :keyword="keyword"
           :client="{name: `Nightnurse ${team.description}`, uuid: team.uuid}"
@@ -131,6 +131,16 @@ export default {
     getTeamAssociates(users, teamId) {
       const filteredUser = users.filter((user) => user.team_id == teamId);
       return filteredUser;
+    },
+
+    filterOwnerTeams(teams) {
+      // filter out owenr teams, if $props.private is true, show all teams
+      if (this.$props.private) {
+        return teams;
+      }
+      // otherwise filter out team with id 2 (Buenos Aires)
+      const filteredTeams = teams.filter((team) => team.id !== 2);
+      return filteredTeams;
     },
 
     show() {

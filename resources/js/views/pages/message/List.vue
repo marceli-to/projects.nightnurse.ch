@@ -87,23 +87,24 @@
 
   <message-form 
     :message="message"
+    :feedType="feedType"
     @cancelMessage="hideForm()" v-if="hasForm">
   </message-form>
   
   <div class="hidden sm:flex justify-between">
     <template v-if="$store.state.user.admin">
-      <template v-if="filter == 'private'">
+      <template v-if="feedType == 'private'">
         <a href="javascript:;" 
           class="text-xs font-mono text-gray-400 flex justify-start items-center no-underline hover:text-highlight"
-          @click="resetFilter()">
-          <shield-check-icon class="h-4 w-4" aria-hidden="true" />
-          <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
+          @click="setFeedType('public')">
+          <eye-icon class="h-4 w-4" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Öffentliche Nachrichten') }}</span>
         </a>
       </template>
       <template v-else>
         <a href="javascript:;" 
           class="text-xs font-mono text-gray-400 flex justify-start items-center no-underline hover:text-highlight"
-          @click="setFilter('private')">
+          @click="setFeedType('private')">
           <shield-check-icon class="h-4 w-4" aria-hidden="true" />
           <span class="block ml-2">{{ translate('Private Nachrichten') }}</span>
         </a>
@@ -117,10 +118,10 @@
         <span class="block ml-2">{{ translate('Index') }}</span>
       </a>
     </template>
-    <template v-if="filter == 'files'">
+    <template v-if="feedType == 'files'">
       <a href="javascript:;" 
         class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
-        @click="resetFilter()">
+        @click="setFeedType('public')">
         <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
       </a>
@@ -128,7 +129,7 @@
     <template v-else>
       <a href="javascript:;" 
         class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
-        @click="setFilter('files')">
+        @click="setFeedType('files')">
         <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Anhänge Filtern') }}</span>
       </a>
@@ -136,7 +137,7 @@
   </div>
 
   <template v-if="hasTimeline">
-    <feed-index :feedItems="feedItems" @scrollTo="scrollTo"></feed-index>
+    <feed-index :feedItems="feedItems" :feedType="feedType" @scrollTo="scrollTo"></feed-index>
   </template>
 
   <template>
@@ -147,7 +148,7 @@
           v-for="item in filteredItems(items)" 
           :key="item.uuid" 
           :item="item" 
-          :filesOnly="filter == 'files' ? true : false"
+          :filesOnly="feedType == 'files' ? true : false"
           @itemDeleted="fetch()"
           @scrollTo="scrollTo"
           @reply="reply"
@@ -176,6 +177,7 @@ import {
   PlusCircleIcon, 
   PencilAltIcon, 
   TrashIcon, 
+  EyeIcon,
   ShieldCheckIcon, 
   CloudDownloadIcon, 
   FolderDownloadIcon,
@@ -226,6 +228,7 @@ export default {
     ChevronRightIcon,
     SwitchHorizontalIcon,
     FilterIcon,
+    EyeIcon,
     MenuIcon,
     ArrowLeftIcon,
     ExternalLinkIcon,
@@ -255,6 +258,7 @@ export default {
 
       // Data
       feedItems: [],
+      feedType: 'public',
 
       // Project data
       project: [],
@@ -284,7 +288,7 @@ export default {
       hasForm: false,
       hasTimeline: false,
       showInfo: false,
-      filter: null,
+      
 
       // Access
       canAccessPrivateMessages: false,
@@ -328,7 +332,6 @@ export default {
       ]).then(axios.spread((...responses) => {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
-        console.log(this.project);
         this.projectAssociates = this.getProjectAssociates();
         this.reactionTypes = responses[2].data;
         this.$store.commit('reactionTypes', this.reactionTypes);
@@ -369,19 +372,22 @@ export default {
       this.hasTimeline = this.hasTimeline ? false : true;
     },
 
-    setFilter(filterAttribute) {
-      this.filter = filterAttribute;
+    setFeedType(attribute) {
+      this.feedType = attribute;
     },
 
-    resetFilter() {
-      this.filter = null;
+    resetFeedType() {
+      this.feedType = 'public';
     },
 
     filteredItems(items) {
-      if (this.filter == 'private') {
+      if (this.feedType == 'private') {
         return items.filter(item => item.private === 1);
       }
-      if (this.filter == 'files') {
+      if (this.feedType == 'public') {
+        return items.filter(item => item.private === 0);
+      }
+      if (this.feedType == 'files') {
         return items.filter(item => item.files.length > 0);
       }
       return items;
