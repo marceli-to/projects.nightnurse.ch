@@ -71,7 +71,7 @@
             v-for="(associate, index) in projectAssociates"
             :key="index"
             class="text-sm text-dark py-1 sm:py-0.5">
-            {{ associate.full_name }}, {{ associate.company.name }}{{ associate.phone ? `, ${associate.phone}` : '' }}
+            {{ associate.full_name }}<template v-if="associate.phone">, <a :href="`tel:${associate.phone}`" class="text-dark hover:text-highlight no-underline">{{associate.phone}}</a></template>
           </div>
         </div>
 
