@@ -91,6 +91,7 @@ export default {
         'Offerte hinzufügen': 'Add quote',
         'Offerte gelöscht': 'Quote deleted',
         'Projektbeteiligte': 'Associates',
+        'Löschen': 'Delete',
       },
 
       defaultLang: 'de',

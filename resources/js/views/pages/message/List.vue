@@ -3,7 +3,7 @@
 
   <header class="mb-4 md:mb-6 pt-2 sm:pt-3 pb-2 md:pb-4 sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
     <div>
-      <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-4xl leading-snug sm:leading-normal">
+      <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-2xl leading-snug sm:leading-normal">
         <div class="text-dark" v-if="project.company">
           <div class="font-normal text-sm">
             {{project.company.name}}
@@ -17,71 +17,74 @@
           <pencil-alt-icon class="icon-list mb-1 ml-1 sm:ml-2" aria-hidden="true" />
         </router-link>
       </div>
-      <div class="grid grid-cols-12 sm:gap-2 max-w-sm md:max-w-lg">
-        <div class="col-span-4 text-gray-400">
-          <div class="text-xs font-mono pb-0.5">{{ translate('Projektleiter') }}</div>
-          <div class="text-sm text-dark">
-            {{project.manager.full_name}}
-            <a :href="`tel:${project.manager.phone}`" class="flex items-center text-dark hover:text-highlight no-underline" v-if="project.manager.phone">
-              <phone-icon class="w-4 h-4 mr-1" /> {{project.manager.phone}}
+      <div class="max-w-sm sm:max-w-xl">
+        <div class="grid grid-cols-12 sm:gap-2 md:gap-4">
+          <div class="col-span-4 text-gray-400">
+            <div class="text-xs font-mono pb-0.5">{{ translate('Projektleiter') }}</div>
+            <div class="text-sm text-dark">
+              {{project.manager.full_name}}
+              <a :href="`tel:${project.manager.phone}`" class="flex items-center text-dark hover:text-highlight no-underline" v-if="project.manager.phone">
+                <phone-icon class="w-4 h-4 mr-1" /> {{project.manager.phone}}
+              </a>
+            </div>
+          </div>
+          <div class="col-span-4 text-gray-400">
+            <div class="text-xs font-mono pb-0.5">{{ translate('Projektstart') }}</div>
+            <div class="text-sm text-dark">{{project.date_start}}</div>
+          </div>
+          <div class="col-span-4 text-gray-400">
+            <div class="text-xs font-mono pb-0.5">{{ translate('Abgabetermin') }}</div>
+            <div class="text-sm text-dark">{{project.date_end}}</div>
+          </div>
+        </div>
+        <template v-if="showInfo">
+          <div class="grid grid-cols-12 sm:gap-2 md:gap-6 mt-4 md:mt-6">
+            <div class="col-span-4 text-gray-400" v-if="project.workflow">
+              <div class="text-xs font-mono pb-0.5">{{ translate('Workflow') }}</div>
+              <div class="text-sm text-dark">
+                <a :href="project.workflow" target="_blank" class="flex items-center no-underline hover:text-highlight group">
+                  {{ translate('Anzeigen') }}
+                  <external-link-icon class="w-4 h-4 ml-1 text-gray-400 group-hover:text-highlight" />
+                </a>
+              </div>
+            </div>
+            <div class="col-span-4 text-gray-400" v-if="project.quotes.length">
+              <div class="text-xs font-mono pb-0.5">{{ translate('Offerten') }}</div>
+              <div v-for="(quote, index) in project.quotes" :key="index" class="text-sm text-dark">
+                <a :href="quote.uri" target="_blank" class="flex items-center no-underline hover:text-highlight group">
+                  {{ quote.description }}
+                  <external-link-icon class="w-4 h-4 ml-1 text-gray-400 group-hover:text-highlight" />
+                </a>
+              </div>
+            </div>
+            <div class="col-span-12 mt-4 sm:mt-0 text-gray-400">
+              <div class="text-xs font-mono pb-0.5">{{ translate('Projektbeteiligte') }}</div>
+              <div 
+                v-for="(associate, index) in projectAssociates"
+                :key="index"
+                class="text-sm text-dark py-0.5">
+                {{ associate.full_name }}<template v-if="associate.phone">, <a :href="`tel:${associate.phone}`" class="text-dark hover:text-highlight no-underline">{{associate.phone}}</a></template>
+            </div>
+            </div>
+          </div>
+        </template>
+        <template v-if="showInfo">
+          <div class="mt-2">
+            <a href="" @click.prevent="toggleInfo()" class="py-1 font-mono text-gray-400 no-underline text-xs flex items-center">
+              {{ translate('Weniger anzeigen') }}
+              <chevron-up-icon class="w-4 h-4 ml-1" />
             </a>
           </div>
-        </div>
-        <div class="col-span-4 text-gray-400">
-          <div class="text-xs font-mono pb-0.5">{{ translate('Projektstart') }}</div>
-          <div class="text-sm text-dark">{{project.date_start}}</div>
-        </div>
-        <div class="col-span-4 text-gray-400">
-          <div class="text-xs font-mono pb-0.5">{{ translate('Abgabetermin') }}</div>
-          <div class="text-sm text-dark">{{project.date_end}}</div>
-        </div>
-      </div>
-      <template v-if="!showInfo">
-        <div class="mt-2 md:mt-4">
-          <a href="" @click.prevent="toggleInfo()" class="py-1 font-mono text-gray-400 no-underline text-xs flex items-center w-auto">
-            {{ translate('Mehr anzeigen') }}
-            <chevron-down-icon class="w-4 h-4 ml-1" />
-          </a>
-        </div>
-      </template>
-      <template v-if="showInfo">
-        <div class="grid grid-cols-12 sm:gap-2 max-w-sm md:max-w-lg">
-          <div class="col-span-4 text-gray-400 mt-4" v-if="project.workflow">
-            <div class="text-xs font-mono pb-0.5">{{ translate('Workflow') }}</div>
-            <div class="text-sm text-dark">
-              <a :href="project.workflow" target="_blank" class="flex items-center no-underline hover:text-highlight group">
-                {{ translate('Anzeigen') }}
-                <external-link-icon class="w-4 h-4 ml-1 text-gray-400 group-hover:text-highlight" />
-              </a>
-            </div>
+        </template>
+        <template v-if="!showInfo">
+          <div class="mt-2">
+            <a href="" @click.prevent="toggleInfo()" class="py-1 font-mono text-gray-400 no-underline text-xs flex items-center w-auto">
+              {{ translate('Mehr anzeigen') }}
+              <chevron-down-icon class="w-4 h-4 ml-1" />
+            </a>
           </div>
-          <div class="col-span-4 text-gray-400 mt-4" v-if="project.quotes.length">
-            <div class="text-xs font-mono pb-0.5">{{ translate('Offerten') }}</div>
-            <div v-for="(quote, index) in project.quotes" :key="index" class="text-sm text-dark">
-              <a :href="quote.uri" target="_blank" class="flex items-center no-underline hover:text-highlight group">
-                {{ quote.description }}
-                <external-link-icon class="w-4 h-4 ml-1 text-gray-400 group-hover:text-highlight" />
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="text-gray-400 mt-4">
-          <div class="text-xs font-mono pb-0.5">{{ translate('Projektbeteiligte') }}</div>
-          <div 
-            v-for="(associate, index) in projectAssociates"
-            :key="index"
-            class="text-sm text-dark py-1 sm:py-0.5">
-            {{ associate.full_name }}<template v-if="associate.phone">, <a :href="`tel:${associate.phone}`" class="text-dark hover:text-highlight no-underline">{{associate.phone}}</a></template>
-          </div>
-        </div>
-
-        <div class="flex justify-start mt-2">
-          <a href="" @click.prevent="toggleInfo()" class="py-1 font-mono text-gray-400 no-underline text-xs flex items-center">
-            {{ translate('Weniger anzeigen') }}
-            <chevron-up-icon class="w-4 h-4 ml-1" />
-          </a>
-        </div>
-      </template>
+        </template>
+     </div>
     </div>
   </header>
 
@@ -162,13 +165,6 @@
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
-
-    <!--
-      hide the button if:
-      a) project state description is not 'active'
-      b) feed type is public and the user can not create public messages
-    -->
-
     <template v-if="project.state.description == 'active' && $store.state.user">
       <template v-if="$store.state.user.admin && ($store.state.feedType == 'private' || ($store.state.feedType == 'public' && $store.state.user.can.create_public_message))">
         <a href="javascript:;" @click="toggleForm()" class="btn-create">

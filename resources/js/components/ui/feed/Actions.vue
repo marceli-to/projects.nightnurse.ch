@@ -9,21 +9,47 @@
         </svg>
       </a>
     </div>
-    <div :class="[isOpen ? 'block' : 'hidden', `absolute left-0 z-10 mt-2 w-48 origin-top-right rounded-sm bg-white shadow-sm ring-2 ring-dark ring-opacity-5 focus:outline-none menu-inner-${$props.message.uuid}`]" 
+    <div :class="[isOpen ? 'block' : 'hidden', `absolute left-0 z-[500] mt-2 w-48 origin-top-right rounded-sm bg-white shadow-sm ring-2 ring-dark ring-opacity-5 focus:outline-none menu-inner-${$props.message.uuid}`]" 
       role="menu" 
       aria-orientation="vertical" 
       aria-labelledby="menu-button" 
       tabindex="-1">
       <div role="none">
+       
+        <template v-if="!$store.state.user.admin">
+          <div>
+            <a href="javascript:;" 
+              @click.prevent="$emit('reply', $props.message.uuid)" 
+              class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]">
+              <reply-icon class="w-4 h-4 mr-3" />
+              {{ translate('Antworten') }}
+            </a>
+          </div>
+        </template>
+        <template v-if="$store.state.user.admin">
+          <template v-if="!$props.message.private && $store.state.user.can.create_public_message">
+            <div>
+              <a href="javascript:;" 
+                @click.prevent="$emit('reply', $props.message.uuid)" 
+                class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]">
+                <reply-icon class="w-4 h-4 mr-3" />
+                {{ translate('Antworten') }}
+              </a>
+            </div>
+          </template>
+          <template v-else-if="$props.message.private">
+            <div>
+              <a href="javascript:;" 
+                @click.prevent="$emit('reply', $props.message.uuid)" 
+                class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]">
+                <reply-icon class="w-4 h-4 mr-3" />
+                {{ translate('Antworten') }}
+              </a>
+            </div>
+          </template>
+        </template>
 
-        <div>
-          <a href="javascript:;" 
-            @click.prevent="$emit('reply', $props.message.uuid)" 
-            class="text-xs !text-gray-400 no-underline font-mono flex items-center leading-none hover:bg-light p-2 min-h-[40px]">
-            <reply-icon class="w-4 h-4 mr-3" />
-            {{ translate('Antworten') }}
-          </a>
-        </div>
+
         <div>
           <a href="javascript:;" 
             @click.prevent="$emit('delete', $props.message.uuid)" 
