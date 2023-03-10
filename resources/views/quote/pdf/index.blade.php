@@ -1,22 +1,22 @@
 @include('quote.pdf.partials.header')
+<header class="quote-header">
+  <h1>
+    {{ __('Offerte') }} {{$data['quote']['QuoteNumber']}}<br>
+    {{ $data['quote']['Name'] }}<br>
+    Zürich, {!! AppHelper::formatedDate($data['quote']['LastModifiedDate']) !!}
+  </h1>
+  <div class="quote-header__brand">
+    <img src="{{ asset('assets/img/logo-nightnurse.svg') }}" height="100" width="100">
+  </div>
+  <div class="quote-header__address">
+    @if ($data['quote']['ShippingName']) {{ $data['quote']['ShippingName'] }}<br>@endif
+    @if ($data['quote']['ShippingStreet']) {{ $data['quote']['ShippingStreet'] }}<br>@endif
+    @if ($data['quote']['ShippingPostalCode']) {{ $data['quote']['ShippingPostalCode'] }} @endif
+    @if ($data['quote']['ShippingCity']) {{ $data['quote']['ShippingCity'] }} @endif
+  </div>
+</header>
 <div class="page">
   <section class="quote">
-    <header class="quote-header">
-      <h1>
-        {{ __('Offerte') }} {{$data['quote']['QuoteNumber']}}<br>
-        {{ $data['quote']['Name'] }}<br>
-        Zürich, {!! AppHelper::formatedDate($data['quote']['LastModifiedDate']) !!}
-      </h1>
-      <div class="quote-header__brand">
-        <img src="{{ asset('assets/img/logo-nightnurse.svg') }}" height="100" width="100">
-      </div>
-      <div class="quote-header__address">
-        @if ($data['quote']['ShippingName']) {{ $data['quote']['ShippingName'] }}<br>@endif
-        @if ($data['quote']['ShippingStreet']) {{ $data['quote']['ShippingStreet'] }}<br>@endif
-        @if ($data['quote']['ShippingPostalCode']) {{ $data['quote']['ShippingPostalCode'] }} @endif
-        @if ($data['quote']['ShippingCity']) {{ $data['quote']['ShippingCity'] }} @endif
-      </div>
-    </header>
     <div class="quote-body">
       @if (isset($data['quote']['Contact']['Email_Salutation__c']))
         <p>{{ $data['quote']['Contact']['Email_Salutation__c'] }}</p>
@@ -66,13 +66,16 @@
         </table>
       @endif
       <p>{{ __('Die nachfolgenden Seiten und unsere allgemeinen Geschäftsbedingungen sind Bestandteil dieser Offerte. Es ist uns ein wichtiges Anliegen, bei Veröffentlichungen als Urheber der Visualisierungen genannt zu werden, dazu weisen wir gerne auf den Abschnitt über die Immaterialgüterrechte hin.') }}</p>
-      
+    </div>
+    <div class="break"></div>
+      <div class="quote-body">
+      <p>{{ __('Die nachfolgenden Seiten und unsere allgemeinen Geschäftsbedingungen sind Bestandteil dieser Offerte. Es ist uns ein wichtiges Anliegen, bei Veröffentlichungen als Urheber der Visualisierungen genannt zu werden, dazu weisen wir gerne auf den Abschnitt über die Immaterialgüterrechte hin.') }}</p>
+
       <div class="quote-details">
         @if (isset($data['quote']['Quote_Details__c']['Text__c']))
           {!! $data['quote']['Quote_Details__c']['Text__c'] !!}
         @endif
       </div>
-  
     </div>
   </section>
 </div>

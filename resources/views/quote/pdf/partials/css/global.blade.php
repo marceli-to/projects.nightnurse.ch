@@ -23,7 +23,7 @@
 
 @page {
   size: A4;
-  margin: 8mm 12mm 10mm 28mm;
+  margin: 5mm 12mm 10mm 30mm;
 }
 
 @media print {
@@ -81,7 +81,7 @@ h1 {
   font-family: 'MetaLight', Helvetica, Arial, sans-serif;
   font-weight: 300;
   line-height: .9;
-  font-size: 15pt;
+  font-size: 14.5pt;
 }
 
 h2, h3 {
@@ -103,17 +103,20 @@ li {
 }
 
 .quote-body {
-  margin-top: 5mm;
-  width: 145mm;
+  padding-top: 50mm;
+  width: 140mm;
 }
 
 .quote-header {
-  margin-bottom: 5mm;
+  top: 0;
+  left: 0;
+  position: fixed;
 }
 
 .quote-header__brand {
-  margin-top: 0;
-  text-align: right;
+  position: fixed;
+  top: 27mm;
+  right: -3mm;
 }
 
 .quote-header__brand img {
