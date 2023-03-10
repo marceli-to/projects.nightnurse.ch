@@ -27,7 +27,7 @@ class AppServiceProvider extends ServiceProvider
     // Set global mailto address
     if ($this->app->environment('local') || $this->app->environment('staging'))
     {
-      \Mail::alwaysTo('m@marceli.to');
+      \Mail::alwaysTo(env('MAIL_TO'));
     }
   }
 }
