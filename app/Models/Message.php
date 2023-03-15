@@ -161,7 +161,7 @@ class Message extends Base
       return date('H:i', strtotime($this->created_at));
     }
 
-    return date('d.m.Y H:i', strtotime($this->created_at));
+    return date('d.m.Y', strtotime($this->created_at));
   }
 
   /**
