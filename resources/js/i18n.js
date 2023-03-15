@@ -90,8 +90,9 @@ export default {
         'Anzeigen': 'Open link',
         'Offerte hinzufügen': 'Add quote',
         'Offerte gelöscht': 'Quote deleted',
-        'Projektbeteiligte': 'Associates',
+        'Projektbeteiligte': 'People on this project',
         'Löschen': 'Delete',
+        'Heute, ': 'Today, ',
       },
 
       defaultLang: 'de',

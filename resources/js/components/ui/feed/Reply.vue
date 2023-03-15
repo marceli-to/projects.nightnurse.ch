@@ -2,10 +2,10 @@
   <a href="javascript:;" 
     @click="$emit('scrollTo', originalMessage.uuid)"
     class="block !no-underline px-2 py-1 mb-2 lg:mb-4 border-l-2 border-gray-300 group-[.is-private]:border-alice-blue-dark text-sm sm:text-base text-gray-500 relative">
-    <div :class="[originalMessage.body ? 'font-bold' : '', 'text-sm italic']" v-if="originalMessage.subject">
-      {{ originalMessage.subject | truncate(100, '...') }}
-    </div>
-    <div class="text-sm italic" :inner-html.prop="originalMessage.body | truncateHtml(100, '...')"></div>
+    <span :class="[originalMessage.body ? 'font-bold' : '', 'text-sm italic block']" v-if="originalMessage.subject">
+      {{ originalMessage.subject }}
+    </span>
+    <span class="text-sm italic block" v-html="originalMessage.body"></span>
   </a>
 </template>
 <script>

@@ -153,6 +153,14 @@ class Message extends Base
    */
   public function getMessageDateTimeAttribute($value)
   {
+    $date = \Carbon\Carbon::parse($this->created_at);
+
+    // if date is today add the time only
+    if ($date->isToday())
+    {
+      return date('H:i', strtotime($this->created_at));
+    }
+
     return date('d.m.Y H:i', strtotime($this->created_at));
   }
 

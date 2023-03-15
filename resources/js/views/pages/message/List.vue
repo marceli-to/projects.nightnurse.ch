@@ -24,7 +24,7 @@
             <div class="text-sm text-dark">
               {{project.manager.full_name}}
               <a :href="`tel:${project.manager.phone}`" class="flex items-center text-dark hover:text-highlight no-underline" v-if="project.manager.phone">
-                <phone-icon class="w-4 h-4 mr-1" /> {{project.manager.phone}}
+                {{project.manager.phone}}
               </a>
             </div>
           </div>
@@ -351,8 +351,6 @@ export default {
         this.message = null;
         this.canAccessPrivateMessages = this.$store.state.user.can ? this.$store.state.user.can.access_private_messages : false;
         this.setPageTitle(this.project.title);
-        console.log(this.$store.state.feedType, this.project.state);
-
         NProgress.done();
       }));
     },

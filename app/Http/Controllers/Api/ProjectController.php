@@ -237,6 +237,7 @@ class ProjectController extends Controller
     $project = Project::with(
       'state', 
       'company.users', 
+      'company.teams',
       'companies.users', 
       'manager', 
       'users.company',

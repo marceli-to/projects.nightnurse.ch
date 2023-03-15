@@ -273,7 +273,7 @@ export default {
         this.project.owner = responses[1].data.owner;
         this.project.associates = responses[1].data.associates;
         this.isManager = responses[1].data.isManager;
-        this.addPreSelected();
+        this.handleRecipients();
         this.isFetched = true;
       }));
     },
@@ -354,7 +354,7 @@ export default {
     },
 
     // Add preselected recipients
-    addPreSelected() {
+    handleRecipients() {
 
       // Next upgrade: check if there are any preselected recipients in local storage
       //-----------------------------------------------------------------------------
@@ -376,27 +376,38 @@ export default {
         this.project.associates.unshift(this.project.manager);
       }
       
-      // Preselect the sender of the original message if its a reply
-      if (this.isReply) {
-        this.addOrRemoveRecipient(true, this.$props.message.sender);
-      }
-
       // Preselect project associates
       this.project.associates.forEach(user => {
         this.addOrRemoveRecipient(true, user);
         this.removePreSelectedUser(user);
       });
 
-      // Preselect all client users for the first message (only for admins)
-      if (this.$store.state.user.admin && this.project.is_first_message) {
-        Object.entries(this.project.clients).forEach(client => {
-          const users = client[1].users && client[1].users.length ? client[1].users : null;
-          if (users) {
-            users.forEach(user => {
-              this.addOrRemoveRecipient(true, user);
-            });
-          }
-        });
+      // Add sender of the original message if its a reply
+      if (this.isReply) {
+        this.addOrRemoveRecipient(true, this.$props.message.sender);
+      }
+
+      // For messages from admins, preselect all client users for public messages or internal users for private messages
+      if (this.$store.state.user.admin && !this.isReply) {
+
+        // Preselect all client users for external messages
+        if (this.data.private == 0) {
+          Object.entries(this.project.clients).forEach(client => {
+            const users = client[1].users && client[1].users.length ? client[1].users : null;
+            if (users) {
+              users.forEach(user => {
+                this.addOrRemoveRecipient(true, user);
+              });
+            }
+          });
+        }
+        
+        // Preselect all users of team Buenos Aires for internal messages
+        if (this.data.private == 1) {
+          this.project.internal_users.forEach(user => {
+            this.addOrRemoveRecipient(true, user);
+          });
+        }
       }
     },
 
