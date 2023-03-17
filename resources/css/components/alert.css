@@ -1,6 +1,6 @@
 /* components/alert.css */
 .alert {
-  @apply bg-white p-3 text-sm font-mono mb-4 lg:mb-8 border-2;
+  @apply bg-white p-3 text-xs font-mono mb-4 lg:mb-8 border-2;
 }
 
 .alert-danger {
@@ -8,7 +8,7 @@
 }
 
 .alert-info {
-  @apply border-blue-500 text-blue-500;
+  @apply border-blue-500 text-blue-500 border leading-relaxed;
 }
 
 .alert-success {
