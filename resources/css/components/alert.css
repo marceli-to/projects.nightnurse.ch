@@ -8,7 +8,7 @@
 }
 
 .alert-info {
-  @apply bg-blue-500;
+  @apply border-blue-500 text-blue-500;
 }
 
 .alert-success {

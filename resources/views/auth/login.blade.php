@@ -6,6 +6,9 @@
   @if ($errors->any())
     <x-alert type="danger" message="{{__('messages.general_error')}}" />
   @endif
+
+  <x-alert type="info" message="{{__('messages.delete_cookies')}}" />
+
   <form method="POST" action="{{ route('login') }}">
     @csrf
     <x-text-field label="E-Mail" type="email" name="email" autocomplete="false" />
