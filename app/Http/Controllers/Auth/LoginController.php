@@ -26,6 +26,8 @@ class LoginController extends Controller
    */
   public function __construct()
   {
+    // 
+    \Cookie::forget('nightnurse_images_project_room_session');
     $this->middleware('guest')->except('logout');
   }
 
