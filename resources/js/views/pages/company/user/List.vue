@@ -161,7 +161,7 @@ export default {
 
     copy(uuid) {
       let APP_URL = process.env.MIX_APP_URL;
-      navigator.clipboard.writeText(`${APP_URL}/register/${uuid}`).then(() => {
+      navigator.clipboard.writeText(`https://projects.nightnurse.ch/register/${uuid}`).then(() => {
         this.$notify({ type: "success", text: this.translate('Einladungslink kopiert') });
       });
     },
