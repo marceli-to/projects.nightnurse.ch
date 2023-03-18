@@ -13,7 +13,7 @@ class CreatePdf
   public function __construct()
   {
     $this->storageFolderUuid = \Str::uuid();
-    $this->storageFolder = '/storage/quotes/' . $this->storageFolderUuid . '/';
+    $this->storageFolder = '/storage-quotes/quotes/' . $this->storageFolderUuid . '/';
     if (!File::isDirectory(storage_path('app/public/quotes/' . $this->storageFolderUuid)))
     {
       File::makeDirectory(storage_path('app/public/quotes/' . $this->storageFolderUuid), 0775, true, true);
