@@ -22,5 +22,8 @@ return [
   ],
   'domains' => [
     'my.nightnurse.ch.local' => 'my.nightnurse.ch.local',
+    'my.nightnurse.ch' => [
+      'storage_path' => 'storage'
+    ]
   ],
  ];
