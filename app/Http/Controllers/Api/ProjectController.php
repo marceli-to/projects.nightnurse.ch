@@ -40,6 +40,11 @@ class ProjectController extends Controller
                         $query->where('user_id', auth()->user()->id);
                       })
                       ->get();
+      
+      // filter out projects with project_state_id = 2
+      $user_projects = $user_projects->filter(function ($project) {
+        return $project->state->id != 2;
+      });
 
       // Get 'all projects'
      $projects = Project::active()->with('state', 'company', 'companies', 'manager')
