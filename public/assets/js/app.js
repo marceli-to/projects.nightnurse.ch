@@ -22263,7 +22263,7 @@ __webpack_require__.r(__webpack_exports__);
       this.axios.get(route).then(function (response) {
         _this.data.user_projects = response.data.user_projects ? response.data.user_projects : null;
         _this.data.projects = response.data.projects ? response.data.projects : null;
-        console.log(_this.data.user_projects);
+        console.log(_this.data.user_projects.length);
         console.log(_this.data.projects);
         _this.isFetched = true;
         nprogress__WEBPACK_IMPORTED_MODULE_12___default().done();
