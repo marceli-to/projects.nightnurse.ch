@@ -201,7 +201,7 @@ export default {
         this.data.user_projects = response.data.user_projects ? response.data.user_projects : null;
         this.data.projects = response.data.projects ? response.data.projects : null;
         console.log(this.data.user_projects.length);
-        console.log(this.data.projects);
+        console.log(this.data.projects.length);
         this.isFetched = true;
         NProgress.done();
       });
