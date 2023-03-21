@@ -30,11 +30,11 @@
           </div>
           <div class="col-span-4 text-gray-400">
             <div class="text-xs font-mono pb-0.5">{{ translate('Projektstart') }}</div>
-            <div class="text-sm text-dark">{{project.date_start}}</div>
+            <div class="text-sm text-dark">{{project.date_start ? project.date_start : '-'}}</div>
           </div>
           <div class="col-span-4 text-gray-400">
             <div class="text-xs font-mono pb-0.5">{{ translate('Abgabetermin') }}</div>
-            <div class="text-sm text-dark">{{project.date_end}}</div>
+            <div class="text-sm text-dark">{{project.date_end ? project.date_end : '-'}}</div>
           </div>
         </div>
         <template v-if="showInfo">
