@@ -27178,7 +27178,7 @@ var render = function render() {
     })], 1)], 1) : _vm._e()])]);
   }), _vm._v(" "), _c("hr", {
     staticClass: "max-w-5xl border-bottom !mt-10 !my-8 !lg:mt-12 !my-10"
-  })], 2) : _vm._e(), _vm._v(" "), _vm.data.projects.length ? _c("div", {
+  })], 2) : _vm._e(), _vm._v(" "), _vm.data.projects ? _c("div", {
     staticClass: "max-w-5xl"
   }, _vm._l(_vm.data.projects, function (d) {
     return _c("div", {
