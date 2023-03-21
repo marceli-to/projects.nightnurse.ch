@@ -22223,8 +22223,8 @@ __webpack_require__.r(__webpack_exports__);
     return {
       // Data
       data: {
-        user_projects: null,
-        projects: null
+        user_projects: [],
+        all_projects: []
       },
       // Routes
       routes: {
@@ -22261,10 +22261,9 @@ __webpack_require__.r(__webpack_exports__);
 
       nprogress__WEBPACK_IMPORTED_MODULE_12___default().start();
       this.axios.get(route).then(function (response) {
-        _this.data.user_projects = response.data.user_projects ? response.data.user_projects : null;
-        _this.data.projects = response.data.projects ? response.data.projects : null;
-        console.log(_this.data.user_projects.length);
-        console.log(_this.data.projects.length);
+        _this.data.user_projects = response.data.user_projects ? response.data.user_projects : [];
+        _this.data.projects = response.data.projects ? response.data.projects : [];
+        console.log(_this.data.user_projects);
         _this.isFetched = true;
         nprogress__WEBPACK_IMPORTED_MODULE_12___default().done();
       });
@@ -27079,7 +27078,7 @@ var render = function render() {
       },
       proxy: true
     }], null, false, 1980200984)
-  }), _vm._v(" "), _vm.data.user_projects ? _c("div", {
+  }), _vm._v(" "), _vm.data.user_projects.length ? _c("div", {
     staticClass: "max-w-5xl"
   }, [_vm._l(_vm.data.user_projects, function (d) {
     return _c("div", {
@@ -27178,7 +27177,7 @@ var render = function render() {
     })], 1)], 1) : _vm._e()])]);
   }), _vm._v(" "), _c("hr", {
     staticClass: "max-w-5xl border-bottom !mt-10 !my-8 !lg:mt-12 !my-10"
-  })], 2) : _vm._e(), _vm._v(" "), _vm.data.projects ? _c("div", {
+  })], 2) : _vm._e(), _vm._v(" "), _vm.data.projects.length ? _c("div", {
     staticClass: "max-w-5xl"
   }, _vm._l(_vm.data.projects, function (d) {
     return _c("div", {
