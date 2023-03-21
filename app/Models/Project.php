@@ -155,7 +155,8 @@ class Project extends Base
 
   public function getIsoDateEndAttribute($value)
   {
-    return \Carbon\Carbon::parse($value)->toIso8601String();
+    \Log::info($this->date_end);
+    return \Carbon\Carbon::parse($this->date_end)->toIso8601String();
   }
  
   /**
