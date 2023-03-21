@@ -103,7 +103,7 @@ class Project extends Base
 
   public function setDateStartAttribute($value)
   {
-    $this->attributes['date_start'] = $value ? date('Y.m.d', strtotime($value)) : NULL;
+    $this->attributes['date_start'] = $value ? \Carbon\Carbon::parse($value)->format('Y.m.d') : NULL;
   }
 
   /**
@@ -113,7 +113,7 @@ class Project extends Base
 
   public function setDateEndAttribute($value)
   {
-    $this->attributes['date_end'] = $value ? date('Y.m.d', strtotime($value)) : NULL;
+    $this->attributes['date_end'] = $value ? \Carbon\Carbon::parse($value)->format('Y.m.d') : NULL;
   }
 
   /**
@@ -146,7 +146,6 @@ class Project extends Base
 
   public function getIsoDateStartAttribute($value)
   {
-
     return \Carbon\Carbon::parse($value)->toIso8601String();
   }
 
