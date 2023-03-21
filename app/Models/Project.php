@@ -103,6 +103,8 @@ class Project extends Base
 
   public function setDateStartAttribute($value)
   {
+    \Log::info($value);
+    \Log::info(date('Y-m-d', strtotime($value)));
     $this->attributes['date_start'] = $value ? date('Y-m-d', strtotime($value)) : NULL;
   }
 
