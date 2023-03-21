@@ -294,11 +294,11 @@ class ProjectController extends Controller
     $project->users()->sync($users);
 
     // Make changes in 'Vertec'
-    // if (app()->environment() == 'production' || app()->environment() == 'staging')
-    // {
-    //   $vertec = new VertecApi();
-    //   $vertec->updateProject($project);
-    // }
+    if (app()->environment() == 'production' || app()->environment() == 'staging')
+    {
+      $vertec = new VertecApi();
+      $vertec->updateProject($project);
+    }
 
     return response()->json('successfully updated');
   }

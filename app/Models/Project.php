@@ -103,10 +103,6 @@ class Project extends Base
 
   public function setDateStartAttribute($value)
   {
-    if ($value)
-    {
-      \Log::info('date_start: ' . $value);
-    }
     $this->attributes['date_start'] = $value ? date('Y-m-d', strtotime($value)) : NULL;
   }
 
@@ -148,7 +144,8 @@ class Project extends Base
 
   public function getIsoDateStartAttribute($value)
   {
-    return \Carbon\Carbon::parse($value)->toIso8601String();
+    \Log::info($this->date_start);
+    return \Carbon\Carbon::parse($this->date_start)->toIso8601String();
   }
 
   /**
