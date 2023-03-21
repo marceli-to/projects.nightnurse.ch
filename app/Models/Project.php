@@ -122,9 +122,9 @@ class Project extends Base
    * @return string
    */
 
-  public function getDateStartAttribute($value)
+  public function getDateStartAttribute()
   {
-    return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
+    return $this->date_start ? strftime('%d.%m.%Y', strtotime($this->date_start)) : '–';
   }
 
   /**
@@ -132,9 +132,9 @@ class Project extends Base
    * @param Date $value
    */
 
-  public function getDateEndAttribute($value)
+  public function getDateEndAttribute()
   {
-    return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
+    return $this->date_end ? strftime('%d.%m.%Y', strtotime($this->date_end)) : '–';
   }
 
   /**
