@@ -124,7 +124,7 @@ class Project extends Base
 
   public function getDateStartAttribute($value)
   {
-    return \Carbon\Carbon::parse($value)->format('d.m.Y');
+    return $value ? \Carbon\Carbon::parse($value)->format('d.m.Y') : '–';
   }
 
   /**
