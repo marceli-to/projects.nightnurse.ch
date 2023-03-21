@@ -285,7 +285,6 @@ class ProjectController extends Controller
   {
     $project = Project::findOrFail($project->id);
     $project->update($request->all());
-    $project->save();
 
     // Handle companies & users (pivot tables)
     $companies = collect($request->input('companies'))->pluck('id');
