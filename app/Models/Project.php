@@ -124,7 +124,7 @@ class Project extends Base
 
   public function getDateStartAttribute($value)
   {
-    return $value ? \Carbon\Carbon::parse($value)->format('d.m.Y') : '–';
+    return $value ? \Carbon\Carbon::parse($value)->format('d.m.Y') : NULL;
   }
 
   /**
@@ -134,7 +134,7 @@ class Project extends Base
 
   public function getDateEndAttribute($value)
   {
-    return $value ? \Carbon\Carbon::parse($value)->format('d.m.Y') : '–';
+    return $value ? \Carbon\Carbon::parse($value)->format('d.m.Y') : NULL;
   }
 
   /**
@@ -144,7 +144,6 @@ class Project extends Base
 
   public function getIsoDateStartAttribute($value)
   {
-    \Log::info($this->date_start);
     return \Carbon\Carbon::parse($this->date_start)->toIso8601String();
   }
 
@@ -155,7 +154,6 @@ class Project extends Base
 
   public function getIsoDateEndAttribute($value)
   {
-    \Log::info($this->date_end);
     return \Carbon\Carbon::parse($this->date_end)->toIso8601String();
   }
  
