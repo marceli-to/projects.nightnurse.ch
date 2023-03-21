@@ -13,6 +13,7 @@ class ProjectResource extends JsonResource
    */
   public function toArray($request)
   {
+    \Log::info($this->date_star);
     return [
       'id' => $this->id,
       'uuid' => $this->uuid,
