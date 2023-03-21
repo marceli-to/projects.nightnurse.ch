@@ -124,8 +124,7 @@ class Project extends Base
 
   public function getDateStartAttribute($value)
   {
-    return \Carbon\Carbon::parse($value)->format('d.m.Y');
-    // return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
+    return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
   }
 
   /**
@@ -135,8 +134,7 @@ class Project extends Base
 
   public function getDateEndAttribute($value)
   {
-    return \Carbon\Carbon::parse($value)->format('d.m.Y');
-    //return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
+    return $value ? strftime('%d.%m.%Y', strtotime($value)) : '–';
   }
 
   /**
