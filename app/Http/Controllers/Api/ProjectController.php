@@ -29,7 +29,7 @@ class ProjectController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      $user_projects = Project::with('state', 'company', 'companies', 'manager')
+      $user_projects = Project::active()->with('state', 'company', 'companies', 'manager')
                       ->with(['messages' => function ($query) {
                         $query->with('sender')->limit(3);
                       }])
@@ -39,7 +39,6 @@ class ProjectController extends Controller
                       ->orWhereHas('users', function ($query) {
                         $query->where('user_id', auth()->user()->id);
                       })
-                      ->active()
                       ->get();
       
       // filter out projects with project_state_id = 2
