@@ -10,7 +10,7 @@
       {{ translate('Projekte') }}
     </template>
   </content-header>
-  <div v-if="data.user_projects.length" class="max-w-5xl">
+  <div v-if="data.user_projects" class="max-w-5xl">
     <div v-for="d in data.user_projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
       <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
@@ -157,8 +157,8 @@ export default {
 
       // Data
       data: {
-        user_projects: [],
-        all_projects: [],
+        user_projects: null,
+        projects: null,
       },
 
       // Routes
@@ -198,9 +198,10 @@ export default {
 
       NProgress.start();
       this.axios.get(route).then(response => {
-        this.data.user_projects = response.data.user_projects ? response.data.user_projects : [];
-        this.data.projects = response.data.projects ? response.data.projects : [];
+        this.data.user_projects = response.data.user_projects ? response.data.user_projects : null;
+        this.data.projects = response.data.projects ? response.data.projects : null;
         console.log(this.data.user_projects);
+        console.log(this.data.projects);
         this.isFetched = true;
         NProgress.done();
       });
