@@ -283,7 +283,6 @@ class ProjectController extends Controller
    */
   public function update(Project $project, ProjectStoreRequest $request)
   {
-    $project = Project::findOrFail($project->id);
     $project->update($request->all());
 
     // Handle companies & users (pivot tables)
