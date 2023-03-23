@@ -21388,6 +21388,7 @@ __webpack_require__.r(__webpack_exports__);
         _this2.isFetched = true;
         _this2.message = null;
         _this2.canAccessPrivateMessages = _this2.$store.state.user.can ? _this2.$store.state.user.can.access_private_messages : false;
+        console.log(_this2.canAccessPrivateMessages);
 
         _this2.setPageTitle(_this2.project.title);
 

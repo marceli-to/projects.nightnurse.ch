@@ -350,6 +350,7 @@ export default {
         this.isFetched = true;
         this.message = null;
         this.canAccessPrivateMessages = this.$store.state.user.can ? this.$store.state.user.can.access_private_messages : false;
+        console.log(this.canAccessPrivateMessages);
         this.setPageTitle(this.project.title);
         NProgress.done();
       }));
