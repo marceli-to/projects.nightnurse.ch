@@ -300,7 +300,6 @@ export default {
       hasTimeline: false,
       showInfo: false,
       
-
       // Access
       canAccessPrivateMessages: false,
     };
@@ -310,7 +309,6 @@ export default {
     this.fetch();
 
     window.Echo.private(`timeline.${this.$route.params.uuid}`).listen('MessageSent', (e) => {
-      console.log(e);
       if (e.message.private === 1 && !this.canAccessPrivateMessages) {
         return;
       }
@@ -350,7 +348,6 @@ export default {
         this.isFetched = true;
         this.message = null;
         this.canAccessPrivateMessages = this.$store.state.user.can ? this.$store.state.user.can.access_private_messages : false;
-        console.log(this.canAccessPrivateMessages);
         this.setPageTitle(this.project.title);
         NProgress.done();
       }));
