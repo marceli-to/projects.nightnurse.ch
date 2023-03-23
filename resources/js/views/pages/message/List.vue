@@ -309,8 +309,8 @@ export default {
   mounted() {
     this.fetch();
 
-
     window.Echo.private(`timeline.${this.$route.params.uuid}`).listen('MessageSent', (e) => {
+      console.log(e);
       if (e.message.private === 1 && !this.canAccessPrivateMessages) {
         return;
       }
