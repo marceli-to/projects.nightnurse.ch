@@ -21340,7 +21340,7 @@ __webpack_require__.r(__webpack_exports__);
     var _this = this;
 
     this.fetch();
-    window.Echo["private"]("timeline.".concat(this.$route.params.uuid)).listen('MessageSent', function (e) {
+    window.Echo["private"]("private-timeline.".concat(this.$route.params.uuid)).listen('MessageSent', function (e) {
       console.log(e);
 
       if (e.message["private"] === 1 && !_this.canAccessPrivateMessages) {
