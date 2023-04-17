@@ -200,7 +200,6 @@ export default {
       this.axios.get(route).then(response => {
         this.data.user_projects = response.data.user_projects ? response.data.user_projects : [];
         this.data.projects = response.data.projects ? response.data.projects : [];
-        console.log(this.data.user_projects);
         this.isFetched = true;
         NProgress.done();
       });

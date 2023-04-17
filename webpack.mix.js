@@ -19,6 +19,3 @@ mix.js("resources/js/app.js", "public/assets/js")
 
 // Quote
 mix.sass('resources/quote/sass/app.scss', 'public/assets/css/quote.css').options({processCssUrls: false}).version();
-
-
-

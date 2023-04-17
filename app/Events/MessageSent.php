@@ -37,6 +37,6 @@ class MessageSent implements ShouldBroadcast
    */
   public function broadcastOn()
   {
-    return new PrivateChannel('timeline.' . $this->project->uuid);
+    return new Channel('timeline.' . $this->project->uuid);
   }
 }
