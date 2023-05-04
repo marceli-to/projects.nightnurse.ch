@@ -31,6 +31,4 @@ class CreatePdf
       'name' => $file
     ];
   }
-
-
 }

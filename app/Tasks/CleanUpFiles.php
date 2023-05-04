@@ -10,7 +10,7 @@ class CleanUpFiles
     // Folder: uploads/temp
     $files = \Storage::listContents('public/uploads/temp');
     collect($files)->each(function($file) {
-      if ($file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
+      if (isset($file['timestamp']) && $file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
         \Storage::delete($file['path']);
       }
     });
@@ -18,7 +18,7 @@ class CleanUpFiles
     // Folder: downloads/zip
     $files = \Storage::listContents('public/downloads/zip');
     collect($files)->each(function($file) {
-      if ($file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
+      if (isset($file['timestamp']) && $file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
         \Storage::delete($file['path']);
       }
     });
@@ -30,7 +30,7 @@ class CleanUpFiles
       $files = \Storage::listContents($folder);
       collect($files)->each(function($file) {
         // Delete files and folders older than 10 days
-        if ($file['timestamp'] < now()->subDays(30)->getTimestamp()) {
+        if (isset($file['timestamp']) && $file['timestamp'] < now()->subDays(30)->getTimestamp()) {
           \Storage::delete($file['path']);
           if (count(\Storage::listContents($file['dirname'])) == 0) {
             \Storage::deleteDirectory($file['dirname']);

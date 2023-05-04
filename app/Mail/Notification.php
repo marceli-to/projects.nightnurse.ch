@@ -30,7 +30,7 @@ class Notification extends Mailable
   public function build()
   {
     return $this->from(env('MAIL_FROM_ADDRESS'), 'Nightnurse Images - Project Room')
-                ->replyTo($this->message->sender->email)
+                ->replyTo('nni+' . $this->message->uuid . '@marceli.to')
                 ->subject($this->subject)
                 ->with(['message' => $this->message])
                 ->markdown('notifications.message');

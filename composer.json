@@ -30,7 +30,8 @@
         "rakutentech/laravel-request-docs": "^1.30",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "symfony/http-client": "^6.2",
-        "symfony/mailgun-mailer": "^6.2"
+        "symfony/mailgun-mailer": "^6.2",
+        "webklex/laravel-imap": "^5.2"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
