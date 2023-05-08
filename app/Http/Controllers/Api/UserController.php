@@ -167,7 +167,7 @@ class UserController extends Controller
       $user->deleted_at = NULL;
       $user->save();
       $this->invite($user);
-      return response()->json(['userId' => $user->id]);
+      return response()->json(['user' => $user]);
     }
     
     // Get company

@@ -10,16 +10,16 @@ class CleanUpFiles
     // Folder: uploads/temp
     $files = \Storage::listContents('public/uploads/temp');
     collect($files)->each(function($file) {
-      if ($file->lastModified() < now()->subMinutes(30)->getTimestamp()) {
-        \Storage::delete($file['path']);
+      if ($file->lastModified() < now()->subMinutes(60)->getTimestamp()) {
+        \Storage::delete($file->path());
       }
     });
 
     // Folder: downloads/zip
     $files = \Storage::listContents('public/downloads/zip');
     collect($files)->each(function($file) {
-      if ($file->lastModified() < now()->subMinutes(30)->getTimestamp()) {
-        \Storage::delete($file['path']);
+      if ($file->lastModified() < now()->subMinutes(60)->getTimestamp()) {
+        \Storage::delete($file->path());
       }
     });
 

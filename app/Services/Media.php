@@ -64,13 +64,7 @@ class Media
     $file = $request->file('file');
     $file_data = getimagesize($request->file('file'));
     $name = $this->sanitize(trim($file->getClientOriginalName()), $this->force_lowercase);
-    
-    
-    // $filename = uniqid()  . '_' . $name;
-    // $filename = $name;
     $filename = $this->uniqueFileName($name);
-
-
     $file->move($this->upload_path, $filename);
     $filetype = File::extension($this->upload_path . DIRECTORY_SEPARATOR . $filename);
     $filesize = File::size($this->upload_path . DIRECTORY_SEPARATOR . $filename);
