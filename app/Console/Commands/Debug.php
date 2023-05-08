@@ -40,11 +40,8 @@ class Debug extends Command
     // Folder: uploads/temp
     $files = \Storage::listContents('public/uploads/temp');
     collect($files)->each(function($file) {
-      dd($file->lastModified());
-      if (isset($file['timestamp']) && $file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
-        echo $file['timestamp'];
-
-        //\Storage::delete($file['path']);
+      if ($file->lastModified() < now()->subMinutes(30)->getTimestamp()) {
+        \Storage::delete($file['path']);
       }
       else {
         echo "no timestamp. last modified " . date('d.m.Y, H:i:s', $file['lastModified']) . "\n";
