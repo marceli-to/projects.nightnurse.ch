@@ -44,7 +44,7 @@ class Debug extends Command
         \Storage::delete($file['path']);
       }
       else {
-        echo "no timestamp. last modified " . date('d.m.Y, H:i:s', $file['lastModified']) . "\n";
+        echo $file->lastModified();
       }
     });
   }
