@@ -46,16 +46,14 @@ Route::middleware('auth:api')->group(function() {
   Route::delete('v1/project/{project}', [ProjectApiController::class, 'destroy']);
 
   Route::post('v1/message', [MessageApiController::class, 'store']);
-
+  Route::get('v1/messages/{project}', [MessageApiController::class, 'get']);
 });
 
 // Protected API routes
 Route::middleware('auth:sanctum')->get('/user/authenticated', function (Request $request) {
   return $request->user();
 });
-Route::middleware('auth:sanctum')->post('/user/authenticated', function (Request $request) {
-  return $request->user();
-});
+
 
 Route::middleware('auth:sanctum')->group(function() {
 

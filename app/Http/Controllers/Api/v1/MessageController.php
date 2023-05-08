@@ -5,11 +5,41 @@ use App\Models\Message;
 use App\Models\MessageUser;
 use App\Models\User;
 use App\Models\Project;
+use App\Http\Resources\MessageResource;
 use App\Http\Requests\Api\MessageStoreRequest;
 use Illuminate\Http\Request;
 
 class MessageController extends Controller
 {
+  /**
+   * Get a list of messages
+   * 
+   * @param Project $project
+   * @return \Illuminate\Http\Response
+   */
+
+  public function get(Project $project)
+  {
+    $messages = Message::with(
+        'sender', 
+        'files', 
+        'users', 
+        'message',
+        'reactions.user', 
+        'reactions.type'
+      )
+      ->withTrashed()
+      ->orderBy('created_at', 'DESC')
+      ->where('project_id', $project->id)
+      ->get();
+
+    $data = MessageResource::collection($messages)
+      ->groupBy('message_date_string')
+      ->all();
+    
+    return response()->json($data);
+  }
+
   /**
    * Store a newly created message
    *
