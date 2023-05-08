@@ -199,7 +199,8 @@ class Media
     }
 
     // check in temp folder
-    $current_name = str_replace($extension, '', $name);
+    $current_name = pathinfo($name, PATHINFO_FILENAME);
+    //$current_name = str_replace($extension, '', $name);
     $name = $current_name;
 
     while(file_exists($this->upload_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
