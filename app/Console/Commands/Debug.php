@@ -53,16 +53,17 @@ class Debug extends Command
       // Get all files in subfolder
       $files = \Storage::listContents($folder);
       collect($files)->each(function($file) {
+        $path = $file->path();
+
+        if ($item instanceof \League\Flysystem\FileAttributes) {
+          echo 'is file';
+        } elseif ($item instanceof \League\Flysystem\DirectoryAttributes) {
+          echo 'is directory';
+        }
         // Delete files and folders older than 30 days
         if ($file->lastModified() < now()->subDays(30)->getTimestamp()) {
 
-          $path = $file->path();
 
-          if ($item instanceof \League\Flysystem\FileAttributes) {
-            echo 'is file';
-          } elseif ($item instanceof \League\Flysystem\DirectoryAttributes) {
-            echo 'is directory';
-          }
 
           // \Storage::delete($file->path());
 
