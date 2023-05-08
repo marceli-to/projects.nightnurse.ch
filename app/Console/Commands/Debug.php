@@ -40,9 +40,10 @@ class Debug extends Command
     // Folder: uploads/temp
     $files = \Storage::listContents('public/uploads/temp');
     collect($files)->each(function($file) {
+      echo $file['timestamp'];
+      echo "\n";
       if (isset($file['timestamp']) && $file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
-        echo $file['timestamp'];
-        echo "\n";
+
         //\Storage::delete($file['path']);
       }
     });
