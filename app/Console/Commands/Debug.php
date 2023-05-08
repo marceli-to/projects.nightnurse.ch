@@ -52,7 +52,7 @@ class Debug extends Command
     collect($folders)->each(function($folder) {
 
       // Get all files in subfolder
-      $files = \Storage::listContents($folder)->filter(fn (StorageAttributes $attributes) => $attributes->isFile());
+      $files = \Storage::listContents($folder)->path();
 
       dd($files);
 
