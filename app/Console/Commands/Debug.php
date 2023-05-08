@@ -53,7 +53,6 @@ class Debug extends Command
       // Get all files in subfolder
       $files = \Storage::listContents($folder);
       collect($files)->each(function($file) {
-        $path = $file->path();
         // Delete files and folders older than 30 days
         if ($file->lastModified() < now()->subDays(30)->getTimestamp()) {
           \Storage::delete($file->path());
