@@ -26,7 +26,7 @@ An:
 </table>
 </div>
 @if ($message['body'])
-<div class="pt-25">
+<div class="pt-25 message-body">
 {!! $message['body'] !!}
 </div>
 @endif

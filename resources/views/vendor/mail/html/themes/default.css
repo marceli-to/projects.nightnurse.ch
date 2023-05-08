@@ -250,6 +250,9 @@ table td {
   border-top: 8px solid #e53e3e;
 }
 
+.message-body p {
+  padding-bottom: 15px !important;
+}
 
 /* Utilities */
 
