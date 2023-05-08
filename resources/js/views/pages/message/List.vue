@@ -145,7 +145,7 @@
   <template>
     <feed>
       <div v-for="(items, day) in feedItems" :key="day" class="relative">
-        <feed-item-timestamp>{{ day }}</feed-item-timestamp>
+        <feed-item-timestamp v-if="filteredItems(items).length">{{ day }}</feed-item-timestamp>
         <feed-item 
           v-for="item in filteredItems(items)" 
           :key="item.uuid" 

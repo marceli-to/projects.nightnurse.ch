@@ -90,7 +90,7 @@
         <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
           <span>{{ translate('Abbrechen') }}</span>
         </a>
-        <button type="submit" class="btn-send">
+        <button type="submit" :class="[!isValidMessage ? 'pointer-events-none opacity-40' : '', 'btn-send']">
           <mail-icon class="h-5 w-5" aria-hidden="true" />
           <span class="block ml-2">{{ translate('Senden') }}</span>
         </button>
@@ -317,7 +317,6 @@ export default {
     },
 
     validate() {
-
       // If the user is an admin (i.e. belongs to the owner company),
       // and the array of external recipients is empty, check that
       // at least one recipient is a non-owner-recipient
@@ -326,11 +325,6 @@ export default {
         if (!confirm(this.translate('Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?'))) {
           return false;
         }
-      }
-      if (this.data.users.length == 0) {
-        this.errors.users = true;
-        this.$notify({ type: "danger", text: this.translate('Bitte Empfänger auswählen...') });
-        return false;
       }
       return true;
     },
@@ -504,6 +498,14 @@ export default {
     title() {
       return `${this.translate('Neue Nachricht')} <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     },
+
+    isValidMessage() {
+      if ((!this.data.subject && this.data.body == '' && this.data.files.length == 0) || this.data.users.length == 0) {
+        return false;
+      }
+      return true;
+    },
+
   }
 };
 </script>
