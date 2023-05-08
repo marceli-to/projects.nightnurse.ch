@@ -171,7 +171,7 @@ class Media
   {
     if (in_array(strtolower($filetype), $this->previewable_image_types))
     {
-      if ($file_data[0] <= 5000)
+      if ($file_data[0] <= 4000)
       {
         return TRUE;
       }
@@ -195,18 +195,17 @@ class Media
     // check in destination folder
     while(file_exists($this->storage_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
     {           
-      $name = $name. '-' .  uniqid();
+      $name = $name . '-' .  uniqid();
     }
 
     // check in temp folder
-    $current_name = pathinfo($name, PATHINFO_FILENAME);
+    $current_name = str_replace($extension, '', $name);
     $name = $current_name;
 
     while(file_exists($this->upload_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
     {           
-      $name = $name. '-' .  uniqid();
+      $name = $name . '-' .  uniqid();
     }
-
     return $name . '.' . $extension;
   }
 }
