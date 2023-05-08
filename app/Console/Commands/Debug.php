@@ -50,6 +50,9 @@ class Debug extends Command
     // Get all subfolders of public/quotes
     $folders = \Storage::directories('public/quotes');
     collect($folders)->each(function($folder) {
+
+      dd($folder->path());
+
       // Get all files in subfolder
       $files = \Storage::listContents($folder);
       collect($files)->each(function($file) {
