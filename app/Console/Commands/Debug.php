@@ -55,9 +55,9 @@ class Debug extends Command
       collect($files)->each(function($file) {
         $path = $file->path();
 
-        if ($item instanceof \League\Flysystem\FileAttributes) {
+        if ($file instanceof \League\Flysystem\FileAttributes) {
           echo 'is file';
-        } elseif ($item instanceof \League\Flysystem\DirectoryAttributes) {
+        } elseif ($file instanceof \League\Flysystem\DirectoryAttributes) {
           echo 'is directory';
         }
         // Delete files and folders older than 30 days
