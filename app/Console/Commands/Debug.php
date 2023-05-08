@@ -38,8 +38,8 @@ class Debug extends Command
   public function handle()
   {
     // Folder: uploads/temp
-    // $files = \Storage::listContents('public/uploads/temp');
-    dd(now()->subMinutes(30));
+    $files = \Storage::listContents('public/uploads/temp');
+    dd($files);
     // collect($files)->each(function($file) {
     //   if (isset($file['timestamp']) && $file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
     //     \Storage::delete($file['path']);
