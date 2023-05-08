@@ -39,11 +39,12 @@ class Debug extends Command
   {
     // Folder: uploads/temp
     $files = \Storage::listContents('public/uploads/temp');
-    dd($files);
-    // collect($files)->each(function($file) {
-    //   if (isset($file['timestamp']) && $file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
-    //     \Storage::delete($file['path']);
-    //   }
-    // });
+    collect($files)->each(function($file) {
+      if (isset($file['timestamp']) && $file['timestamp'] < now()->subMinutes(30)->getTimestamp()) {
+        echo $file['timestamp'];
+        echo "\n";
+        //\Storage::delete($file['path']);
+      }
+    });
   }
 }
