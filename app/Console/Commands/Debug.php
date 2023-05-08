@@ -54,23 +54,9 @@ class Debug extends Command
       $files = \Storage::listContents($folder);
       collect($files)->each(function($file) {
         $path = $file->path();
-
-        if ($file instanceof \League\Flysystem\FileAttributes) {
-          echo 'is file';
-        } elseif ($file instanceof \League\Flysystem\DirectoryAttributes) {
-          echo 'is directory';
-        }
         // Delete files and folders older than 30 days
         if ($file->lastModified() < now()->subDays(30)->getTimestamp()) {
-
-
-
-          // \Storage::delete($file->path());
-
-          // if (count(\Storage::listContents($file->path())) == 0) {
-          //   \Storage::deleteDirectory($file['path']);
-          // }
-
+          \Storage::delete($file->path());
         }
       });
     });
