@@ -595,6 +595,10 @@ export default {
         this.data.companies[index].users.unshift(user);
       }
       this.companyUuid = null;
+
+      this.addOrRemove(true, user.id);
+      this.quickSave();
+
     },
 
     isUpdate() {
