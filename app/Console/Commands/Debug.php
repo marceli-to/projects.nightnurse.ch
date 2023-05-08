@@ -51,7 +51,7 @@ class Debug extends Command
     $folders = \Storage::directories('public/quotes');
     collect($folders)->each(function($folder) {
 
-      dd(\Storage::listContents($folder->path()));
+      dd(\Storage::listContents($folder));
 
       // Get all files in subfolder
       $files = \Storage::listContents($folder);
