@@ -51,10 +51,11 @@ class Debug extends Command
     $folders = \Storage::directories('public/quotes');
     collect($folders)->each(function($folder) {
 
-      dd(\Storage::listContents($folder));
-
       // Get all files in subfolder
       $files = \Storage::listContents($folder);
+
+      dd($files);
+
       collect($files)->each(function($file) {
         // Delete files and folders older than 30 days
         if ($file->lastModified() < now()->subDays(10)->getTimestamp()) {
