@@ -37,15 +37,30 @@ class Debug extends Command
    */
   public function handle()
   {
-    // Folder: uploads/temp
-    $files = \Storage::listContents('public/uploads/temp');
-    collect($files)->each(function($file) {
-      if ($file->lastModified() < now()->subMinutes(30)->getTimestamp()) {
-        \Storage::delete($file['path']);
-      }
-      else {
-        echo $file->lastModified();
-      }
+    // // Folder: uploads/temp
+    // $files = \Storage::listContents('public/uploads/temp');
+    // collect($files)->each(function($file) {
+    //   if ($file->lastModified() < now()->subMinutes(30)->getTimestamp()) {
+    //     \Storage::delete($file['path']);
+    //   }
+    //   else {
+    //     echo $file->lastModified();
+    //   }
+    // });
+    // Get all subfolders of public/quotes
+    $folders = \Storage::directories('public/quotes');
+    collect($folders)->each(function($folder) {
+      // Get all files in subfolder
+      $files = \Storage::listContents($folder);
+      collect($files)->each(function($file) {
+        // Delete files and folders older than 30 days
+        if ($file->lastModified() < now()->subDays(30)->getTimestamp()) {
+          \Storage::delete($file['path']);
+          if (count(\Storage::listContents($file['path'])) == 0) {
+            \Storage::deleteDirectory($file['path']);
+          }
+        }
+      });
     });
   }
 }
