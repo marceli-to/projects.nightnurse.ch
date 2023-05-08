@@ -149,7 +149,8 @@
         <feed-item 
           v-for="item in filteredItems(items)" 
           :key="item.uuid" 
-          :item="item" 
+          :item="item"
+          :projectState="project.state" 
           :filesOnly="$store.state.feedType == 'files' ? true : false"
           @itemDeleted="fetch()"
           @scrollTo="scrollTo"

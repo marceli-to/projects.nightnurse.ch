@@ -26,7 +26,7 @@ class MessageController extends Controller
         'users', 
         'message',
         'reactions.user', 
-        'reactions.type'
+        'reactions.type',
       )
       ->withTrashed()
       ->orderBy('created_at', 'DESC')

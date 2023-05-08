@@ -2,7 +2,7 @@
   <div 
     :class="[$props.message.internal ? '' : '', 'py-2 group/reactions-menu relative flex']"
     @mouseleave="hide()"
-    v-if="!$props.message.deleted_at">
+    v-if="!$props.message.deleted_at && $props.canReact">
 
     <div v-if="hasReactions" class="flex">
       <a href="" 
@@ -67,6 +67,11 @@ export default {
     },
 
     canDelete: {
+      type: Boolean,
+      default: false,
+    },
+
+    canReact: {
       type: Boolean,
       default: false,
     }

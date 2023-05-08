@@ -111,6 +111,7 @@
         <feed-item-actions 
           :message="message"
           :canDelete="(message.can_delete && !message.deleted_at)"
+          :canReply="$props.projectState.id == 1 ? true : false"
           @delete="destroy"
           @translate="deeplFy"
           @reply="$emit('reply', $event)"
@@ -119,6 +120,7 @@
 
         <feed-item-reactions-menu
           :message="message"
+          :canReact="$props.projectState.id == 1 ? true : false"
           @reactionStored="fetch()"
           v-if="!message.deleted_at">
         </feed-item-reactions-menu>
@@ -200,6 +202,8 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    projectState: null,
   },
 
   mounted() {

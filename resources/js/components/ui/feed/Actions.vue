@@ -16,7 +16,7 @@
       tabindex="-1">
       <div role="none">
        
-        <template v-if="!$store.state.user.admin">
+        <template v-if="!$store.state.user.admin && $props.canReply">
           <div>
             <a href="javascript:;" 
               @click.prevent="$emit('reply', $props.message.uuid)" 
@@ -27,7 +27,7 @@
           </div>
         </template>
         <template v-if="$store.state.user.admin">
-          <template v-if="!$props.message.private && $store.state.user.can.create_public_message">
+          <template v-if="!$props.message.private && $store.state.user.can.create_public_message && $props.canReply">
             <div>
               <a href="javascript:;" 
                 @click.prevent="$emit('reply', $props.message.uuid)" 
@@ -110,6 +110,11 @@ export default {
     },
 
     canDelete: {
+      type: Boolean,
+      default: false,
+    },
+
+    canReply: {
       type: Boolean,
       default: false,
     }
