@@ -26,17 +26,22 @@ class CleanUpFiles
     // Get all subfolders of public/quotes
     $folders = \Storage::directories('public/quotes');
     collect($folders)->each(function($folder) {
+
       // Get all files in subfolder
       $files = \Storage::listContents($folder);
-      collect($files)->each(function($file) {
-        // Delete files and folders older than 30 days
-        if ($file->lastModified() < now()->subDays(30)->getTimestamp()) {
-          \Storage::delete($file['path']);
-          if (count(\Storage::listContents($file['dirname'])) == 0) {
-            \Storage::deleteDirectory($file['dirname']);
+      $fileCollection = collect($files);
+
+      if ($fileCollection->count() == 0) {
+        \Storage::deleteDirectory($folder);
+      }
+      else {
+        $fileCollection->each(function($file) {
+          // Delete files and folders older than 30 days
+          if ($file->lastModified() < now()->subDays(10)->getTimestamp()) {
+            \Storage::delete($file->path());
           }
-        }
-      });
+        });
+      }
     });
   }
 }
