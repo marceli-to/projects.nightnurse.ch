@@ -19,9 +19,10 @@
     <input type="hidden" name="uuid" value="{{$uuid}}">
     <x-text-field label="{{ __('Vorname') }}" type="text" name="firstname" autocomplete="false" required="true" value="{{$user->firstname ?? ''}}" />
     <x-text-field label="{{ __('Name') }}" type="text" name="name" autocomplete="false" required="true" value="{{$user->name ?? ''}}" />
-    <x-text-field label="{{ __('Telefon') }}" type="text" name="phone" autocomplete="false" value="{{$user->phone ?? ''}}" />
+    <x-text-field label="{{ __('Telefon') }}" type="text" name="phone" autocomplete="false" value="{{ $user->phone ?? '' }}" />
     <x-select label="{{ __('Geschlecht') }}" name="gender_id" :options="['1' => 'Mann', '2' => 'Frau']" required="true" value="{{$user->gender_id ?? ''}}" />
     <x-select label="{{ __('Sprache') }}" name="language_id" :options="['1' => 'Deutsch', '2' => 'English']" required="true" value="{{$user->language_id ?? ''}}" />
+    <x-text-field label="{{ __('E-Mail') }}" type="email" name="email" autocomplete="false" disabled="true" value="{{ $user->email }}" />
     <x-text-field label="{{ __('Passwort (min. 8 Zeichen)') }}" type="password" name="password" autocomplete="false" required="true" />
     <x-text-field label="{{ __('Passwort wiederholen') }}" type="password" name="password_confirmation" autocomplete="false" required="true" />
     <div class="card-auth__buttons">

@@ -55,6 +55,13 @@ class TextField extends Component
   public $autocomplete;
 
   /**
+   * Disabled
+   *
+   * @var boolean
+   */
+  public $disabled;
+
+  /**
    * Value
    *
    * @var string
@@ -75,7 +82,7 @@ class TextField extends Component
    * 
    * @return void
    */
-  public function __construct($name, $type = 'text', $label, $placeholder = NULL, $required = FALSE, $css = NULL, $autocomplete = TRUE, $value = NULL)
+  public function __construct($name, $type = 'text', $label, $placeholder = NULL, $required = FALSE, $css = NULL, $autocomplete = TRUE, $disabled = FALSE, $value = NULL)
   {
     $this->name = $name;
     $this->type = $type;
@@ -84,6 +91,7 @@ class TextField extends Component
     $this->required = $required;
     $this->css = $css;
     $this->autocomplete = $autocomplete;
+    $this->disabled = $disabled;
     $this->value = $value;
   }
 
