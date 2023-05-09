@@ -13,7 +13,6 @@
   </div>
   @endif
   <p>{!! __("Diese Anmeldung war für <strong>:email</strong> bestimmt. Sollte das nicht Ihre E-Mail sein oder Sie eine andere E-Mail-Adresse registrieren möchten, schreiben Sie schreiben Sie dem Projektleiter oder eine E-Mail an <a href='mailto:projects@nightnurse.ch'>projects@nightnurse.ch</a>.", ['email' => $user->email]) !!}</p>
-  
   <form method="POST" action="{{ route('register') }}">
     @csrf
     <input type="hidden" name="uuid" value="{{$uuid}}">

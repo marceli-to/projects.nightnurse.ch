@@ -178,15 +178,13 @@ class UserController extends Controller
       'uuid' => \Str::uuid(),
       'email' => $request->input('email'),
       'email_verified_at' => \Carbon\Carbon::now(),
-      'language_id' => 1,
+      'language_id' => $request->input('language_id'),
       'company_id' => $company->id,
       'gender_id' => 1,
       'role_id' => $company->owner ? 1 : 2,
       'team_id' => $company->owner ? $company->id : NULL,
     ]);
-
     $this->invite($user);
-
     return response()->json(['user' => $user]);
   }
 
@@ -202,7 +200,7 @@ class UserController extends Controller
     if ($user)
     {
       try {
-        return \Mail::to($user->email)->send(new \App\Mail\Invitation($user));
+        \Mail::to($user->email)->send(new \App\Mail\Invitation($user));
       } 
       catch(\Throwable $e) {
         \Log::error($e);

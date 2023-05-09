@@ -18,10 +18,18 @@ class RegisterController extends Controller
 
   public function index(User $user)
   {
+    $user = User::with('language')->find($user->id);
     if ($user->register_complete)
     {
       return redirect(route('complete'));
     }
+
+    if (!session('locale'))
+    {
+      app()->setLocale($user->language->acronym);
+      session()->put('locale', $user->language->acronym);
+    }
+
     return view($this->viewPath . 'register', ['uuid' => $user->uuid, 'user' => $user]);
   }
 

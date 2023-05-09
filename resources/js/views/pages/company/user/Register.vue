@@ -10,6 +10,14 @@
       <input type="email" v-model="data.email">
       <required :text="translate('Pflichtfeld')" />
     </div>
+    <div class="form-group">
+      <label>{{ translate('Sprache') }}</label>
+      <select v-model="data.language_id">
+        <option v-for="language in languages" :key="language.id" :value="language.id">
+          {{ language.description }}
+        </option>
+      </select>
+    </div>
     <content-footer>
       <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
       <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
@@ -57,8 +65,11 @@ export default {
       // Model
       data: {
         email: null,
-        company_uuid: this.$route.params.companyUuid
+        company_uuid: this.$route.params.companyUuid,
+        language_id: 1,
       },
+
+      languages: [],
 
       // Validation
       errors: {
@@ -69,6 +80,7 @@ export default {
       // Routes
       routes: {
         post: '/api/user/register',
+        languages: '/api/languages',
       },
 
       // States
@@ -79,6 +91,7 @@ export default {
   },
 
   created() {
+    this.getLanguages();
   },
 
   methods: {
@@ -96,6 +109,16 @@ export default {
         this.hasErrors = true;
         NProgress.done();
         this.errors.message = error.response.data.errors.email[0];
+      });
+    },
+
+    getLanguages() {
+      NProgress.start();
+      this.isFetched = false;
+      this.axios.get(this.routes.languages).then(response => {
+        this.languages = response.data.data;
+        this.isFetched = true;
+        NProgress.done();
       });
     },
   },
