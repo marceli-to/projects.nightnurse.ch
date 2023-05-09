@@ -41,14 +41,12 @@ export default {
   },
 
   mounted() {
-    this.fetch();
-
-    // if (sessionStorage.getItem('notification') == 'hidden') {
-    //   this.isHidden = true;
-    // }
-    // else {
-    //   this.fetch();
-    // }
+    if (sessionStorage.getItem('notification') == 'hidden') {
+      this.isHidden = true;
+    }
+    else {
+      this.fetch();
+    }
   },
   
   methods: {
@@ -61,7 +59,6 @@ export default {
 
     hide() {
       this.isHidden = true;
-      // Save hidden state to session storage
       sessionStorage.setItem('notification', 'hidden');
     }
   }
