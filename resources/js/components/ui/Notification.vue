@@ -1,5 +1,5 @@
 <template>
-  <div class="notification is-toast" v-if="notification.publish && isLoaded && !isHidden">
+  <div class="notification is-toast" v-if="isLoaded && !isHidden">
     <div>
       <a href="javascript:;" @click.prevent="hide()">
         <x-icon aria-hidden="true" />
@@ -51,7 +51,7 @@ export default {
     fetch() {
       this.axios.get(`${this.routes.find}`).then(response => {
         this.notification = response.data;
-        this.isLoaded = true;
+        this.isLoaded = this.notification.publish;
       });
     },
 
