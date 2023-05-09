@@ -6,6 +6,7 @@
   @if ($errors->any())
     <x-alert type="danger" message="{{__('messages.general_error')}}" />
   @endif
+  <x-notification />
   <form method="POST" action="{{ route('login') }}">
     @csrf
     <x-text-field label="E-Mail" type="email" name="email" autocomplete="false" />

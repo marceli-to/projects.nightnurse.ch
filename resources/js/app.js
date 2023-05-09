@@ -40,6 +40,7 @@ import companyRoutes from '@/views/pages/company/config/routes';
 import userRoutes from '@/views/pages/company/user/config/routes';
 import messageRoutes from '@/views/pages/message/config/routes';
 import profileRoutes from '@/views/pages/profile/config/routes';
+import notificationRoutes from '@/views/pages/notification/config/routes';
 
 const router = new VueRouter(
   { 
@@ -53,7 +54,8 @@ const router = new VueRouter(
       ...companyRoutes,
       ...userRoutes,
       ...messageRoutes,
-      ...profileRoutes
+      ...profileRoutes,
+      ...notificationRoutes
     ]
   }
 );

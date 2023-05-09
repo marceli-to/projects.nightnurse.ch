@@ -17,3 +17,69 @@
 .vue-notification-group .vue-notification-wrapper .vue-notification-template.success {
   @apply bg-green-500 border-green-500 text-white
 }
+
+.notification {
+  @apply p-3 pt-2 text-xs font-mono
+}
+
+.notification > div {
+  @apply relative pr-2 leading-5 break-normal
+}
+
+.notification h1 {
+  @apply text-sm font-mono !mb-1
+}
+
+
+.notification.is-toast {
+  @apply fixed bottom-3 left-3 right-3 md:left-auto md:bottom-auto md:right-3 md:top-3 z-1001 md:z-900 md:max-w-[320px]
+}
+
+.notification.is-toast {
+  @apply bg-blue-400 border-blue-400 text-white
+}
+
+.notification.is-toast h1 {
+  @apply text-white
+}
+
+.notification.is-toast a {
+  @apply text-white
+}
+
+.notification.is-toast a svg {
+  @apply h-5 w-5 absolute -top-1 -right-2
+}
+
+.notification.is-inline {
+  @apply relative bg-transparent border-2 border-blue-400 text-blue-400 max-w-none mb-4
+}
+
+.notification.is-inline h1 {
+  @apply text-blue-400
+}
+
+/*
+
+.is-sold {
+  @apply bg-red-100 text-red-600
+}
+.is-sold h1 {
+  @apply text-red-600
+}
+.is-success {
+  @apply bg-green-50 text-green-600
+}
+.is-success h1, 
+.is-success a {
+  @apply text-green-600
+}
+
+.is-warning {
+  @apply bg-yellow-50 text-yellow-600
+}
+.is-warning h1 {
+  @apply text-yellow-600
+}
+
+*/

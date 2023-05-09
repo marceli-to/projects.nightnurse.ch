@@ -33,6 +33,12 @@
             {{ translate('Kunden') }}
           </menu-item>
         </li>
+        <li class="block !p-0 !m-0" v-if="$store.state.user.admin">
+          <menu-item :route="'notifications'">
+            <speakerphone-icon class="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-4" aria-hidden="true" />
+            {{ translate('Notifications') }}
+          </menu-item>
+        </li>
         <li class="block !p-0 !m-0">
           <menu-item :route="'profile-edit'">
             <user-circle-icon class="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-4" aria-hidden="true" />
@@ -59,14 +65,15 @@
       </ul>
     </nav>
   </div>
+  <notification />
 </header>
-
 </template>
 <script>
-import { XIcon, UsersIcon, FolderIcon, OfficeBuildingIcon, UserCircleIcon, MenuAlt3Icon } from "@vue-hero-icons/outline";
+import { XIcon, UsersIcon, FolderIcon, OfficeBuildingIcon, UserCircleIcon, MenuAlt3Icon, SpeakerphoneIcon } from "@vue-hero-icons/outline";
 import { LogoutIcon } from "@vue-hero-icons/solid"
 import MenuItem from '@/components/ui/menu/Item';
 import MenuItemLabel from '@/components/ui/menu/Label';
+import Notification from '@/components/ui/Notification';
 import FlagDeIcon from '@/components/ui/icons/flag-de';
 import FlagEnIcon from '@/components/ui/icons/flag-en';
 import i18n from "@/i18n";
@@ -81,10 +88,12 @@ export default {
     MenuAlt3Icon,
     LogoutIcon,
     UserCircleIcon,
+    SpeakerphoneIcon,
     MenuItem,
     MenuItemLabel,
     FlagDeIcon,
-    FlagEnIcon
+    FlagEnIcon,
+    Notification
   },
 
   mixins: [i18n],
@@ -94,8 +103,11 @@ export default {
 
       hasMenu: false,
 
+      notification: null,
+
       routes: {
         post: '/api/profile/switch-language',
+        notifications: '/api/notification/latest'
       },
     }
   },

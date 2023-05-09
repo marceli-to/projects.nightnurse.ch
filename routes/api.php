@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectQuoteController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
+use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\ReactionController;
@@ -103,7 +104,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('project/quote', [ProjectQuoteController::class, 'store']);
     Route::delete('project/quote/{projectQuote:uuid}', [ProjectQuoteController::class, 'destroy']);
 
-
     Route::get('projects-archive', [ProjectController::class, 'getArchive']);
     Route::get('project/companies/{project:uuid}', [ProjectController::class, 'getProjectCompanies']);
     Route::post('project', [ProjectController::class, 'store']);
@@ -142,6 +142,15 @@ Route::middleware('auth:sanctum')->group(function() {
     // Roles
     Route::get('roles', [RoleController::class, 'get']);
     Route::get('role/{role}', [RoleController::class, 'find']);
+
+    // Notifications
+    Route::get('notifications', [NotificationController::class, 'get']);
+    Route::get('notification/latest', [NotificationController::class, 'findLatest']);
+    Route::get('notification/{notification}', [NotificationController::class, 'find']);
+    Route::post('notification', [NotificationController::class, 'store']);
+    Route::put('notification/{notification}', [NotificationController::class, 'update']);
+    Route::get('notification/state/{notification}', [NotificationController::class, 'toggle']);
+    Route::delete('notification/{notification}', [NotificationController::class, 'destroy']);
 
   });
 
