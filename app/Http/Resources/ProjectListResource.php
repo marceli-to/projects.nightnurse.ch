@@ -19,7 +19,7 @@ class ProjectListResource extends JsonResource
       'color' => $this->color,
       'last_activity'=> $this->last_activity,
       'company' => CompanyResource::make($this->company),
-      'messages' => MessageListResource::collection($this->messages),
+      'preview_messages' => MessageListResource::collection($this->previewMessages),
     ];
   }
 }
