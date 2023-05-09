@@ -245,6 +245,10 @@ export default {
     };
   },
 
+  mounted() {
+    document.addEventListener('paste', this.handlePaste);
+  },
+
   created() {
     this.fetch();
     this.data.private = this.$store.state.feedType === 'private' ? 1 : 0;
@@ -344,6 +348,29 @@ export default {
           this.data.users.splice(idx, 1);
           this.$store.commit('recipients', this.data.users);
         }
+      }
+    },
+
+    handlePaste(event) {
+      const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+      if (!items) return;
+
+      const files = [];
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+
+        if (item.kind === 'file') {
+          const file = item.getAsFile();
+          console.log(file, item);
+          //this.$refs.dropzone.manuallyAddFile(files, { accepted: true, status: 'queued' })
+          //files.push(file);
+        }
+      }
+
+      if (files.length > 0) {
+        console.log(files);
+        this.$refs.dropzone.manuallyAddFile(files[0], {})
       }
     },
 
