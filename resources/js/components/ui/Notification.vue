@@ -1,7 +1,5 @@
 <template>
-  <div 
-    class="notification is-toast"
-    v-if="isLoaded && !isHidden">
+  <div class="notification is-toast" v-if="notification.publish && isLoaded && !isHidden">
     <div>
       <a href="javascript:;" @click.prevent="hide()">
         <x-icon aria-hidden="true" />
@@ -15,7 +13,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import { XIcon } from 'vue-feather-icons';
 export default {
@@ -29,6 +26,7 @@ export default {
       notification: {
         title: null,
         text: null,
+        publish: false
       },
 
       isLoaded: false,
