@@ -30,7 +30,7 @@ class ProjectController extends Controller
     if (auth()->user()->isAdmin())
     {
       $user_projects = Project::with('state', 'company', 'companies', 'manager')
-                      ->with(['messages' => function ($query) {
+                      ->with(['publicMessages' => function ($query) {
                         $query->with('sender')->limit(3);
                       }])
                       ->orderBy('last_activity', 'DESC')
@@ -44,7 +44,7 @@ class ProjectController extends Controller
       
      // Get 'all projects'
      $projects = Project::active()->with('state', 'company', 'companies', 'manager')
-                    ->with(['messages' => function ($query) {
+                    ->with(['publicMessages' => function ($query) {
                       $query->with('sender')->limit(3);
                     }])
                     ->orderBy('last_activity', 'DESC')

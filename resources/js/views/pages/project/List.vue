@@ -27,8 +27,8 @@
           </span>
         </router-link>
         <div v-if="d.messages">
-          <div v-for="(message, iteration) in d.messages" :key="message.uuid">
-            <div v-if="iteration < 3" class="pt-1.5 mt-1.5">
+          <div v-for="(message, iteration) in d.messages" :key="message.uuid" class="mt-1">
+            <div v-if="iteration < 3" :class="[message.internal ? 'bg-gray-100' : '', 'py-1 mb-1']">
               <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
                 <span class="text-gray-400 text-xs sm:text-sm">
                   <span class="">{{ message.message_date_time }}</span><separator />
@@ -77,8 +77,8 @@
           </span>
         </router-link>
         <div v-if="d.messages">
-          <div v-for="(message, iteration) in d.messages" :key="message.uuid">
-            <div v-if="iteration < 3" class="pt-1.5 mt-1.5">
+          <div v-for="(message, iteration) in d.messages" :key="message.uuid" class="mt-1">
+            <div v-if="iteration < 3" :class="[message.internal ? 'bg-gray-100' : '', 'py-1 mb-1']">
               <span class="text-gray-400 text-xs sm:text-sm">
                 <span class="">{{ message.message_date_time }}</span><separator />
                 <span v-if="message.sender">{{message.sender.full_name | truncate(15, '...')}}</span>

@@ -72,6 +72,11 @@ class Project extends Base
     return $this->hasMany(Message::class, 'project_id', 'id')->orderBy('created_at', 'DESC');
   }
 
+  public function publicMessages()
+  {
+    return $this->hasMany(Message::class, 'project_id', 'id')->where('private', 0)->orderBy('created_at', 'DESC');
+  }
+
   public function quotes()
   {
     return $this->hasMany(ProjectQuote::class, 'project_id', 'id')->orderBy('created_at', 'DESC');
