@@ -12,7 +12,7 @@
   @endif
   <form method="POST" action="{{ route('password.email') }}">
     @csrf
-    <x-text-field label="E-Mail" type="email" name="email" />
+    <x-text-field label="{{ __('E-Mail') }}" type="email" name="email" />
     <div class="card-auth__buttons">
       <x-button label="{{ __('Senden') }}" name="register" type="submit" />
       <a href="{{ route('login') }}" class="form-helper">{{ __('Zurück') }}</a>

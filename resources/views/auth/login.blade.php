@@ -9,7 +9,7 @@
   <x-notification />
   <form method="POST" action="{{ route('login') }}">
     @csrf
-    <x-text-field label="E-Mail" type="email" name="email" autocomplete="false" />
+    <x-text-field label="{{ __('E-Mail') }}" type="email" name="email" autocomplete="false" />
     <x-text-field label="{{ __('Passwort') }}" type="password" name="password" autocomplete="false" />
     <div class="card-auth__buttons">
       <x-button label="{{ __('Anmelden') }}" name="register" type="submit" />

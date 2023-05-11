@@ -12,7 +12,7 @@
   <form method="POST" action="{{ route('password.update') }}">
     @csrf
     <input type="hidden" name="token" value="{{ $token }}">
-    <x-text-field label="E-Mail" type="email" required name="email" />
+    <x-text-field label="{{ __('E-Mail') }}" type="email" required name="email" />
     <x-text-field label="Passwort" type="password" required name="password" />
     <x-text-field label="Passwort bestätigen" type="password" name="password_confirmation" required autocomplete="new-password" />
     <div class="card-auth__buttons">
