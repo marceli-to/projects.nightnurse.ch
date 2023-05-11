@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
 use App\Http\Controllers\Api\NotificationController;
 use App\Http\Controllers\Api\MessageController;
+use App\Http\Controllers\Api\MessageUserController;
 use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\ReactionController;
 use App\Http\Controllers\Api\ReactionTypeController;
@@ -69,6 +70,9 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('projects', [ProjectController::class, 'get']);
   Route::get('project/users/{project:uuid}', [ProjectController::class, 'getProjectUsers']);
   Route::get('project/{project:uuid}', [ProjectController::class, 'find']);
+
+  // Messages
+  Route::get('message/users/{message:uuid}', [MessageUserController::class, 'get']);
 
   // Messages
   Route::get('messages/{project:uuid}', [MessageController::class, 'get']);

@@ -199,6 +199,7 @@ export default {
       routes: {
         fetch: '/api/project',
         fetchUsers: '/api/project/users',
+        fetchMessageUsers: '/api/message/users',
         post: '/api/message/queue',
         destroy: '/api/upload'
       },
@@ -276,9 +277,12 @@ export default {
           this.isReply = true;
           this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
           this.data.message_uuid = this.$props.message.uuid;
+          this.handleReplyRecipients();
+        }
+        else {
+          this.handleRecipients();
         }
 
-        this.handleRecipients();
         this.isFetched = true;
       }));
     },
@@ -363,17 +367,24 @@ export default {
 
         if (item.kind === 'file') {
           const file = item.getAsFile();
-          console.log(file, item);
           //this.$refs.dropzone.manuallyAddFile(files, { accepted: true, status: 'queued' })
           //files.push(file);
         }
       }
 
       if (files.length > 0) {
-        console.log(files);
         this.$refs.dropzone.manuallyAddFile(files[0], {})
       }
     },
+
+    handleReplyRecipients() {
+      this.axios.get(`${this.routes.fetchMessageUsers}/${this.$props.message.uuid}`).then(response => {
+        console.log(response.data);
+        response.data.users.forEach(user => {
+          this.addOrRemoveRecipient(true, user);
+        });
+      });
+    }
 
     // Add preselected recipients
     handleRecipients() {
