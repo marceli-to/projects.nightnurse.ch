@@ -1,5 +1,5 @@
 @extends('layout.guest')
-@section('seo_title', 'Passwort vergessen')
+@section('seo_title', __('Passwort vergessen'))
 @section('content')
 <x-card-auth>
   <h2 class="card-auth__heading">{{ __('Passwort vergessen') }}</h2>
