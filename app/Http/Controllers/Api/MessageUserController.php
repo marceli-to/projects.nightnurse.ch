@@ -24,7 +24,6 @@ class MessageUserController extends Controller
         $users[] = UserResource::make($message_user->user);
       }
     }
-    dd($users);
     return response()->json($users);
   }
 
