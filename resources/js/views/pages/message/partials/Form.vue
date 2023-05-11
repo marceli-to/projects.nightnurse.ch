@@ -384,7 +384,7 @@ export default {
           this.addOrRemoveRecipient(true, user);
         });
       });
-    }
+    },
 
     // Add preselected recipients
     handleRecipients() {
