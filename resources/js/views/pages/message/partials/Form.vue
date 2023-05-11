@@ -392,6 +392,7 @@ export default {
 
       // If its a reply, preselect the original recipients
       if (this.isReply) {
+        console.log(this.project.users);
         this.project.users.forEach(user => {
           this.addOrRemoveRecipient(true, user);
         });
