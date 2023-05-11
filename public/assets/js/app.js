@@ -21779,16 +21779,16 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     handleReplyRecipients: function handleReplyRecipients() {
+      var _this3 = this;
       this.axios.get("".concat(this.routes.fetchMessageUsers, "/").concat(this.$props.message.uuid)).then(function (response) {
-        console.log(response.data);
-        // response.data.users.forEach(user => {
-        //   this.addOrRemoveRecipient(true, user);
-        // });
+        response.data.users.forEach(function (user) {
+          _this3.addOrRemoveRecipient(true, user);
+        });
       });
     },
     // Add preselected recipients
     handleRecipients: function handleRecipients() {
-      var _this3 = this;
+      var _this4 = this;
       // Next upgrade: check if there are any preselected recipients in local storage
       //-----------------------------------------------------------------------------
       // const storageName = `default-recipients-${this.$store.state.feedType}`;
@@ -21805,14 +21805,14 @@ __webpack_require__.r(__webpack_exports__);
       if (this.isReply) {
         console.log(this.project.users);
         this.project.users.forEach(function (user) {
-          _this3.addOrRemoveRecipient(true, user);
+          _this4.addOrRemoveRecipient(true, user);
         });
         return;
       }
 
       // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(function (x) {
-        return x.id !== _this3.project.manager.id;
+        return x.id !== _this4.project.manager.id;
       });
 
       // Remove project manager from the associates to prevent double entries
@@ -21822,8 +21822,8 @@ __webpack_require__.r(__webpack_exports__);
 
       // Preselect project associates
       this.project.associates.forEach(function (user) {
-        _this3.addOrRemoveRecipient(true, user);
-        _this3.removePreSelectedUser(user);
+        _this4.addOrRemoveRecipient(true, user);
+        _this4.removePreSelectedUser(user);
       });
 
       // Add sender of the original message if its a reply
@@ -21839,7 +21839,7 @@ __webpack_require__.r(__webpack_exports__);
             var users = client[1].users && client[1].users.length ? client[1].users : null;
             if (users) {
               users.forEach(function (user) {
-                _this3.addOrRemoveRecipient(true, user);
+                _this4.addOrRemoveRecipient(true, user);
               });
             }
           });
@@ -21848,7 +21848,7 @@ __webpack_require__.r(__webpack_exports__);
         // Preselect all users of team Buenos Aires for internal messages
         if (this.data["private"] == 1) {
           this.project.internal_users.forEach(function (user) {
-            _this3.addOrRemoveRecipient(true, user);
+            _this4.addOrRemoveRecipient(true, user);
           });
         }
       }
@@ -21872,13 +21872,13 @@ __webpack_require__.r(__webpack_exports__);
       this.data.files.push(res);
     },
     uploadComplete: function uploadComplete(file) {
-      var _this4 = this;
+      var _this5 = this;
       if (file.status == "error") {
         if (file.xhr !== undefined) {
           var res = JSON.parse(file.xhr.response);
           if (res.errors.file) {
             res.errors.file.forEach(function (error) {
-              return _this4.$notify({
+              return _this5.$notify({
                 type: "danger",
                 text: error,
                 duration: 2000
@@ -21917,20 +21917,20 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     uploadDelete: function uploadDelete(file) {
-      var _this5 = this;
+      var _this6 = this;
       if (confirm(this.messages.confirm)) {
         nprogress__WEBPACK_IMPORTED_MODULE_18___default().start();
         this.axios["delete"]("".concat(this.routes.destroy, "/").concat(file)).then(function (response) {
-          var idx = _this5.data.files.findIndex(function (x) {
+          var idx = _this6.data.files.findIndex(function (x) {
             return x.name == file;
           });
           if (idx > -1) {
-            _this5.data.files.splice(idx, 1);
+            _this6.data.files.splice(idx, 1);
           }
           nprogress__WEBPACK_IMPORTED_MODULE_18___default().done();
-          _this5.$notify({
+          _this6.$notify({
             type: "success",
-            text: _this5.messages.deleted,
+            text: _this6.messages.deleted,
             duration: 2000
           });
         });
