@@ -1,6 +1,6 @@
 {
   "Registrierung": "Register",
-  "Diese Anmeldung war für <strong>:email</strong> bestimmt. Sollte das nicht Ihre E-Mail sein oder Sie eine andere E-Mail-Adresse registrieren möchten, schreiben Sie schreiben Sie dem Projektleiter oder eine E-Mail an <a href='mailto:projects@nightnurse.ch'>projects@nightnurse.ch</a>.": "This registration was intended for <strong>:email</strong>. If this is not your email or you want to register another email address, write to the project manager or email to <a href='mailto:projects@nightnurse.ch'>projects@nightnurse.ch</a>.",
+  "Diese Anmeldung war für <strong>:email</strong> bestimmt. Sollte das nicht Ihre E-Mail sein oder Sie eine andere E-Mail-Adresse registrieren möchten, schreiben Sie schreiben Sie dem Projektleiter oder eine E-Mail an <a href='mailto:projects@nightnurse.ch'>projects@nightnurse.ch</a>.": "This registration was intended for <strong>:email</strong>. If this is not your email address or you want to register another email address, write to the project manager or email to <a href='mailto:projects@nightnurse.ch'>projects@nightnurse.ch</a>.",
   "Vorname": "Firstname",
   "Name": "Name",
   "Telefon": "Phone",
