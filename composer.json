@@ -28,6 +28,7 @@
         "pusher/pusher-php-server": "^7.2",
         "qruto/laravel-wave": "^0.6.0",
         "rakutentech/laravel-request-docs": "^1.30",
+        "spatie/laravel-translatable": "^6.5",
         "staudenmeir/eloquent-eager-limit": "^1.0",
         "symfony/http-client": "^6.2",
         "symfony/mailgun-mailer": "^6.2",

@@ -8,14 +8,26 @@
       </template>
     </content-header>
 
+    <h4 class="text-md">Deutsch</h4>
     <div class="form-group">
       <label>{{ translate('Title') }}</label>
-      <input type="text" v-model="data.title">
+      <input type="text" v-model="data.title.de">
+    </div>
+    
+    <div class="form-group">
+      <label>{{ translate('Inhalt') }}</label>
+      <textarea name="text" v-model="data.text.de"></textarea>
+    </div>
+
+    <h4 class="!mt-12">English</h4>
+    <div class="form-group">
+      <label>{{ translate('Title') }}</label>
+      <input type="text" v-model="data.title.en">
     </div>
 
     <div class="form-group">
       <label>{{ translate('Inhalt') }}</label>
-      <textarea name="text" v-model="data.text"></textarea>
+      <textarea name="text" v-model="data.text.en"></textarea>
     </div>
 
     <div class="form-group">
@@ -67,8 +79,14 @@ export default {
       
       // Model
       data: {
-        title: null,
-        text: null,
+        title: {
+          de: null,
+          en: null,
+        },
+        text: {
+          de: null,
+          en: null,
+        },
         publish: 1,
       },
 

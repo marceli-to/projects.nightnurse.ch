@@ -4,22 +4,26 @@
       <a href="javascript:;" @click.prevent="hide()">
         <x-icon aria-hidden="true" />
       </a>
-      <h1 v-if="notification.title">
-        {{  notification.title }}
+      <h1 v-if="notification.title[_locale()]">
+        {{  notification.title[_locale()] }}
       </h1>
-      <div v-if="notification.text">
-        {{  notification.text }}
+      <div v-if="notification.text[_locale()]">
+        {{  notification.text[_locale()] }}
       </div>
     </div>
   </div>
 </template>
 <script>
 import { XIcon } from 'vue-feather-icons';
+import i18n from "@/i18n";
+
 export default {
 
   components: {
     XIcon,
   },
+
+  mixins: [i18n],
 
   data() {
     return {

@@ -13,8 +13,8 @@
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">
-        <span v-if="d.title">{{ d.title }}</span>
-        <span v-else>{{ d.text | truncate(75, '...') }}</span>
+        <span v-if="d.title.de">{{ d.title.de }}</span>
+        <span v-else>{{ d.text.de | truncate(75, '...') }}</span>
         <pill v-if="d.publish" class="bg-green-500">{{ translate('aktiv') }}</pill>
         <pill v-else class="bg-gray-300">{{ translate('inaktiv') }}</pill>
       </div>
