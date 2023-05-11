@@ -252,12 +252,6 @@ export default {
   created() {
     this.fetch();
     this.data.private = this.$store.state.feedType === 'private' ? 1 : 0;
-
-    if (this.$props.message) {
-      this.isReply = true;
-      this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
-      this.data.message_uuid = this.$props.message.uuid;
-    }
   },
 
   methods: {
@@ -277,6 +271,13 @@ export default {
         this.project.owner = responses[1].data.owner;
         this.project.associates = responses[1].data.associates;
         this.isManager = responses[1].data.isManager;
+
+        if (this.$props.message) {
+          this.isReply = true;
+          this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
+          this.data.message_uuid = this.$props.message.uuid;
+        }
+
         this.handleRecipients();
         this.isFetched = true;
       }));
@@ -388,6 +389,14 @@ export default {
       //   });
       //   return;
       // }
+
+      // If its a reply, preselect the original recipients
+      if (this.isReply) {
+        this.project.users.forEach(user => {
+          this.addOrRemoveRecipient(true, user);
+        });
+        return;
+      }
 
       // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
