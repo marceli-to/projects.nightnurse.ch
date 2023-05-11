@@ -379,7 +379,7 @@ export default {
 
     handleReplyRecipients() {
       this.axios.get(`${this.routes.fetchMessageUsers}/${this.$props.message.uuid}`).then(response => {
-        response.data.users.forEach(user => {
+        response.data.forEach(user => {
           this.addOrRemoveRecipient(true, user);
         });
       });

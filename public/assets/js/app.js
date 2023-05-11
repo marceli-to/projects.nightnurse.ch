@@ -21781,7 +21781,7 @@ __webpack_require__.r(__webpack_exports__);
     handleReplyRecipients: function handleReplyRecipients() {
       var _this3 = this;
       this.axios.get("".concat(this.routes.fetchMessageUsers, "/").concat(this.$props.message.uuid)).then(function (response) {
-        response.data.users.forEach(function (user) {
+        response.data.forEach(function (user) {
           _this3.addOrRemoveRecipient(true, user);
         });
       });
