@@ -16,6 +16,7 @@ class MessageUserController extends Controller
   public function get(Message $message)
   {
     $users = MessageUser::where('message_id', $message->id)->with('user')->get();
+    dd($users);
     return response()->json($users);
   }
 
