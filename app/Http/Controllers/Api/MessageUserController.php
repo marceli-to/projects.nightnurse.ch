@@ -3,6 +3,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\MessageUser;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 
 class MessageUserController extends Controller
@@ -15,7 +16,14 @@ class MessageUserController extends Controller
    */
   public function get(Message $message)
   {
-    $users = MessageUser::where('message_id', $message->id)->with('user')->get();
+    $message_users = MessageUser::where('message_id', $message->id)->with('user')->get();
+    if ($message_users)
+    {
+      foreach($message_users as $message_user)
+      {
+        $users[] = UserResource::make($message_user->user);
+      }
+    }
     dd($users);
     return response()->json($users);
   }
