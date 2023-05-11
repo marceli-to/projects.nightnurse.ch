@@ -23,5 +23,7 @@
   "Zurück": "Back",
   "Senden": "Send",
   "Passwort zurücksetzen": "Reset password",
-  "Zurücksetzen": "Reset"
+  "Zurücksetzen": "Reset",
+  "Anmelden": "Login",
+  "Passwort": "Password"
 }
