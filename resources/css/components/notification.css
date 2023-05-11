@@ -30,7 +30,6 @@
   @apply text-sm font-mono !mb-1
 }
 
-
 .notification.is-toast {
   @apply fixed bottom-3 left-3 right-3 md:left-auto md:bottom-auto md:right-3 md:top-3 z-1001 md:z-900 md:max-w-[320px]
 }
@@ -58,6 +57,7 @@
 .notification.is-inline h1 {
   @apply text-blue-400
 }
+
 
 /*
 

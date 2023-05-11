@@ -14,7 +14,7 @@ class Notification extends Base
    * @var array
    */
 
-   protected $attributes = [
+  protected $attributes = [
     'title' => '{ "de": "null", "en": "null" }',
     'text'  => '{ "de": "null", "en": "null" }',
   ];

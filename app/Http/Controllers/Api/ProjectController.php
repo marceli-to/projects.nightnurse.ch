@@ -78,7 +78,7 @@ class ProjectController extends Controller
     if (auth()->user()->isAdmin())
     {
       $user_projects = Project::archive()->with('state', 'company', 'companies', 'manager')
-                      ->with(['messages' => function ($query) {
+                      ->with(['previewMessages' => function ($query) {
                         $query->with('sender')->limit(3);
                       }])
                       ->orderBy('last_activity', 'DESC')
@@ -89,7 +89,7 @@ class ProjectController extends Controller
 
       // Get 'all projects'
      $projects = Project::archive()->with('state', 'company', 'companies', 'manager')
-                    ->with(['messages' => function ($query) {
+                    ->with(['previewMessages' => function ($query) {
                       $query->with('sender')->limit(3);
                     }])
                     ->orderBy('last_activity', 'DESC')

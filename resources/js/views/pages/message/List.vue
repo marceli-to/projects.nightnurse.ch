@@ -1,8 +1,8 @@
 <template>
 <div v-if="isFetched" class="max-w-5xl">
-
-  <header class="mb-4 md:mb-6 pt-2 sm:pt-3 pb-2 md:pb-4 sticky top-0 bg-white z-40 border-bottom relative -ml-[1px] pl-[1px]">
-    <div>
+  <header class="mb-4 md:mb-6 pt-2 sm:pt-3 pb-2 md:pb-4 sticky top-0 bg-white z-40 border-bottom -ml-[1px] pl-[1px]">
+    <div class="relative">
+      <feed-archive-info v-if="project.state.id == 2" />
       <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-2xl leading-snug sm:leading-normal">
         <div class="text-dark" v-if="project.company">
           <div class="font-normal text-sm">
@@ -13,7 +13,7 @@
         <div class="text-dark" v-else>
           {{project.number}} {{project.name}}
         </div>
-        <router-link :to="{name: 'project-update', params: { uuid: project.uuid, redirect: 'messages' }}" v-if="$store.state.user.admin">
+        <router-link :to="{name: 'project-update', params: { uuid: project.uuid, redirect: 'messages' }}" v-if="$store.state.user.admin && project.state.id == 1">
           <pencil-alt-icon class="icon-list mb-1 ml-1 sm:ml-2" aria-hidden="true" />
         </router-link>
       </div>
@@ -216,6 +216,7 @@ import ListAction from "@/components/ui/layout/ListAction.vue";
 import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
 import Feed from "@/components/ui/feed/Feed.vue";
 import FeedIndex from "@/components/ui/feed/Index.vue";
+import FeedArchiveInfo from "@/components/ui/feed/ArchiveInfo.vue";
 import FeedItem from "@/components/ui/feed/Item.vue";
 import FeedItemHeader from "@/components/ui/feed/Header.vue";
 import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
@@ -259,6 +260,7 @@ export default {
     FeedItemTimestamp,
     FeedItemAttachement,
     FeedItemBody,
+    FeedArchiveInfo,
     FileType,
     MessageForm,
     NProgress

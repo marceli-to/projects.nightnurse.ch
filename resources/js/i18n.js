@@ -93,6 +93,7 @@ export default {
         'Projektbeteiligte': 'People on this project',
         'Löschen': 'Delete',
         'Heute, ': 'Today, ',
+        'Projekt ist archiviert und wird in 30 Tagen gelöscht.': 'Project is archived and will be deleted in 30 days.',
       },
 
       defaultLang: 'de',
