@@ -21416,7 +21416,6 @@ __webpack_require__.r(__webpack_exports__);
     },
     reply: function reply(uuid) {
       var _this3 = this;
-      this.message = null;
       this.axios.get("".concat(this.routes.fetch, "/").concat(uuid)).then(function (response) {
         _this3.message = response.data;
         _this3.toggleForm();
@@ -21782,6 +21781,7 @@ __webpack_require__.r(__webpack_exports__);
     // },
     handleReplyRecipients: function handleReplyRecipients() {
       var _this3 = this;
+      this.data.users = [];
       this.axios.get("".concat(this.routes.fetchMessageUsers, "/").concat(this.$props.message.uuid)).then(function (response) {
         response.data.forEach(function (user) {
           _this3.addOrRemoveRecipient(true, user);
