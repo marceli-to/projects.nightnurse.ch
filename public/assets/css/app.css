@@ -2681,6 +2681,12 @@ input[type="checkbox"].checkbox:focus{
 .leading-relaxed{
   line-height: 1.625;
 }
+.leading-5{
+  line-height: 1.25rem;
+}
+.leading-6{
+  line-height: 1.5rem;
+}
 .text-dark{
   --tw-text-opacity: 1;
   color: rgb(34 34 34 / var(--tw-text-opacity));
