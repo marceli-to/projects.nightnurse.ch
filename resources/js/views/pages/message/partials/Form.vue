@@ -297,7 +297,6 @@ export default {
       // Store this.data.private and this.data.users to local storage as one object
       // so that we can pre-select the values when the user returns to the page
       const storage = {
-        private: this.data.private,
         users: this.data.users,
       };
       const storageName = `recipients-${this.$route.params.uuid}-${this.data.private ? 'private' : 'public'}`;
@@ -378,6 +377,7 @@ export default {
       if (storage && storage.users.length > 0) {
         storage.users.forEach(user => {
           this.addOrRemoveRecipient(true, user);
+          this.project.associates = this.project.associates.filter(x => x.id !== user.id);
         });
         return;
       }
