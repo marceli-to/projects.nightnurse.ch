@@ -209,7 +209,7 @@ export default {
       isLoading: false,
       isVisible: false,
       isReply: false,
-      isManager: false,
+      isProjectManager: false,
       hasUpload: false,
 
       // Messages
@@ -271,16 +271,17 @@ export default {
         this.project.clients = responses[1].data.clients;
         this.project.owner = responses[1].data.owner;
         this.project.associates = responses[1].data.associates;
-        this.isManager = responses[1].data.isManager;
+        this.isProjectManager = responses[1].data.isProjectManager;
 
-        // 
         if (this.$props.message) {
+          // handle recipients in case of a reply
           this.isReply = true;
           this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
           this.data.message_uuid = this.$props.message.uuid;
           this.handleReplyRecipients();
         }
         else {
+          // handle recipients in case of a new message
           this.handleRecipients();
         }
 
@@ -385,6 +386,9 @@ export default {
           this.addOrRemoveRecipient(true, user);
         });
       });
+      
+      this.addOrRemoveRecipient(true, this.$props.message.sender);
+
     },
 
     // Add preselected recipients
@@ -402,20 +406,11 @@ export default {
       //   return;
       // }
 
-      // If its a reply, preselect the original recipients
-      if (this.isReply) {
-        console.log(this.project.users);
-        this.project.users.forEach(user => {
-          this.addOrRemoveRecipient(true, user);
-        });
-        return;
-      }
-
       // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
       
-      // Remove project manager from the associates to prevent double entries
-      if (this.isManager === false) {
+      // Add project manager to the recipients if the current user is not the project manager
+      if (this.isProjectManager === false) {
         this.project.associates.unshift(this.project.manager);
       }
       
@@ -424,11 +419,6 @@ export default {
         this.addOrRemoveRecipient(true, user);
         this.removePreSelectedUser(user);
       });
-
-      // Add sender of the original message if its a reply
-      if (this.isReply) {
-        this.addOrRemoveRecipient(true, this.$props.message.sender);
-      }
 
       // For messages from admins, preselect all client users for public messages or internal users for private messages
       if (this.$store.state.user.admin && !this.isReply) {

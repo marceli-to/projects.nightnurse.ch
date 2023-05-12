@@ -21625,7 +21625,7 @@ __webpack_require__.r(__webpack_exports__);
       isLoading: false,
       isVisible: false,
       isReply: false,
-      isManager: false,
+      isProjectManager: false,
       hasUpload: false,
       // Messages
       messages: {
@@ -21679,15 +21679,15 @@ __webpack_require__.r(__webpack_exports__);
         _this.project.clients = responses[1].data.clients;
         _this.project.owner = responses[1].data.owner;
         _this.project.associates = responses[1].data.associates;
-        _this.isManager = responses[1].data.isManager;
-
-        // 
+        _this.isProjectManager = responses[1].data.isProjectManager;
         if (_this.$props.message) {
+          // handle recipients in case of a reply
           _this.isReply = true;
           _this.data.subject = "Re: ".concat(_this.$props.message.subject ? _this.$props.message.subject : '');
           _this.data.message_uuid = _this.$props.message.uuid;
           _this.handleReplyRecipients();
         } else {
+          // handle recipients in case of a new message
           _this.handleRecipients();
         }
         _this.isFetched = true;
@@ -21787,6 +21787,7 @@ __webpack_require__.r(__webpack_exports__);
           _this3.addOrRemoveRecipient(true, user);
         });
       });
+      this.addOrRemoveRecipient(true, this.$props.message.sender);
     },
     // Add preselected recipients
     handleRecipients: function handleRecipients() {
@@ -21803,22 +21804,13 @@ __webpack_require__.r(__webpack_exports__);
       //   return;
       // }
 
-      // If its a reply, preselect the original recipients
-      if (this.isReply) {
-        console.log(this.project.users);
-        this.project.users.forEach(function (user) {
-          _this4.addOrRemoveRecipient(true, user);
-        });
-        return;
-      }
-
       // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(function (x) {
         return x.id !== _this4.project.manager.id;
       });
 
-      // Remove project manager from the associates to prevent double entries
-      if (this.isManager === false) {
+      // Add project manager to the recipients if the current user is not the project manager
+      if (this.isProjectManager === false) {
         this.project.associates.unshift(this.project.manager);
       }
 
@@ -21827,11 +21819,6 @@ __webpack_require__.r(__webpack_exports__);
         _this4.addOrRemoveRecipient(true, user);
         _this4.removePreSelectedUser(user);
       });
-
-      // Add sender of the original message if its a reply
-      if (this.isReply) {
-        this.addOrRemoveRecipient(true, this.$props.message.sender);
-      }
 
       // For messages from admins, preselect all client users for public messages or internal users for private messages
       if (this.$store.state.user.admin && !this.isReply) {

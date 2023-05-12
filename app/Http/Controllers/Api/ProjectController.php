@@ -140,7 +140,7 @@ class ProjectController extends Controller
           'owner' => $owner, 
           'clients' => $project_clients, 
           'associates' => $project_associates,
-          'isManager' => $project->user_id == auth()->user()->id
+          'isProjectManager' => $project->user_id == auth()->user()->id
         ]
       );
     }
@@ -210,7 +210,7 @@ class ProjectController extends Controller
       ],
       'clients' => $project_clients,
       'associates' => $project_associates,
-      'isManager' => false,
+      'isProjectManager' => false,
     ];
     return response()->json($data);
   }
