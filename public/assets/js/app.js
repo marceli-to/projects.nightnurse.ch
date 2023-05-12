@@ -21416,6 +21416,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     reply: function reply(uuid) {
       var _this3 = this;
+      this.message = null;
       this.axios.get("".concat(this.routes.fetch, "/").concat(uuid)).then(function (response) {
         _this3.message = response.data;
         _this3.toggleForm();
