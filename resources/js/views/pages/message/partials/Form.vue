@@ -296,12 +296,12 @@ export default {
 
       // Store this.data.private and this.data.users to local storage as one object
       // so that we can pre-select the values when the user returns to the page
-      // const storage = {
-      //   private: this.data.private,
-      //   users: this.data.users,
-      // };
-      // const storageName = `default-recipients-${this.data.private ? 'private' : 'public'}`;
-      // localStorage.setItem(storageName, JSON.stringify(storage));
+      const storage = {
+        private: this.data.private,
+        users: this.data.users,
+      };
+      const storageName = `recipients-${this.$route.params.uuid}-${this.data.private ? 'private' : 'public'}`;
+      localStorage.setItem(storageName, JSON.stringify(storage));
 
       if (this.validate()) {
         this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
@@ -364,7 +364,6 @@ export default {
       });
 
       // Add the sender of the message to the recipients
-      console.log(this.$props.message.sender);
       this.addOrRemoveRecipient(true, this.$props.message.sender);
     },
 
@@ -373,15 +372,15 @@ export default {
 
       // Next upgrade: check if there are any preselected recipients in local storage
       //-----------------------------------------------------------------------------
-      // const storageName = `default-recipients-${this.$store.state.feedType}`;
-      // const storage = JSON.parse(localStorage.getItem(storageName));
-      // // If there are users, loop over them and add them to the recipients array
-      // if (storage && !this.isReply) {
-      //   storage.users.forEach(user => {
-      //     this.addOrRemoveRecipient(true, user);
-      //   });
-      //   return;
-      // }
+      const storageName = `recipients-${this.$route.params.uuid}-${this.$store.state.feedType}`;
+      const storage = JSON.parse(localStorage.getItem(storageName));
+      // If there are users, loop over them and add them to the recipients array
+      if (storage && storage.users.length > 0) {
+        storage.users.forEach(user => {
+          this.addOrRemoveRecipient(true, user);
+        });
+        return;
+      }
 
       // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
