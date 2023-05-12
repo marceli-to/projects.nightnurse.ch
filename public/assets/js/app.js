@@ -23354,9 +23354,9 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "mt-4 mb-8 flex justify-center leading-7"
+    staticClass: "mt-4 mb-8 flex justify-center"
   }, [_c("div", {
-    staticClass: "notification inline-block p-2 w-auto border-2 border-red-500 text-red-500 max-w-sm"
+    staticClass: "notification inline-block p-2 w-auto border-2 border-red-500 text-red-500 max-w-sm leading-7"
   }, [_vm._v("\n    " + _vm._s(_vm.translate("Dieses Projekt ist archiviert. Alle Dateien werden ungefähr 30 Tage nach Abschluss gelöscht.")) + "\n  ")])]);
 };
 var staticRenderFns = [];
