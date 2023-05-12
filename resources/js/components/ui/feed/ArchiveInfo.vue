@@ -1,6 +1,6 @@
 <template>
   <div class="mt-4 mb-8 flex justify-center">
-    <div class="notification inline-block p-2 w-auto border-2 border-red-500 text-red-500 max-w-sm leading-7">
+    <div class="notification inline-block p-2 w-auto border-2 border-red-500 text-red-500 max-w-sm md:max-w-[600px] text-center leading-5">
       {{ translate('Dieses Projekt ist archiviert. Alle Dateien werden ungefähr 30 Tage nach Abschluss gelöscht.') }}
     </div>
   </div>
