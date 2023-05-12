@@ -357,6 +357,7 @@ export default {
     },
 
     reply(uuid) {
+      this.message = null;
       this.axios.get(`${this.routes.fetch}/${uuid}`).then(response => {
         this.message = response.data;
         this.toggleForm();

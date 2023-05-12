@@ -197,7 +197,7 @@ export default {
 
       // Routes
       routes: {
-        fetch: '/api/project',
+        fetchProject: '/api/project',
         fetchUsers: '/api/project/users',
         fetchMessageUsers: '/api/message/users',
         post: '/api/message/queue',
@@ -247,7 +247,7 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('paste', this.handlePaste);
+    // document.addEventListener('paste', this.handlePaste);
   },
 
   created() {
@@ -258,13 +258,13 @@ export default {
   methods: {
 
     /**
-     * Messsage
+     * Message
      */
 
     fetch() {
       this.isFetched = false;
       this.axios.all([
-        this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`),
+        this.axios.get(`${this.routes.fetchProject}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.fetchUsers}/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
@@ -273,6 +273,7 @@ export default {
         this.project.associates = responses[1].data.associates;
         this.isManager = responses[1].data.isManager;
 
+        // 
         if (this.$props.message) {
           this.isReply = true;
           this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
@@ -356,26 +357,26 @@ export default {
       }
     },
 
-    handlePaste(event) {
-      const items = (event.clipboardData || event.originalEvent.clipboardData).items;
-      if (!items) return;
+    // handlePaste(event) {
+    //   const items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    //   if (!items) return;
 
-      const files = [];
+    //   const files = [];
 
-      for (let i = 0; i < items.length; i++) {
-        const item = items[i];
+    //   for (let i = 0; i < items.length; i++) {
+    //     const item = items[i];
 
-        if (item.kind === 'file') {
-          const file = item.getAsFile();
-          //this.$refs.dropzone.manuallyAddFile(files, { accepted: true, status: 'queued' })
-          //files.push(file);
-        }
-      }
+    //     if (item.kind === 'file') {
+    //       const file = item.getAsFile();
+    //       //this.$refs.dropzone.manuallyAddFile(files, { accepted: true, status: 'queued' })
+    //       //files.push(file);
+    //     }
+    //   }
 
-      if (files.length > 0) {
-        this.$refs.dropzone.manuallyAddFile(files[0], {})
-      }
-    },
+    //   if (files.length > 0) {
+    //     this.$refs.dropzone.manuallyAddFile(files[0], {})
+    //   }
+    // },
 
     handleReplyRecipients() {
       this.axios.get(`${this.routes.fetchMessageUsers}/${this.$props.message.uuid}`).then(response => {
