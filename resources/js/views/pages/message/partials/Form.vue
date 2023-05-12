@@ -246,10 +246,6 @@ export default {
     };
   },
 
-  mounted() {
-    // document.addEventListener('paste', this.handlePaste);
-  },
-
   created() {
     this.fetch();
     this.data.private = this.$store.state.feedType === 'private' ? 1 : 0;
@@ -358,27 +354,6 @@ export default {
       }
     },
 
-    // handlePaste(event) {
-    //   const items = (event.clipboardData || event.originalEvent.clipboardData).items;
-    //   if (!items) return;
-
-    //   const files = [];
-
-    //   for (let i = 0; i < items.length; i++) {
-    //     const item = items[i];
-
-    //     if (item.kind === 'file') {
-    //       const file = item.getAsFile();
-    //       //this.$refs.dropzone.manuallyAddFile(files, { accepted: true, status: 'queued' })
-    //       //files.push(file);
-    //     }
-    //   }
-
-    //   if (files.length > 0) {
-    //     this.$refs.dropzone.manuallyAddFile(files[0], {})
-    //   }
-    // },
-
     handleReplyRecipients() {
       this.data.users = [];
       this.$store.commit('recipients', this.data.users);
@@ -388,8 +363,9 @@ export default {
         });
       });
 
+      // Add the sender of the message to the recipients
+      console.log(this.$props.message.sender);
       this.addOrRemoveRecipient(true, this.$props.message.sender);
-
     },
 
     // Add preselected recipients
