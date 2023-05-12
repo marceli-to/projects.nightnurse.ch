@@ -2,7 +2,6 @@
 <div v-if="isFetched" class="max-w-5xl">
   <header class="mb-4 md:mb-6 pt-2 sm:pt-3 pb-2 md:pb-4 sticky top-0 bg-white z-40 border-bottom -ml-[1px] pl-[1px]">
     <div class="relative">
-      <feed-archive-info v-if="project.state.id == 2" />
       <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-2xl leading-snug sm:leading-normal">
         <div class="text-dark" v-if="project.company">
           <div class="font-normal text-sm">
@@ -144,6 +143,7 @@
 
   <template>
     <feed>
+      <feed-archive-info v-if="project.state.id == 2" />
       <div v-for="(items, day) in feedItems" :key="day" class="relative">
         <feed-item-timestamp v-if="filteredItems(items).length">{{ day }}</feed-item-timestamp>
         <feed-item 

@@ -1,6 +1,8 @@
 <template>
-  <div class="notification border-2 border-red-500 text-red-500 mb-4 mt-2 md:mb-0 md:!absolute inline-block w-auto right-0 leading-snug p-2">
-    {{ translate('Projekt ist archiviert und wird in 30 Tagen gelöscht.') }}
+  <div class="mt-4 mb-8 flex justify-center leading-snug">
+    <div class="notification inline-block p-2 w-auto border-2 border-red-500 text-red-500">
+      {{ translate('Dieses Projekt ist archiviert und wird in 30 Tagen gelöscht.') }}
+    </div>
   </div>
 </template>
 <script>
