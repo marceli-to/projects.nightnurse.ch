@@ -23673,7 +23673,7 @@ var render = function render() {
       "aria-hidden": "true"
     }
   }), _vm._v(" "), _c("span", {
-    "class": [_vm.message["private"] || _vm.message.internal ? "text-gray-400" : "text-dark", "hover:text-highlight inline-block ml-2"]
+    staticClass: "inline-block ml-2"
   }, [_vm._v(_vm._s(_vm.translate("Weniger anzeigen")))])], 1), _vm._v(" "), _vm.message.files.length > 1 ? _c("a", {
     "class": [_vm.message["private"] || _vm.message.internal ? "text-gray-400" : "text-dark", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
     attrs: {
@@ -23686,7 +23686,7 @@ var render = function render() {
       "aria-hidden": "true"
     }
   }), _vm._v(" "), _c("span", {
-    "class": [_vm.message["private"] || _vm.message.internal ? "text-gray-400" : "text-dark", "hover:text-highlight inline-block ml-2"]
+    staticClass: "inline-block ml-2"
   }, [_vm._v(_vm._s(_vm.translate("Download als ZIP")))])], 1) : _vm._e()]) : _vm._e()], 2) : _vm._e(), _vm._v(" "), _c("feed-item-reactions", {
     attrs: {
       reactions: _vm.message.reactions
