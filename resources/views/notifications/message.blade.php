@@ -11,7 +11,7 @@
 <td>
 <div class="text-xs font-mono font-bold">
 {{$message['sender']['full_name']}}
-@if ({{$message['sender']['phone']}})
+@if ($message['sender']['phone'])
 <a href="tel:{{$message['sender']['phone']}}" class="text-xs font-mono font-bold no-underline">{{$message['sender']['phone']}}</a>
 @endif
 </div>
