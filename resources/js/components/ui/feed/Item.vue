@@ -82,7 +82,7 @@
               <a
                 href="javascript:;" 
                 @click="toggle(message.uuid)"
-                :class="[message.private ? 'text-gray-400' : 'text-slate-100', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
+                :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
                 v-else>
                 <chevron-up-icon class="h-4 w-4" aria-hidden="true" />
                 <span :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'hover:text-highlight inline-block ml-2']">{{ translate('Weniger anzeigen') }}</span>
@@ -91,7 +91,7 @@
               <a 
                 :href="`/download/zip/${message.uuid}`" 
                 target="_blank" 
-                :class="[message.private ? 'text-gray-400' : 'text-slate-100', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
+                :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
                 v-if="message.files.length > 1">
                 <folder-download-icon class="h-5 w-5" aria-hidden="true" />
                 <span :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'hover:text-highlight inline-block ml-2']">{{ translate('Download als ZIP') }}</span>
