@@ -12,7 +12,7 @@
 <div class="text-xs font-mono font-bold">
 {{$message['sender']['full_name']}}
 @if ($message['sender']['phone'])
-<br><a href="tel:{{$message['sender']['phone']}}" class="text-xs font-mono font-bold no-underline text-black">{{$message['sender']['phone']}}</a>
+ – <a href="tel:{{$message['sender']['phone']}}" class="text-xs font-mono font-bold no-underline text-black" style="color: #000000">{{$message['sender']['phone']}}</a>
 @endif
 </div>
 @if ($message['users'])
