@@ -110,7 +110,6 @@ class MessageController extends Controller
     }
 
     // Add users to message user table
-    // @todo: check if a user has "no notifications enabled" and set "processed" to 1
     if ($request->input('users'))
     {
       foreach($request->input('users') as $user)

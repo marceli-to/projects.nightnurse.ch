@@ -9,7 +9,9 @@
 @include('notifications.partials.logo')
 </td>
 <td>
-<div class="text-xs font-mono font-bold">{{$message['sender']['full_name']}}</div>
+<div class="text-xs font-mono font-bold">
+  {{$message['sender']['full_name']}} {{$message['sender']['phone']}}
+</div>
 @if ($message['users'])
 <div class="text-xs text-sm font-mono">
 An: 
