@@ -23641,7 +23641,7 @@ var render = function render() {
   }), _vm._v(" "), _vm.message.files.length > 3 ? _c("span", {
     staticClass: "sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4"
   }, [_vm.hasTruncateFiles ? _c("a", {
-    "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
+    "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
     attrs: {
       href: "javascript:;"
     },
@@ -23658,7 +23658,7 @@ var render = function render() {
   }), _vm._v(" "), _c("span", {
     "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "inline-block ml-2"]
   }, [_vm._v(_vm._s(_vm.translate("Mehr anzeigen")) + " (" + _vm._s(_vm.message.files.length - 3) + ")")])], 1) : _c("a", {
-    "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
+    "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
     attrs: {
       href: "javascript:;"
     },
@@ -23675,7 +23675,7 @@ var render = function render() {
   }), _vm._v(" "), _c("span", {
     "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "inline-block ml-2"]
   }, [_vm._v(_vm._s(_vm.translate("Weniger anzeigen")))])], 1), _vm._v(" "), _vm.message.files.length > 1 ? _c("a", {
-    "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
+    "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
     attrs: {
       href: "/download/zip/".concat(_vm.message.uuid),
       target: "_blank"
