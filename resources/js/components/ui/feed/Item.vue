@@ -77,7 +77,7 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
                 v-if="hasTruncateFiles">
                 <chevron-down-icon class="h-4 w-4" aria-hidden="true" />
-                <span :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'inline-block ml-2']">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
+                <span :class="[message.private ? 'text-gray-400' : 'text-slate-100', 'inline-block ml-2']">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
               </a>
               <a
                 href="javascript:;" 
@@ -85,7 +85,7 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
                 v-else>
                 <chevron-up-icon class="h-4 w-4" aria-hidden="true" />
-                <span :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'inline-block ml-2']">{{ translate('Weniger anzeigen') }}</span>
+                <span :class="[message.private ? 'text-gray-400' : 'text-slate-100', 'inline-block ml-2']">{{ translate('Weniger anzeigen') }}</span>
               </a>
 
               <a 
@@ -94,7 +94,7 @@
                 :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
                 v-if="message.files.length > 1">
                 <folder-download-icon class="h-5 w-5" aria-hidden="true" />
-                <span :class="[message.private ? 'text-slate-100' : 'text-gray-400', 'inline-block ml-2']">{{ translate('Download als ZIP') }}</span>
+                <span :class="[message.private ? 'text-gray-400' : 'text-slate-100', 'inline-block ml-2']">{{ translate('Download als ZIP') }}</span>
               </a>
               
             </span>

@@ -23656,7 +23656,7 @@ var render = function render() {
       "aria-hidden": "true"
     }
   }), _vm._v(" "), _c("span", {
-    "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "inline-block ml-2"]
+    "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "inline-block ml-2"]
   }, [_vm._v(_vm._s(_vm.translate("Mehr anzeigen")) + " (" + _vm._s(_vm.message.files.length - 3) + ")")])], 1) : _c("a", {
     "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
     attrs: {
@@ -23673,7 +23673,7 @@ var render = function render() {
       "aria-hidden": "true"
     }
   }), _vm._v(" "), _c("span", {
-    "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "inline-block ml-2"]
+    "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "inline-block ml-2"]
   }, [_vm._v(_vm._s(_vm.translate("Weniger anzeigen")))])], 1), _vm._v(" "), _vm.message.files.length > 1 ? _c("a", {
     "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
     attrs: {
@@ -23686,7 +23686,7 @@ var render = function render() {
       "aria-hidden": "true"
     }
   }), _vm._v(" "), _c("span", {
-    "class": [_vm.message["private"] ? "text-slate-100" : "text-gray-400", "inline-block ml-2"]
+    "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "inline-block ml-2"]
   }, [_vm._v(_vm._s(_vm.translate("Download als ZIP")))])], 1) : _vm._e()]) : _vm._e()], 2) : _vm._e(), _vm._v(" "), _c("feed-item-reactions", {
     attrs: {
       reactions: _vm.message.reactions
