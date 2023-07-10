@@ -10,10 +10,10 @@
 </td>
 <td>
 <div class="text-xs font-mono font-bold">
-  {{$message['sender']['full_name']}}
-  @if ({{$message['sender']['phone']}})
-    <a href="tel:{{$message['sender']['phone']}}" class="text-xs font-mono font-bold no-underline">{{$message['sender']['phone']}}</a>
-  @endif
+{{$message['sender']['full_name']}}
+@if ({{$message['sender']['phone']}})
+<a href="tel:{{$message['sender']['phone']}}" class="text-xs font-mono font-bold no-underline">{{$message['sender']['phone']}}</a>
+@endif
 </div>
 @if ($message['users'])
 <div class="text-xs text-sm font-mono">
