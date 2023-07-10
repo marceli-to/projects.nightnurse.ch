@@ -23641,7 +23641,7 @@ var render = function render() {
   }), _vm._v(" "), _vm.message.files.length > 3 ? _c("span", {
     staticClass: "sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4"
   }, [_vm.hasTruncateFiles ? _c("a", {
-    "class": [_vm.message["private"] ? "text-gray-400" : "text-slate-100", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
+    "class": [_vm.message["private"] || _vm.message.internal ? "text-gray-400" : "text-slate-100", "flex items-center no-underline hover:text-highlight mt-3 sm:mt-0"],
     attrs: {
       href: "javascript:;"
     },

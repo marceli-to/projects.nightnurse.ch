@@ -74,10 +74,10 @@
               <a 
                 href="javascript:;" 
                 @click="toggle(message.uuid)"
-                :class="[message.private ? 'text-gray-400' : 'text-slate-100', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
+                :class="[message.private || message.internal ? 'text-gray-400' : 'text-slate-100', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
                 v-if="hasTruncateFiles">
                 <chevron-down-icon class="h-4 w-4" aria-hidden="true" />
-                <span :class="[message.private ||  message.internal ? 'text-gray-400' : 'text-slate-100', 'hover:text-highlight inline-block ml-2']">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
+                <span :class="[message.private || message.internal ? 'text-gray-400' : 'text-slate-100', 'hover:text-highlight inline-block ml-2']">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
               </a>
               <a
                 href="javascript:;" 
