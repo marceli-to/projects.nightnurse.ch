@@ -272,7 +272,14 @@ export default {
         if (this.$props.message) {
           // handle recipients in case of a reply
           this.isReply = true;
-          this.data.subject = `Re: ${this.$props.message.subject ? this.$props.message.subject : ''}`;
+
+          // add 'Re: ' to this.data.subject if it's not already in this.$props.message.subject
+          if (this.$props.message.subject && !this.$props.message.subject.startsWith('Re: ')) {
+            this.data.subject = `Re: ${this.$props.message.subject}`;
+          }
+          else {
+            this.data.subject = this.$props.message.subject;
+          }
           this.data.message_uuid = this.$props.message.uuid;
           this.handleReplyRecipients();
         }
