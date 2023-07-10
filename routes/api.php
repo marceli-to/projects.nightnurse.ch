@@ -100,7 +100,8 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('reaction-types', [ReactionTypeController::class, 'get']);
   Route::post('reaction', [ReactionController::class, 'store']);
 
-  
+  Route::get('notification/latest', [NotificationController::class, 'findLatest']);
+
   // Routes for admins only
   Route::middleware('role:admin')->group(function() {
 
@@ -149,7 +150,6 @@ Route::middleware('auth:sanctum')->group(function() {
 
     // Notifications
     Route::get('notifications', [NotificationController::class, 'get']);
-    Route::get('notification/latest', [NotificationController::class, 'findLatest']);
     Route::get('notification/{notification}', [NotificationController::class, 'find']);
     Route::post('notification', [NotificationController::class, 'store']);
     Route::put('notification/{notification}', [NotificationController::class, 'update']);
