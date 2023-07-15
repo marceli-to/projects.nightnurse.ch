@@ -86,7 +86,7 @@ class NotificationController extends Controller
    * @param Notification $notification
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Notification $notification, NotificationService $notificationService)
+  public function destroy(Notification $notification)
   {
     $notification->delete();
     return response()->json('successfully deleted');
