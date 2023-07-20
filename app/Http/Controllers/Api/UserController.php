@@ -178,7 +178,7 @@ class UserController extends Controller
       'uuid' => \Str::uuid(),
       'email' => $request->input('email'),
       'email_verified_at' => \Carbon\Carbon::now(),
-      'language_id' => $request->input('language_id'),
+      'language_id' => 1,
       'company_id' => $company->id,
       'gender_id' => 1,
       'role_id' => $company->owner ? 1 : 2,
