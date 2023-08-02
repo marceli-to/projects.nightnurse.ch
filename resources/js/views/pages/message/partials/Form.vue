@@ -41,8 +41,12 @@
             ref="dropzone"
             id="dropzone"
             :options="dropzoneConfig"
+            @vdropzone-file-added="uploadFileAdded"
+            @vdropzone-files-added="uploadFilesAdded"
             @vdropzone-success="uploadSuccess"
             @vdropzone-complete="uploadComplete"
+            @vdropzone-complete-multiple="uploadCompleteMultiple"
+            @vdropzone-queue-complete="uploadQueueComplete"
             @vdropzone-max-files-exceeded="uploadMaxFilesExceeded"
             :useCustomSlot=true>
             <div class="text-dark text-sm">
@@ -50,7 +54,7 @@
               <div>{{ translate('max. Grösse 250 MB') }}</div>
             </div>
           </vue-dropzone>
-          <list v-if="hasUpload && data.files.length" class="my-4 sm:my-6 lg:my-8">
+          <list v-if="hasUploads" class="my-4 sm:my-6 lg:my-8">
             <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
               <div class="flex items-center no-underline hover:text-highlight py-2">
                 <img 
@@ -210,7 +214,8 @@ export default {
       isVisible: false,
       isReply: false,
       isProjectManager: false,
-      hasUpload: false,
+      hasUploads: false,
+      hasValidUpload: true,
 
       // Messages
       messages: {
@@ -229,6 +234,7 @@ export default {
         maxFiles: 99,
         createImageThumbnails: false,
         autoProcessQueue: true,
+        uploadMultiple: true,
         //acceptedFiles: '',
         previewTemplate: this.uploadTemplate(),
         headers: {
@@ -440,10 +446,22 @@ export default {
      * Image/File Upload 
      */
 
+    uploadFileAdded(file) {
+      this.hasValidUpload = false;
+    },
+
+    uploadFilesAdded(file) {
+      this.hasValidUpload = false;
+    },
+
     uploadSuccess(file, response) {
       let res = JSON.parse(file.xhr.response);
-      this.hasUpload = true;
       this.data.files.push(res);
+      this.hasUploads = true;
+    },
+
+    uploadQueueComplete() {
+      this.hasValidUpload = true;
     },
 
     uploadComplete(file) {
@@ -471,6 +489,12 @@ export default {
       else {
         this.$refs.dropzone.removeFile(file);
       }
+    },
+
+    uploadCompleteMultiple(files) {
+      files.forEach(file => {
+        this.uploadComplete(file);
+      });
     },
 
     uploadMaxFilesExceeded(file) {
@@ -521,8 +545,8 @@ export default {
       return `${this.translate('Neue Nachricht')} <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     },
 
-    isValidMessage() {
-      if ((!this.data.subject && this.data.body == '' && this.data.files.length == 0) || this.data.users.length == 0) {
+    isValidMessage() {      
+      if (((this.data.subject == null || this.data.subject == '') && this.data.body == '' && (!this.hasValidUpload || this.data.files.length == 0)) || this.data.users.length == 0) {
         return false;
       }
       return true;

@@ -61,8 +61,8 @@ class Media
    */
   public function store(Request $request, $destinationFolder = NULL)
   {
-    $file = $request->file('file');
-    $file_data = getimagesize($request->file('file'));
+    $file = $request->file('file')[0];
+    $file_data = getimagesize($file);
     $name = $this->sanitize(trim($file->getClientOriginalName()), $this->force_lowercase);
     $filename = $this->uniqueFileName($name);
     $file->move($this->upload_path, $filename);
