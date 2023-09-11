@@ -43,6 +43,7 @@ class UserController extends Controller
   {
     $user  = User::with('language')->findOrFail(auth()->user()->id);
     $data = [
+      'uuid' => $user->uuid,
       'firstname' => $user->firstname, 
       'name' => $user->name,
       'email' => $user->email,

@@ -16,7 +16,10 @@ class MessageUserController extends Controller
    */
   public function get(Message $message)
   {
-    $message_users = MessageUser::where('message_id', $message->id)->with('user')->get();
+    $message_users = MessageUser::where('message_id', $message->id)
+                      ->where('user_id', '!=', auth()->user()->id)
+                      ->with('user')
+                      ->get();
     if ($message_users)
     {
       foreach($message_users as $message_user)

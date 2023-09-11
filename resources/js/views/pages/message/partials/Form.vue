@@ -277,7 +277,8 @@ export default {
         this.project.owner = responses[1].data.owner;
         this.project.associates = responses[1].data.associates;
         this.isProjectManager = responses[1].data.isProjectManager;
-
+        
+        
         if (this.$props.message) {
           // handle recipients in case of a reply
           this.isReply = true;
@@ -291,6 +292,7 @@ export default {
           }
           this.data.message_uuid = this.$props.message.uuid;
           this.handleReplyRecipients();
+
         }
         else {
           // handle recipients in case of a new message
@@ -380,6 +382,8 @@ export default {
 
       // Add the sender of the message to the recipients
       this.addOrRemoveRecipient(true, this.$props.message.sender);
+
+      this.removePreSelectedUser(this.$store.state.user);
     },
 
     // Add preselected recipients
@@ -566,7 +570,6 @@ export default {
         return false;
       }
     },
-
   }
 };
 </script>
