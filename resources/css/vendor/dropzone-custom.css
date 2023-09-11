@@ -18,11 +18,17 @@
 }
 
 .dropzone .dz-preview {
-  @apply block m-0 !min-h-0 relative;
+  @apply inline-flex !min-h-0 relative bg-transparent m-0 mr-2;
 }
 
 .dropzone .dz-message strong {
   @apply text-dark text-base;
+}
+
+
+.dropzone .dz-preview.dz-file-preview .dz-image {
+  background: none !important;
+  @apply !rounded-none !bg-gray-100;
 }
 
 .dropzone .dz-preview .dz-image {
@@ -30,8 +36,11 @@
 }
 
 .dropzone .dz-preview .dz-progress {
-  @apply bg-light border-0 mx-0 h-3 opacity-100 overflow-hidden pointer-events-none absolute w-full left-0 top-12;
+  @apply bg-light border-0 mx-0 h-3 opacity-100 overflow-hidden pointer-events-none absolute w-full left-0 top-1;
   z-index: 1000;
 }
 
 
+.dropzone .dz-preview .dz-progress .dz-upload {
+  display: inline-block !important;
+}

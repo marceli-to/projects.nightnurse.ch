@@ -339,10 +339,12 @@ padding: 20px 20px; }
     overflow: hidden; }
     .dropzone .dz-preview .dz-progress .dz-upload {
       background: #ff008b;
-      position: absolute;
-      top: 0;
+      position: relative;
+      margin-bottom: 10px;
+      min-height: 30px;
+      /* top: 0;
       left: 0;
-      bottom: 0;
+      bottom: 0; */
       width: 0;
       -webkit-transition: width 300ms ease-in-out;
       -moz-transition: width 300ms ease-in-out;

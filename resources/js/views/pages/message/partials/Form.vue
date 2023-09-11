@@ -54,6 +54,7 @@
               <div>{{ translate('max. Grösse 250 MB') }}</div>
             </div>
           </vue-dropzone>
+
           <list v-if="hasUploads" class="my-4 sm:my-6 lg:my-8">
             <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
               <div class="flex items-center no-underline hover:text-highlight py-2">
@@ -94,7 +95,7 @@
         <a href="javascript:;" class="form-helper form-helper-footer" @click="hide()">
           <span>{{ translate('Abbrechen') }}</span>
         </a>
-        <button type="submit" :class="[!isValidMessage ? 'pointer-events-none opacity-40' : '', 'btn-send']">
+        <button type="submit" :class="[!allowSubmit ? 'pointer-events-none opacity-40' : '', 'btn-send']">
           <mail-icon class="h-5 w-5" aria-hidden="true" />
           <span class="block ml-2">{{ translate('Senden') }}</span>
         </button>
@@ -236,11 +237,13 @@ export default {
         autoProcessQueue: true,
         uploadMultiple: true,
         //acceptedFiles: '',
-        previewTemplate: this.uploadTemplate(),
+        //previewTemplate: this.uploadTemplate(),
         headers: {
           'x-csrf-token': document.head.querySelector('meta[name="csrf-token"]').content
         }
       },
+
+      uploadProgress: null,
 
       // TinyMCE
       tinyConfig: tinyConfig,
@@ -545,11 +548,23 @@ export default {
       return `${this.translate('Neue Nachricht')} <span class="text-highlight">${this.project.number} – ${this.project.name}</span>`;
     },
 
-    isValidMessage() {      
-      if (((this.data.subject == null || this.data.subject == '') && this.data.body == '' && (!this.hasValidUpload || this.data.files.length == 0)) || this.data.users.length == 0) {
+    allowSubmit() {
+      // Form submission is allowed if:
+      // 1. this.data.subject is not empty or null and this.data.files is empty and this.data.users is not empty
+      // 2. this.data.body is not empty and this.data.files is empty and this.data.users is not empty
+      // 3. this.data.files is not empty and this.data.users is not empty
+      if (this.data.subject && this.data.subject.length > 0 && this.data.files.length == 0 && this.data.users.length > 0 && this.hasValidUpload) {
+        return true;
+      }
+      else if (this.data.body && this.data.body.length > 0 && this.data.files.length == 0 && this.data.users.length > 0 && this.hasValidUpload) {
+        return true;
+      }
+      else if (this.data.files.length > 0 && this.data.users.length > 0 && this.hasValidUpload) {
+        return true;
+      }
+      else {
         return false;
       }
-      return true;
     },
 
   }
