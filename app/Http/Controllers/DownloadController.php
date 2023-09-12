@@ -31,6 +31,10 @@ class DownloadController extends Controller
       $path = storage_path('app/public/uploads/');
       foreach($message->files as $file)
       {
+        if ($file->folder)
+        {
+          $path = storage_path('app/public/uploads/' . $file->folder . '/');
+        }
         $archive->addFile($path . $file->name, $file->name);
       }
       $archive->close();

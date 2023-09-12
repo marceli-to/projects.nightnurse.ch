@@ -242,7 +242,7 @@ export default {
         maxFiles: 99,
         createImageThumbnails: false,
         autoProcessQueue: true,
-        uploadMultiple: true,
+        uploadMultiple: false,
         //acceptedFiles: '',
         //previewTemplate: this.uploadTemplate(),
         headers: {

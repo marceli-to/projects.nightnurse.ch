@@ -61,7 +61,7 @@ class Media
    */
   public function store(Request $request, $destinationFolder = NULL)
   {
-    $file = $request->file('file')[0];
+    $file = $request->file('file');
     $file_data = getimagesize($file);
     $name = $this->sanitize(trim($file->getClientOriginalName()), $this->force_lowercase);
     $filename = $this->uniqueFileName($name);
@@ -84,10 +84,31 @@ class Media
    * Copy a file from temp to storage folder
    * 
    * @param String $filename
+   * @param String $folder
    */
-  public function copy($filename = NULL)
+  public function copy($filename = NULL, $folder = NULL)
   {
-    return Storage::move('public/uploads/temp' . DIRECTORY_SEPARATOR . $filename, 'public/uploads' . DIRECTORY_SEPARATOR . $filename);
+    if ($folder)
+    {
+      if (!File::isDirectory($this->storage_path . DIRECTORY_SEPARATOR . $folder))
+      {
+        File::makeDirectory($this->storage_path . DIRECTORY_SEPARATOR . $folder, 0775, true, true);
+      }
+
+      $newFilename = $this->uniqueFileName($filename, $folder);
+
+      return 
+        Storage::move(
+          'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
+          'public/uploads' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $newFilename
+        );
+    }
+
+    return 
+      Storage::move(
+        'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
+        'public/uploads' . DIRECTORY_SEPARATOR . $filename
+      );
   }
 
   /**
@@ -103,9 +124,29 @@ class Media
       {
         Storage::delete('public/uploads/temp' . DIRECTORY_SEPARATOR . $file->name);
       }
-      Storage::delete('public/uploads' . DIRECTORY_SEPARATOR . $file->name);
+      else
+      {
+        if ($file->folder)
+        {
+          Storage::delete('public/uploads' . DIRECTORY_SEPARATOR . $file->folder . DIRECTORY_SEPARATOR . $file->name);
+        }
+        else {
+          Storage::delete('public/uploads' . DIRECTORY_SEPARATOR . $file->name);
+        }
+      }
     }
     return true;
+  }
+
+  /** 
+   * Remove a folder from storage
+   * 
+   * @param String $folder
+   */
+
+  public function removeFolder($folder = NULL)
+  {
+    return Storage::deleteDirectory('public/uploads' . DIRECTORY_SEPARATOR . $folder);
   }
 
   /**
@@ -569,26 +610,32 @@ class Media
    * - file.png => file-1.png
    * - file-1.png => file-2.png
    */
-  protected function uniqueFileName($filename)
+  protected function uniqueFileName($filename, $folder = NULL)
   {
     $current_name = pathinfo($filename, PATHINFO_FILENAME);
     $name = $current_name;
     $extension = pathinfo($filename, PATHINFO_EXTENSION);
 
-    // check in destination folder
-    while(file_exists($this->storage_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
-    {           
-      $name = $name . '-' .  uniqid();
+    if ($folder)
+    {
+      // check in destination folder
+      while(file_exists($this->storage_path . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $name . '.' . $extension))
+      {           
+        $name = $name . '-' .  uniqid();
+      }
+    }
+    else 
+    {
+      // check in temp folder
+      $current_name = str_replace($extension, '', $name);
+      $name = $current_name;
+
+      while(file_exists($this->upload_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
+      {           
+        $name = $name . '-' .  uniqid();
+      }
     }
 
-    // check in temp folder
-    $current_name = str_replace($extension, '', $name);
-    $name = $current_name;
-
-    while(file_exists($this->upload_path . DIRECTORY_SEPARATOR . $name . '.' . $extension))
-    {           
-      $name = $name . '-' .  uniqid();
-    }
     return $name . '.' . $extension;
   }
   

@@ -540,12 +540,15 @@ export default {
       const _this = this;
       const state = event.target.checked ? true : false;
       const boxes = this.$refs[uuid];
-      boxes.forEach(function(box){
-        if (!box.disabled) {
-          box.checked = state;
-          _this.addOrRemove(state, box.value);
-        }
-      });
+
+      if (boxes) {
+        boxes.forEach(function(box){
+          if (!box.disabled) {
+            box.checked = state;
+            _this.addOrRemove(state, box.value);
+          }
+        });
+      }
     },
 
     toggleOne(event, id) {

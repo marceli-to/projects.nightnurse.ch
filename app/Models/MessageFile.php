@@ -13,6 +13,7 @@ class MessageFile extends Base
     'uuid',
     'name',
     'original_name',
+    'folder',
     'extension',
     'size',
     'preview',

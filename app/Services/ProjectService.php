@@ -30,10 +30,12 @@ class ProjectService
       // Get all files for the message
       $files = $message->files;
 
+      $this->media->removeMany($files);
+      $this->media->removeFolder($project->uuid);
+
       // Loop through each file and delete it
       foreach ($files as $file)
       {
-        $this->media->remove($file->name);
         $file->delete();
       }
 

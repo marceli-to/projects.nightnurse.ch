@@ -95,12 +95,13 @@ class MessageController extends Controller
     {
       foreach($request->input('files') as $file)
       {
-        $media = (new Media())->copy($file['name']);
+        $media = (new Media())->copy($file['name'], $project->uuid);
 
         $messageFile = MessageFile::create([
           'uuid' => \Str::uuid(),
           'name' => $file['name'],
           'original_name' => $file['original_name'],
+          'folder' => $project->uuid,
           'extension' => $file['extension'] ,
           'size' => $file['size'],
           'preview' => $file['preview'],
@@ -126,6 +127,8 @@ class MessageController extends Controller
       }
     }
 
+    // Update last_activity only for public messages since private messages 
+    // are not shown in the project list and therefore don't need to update
     if (!$request->input('private'))
     {
       $project->last_activity = \Carbon\Carbon::now();

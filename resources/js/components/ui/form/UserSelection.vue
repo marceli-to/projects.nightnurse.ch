@@ -98,7 +98,7 @@ export default {
     },
 
     clients: {
-      type: Object,
+      type: [Object, Array],
       default: () => {},
     },
 
@@ -134,7 +134,7 @@ export default {
     },
 
     filterOwnerTeams(teams) {
-      // filter out owenr teams, if $props.private is true, show all teams
+      // filter out owner teams, if $props.private is true, show all teams
       if (this.$props.private) {
         return teams;
       }

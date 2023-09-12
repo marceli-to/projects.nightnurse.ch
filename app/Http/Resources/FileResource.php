@@ -16,6 +16,7 @@ class FileResource extends JsonResource
       'uuid' => $this->uuid,
       'name' => $this->name,
       'original_name' => $this->original_name,
+      'folder' => $this->folder,
       'extension' => $this->extension,
       'preview' => $this->preview,
       'size' => $this->size,

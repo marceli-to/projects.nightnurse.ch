@@ -42,15 +42,27 @@ An:
 <table class="border-top" style="width: 100%">
 <tr>
   <td class="py-15" style="width: 60px">
-    <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-sm">
-      <img src="{{url('')}}/img/thumbnail/{{$file['name']}}" alt="" title="" height="50" width="50" class="img img-thumbnail img-rounded">
-    </a>
+    @if ($file['folder'])
+      <a href="{{url('')}}/storage/uploads/{{$file['folder']}}/{{$file['name']}}" target="_blank" class="font-mono text-sm">
+        <img src="{{url('')}}/img/thumbnail/{{$file['folder']}}/{{$file['name']}}" alt="" title="" height="50" width="50" class="img img-thumbnail img-rounded">
+      </a>
+    @else
+      <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-sm">
+        <img src="{{url('')}}/img/thumbnail/{{$file['name']}}" alt="" title="" height="50" width="50" class="img img-thumbnail img-rounded">
+      </a>
+    @endif
   </td>
   <td class="py-15" style="vertical-align: middle">
     <span class="text-xs font-mono">
-      <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">
-        {{$file['original_name']}}
-      </a>
+      @if ($file['folder'])
+        <a href="{{url('')}}/storage/uploads/{{$file['folder']}}/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">
+          {{$file['original_name']}}
+        </a>
+      @else
+        <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">
+          {{$file['original_name']}}
+        </a>
+      @endif
     </span>
   </td>
 </tr>
