@@ -92,7 +92,7 @@
     @cancelMessage="hideForm()" v-if="hasForm">
   </message-form>
   
-  <div class="hidden sm:flex justify-between">
+  <div class="sm:flex justify-between">
     <template v-if="$store.state.user.admin">
       <template v-if="$store.state.feedType == 'private'">
         <a href="javascript:;" 
@@ -113,7 +113,7 @@
     </template>
     <template>
       <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex justify-center items-center no-underline hover:text-highlight"
+        class="text-xs font-mono text-gray-400 hidden sm:flex justify-center items-center no-underline hover:text-highlight"
         @click="toggleTimeline()">
         <menu-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Index') }}</span>
@@ -121,7 +121,7 @@
     </template>
     <template v-if="$store.state.feedType == 'files'">
       <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
+        class="text-xs font-mono text-gray-400 hidden sm:flex justify-end items-center no-underline hover:text-highlight"
         @click="setFeedType('public')">
         <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Alle Nachrichten') }}</span>
@@ -129,7 +129,7 @@
     </template>
     <template v-else>
       <a href="javascript:;" 
-        class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
+        class="text-xs font-mono text-gray-400 hidden sm:flex justify-end items-center no-underline hover:text-highlight"
         @click="setFeedType('files')">
         <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
         <span class="block ml-2">{{ translate('Anhänge Filtern') }}</span>
