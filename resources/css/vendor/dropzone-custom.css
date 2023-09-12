@@ -5,7 +5,7 @@
  */
 
 .dropzone {
-  @apply my-1 p-3 border-dashed border-gray-100 text-dark;
+  @apply my-1 p-3 border-dashed border-gray-100 text-dark flex flex-col relative;
 }
 
 .dropzone.dz-drag-hover {
@@ -18,29 +18,48 @@
 }
 
 .dropzone .dz-preview {
-  @apply inline-flex !min-h-0 relative bg-transparent m-0 mr-2;
+  @apply flex min-h-[40px] relative bg-transparent m-0 overflow-hidden;
 }
 
 .dropzone .dz-message strong {
   @apply text-dark text-base;
 }
 
-
 .dropzone .dz-preview.dz-file-preview .dz-image {
   background: none !important;
-  @apply !rounded-none !bg-gray-100;
+  @apply !rounded-none !bg-gray-50;
 }
 
 .dropzone .dz-preview .dz-image {
-  @apply !rounded-none;
+  @apply !rounded-none !hidden;
+}
+.dropzone .dz-preview .dz-details {
+  @apply flex items-center text-left bg-gray-50 rounded-none py-1 px-0.5 pt-2;
+}
+
+.dropzone .dz-preview .dz-details .dz-size {
+  @apply m-0 text-base;
+}
+
+.dropzone .dz-preview .dz-details span {
+  @apply !bg-transparent;
 }
 
 .dropzone .dz-preview .dz-progress {
-  @apply bg-light border-0 mx-0 h-3 opacity-100 overflow-hidden pointer-events-none absolute w-full left-0 top-1;
+  @apply bg-light border-0 mx-0 h-2 opacity-100 overflow-hidden pointer-events-none absolute w-full left-0 top-1;
   z-index: 1000;
 }
 
-
 .dropzone .dz-preview .dz-progress .dz-upload {
   display: inline-block !important;
+}
+
+.dropzone .dz-success-mark svg,
+.dropzone .dz-error-mark svg {
+  @apply !w-6 !h-6;
+}
+
+.dropzone .dz-preview .dz-success-mark,
+.dropzone .dz-preview .dz-error-mark {
+  @apply left-auto right-2 top-2 m-0;
 }

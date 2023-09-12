@@ -534,8 +534,8 @@ export default {
       return `<div class="dz-preview dz-file-preview">
               <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
               <div class="dz-error-message"><span data-dz-errormessage></span></div>
-              <div class="dz-success-mark"><i class="fa fa-check"></i></div>
-              <div class="dz-error-mark"><i class="fa fa-close"></i></div>
+              <div class="dz-success-mark"></div>
+              <div class="dz-error-mark"></div>
           </div>`;
     },
 
