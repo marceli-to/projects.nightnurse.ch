@@ -467,12 +467,14 @@ export default {
       const idx = this.data.companies.findIndex(x => x.id === id);
      
       // remove all company associated users
-      this.data.companies[idx].users.forEach(user => {
-        const i = this.data.users.findIndex(x => x.id === user.id)
-        if (i > -1) {
-          this.data.users.splice(i, 1);
-        }
-      });
+      if (this.data.companies[idx].users) {
+        this.data.companies[idx].users.forEach(user => {
+          const i = this.data.users.findIndex(x => x.id === user.id)
+          if (i > -1) {
+            this.data.users.splice(i, 1);
+          }
+        });
+      }
 
       // remove the company
       this.data.companies.splice(idx, 1);

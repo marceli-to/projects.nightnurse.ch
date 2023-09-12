@@ -126,8 +126,11 @@ class MessageController extends Controller
       }
     }
 
-    $project->last_activity = \Carbon\Carbon::now();
-    $project->save();
+    if (!$request->input('private'))
+    {
+      $project->last_activity = \Carbon\Carbon::now();
+      $project->save();
+    }
 
     $user = User::find(auth()->user()->id);
     $message = Message::with('project.company', 'sender', 'files', 'users')->find($message->id);

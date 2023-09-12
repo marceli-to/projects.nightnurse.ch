@@ -42,8 +42,8 @@ class ProjectController extends Controller
                       ->active()
                       ->get();
       
-     // Get 'all projects'
-     $projects = Project::active()->with('state', 'company', 'companies', 'manager')
+      // Get 'all projects'
+      $projects = Project::active()->with('state', 'company', 'companies', 'manager')
                     ->with(['previewMessages' => function ($query) {
                       $query->with('sender')->limit(3);
                     }])

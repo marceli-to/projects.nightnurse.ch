@@ -79,7 +79,12 @@ class MessageController extends Controller
       }
     }
 
-    $project->last_activity = \Carbon\Carbon::now();
+    if (!$request->input('private'))
+    {
+      $project->last_activity = \Carbon\Carbon::now();
+      $project->save();
+    }
+    
     $project->save();
     return response()->json(['messageId' => $message->id]);
   }
