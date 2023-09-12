@@ -96,8 +96,14 @@
           <span>{{ translate('Abbrechen') }}</span>
         </a>
         <button type="submit" :class="[!allowSubmit ? 'pointer-events-none opacity-40' : '', 'btn-send']">
-          <mail-icon class="h-5 w-5" aria-hidden="true" />
-          <span class="block ml-2">{{ translate('Senden') }}</span>
+          <template v-if="!hasValidUpload">
+            <clock-icon class="h-5 w-5" aria-hidden="true" />
+            <span class="block ml-2">{{ translate('Warten auf Upload') }}</span>
+          </template>
+          <template v-else>
+            <mail-icon class="h-5 w-5" aria-hidden="true" />
+            <span class="block ml-2">{{ translate('Senden') }}</span>
+          </template>
         </button>
       </content-footer>
       
@@ -107,7 +113,7 @@
 </template>
 
 <script>
-import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon, ChevronDownIcon, ChevronUpIcon } from "@vue-hero-icons/outline";
+import { TrashIcon, CloudDownloadIcon, MailIcon, PlusCircleIcon, ChevronDownIcon, ChevronUpIcon, ClockIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -145,6 +151,7 @@ export default {
     FileType,
     TrashIcon,
     CloudDownloadIcon,
+    ClockIcon,
     PlusCircleIcon,
     MailIcon,
     ChevronDownIcon,
