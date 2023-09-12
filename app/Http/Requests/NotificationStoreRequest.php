@@ -22,7 +22,8 @@ class NotificationStoreRequest extends FormRequest
   public function rules()
   {
     return [
-
+      'title.de' => 'required',
+      'title.en' => 'required',
     ];
   }
 

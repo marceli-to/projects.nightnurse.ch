@@ -9,8 +9,8 @@
     </content-header>
 
     <h4 class="text-md">Deutsch</h4>
-    <div class="form-group">
-      <label>{{ translate('Title') }}</label>
+    <div :class="[errors.title.de ? 'is-invalid' : '', 'form-group']">
+      <label>{{ translate('Title') }}*</label>
       <input type="text" v-model="data.title.de">
     </div>
     
@@ -20,8 +20,8 @@
     </div>
 
     <h4 class="!mt-12">English</h4>
-    <div class="form-group">
-      <label>{{ translate('Title') }}</label>
+    <div :class="[errors.title.en ? 'is-invalid' : '', 'form-group']">
+      <label>{{ translate('Title') }}*</label>
       <input type="text" v-model="data.title.en">
     </div>
 
@@ -92,7 +92,10 @@ export default {
 
       // Validation
       errors: {
-        title: false,
+        title: {
+          de: false,
+          en: false
+        }
       },
 
       // Routes
