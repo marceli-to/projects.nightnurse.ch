@@ -554,7 +554,7 @@ class Media
   {
     if (in_array(strtolower($filetype), $this->previewable_image_types))
     {
-      if ($file_data[0] <= 4000)
+      if ($file_data[0] <= 6000)
       {
         return TRUE;
       }
