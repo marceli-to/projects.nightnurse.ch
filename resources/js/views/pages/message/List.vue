@@ -12,7 +12,7 @@
         <div class="text-dark" v-else>
           {{project.number}} {{project.name}}
         </div>
-        <router-link :to="{name: 'project-update', params: { uuid: project.uuid, redirect: 'messages' }}" v-if="$store.state.user.admin && project.state.id == 1">
+        <router-link :to="{name: 'project-update', params: { uuid: project.uuid, redirect: 'messages' }}" v-if="$store.state.user.admin">
           <pencil-alt-icon class="icon-list mb-1 ml-1 sm:ml-2" aria-hidden="true" />
         </router-link>
       </div>
