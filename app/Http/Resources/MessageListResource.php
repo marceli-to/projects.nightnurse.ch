@@ -19,8 +19,10 @@ class MessageListResource extends JsonResource
       'subject' => $this->subject,
       'body' => $this->body,
       'body_preview' => $this->body_preview,
+      'intermediate' => $this->intermediate,
       'message_date' => $this->message_date,
       'message_date_time' => $this->message_date_time,
+      'files' => $this->files,
       'sender' => UserResource::make($this->sender),
     ];
   }

@@ -56,7 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail
    *
    * @var array
    */
-  protected $appends = ['short_name', 'full_name'];
+  protected $appends = ['short_name', 'full_name', 'acronym'];
 
 
   public function permissions()
@@ -172,5 +172,17 @@ class User extends Authenticatable implements MustVerifyEmail
   public function getShortNameAttribute($value)
   {
     return $this->firstname . ' ' . mb_substr($this->name, 0,1) . '.';
+  }
+
+  /**
+   * Get the user's acronym.
+   *
+   * @param  string  $value
+   * @return string
+   */
+
+  public function getAcronymAttribute($value)
+  {
+    return mb_substr($this->firstname, 0,1) . mb_substr($this->name, 0,1);
   }
 }

@@ -19,6 +19,7 @@ class MessageResource extends JsonResource
       'subject' => $this->subject,
       'body' => $this->body,
       'body_preview' => $this->body_preview,
+      'intermediate' => $this->intermediate,
       'internal' => $this->internal,
       'private' => $this->private,
       'can_delete' => $this->can_delete,

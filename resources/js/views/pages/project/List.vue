@@ -9,7 +9,25 @@
     <template #title>
       {{ translate('Projekte') }}
     </template>
+
   </content-header>
+
+  <div class="flex justify-between w-full mb-4 sm:mb-6 lg:mb-8">
+    <a href="" @click.prevent="toggleIntermediates()" class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight">
+      <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
+      <span class="block ml-2">{{ translate('Zwischenstände anzeigen') }}</span>
+    </a>
+    <a href="" 
+      @click.prevent="archived()" 
+      class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
+      v-if="$store.state.user.admin">
+      <folder-icon class="h-4 w-4" aria-hidden="true" />
+      <span v-if="isArchive" class="block ml-2">{{ translate('Aktive Projekte') }}</span>
+      <span v-else class="block ml-2">{{ translate('Archivierte Projekte') }}</span>
+    </a>
+
+  </div>
+
   <div v-if="data.user_projects.length" class="max-w-5xl">
     <div v-for="d in data.user_projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
@@ -26,24 +44,17 @@
             <br class="sm:hidden">{{ d.company.name }}
           </span>
         </router-link>
-        <div v-if="d.preview_messages">
-          <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" class="mt-2">
-            <div v-if="iteration < 3" :class="[message.internal ? 'bg-gray-100' : '', 'py-1 mb-2']">
-              <router-link :to="{name: 'messages', params: { uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
-                <span class="text-gray-500 text-xs sm:text-sm pl-1">
-                  <span class="">{{ message.message_date_time }}</span><separator />
-                  <span v-if="message.sender">{{message.sender.full_name | truncate(15, '...')}}</span>
-                  <separator class="hidden sm:inline" />
-                  <br class="sm:hidden">
-                </span>
-                <span class="block mt-1 pl-1 sm:pl-0 sm:inline-block sm:mt-0">
-                  <span v-if="message.subject">{{message.subject}}</span>
-                  <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
-                  <span v-else>–</span>
-                </span>
-              </router-link>
+        <div v-if="d.preview_messages" :class="[showIntermediates ? 'flex' : '', '']">
+          <template v-if="showIntermediates">
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" :class="[message.intermediate ? 'mt-2' : '', '']">
+              <project-thumbnail-item :message="message" :project="d" v-if="message.intermediate"/>
             </div>
-          </div>
+          </template>
+          <template v-else>
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" class="mt-2">
+              <project-list-item :message="message" :project="d" />
+            </div>
+          </template>
         </div>
       </div>
       <div class="col-span-2 md:col-span-2">
@@ -76,23 +87,21 @@
             <br class="sm:hidden">{{ d.company.name }}
           </span>
         </router-link>
-        <div v-if="d.preview_messages">
-          <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" class="mt-2">
-            <div v-if="iteration < 3" :class="[message.internal ? 'bg-gray-100' : '', 'py-1 mb-2']">
-              <span class="text-gray-500 text-xs sm:text-sm pl-1">
-                <span class="">{{ message.message_date_time }}</span><separator />
-                <span v-if="message.sender">{{message.sender.full_name | truncate(15, '...')}}</span>
-                <separator class="hidden sm:inline" />
-                <br class="sm:hidden">
-              </span>
-              <span class="block mt-1 pl-1 sm:pl-0 sm:inline-block sm:mt-0">
-                <span v-if="message.subject">{{message.subject}}</span>
-                <span v-else-if="message.body_preview">{{ message.body_preview }}</span>
-                <span v-else>–</span>
-              </span>
+
+        <div v-if="d.preview_messages" :class="[showIntermediates ? 'flex' : '', '']">
+          <template v-if="showIntermediates">
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" :class="[message.intermediate ? 'mt-2' : '', '']">
+              <project-thumbnail-item :message="message" :project="d" v-if="message.intermediate"/>
             </div>
-          </div>
+          </template>
+          <template v-else>
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" class="mt-2">
+              <project-list-item :message="message" :project="d" />
+            </div>
+          </template>
         </div>
+
+
       </div>
       <div class="col-span-2 md:col-span-2">
         <div class="flex items-center justify-end" v-if="$store.state.user.admin">
@@ -107,27 +116,19 @@
     </div>
   </div>
 
-  <div v-if="$store.state.user.admin">
-    <a href="" @click.prevent="archived()" class="text-sm flex items-center hover:text-highlight underline underline-offset-2 hover:no-underline">
-      <archive-icon class="mr-2" aria-hidden="true" />
-      <span v-if="isArchive">{{ translate('aktive Projekte') }}</span>
-      <span v-else>{{ translate('archivierte Projekte') }}</span>
-    </a>
-  </div>
+
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, AnnotationIcon, ArchiveIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, AnnotationIcon, ArchiveIcon, SwitchHorizontalIcon, FolderIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import PageTitle from "@/mixins/PageTitle";
 import Separator from "@/components/ui/misc/Separator.vue";
 import ContentHeader from "@/components/ui/layout/Header.vue";
-import List from "@/components/ui/layout/List.vue";
-import ListItem from "@/components/ui/layout/ListItem.vue";
-import ListAction from "@/components/ui/layout/ListAction.vue";
-import ListEmpty from "@/components/ui/layout/ListEmpty.vue";
-import Pill from "@/components/ui/misc/Pill.vue";
+import ProjectListItem from "@/views/pages/project/partials/ListItem.vue";
+import ProjectThumbnailItem from "@/views/pages/project/partials/ThumbnailItem.vue";
+
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
 
@@ -140,14 +141,13 @@ export default {
     TrashIcon,
     AnnotationIcon,
     ArchiveIcon,
+    FolderIcon,
+    SwitchHorizontalIcon,
     ContentHeader,
     Separator,
-    List,
-    ListItem,
-    ListAction,
-    ListEmpty,
-    Pill,
-    NProgress
+    NProgress,
+    ProjectListItem,
+    ProjectThumbnailItem
   },
 
   mixins: [ErrorHandling, Helpers, i18n, PageTitle],
@@ -173,6 +173,7 @@ export default {
       isLoading: false,
       isFetched: false,
       isArchive: false,
+      showIntermediates: false,
 
       // Messages
       messages: {
@@ -228,7 +229,11 @@ export default {
     archived() {
       this.isArchive = this.isArchive ? false : true;
       this.fetch();
-    }
+    },
+
+    toggleIntermediates() {
+      this.showIntermediates = this.showIntermediates ? false : true;
+    },
   },
 }
 </script>

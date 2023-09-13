@@ -86,9 +86,15 @@
                 </a>
               </list-action>
             </list-item>
+            <div class="form-group my-4 sm:my-6 lg:my-8">
+              <label class="mb-2 lg:mb-3">{{ translate('Zwischenstand?') }} {{  isIntermediate }}</label>
+              <label class="relative !flex items-center cursor-pointer">
+                <input type="checkbox" value="1" v-model="data.intermediate" class="sr-only peer">
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-none peer-focus:ring-none rounded-full peer  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-highlight"></div>
+              </label>
+            </div>
           </list>
         </div>
-
       </div>
 
       <content-footer>
@@ -185,6 +191,7 @@ export default {
         subject: null,
         body: '',
         private: 0,
+        intermediate: 0,
         message_uuid: null,
         users: [],
         files: [],
@@ -328,6 +335,7 @@ export default {
       localStorage.setItem(storageName, JSON.stringify(storage));
 
       if (this.validate()) {
+        this.data.intermediate = this.data.intermediate ? 1 : 0;
         this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
           this.$notify({ type: "success", text: this.messages.created });
           this.reset();

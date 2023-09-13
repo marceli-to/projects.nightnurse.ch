@@ -4,7 +4,7 @@
     <slot name="icon" />
   </template>
   <template v-if="$slots.title">
-    <h3 class="!mt-0 !mb-0 !text-lg">
+    <h3 class="!mt-0 !mb-0 !text-lg w-full">
       <slot name="title" />
     </h3>
   </template>

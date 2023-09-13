@@ -31,7 +31,7 @@ class ProjectController extends Controller
     {
       $user_projects = Project::with('state', 'company', 'companies', 'manager')
                       ->with(['previewMessages' => function ($query) {
-                        $query->with('sender')->limit(3);
+                        $query->with('sender', 'files')->limit(3);
                       }])
                       ->orderBy('last_activity', 'DESC')
                       ->orderBy('number', 'DESC')
@@ -45,7 +45,7 @@ class ProjectController extends Controller
       // Get 'all projects'
       $projects = Project::active()->with('state', 'company', 'companies', 'manager')
                     ->with(['previewMessages' => function ($query) {
-                      $query->with('sender')->limit(3);
+                      $query->with('sender', 'files')->limit(3);
                     }])
                     ->orderBy('last_activity', 'DESC')
                     ->orderBy('number', 'DESC')
@@ -58,7 +58,7 @@ class ProjectController extends Controller
     $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
     $projects = Project::with('company')
       ->with(['previewMessages' => function ($query) {
-        $query->with('sender')->limit(3);
+        $query->with('sender', 'files')->limit(3);
       }])
       ->whereIn('id', $ids)
       ->orderBy('last_activity', 'DESC')

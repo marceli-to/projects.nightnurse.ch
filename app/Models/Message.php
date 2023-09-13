@@ -19,6 +19,7 @@ class Message extends Base
     'uuid',
     'subject',
     'body',
+    'intermediate',
     'private',
     'internal',
     'project_id',
@@ -82,6 +83,16 @@ class Message extends Base
   public function scopePrivate($query)
   {
     return $query->where('private', 1);
+  }
+
+  /**
+   * Scope for intermediate messages
+   * 
+   */
+
+  public function scopeIntermediate($query)
+  {
+    return $query->where('intermediate', 1)->where('private', 0);
   }
 
   /**
