@@ -102,6 +102,7 @@ class MessageController extends Controller
           'uuid' => \Str::uuid(),
           'name' => $file['name'],
           'original_name' => $file['original_name'],
+          'image_orientation' => $file['image_orientation'],
           'folder' => $project->uuid,
           'extension' => $file['extension'] ,
           'size' => $file['size'],

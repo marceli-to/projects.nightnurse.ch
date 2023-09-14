@@ -86,7 +86,7 @@
                 </a>
               </list-action>
             </list-item>
-            <div class="form-group my-4 sm:my-6 lg:my-8">
+            <div class="form-group my-4 sm:my-6 lg:my-8" v-if="$store.state.user.admin">
               <label class="mb-2 lg:mb-3">{{ translate('Zwischenstand?') }} {{  isIntermediate }}</label>
               <label class="relative !flex items-center cursor-pointer">
                 <input type="checkbox" value="1" v-model="data.intermediate" class="sr-only peer">

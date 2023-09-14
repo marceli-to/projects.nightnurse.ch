@@ -54,11 +54,13 @@ return array(
   */
 
   'templates' => array(
-    'small' => 'Intervention\Image\Templates\Small',
-    'large' => 'Intervention\Image\Templates\Large',
+    // 'small' => 'Intervention\Image\Templates\Small',
+    // 'large' => 'Intervention\Image\Templates\Large',
     'cache' => 'App\Filters\Image\Template\Cache',
     'thumbnail' => 'App\Filters\Image\Template\Thumbnail',
     'portrait' => 'App\Filters\Image\Template\Portrait',
+    'large' => 'App\Filters\Image\Template\Large',
+    'small' => 'App\Filters\Image\Template\Small',
   ),
 
   /*

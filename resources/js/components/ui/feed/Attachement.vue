@@ -3,17 +3,17 @@
     <template v-if="$props.intermediate">
       <a :href="fileUri(file)" 
         target="_blank" 
-        :class="[file.preview ? 'flex-col mb-1 lg:mb-2' : 'items-center', 'flex no-underline hover:text-highlight py-2']">
+        :class="[file.preview ? 'flex-col mb-1 lg:mb-2' : 'items-center', 'flex no-underline hover:text-highlight py-2 lg:pt-3']">
         <img 
           :src="smallImageUri(file)" 
           height="100" 
           width="100"
-          class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto w-full bg-light rounded-sm"
+          :class="[file.image_orientation == 'portrait' ? 'w-1/2' : 'w-full', '!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto bg-light rounded-sm']"
           v-if="file.preview" />
         <div class="mr-2 lg:mr-3 py-1" v-else>
           <file-type :extension="file.extension" />
         </div>
-        <div :class="[file.preview ? 'py-1 lg:py-2' : '', 'font-mono text-xs']">
+        <div :class="[file.preview ? 'py-1 sm:py-2 lg:py-3' : '', 'font-mono text-xs']">
           {{ file.original_name | truncate(45, '...') }} – {{ file.size | filesize(file.size) }}
         </div>
       </a>

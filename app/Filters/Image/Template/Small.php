@@ -10,13 +10,13 @@ class Small implements FilterInterface
    * Maximum width for small landscape images
    */    
   
-  protected $max_width = 800;    
+  protected $max_width = 1000;    
 
   /**
    * Maximum height for small portrait images
    */
 
-  protected $max_height = 450;
+  protected $max_height = 600;
   
   public function applyFilter(Image $image)
   {

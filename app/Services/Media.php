@@ -74,6 +74,7 @@ class Media
     return [
       'name' => $filename, 
       'original_name' => $name, 
+      'image_orientation' => ($file_data !== FALSE && $file_data[0] > $file_data[1]) ? 'landscape' : 'portrait',
       'extension' => $filetype, 
       'size' => $filesize,
       'preview' => $previewable ? TRUE : FALSE

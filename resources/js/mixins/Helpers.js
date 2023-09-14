@@ -30,9 +30,9 @@ export default {
 
     smallImageUri(file) {
       if (file.folder) {
-        return `/img/large/${file.folder}/${file.name}`;
+        return `/img/small/${file.folder}/${file.name}`;
       }
-      return `/img/large/${file.name}`;
+      return `/img/small/${file.name}`;
     },
   }
 };
