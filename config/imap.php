@@ -72,7 +72,7 @@ return [
             'encryption' => 'ssl',
             'validate_cert' => false,
             'username' => 'nni@marceli.to',
-            'password' => 'mefo kqjl ycam edqe',
+            'password' => 'xgmg dxla pvcb ztco',
             'authentication' => null,
         ],
         /*

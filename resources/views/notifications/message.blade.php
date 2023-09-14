@@ -91,5 +91,4 @@ An:
 <div class="pb-5 text-right text-xs text-slate font-mono">
   <a href="{{url('')}}/projects/project/{{$message['project']['uuid']}}/messages" class="text-xs text-slate font-mono">Open in Browser</a>
 </div>
-
 @endcomponent

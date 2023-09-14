@@ -54,42 +54,54 @@ class FetchMails extends Command
         $recipient = $message->getAttributes()["to"][0]->mail;
 
         // get message uuid from recipient (i.e. nni+<uuid>@domain.com)
-        $uuid = explode("+", $recipient)[1];
-        $uuid = explode("@", $uuid)[0];
-        // -> $uuid
-        dd($uuid);
+        $uuid = explode("+", $recipient);
+
+        if (isset($uuid[1]))
+        {
+          $uuid = $uuid[1];
+          $uuid = explode("@", $uuid)[0];
+        }
+
+        $text_body = $message->getTextBody();
+
+        dd($text_body);
+
+        // we're only interested in text after 
+
+        // echo $message->getSubject().'<br />';
+        // echo 'Attachments: '.$message->getAttachments()->count().'<br />';
+        // echo $message->getHTMLBody();
+
       }
     }
     
     //Get all Mailboxes
     /** @var \Webklex\PHPIMAP\Support\FolderCollection $folders */
-    $folders = $client->getFolders();
-
-    dd($folders);
+    // $folders = $client->getFolders();
     
     //Loop through every Mailbox
     /** @var \Webklex\PHPIMAP\Folder $folder */
-    foreach($folders as $folder) 
-    {
-      //Get all Messages of the current Mailbox $folder
-      /** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
-      $messages = $folder->messages()->all()->get();
+    // foreach($folders as $folder) 
+    // {
+    //   //Get all Messages of the current Mailbox $folder
+    //   /** @var \Webklex\PHPIMAP\Support\MessageCollection $messages */
+    //   $messages = $folder->messages()->all()->get();
 
-      /** @var \Webklex\PHPIMAP\Message $message */
-      foreach($messages as $message)
-      {
-        echo $message->getSubject().'<br />';
-        echo 'Attachments: '.$message->getAttachments()->count().'<br />';
-        echo $message->getHTMLBody();
+    //   /** @var \Webklex\PHPIMAP\Message $message */
+    //   foreach($messages as $message)
+    //   {
+    //     echo $message->getSubject().'<br />';
+    //     echo 'Attachments: '.$message->getAttachments()->count().'<br />';
+    //     echo $message->getHTMLBody();
 
-        //Move the current Message to 'INBOX.read'
-        if($message->move('INBOX.read') == true){
-          echo 'Message has ben moved';
-        }
-        else{
-          echo 'Message could not be moved';
-        }
-      }
-    }
+    //     //Move the current Message to 'INBOX.read'
+    //     if($message->move('INBOX.read') == true){
+    //       echo 'Message has ben moved';
+    //     }
+    //     else{
+    //       echo 'Message could not be moved';
+    //     }
+    //   }
+    // }
   }
 }

@@ -339,6 +339,7 @@ export default {
         this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
           this.$notify({ type: "success", text: this.messages.created });
           this.reset();
+          window.scrollTo(0, 0);
         });
       }
     },
