@@ -4,7 +4,7 @@
       <div v-for="file in message.files" :key="file.uuid">
         <a :href="fileUri(file)" target="_blank" class="group">
           <img 
-            :src="thumbnailUri(file)" 
+            :src="thumbnailImageUri(file)" 
             height="100" 
             width="100"
             class="!mt-0 !mb-0 mr-1 lg:mr-2 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm group-hover:opacity-75 group-hover:transition-opacity"
@@ -13,7 +13,7 @@
       </div>
     </div>
     <router-link :to="{name: 'messages', params: { uuid: project.uuid }}" class="relative text-dark font-normal no-underline pr-2">
-      <span class="mt-2 inline-flex">{{ message.message_date_time }}</span><separator />{{ message.sender.acronym }}<separator /><span v-if="message.subject">{{message.subject}}</span><span v-else-if="message.body_preview">{{ message.body_preview }}</span><span v-else>–</span>
+      <span class="mt-2 inline-flex">{{ message.message_date_time }}</span><separator />{{ message.sender.acronym }}
     </router-link>
   </div>
 </template>

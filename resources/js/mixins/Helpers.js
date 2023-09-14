@@ -21,11 +21,18 @@ export default {
       return `/storage/uploads/${file.name}`;
     },
 
-    thumbnailUri(file) {
+    thumbnailImageUri(file) {
       if (file.folder) {
         return `/img/thumbnail/${file.folder}/${file.name}`;
       }
       return `/img/thumbnail/${file.name}`;
+    },
+
+    smallImageUri(file) {
+      if (file.folder) {
+        return `/img/large/${file.folder}/${file.name}`;
+      }
+      return `/img/large/${file.name}`;
     },
   }
 };

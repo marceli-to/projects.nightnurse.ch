@@ -68,6 +68,7 @@
               :index="idx"
               :file="file"
               :truncate="hasTruncateFiles"
+              :intermediate="message.intermediate"
               :private="message.private">
             </feed-item-attachement>
             <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4" v-if="(message.files.length > 3)">
