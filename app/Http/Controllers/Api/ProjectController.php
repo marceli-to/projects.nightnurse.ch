@@ -29,10 +29,15 @@ class ProjectController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
+      // Get 'my projects'
       $user_projects = Project::with('state', 'company', 'companies', 'manager')
                       ->with(['previewMessages' => function ($query) {
                         $query->with('sender', 'files')->limit(3);
                       }])
+                      // previewIntermediateMessages
+                      // ->with(['previewIntermediateMessages' => function ($query) {
+                      //   $query->with('sender', 'files')->limit(3);
+                      // }])
                       ->orderBy('last_activity', 'DESC')
                       ->orderBy('number', 'DESC')
                       ->where('user_id', auth()->user()->id)
@@ -42,6 +47,8 @@ class ProjectController extends Controller
                       ->active()
                       ->get();
       
+
+
       // Get 'all projects'
       $projects = Project::active()->with('state', 'company', 'companies', 'manager')
                     ->with(['previewMessages' => function ($query) {

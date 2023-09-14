@@ -126,8 +126,8 @@ import Helpers from "@/mixins/Helpers";
 import PageTitle from "@/mixins/PageTitle";
 import Separator from "@/components/ui/misc/Separator.vue";
 import ContentHeader from "@/components/ui/layout/Header.vue";
-import ProjectListItem from "@/views/pages/project/partials/ListItem.vue";
-import ProjectThumbnailItem from "@/views/pages/project/partials/ThumbnailItem.vue";
+import ProjectListItem from "@/views/pages/project/components/ListItem.vue";
+import ProjectThumbnailItem from "@/views/pages/project/components/ThumbnailItem.vue";
 
 import i18n from "@/i18n";
 import NProgress from 'nprogress';

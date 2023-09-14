@@ -13,5 +13,19 @@ export default {
     randomString() {
       return Math.random().toString(36).slice(2);
     },
+
+    fileUri(file) {
+      if (file.folder) {
+        return `/storage/uploads/${file.folder}/${file.name}`;
+      }
+      return `/storage/uploads/${file.name}`;
+    },
+
+    thumbnailUri(file) {
+      if (file.folder) {
+        return `/img/thumbnail/${file.folder}/${file.name}`;
+      }
+      return `/img/thumbnail/${file.name}`;
+    },
   }
 };

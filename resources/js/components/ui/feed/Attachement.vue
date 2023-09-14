@@ -1,11 +1,11 @@
 <template>
   <div :class="[$props.private ? 'border-slate-300' : 'border-gray-200', 'first:border-t border-b']"
     v-if="($props.truncate && $props.index < truncateLimit) || !$props.truncate">
-    <a :href="`${filePath}`" 
+    <a :href="fileUri(file)" 
       target="_blank" 
       class="flex items-center no-underline hover:text-highlight py-2">
       <img 
-        :src="`${thumbnailPath}`" 
+        :src="thumbnailUri(file)" 
         height="100" 
         width="100"
         class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
@@ -21,6 +21,7 @@
 </template>
 <script>
 import FileType from "@/components/ui/misc/FileType.vue";
+import Helpers from "@/mixins/Helpers";
 
 export default {
 
@@ -28,11 +29,13 @@ export default {
     FileType,
   },
 
+  mixins: [
+    Helpers,
+  ],
+
   data() {
     return {
       truncateLimit: 3,
-      filePath: null,
-      thumbnailPath: null,
     }
   },
 
@@ -57,17 +60,6 @@ export default {
       type: Number,
       default: 0
     },
-  },
-
-  mounted() {
-    if (this.file.folder) {
-      this.filePath = `/storage/uploads/${this.file.folder}/${this.file.name}`;
-      this.thumbnailPath = `/img/thumbnail/${this.file.folder}/${this.file.name}`;
-      return;
-    }
-    this.filePath = `/storage/uploads/${this.file.name}`;
-    this.thumbnailPath = `/img/thumbnail/${this.file.name}`;
-    return;
   },
 }
 </script>
