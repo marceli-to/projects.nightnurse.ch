@@ -455,7 +455,6 @@ export default {
 
   computed: {
     showFeedbackForm() {
-      return true;
       return this.$route.params.view == 'feedback' && 
         (this.feedbacks.data && this.feedbacks.data.length == 0) && 
         this.feedbacks.show_form ? 
