@@ -88,8 +88,9 @@
   </header>
 
   <message-form 
-    :message="message"
-    @cancelMessage="hideForm()" v-if="hasForm">
+    :message="message" 
+    @cancelMessage="hideForm()" 
+    v-if="hasForm">
   </message-form>
   
   <div class="sm:flex justify-between">
@@ -144,6 +145,10 @@
   <template>
     <feed>
       <feed-archive-info v-if="project.state.id == 2" />
+      
+      <feedback-list :items="feedbacks.data" />
+      <feedback-form :uuid="$route.params.uuid" @stored="addFeedback" v-if="showFeedbackForm" />
+
       <div v-for="(items, day) in feedItems" :key="day" class="relative">
         <feed-item-timestamp v-if="filteredItems(items).length">{{ day }}</feed-item-timestamp>
         <feed-item 
@@ -158,6 +163,7 @@
           :ref="`message-${item.uuid}`">
         </feed-item>
       </div>
+
     </feed>
   </template>
 
@@ -222,6 +228,8 @@ import FeedItemHeader from "@/components/ui/feed/Header.vue";
 import FeedItemTimestamp from "@/components/ui/feed/TimeStamp.vue";
 import FeedItemAttachement from "@/components/ui/feed/Attachement.vue";
 import FeedItemBody from "@/components/ui/feed/Body.vue";
+import FeedbackForm from "@/views/pages/feedback/Form.vue";
+import FeedbackList from "@/views/pages/feedback/List.vue";
 import MessageForm from "@/views/pages/message/partials/Form.vue";
 import FileType from "@/components/ui/misc/FileType.vue";
 import i18n from "@/i18n";
@@ -263,6 +271,8 @@ export default {
     FeedArchiveInfo,
     FileType,
     MessageForm,
+    FeedbackList,
+    FeedbackForm,
     NProgress
   },
 
@@ -273,6 +283,10 @@ export default {
 
       // Data
       feedItems: [],
+
+      feedbacks: {
+        data: [],
+      },
 
       // Project data
       project: [],
@@ -290,6 +304,9 @@ export default {
         destroy: '/api/message',
         project: '/api/project',
         reactionTypes: '/api/reaction-types',
+        feedback: {
+          list: '/api/feedbacks',
+        }
       },
 
       // Reaction types
@@ -330,7 +347,6 @@ export default {
         };
       });
     });
-    
   },
 
   methods: {
@@ -342,12 +358,14 @@ export default {
         this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.project}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.reactionTypes}`),
+        this.axios.get(`${this.routes.feedback.list}/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;
         this.projectAssociates = this.getProjectAssociates();
         this.reactionTypes = responses[2].data;
         this.$store.commit('reactionTypes', this.reactionTypes);
+        this.feedbacks = responses[3].data;
         this.isFetched = true;
         this.message = null;
         this.canAccessPrivateMessages = this.$store.state.user.can ? this.$store.state.user.can.access_private_messages : false;
@@ -424,10 +442,26 @@ export default {
       return this.project.users.filter(user => user.company.owner !== 1);
     },
 
+    addFeedback(data) {
+      this.feedbacks.data.unshift(data.feedback);
+      this.feedbacks.show_form = false;
+    },
+
   },
 
   watch: {
     feedItems() { },
-  }
+  },
+
+  computed: {
+    showFeedbackForm() {
+      return true;
+      return this.$route.params.view == 'feedback' && 
+        (this.feedbacks.data && this.feedbacks.data.length == 0) && 
+        this.feedbacks.show_form ? 
+        true : 
+        false;
+    }
+  },
 }
 </script>

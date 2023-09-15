@@ -35,21 +35,21 @@ class UpdateQuote extends Command
   {
     parent::__construct();
 
-    $options = [
-      'grant_type' => 'password',
-      'client_id' => config('salesforce.consumer_key'),
-      'client_secret' => config('salesforce.consumer_secret'),
-      'username' => config('salesforce.username'),
-      'password' => config('salesforce.password') . config('salesforce.secret')
-    ];
+    // $options = [
+    //   'grant_type' => 'password',
+    //   'client_id' => config('salesforce.consumer_key'),
+    //   'client_secret' => config('salesforce.consumer_secret'),
+    //   'username' => config('salesforce.username'),
+    //   'password' => config('salesforce.password') . config('salesforce.secret')
+    // ];
     
-    $salesforce = new \EHAERER\Salesforce\Authentication\PasswordAuthentication($options);
-    $salesforce->setEndpoint(config('salesforce.login_url'));
-    $salesforce->authenticate();
+    // $salesforce = new \EHAERER\Salesforce\Authentication\PasswordAuthentication($options);
+    // $salesforce->setEndpoint(config('salesforce.login_url'));
+    // $salesforce->authenticate();
 
-    $this->access_token = $salesforce->getAccessToken();
-    $this->instance_url = $salesforce->getInstanceUrl();
-    $this->salesforceFunctions = new \EHAERER\Salesforce\SalesforceFunctions($this->instance_url, $this->access_token, "v52.0");
+    // $this->access_token = $salesforce->getAccessToken();
+    // $this->instance_url = $salesforce->getInstanceUrl();
+    // $this->salesforceFunctions = new \EHAERER\Salesforce\SalesforceFunctions($this->instance_url, $this->access_token, "v52.0");
   }
 
   /**

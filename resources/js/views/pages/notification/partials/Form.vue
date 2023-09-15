@@ -8,7 +8,7 @@
       </template>
     </content-header>
 
-    <h4 class="text-md">Deutsch</h4>
+    <h4>Deutsch</h4>
     <div :class="[errors.title.de ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('Title') }}*</label>
       <input type="text" v-model="data.title.de">

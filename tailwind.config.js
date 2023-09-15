@@ -13,6 +13,7 @@ module.exports = {
       fontSize: {
         tiny: ['.675rem', '1'],
         xs: ['.8rem', '1.25'],
+        md: ['0.9375rem', '1.55'],
       },
       colors: {
         'highlight': '#ff008b',

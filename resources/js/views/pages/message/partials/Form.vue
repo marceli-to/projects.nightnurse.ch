@@ -325,7 +325,6 @@ export default {
 
       // Next upgrade: store the last recipients in local storage
       //---------------------------------------------------------------------------
-
       // Store this.data.private and this.data.users to local storage as one object
       // so that we can pre-select the values when the user returns to the page
       const storage = {

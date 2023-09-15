@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\MessageUserController;
 use App\Http\Controllers\Api\TranslationController;
 use App\Http\Controllers\Api\ReactionController;
 use App\Http\Controllers\Api\ReactionTypeController;
+use App\Http\Controllers\Api\FeedbackController;
 use App\Http\Controllers\Api\Settings\ProjectStateController;
 use App\Http\Controllers\Api\Settings\GenderController;
 use App\Http\Controllers\Api\Settings\LanguageController;
@@ -79,6 +80,10 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('message/{message:uuid}', [MessageController::class, 'find']);
   Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
+
+  // Feedbacks
+  Route::get('feedbacks/{project:uuid}', [FeedbackController::class, 'get']);
+  Route::post('feedback', [FeedbackController::class, 'store']);
 
   // Profile
   Route::post('profile/switch-language', [ProfileController::class, 'switchLanguage']);

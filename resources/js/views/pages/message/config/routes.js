@@ -5,9 +5,16 @@ const routes = [
 
   {
     name: 'messages',
-    path: '/projects/project/:uuid/messages/:message?',
+    // path: '/projects/project/:uuid/messages/:message?',
+    path: '/projects/project/:uuid/messages/:view?',
     component: MessageIndex,
   },
+
+  // {
+  //   name: 'messages-feedback',
+  //   path: '/projects/project/:uuid/feedback',
+  //   component: MessageIndex,
+  // },
 
   {
     name: 'message-create',

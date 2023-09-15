@@ -87,6 +87,11 @@ class Project extends Base
     return $this->hasMany(ProjectQuote::class, 'project_id', 'id')->orderBy('created_at', 'DESC');
   }
 
+  public function feedbacks()
+  {
+    return $this->hasMany(Feedback::class, 'project_id', 'id')->orderBy('created_at', 'DESC');
+  }
+
   /**
    * Local scopes
    */
