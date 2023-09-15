@@ -10,12 +10,6 @@ const routes = [
     component: MessageIndex,
   },
 
-  // {
-  //   name: 'messages-feedback',
-  //   path: '/projects/project/:uuid/feedback',
-  //   component: MessageIndex,
-  // },
-
   {
     name: 'message-create',
     path: '/projects/project/:uuid/message/create',

@@ -176,7 +176,7 @@
       <template v-if="$store.state.user.admin && ($store.state.feedType == 'private' || ($store.state.feedType == 'public' && $store.state.user.can.create_public_message))">
         <a href="javascript:;" @click="toggleForm()" class="btn-create">
           <plus-circle-icon class="h-5 w-5" aria-hidden="true" />
-          <span class="block ml-2">{{ translate('Neue Nachricht') }}</span>
+          <span class="block ml-2">{{ $store.state.feedType == 'private' ? translate('Neue private Nachricht') : translate('Neue Nachricht') }}</span>
         </a>
       </template>
       <template v-else>
@@ -347,6 +347,10 @@ export default {
         };
       });
     });
+
+    if (this.$route.params.view == 'private') {
+      this.setFeedType('private');
+    }
   },
 
   methods: {
@@ -405,6 +409,17 @@ export default {
     },
 
     setFeedType(attribute) {
+      if (attribute == 'public') {
+        this.$store.commit('feedType', attribute);
+        this.$router.push({ path: this.$route.path.replace('/private', '') });
+      }
+      else if (attribute == 'private') {
+        this.$store.commit('feedType', attribute);
+        // add /private if its not already there
+        if (this.$route.path.indexOf('/private') == -1) {
+          this.$router.push({ path: `${this.$route.path}/private` });
+        }
+      }
       this.$store.commit('feedType', attribute);
     },
 

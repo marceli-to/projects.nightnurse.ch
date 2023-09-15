@@ -79,6 +79,7 @@ export default {
         'Ja': 'Yes',
         'Nein': 'No',
         'Neue Nachricht': 'New message',
+        'Neue private Nachricht': 'Send new private message',
         'Schliessen': 'close',
         'Abbrechen': 'cancel',
         'Zugriffsrechte': 'Access',
