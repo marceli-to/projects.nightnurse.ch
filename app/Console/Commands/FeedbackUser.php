@@ -47,7 +47,7 @@ class FeedbackUser extends Command
       $recipient = ($env == 'production' && $fu->user->email) ? $fu->user->email : env('MAIL_TO');
       try {
         \Mail::to($recipient)->send(new \App\Mail\FeedbackNotification($fu->feedback));
-        //$fu->processed = 1;
+        $fu->processed = 1;
         $fu->save();
       } 
       catch(\Throwable $e) {

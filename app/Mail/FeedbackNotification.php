@@ -30,6 +30,7 @@ class FeedbackNotification extends Mailable
   {
     $subject = 'Feedback von ' . $this->feedback->author . ' (' . $this->feedback->project->number . '/' . $this->feedback->project->name . ')'; 
     return $this->from(env('MAIL_FROM_ADDRESS'), 'Nightnurse Images - Project Room')
+                ->replyTo($this->feedback->user->email)
                 ->subject($subject)
                 ->with(['feedback' => $this->feedback])
                 ->markdown('notifications.feedback');

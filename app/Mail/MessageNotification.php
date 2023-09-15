@@ -6,7 +6,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Message;
 
-class Notification extends Mailable
+class MessageNotification extends Mailable
 {
   use Queueable, SerializesModels;
 

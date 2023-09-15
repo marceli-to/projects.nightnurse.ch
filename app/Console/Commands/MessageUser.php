@@ -46,7 +46,7 @@ class MessageUser extends Command
     {
       $recipient = ($env == 'production' && $m->user->email) ? $m->user->email : env('MAIL_TO');
       try {
-        \Mail::to($recipient)->send(new \App\Mail\Notification($m->message));
+        \Mail::to($recipient)->send(new \App\Mail\MessageNotification($m->message));
         $m->processed = 1;
         $m->save();
       } 
