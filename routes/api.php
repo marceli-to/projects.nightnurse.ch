@@ -23,6 +23,7 @@ use App\Http\Controllers\Api\v1\CompanyController as CompanyApiController;
 use App\Http\Controllers\Api\v1\UserController as UserApiController;
 use App\Http\Controllers\Api\v1\ProjectController as ProjectApiController;
 use App\Http\Controllers\Api\v1\MessageController as MessageApiController;
+use App\Http\Controllers\Api\v1\FeedbackController as FeedbackApiController;
 
 // Public API
 Route::middleware('auth:api')->group(function() {
@@ -50,6 +51,9 @@ Route::middleware('auth:api')->group(function() {
 
   Route::post('v1/message', [MessageApiController::class, 'store']);
   Route::get('v1/messages/{project}', [MessageApiController::class, 'get']);
+
+  Route::get('v1/feedbacks', [FeedbackApiController::class, 'get']);
+  Route::get('v1/feedbacks/{project}', [FeedbackApiController::class, 'find']);
 });
 
 // Protected API routes
