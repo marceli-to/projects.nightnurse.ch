@@ -34,7 +34,8 @@ class Message extends Base
     'message_date_string',
     'body_preview',
     'can_delete',
-    'truncate_files'
+    'truncate_files',
+    'private_internal',
   ];
 
   public function sender()
@@ -217,6 +218,17 @@ class Message extends Base
   public function getBodyPreviewAttribute($value)
   {
     return \Str::words(strip_tags(str_replace(array('&nbsp;', '<br>', '<br />'), array('', ' ', ' '), html_entity_decode(trim($this->body)))), 4, ' ...');
+  }
+
+  /**
+   * Get the team ba attribute of a message
+   *
+   * @param  string  $value
+   * @return string
+   */
+  public function getPrivateInternalAttribute($value)
+  {
+    return $this->sender->team_id == 1 && $this->private && $this->internal ? true : false;
   }
 
 }

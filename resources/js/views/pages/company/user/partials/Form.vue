@@ -78,7 +78,7 @@
     </div>
 
     <div class="form-group">
-      <label>{{ translate('Vertec Id') }} <asterisk /></label>
+      <label>{{ translate('Vertec Id') }}</label>
       <input type="text" v-model="data.vertec_id">
     </div>
 

@@ -4,8 +4,15 @@
 <x-card-auth>
   <h2 class="card-auth__heading">{{ __('Passwort vergessen') }}</h2>
   <p class="text-sm text-dark">{{__('messages.password_recovery')}}</p>
+
   @if ($errors->any())
-    <x-alert type="danger" message="{{__('messages.general_error')}}" />
+    <div class="alert alert-danger mb-2">
+      <ul class="!p-0 !m-0">
+        @foreach ($errors->all() as $error)
+          <li style="list-style: none" class="!m-0 leading-5">{{ $error }}</li>
+        @endforeach
+      </ul>
+    </div>
   @endif
   @if (session('status'))
     <x-alert type="success" message="{{ session('status') }}" />

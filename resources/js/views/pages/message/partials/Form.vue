@@ -108,7 +108,7 @@
           </template>
           <template v-else>
             <mail-icon class="h-5 w-5" aria-hidden="true" />
-            <span class="block ml-2">{{ translate('Senden') }}</span>
+            <span class="block ml-2">{{ $store.state.feedType == 'private' ? translate('Private Nachricht senden') : translate('Nachricht senden') }}</span>
           </template>
         </button>
       </content-footer>

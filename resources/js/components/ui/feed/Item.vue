@@ -1,6 +1,6 @@
 <template>
   <div 
-    :class="[ message.private ? 'is-private' : message.internal ? 'is-internal' : '', 'feed-item group']" 
+    :class="[ message.private_internal ? 'is-private is-internal' : message.private ? 'is-private' : message.internal ? 'is-internal' : '', 'feed-item group']" 
     v-if="isLoaded">
     <div class="sm:max-w-[70%] lg:max-w-[60%] w-full relative">
 
@@ -266,9 +266,16 @@ export default {
   @apply flex justify-end  mb-8 lg:mb-10
 }
 
-.feed-item.is-internal,
+.feed-item.is-internal {
+  @apply justify-start
+}
+
 .feed-item.is-private {
-  @apply flex justify-start
+  @apply justify-end
+}
+
+.feed-item.is-private.is-internal {
+  @apply !justify-start
 }
 
 /* .feed-item.is-private a,

@@ -3,9 +3,9 @@
     <div v-for="(messages, day) in $props.feedItems" :key="day" class="relative">
       <template v-if="hasItems(messages)">
         <div 
-          :class="[ message.private ? 'is-private' : message.internal ? 'is-internal' : '', 'group flex justify-center mb-3']" 
+          :class="[ message.private_internal ? 'is-private is-internal' : message.private ? 'is-private' : message.internal ? 'is-internal' : '', 'group flex justify-center mb-3']" 
           v-for="(message, idx) in filteredItems(messages)" :key="idx">
-          <div class="max-w-[280px] sm:max-w-[480px] w-auto inline-block p-2 bg-white border-2 border-gray-100 text-xs sm:text-sm text-dark relative rounded translate-x-1/3 group-[.is-internal]:bg-gray-100 group-[.is-internal]:-translate-x-1/3 group-[.is-private]:-translate-x-1/3 group-[.is-private]:bg-alice-blue  group-[.is-private]:border-alice-blue group-hover:opacity-80">
+          <div class="max-w-[280px] sm:max-w-[480px] w-auto inline-block p-2 bg-white border-2 border-gray-100 text-xs sm:text-sm text-dark relative rounded translate-x-1/3 group-[.is-internal]:bg-gray-100 group-[.is-internal]:-translate-x-1/3 group-[.is-private.is-internal]:-translate-x-1/3 group-[.is-private]:translate-x-1/3 group-[.is-private]:bg-alice-blue group-[.is-private]:border-alice-blue group-hover:opacity-80">
             <a href="javascript:;" @click="$emit('scrollTo', message.uuid)" class="no-underline text-xs text-gray-400 inline-block w-auto font-mono">
               <span class="font-bold" v-if="message.sender">{{message.sender.full_name}}:</span>
               <template v-if="message.subject">

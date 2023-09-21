@@ -95,6 +95,8 @@ export default {
         'Löschen': 'Delete',
         'Heute, ': 'Today, ',
         'Warten auf Upload': 'Waiting for upload to finish',
+        'Nachricht senden': 'Send message',
+        'Private Nachricht senden': 'Send private message',
         'Dieses Projekt ist archiviert. Alle Dateien werden ungefähr 30 Tage nach Abschluss gelöscht.': 'This project has been archived. The attached files will be deleted approximately 30 days after the end of the project.',
       },
 
