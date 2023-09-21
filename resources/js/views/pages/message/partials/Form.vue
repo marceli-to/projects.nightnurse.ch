@@ -359,8 +359,15 @@ export default {
       // If the user is an admin (i.e. belongs to the owner company),
       // and the array of external recipients is empty, check that
       // at least one recipient is a non-owner-recipient
-      const external = this.data.users.filter((user) => user.company_id != 1);
-      if (this.$store.state.user.admin && external.length == 0 && this.data.private == 0) {
+      const external_users = this.data.users.filter((user) => user.company_id != 1);
+      const internal_users = this.data.users.filter((user) => user.team_id == 1);
+      
+      if (!this.$store.state.user.admin && internal_users.length == 0) {
+        if (!confirm(this.translate('Es wurde kein Nightnurse-Empfänger ausgewählt. Trotzdem fortfahren?'))) {
+          return false;
+        }
+      }
+      else if (this.$store.state.user.admin && external_users.length == 0 && this.data.private == 0) {
         if (!confirm(this.translate('Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?'))) {
           return false;
         }
