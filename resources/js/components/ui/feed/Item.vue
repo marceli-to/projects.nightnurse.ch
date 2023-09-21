@@ -71,24 +71,25 @@
               :intermediate="message.intermediate"
               :private="message.private">
             </feed-item-attachement>
-            <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4" v-if="(message.files.length > 3)">
-              <a 
-                href="javascript:;" 
-                @click="toggle(message.uuid)"
-                :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
-                v-if="hasTruncateFiles">
-                <chevron-down-icon class="h-4 w-4" aria-hidden="true" />
-                <span class="inline-block ml-2">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
-              </a>
-              <a
-                href="javascript:;" 
-                @click="toggle(message.uuid)"
-                :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
-                v-else>
-                <chevron-up-icon class="h-4 w-4" aria-hidden="true" />
-                <span class="inline-block ml-2">{{ translate('Weniger anzeigen') }}</span>
-              </a>
-
+            <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4">
+              <template  v-if="(message.files.length > 3)">
+                <a 
+                  href="javascript:;" 
+                  @click="toggle(message.uuid)"
+                  :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
+                  v-if="hasTruncateFiles">
+                  <chevron-down-icon class="h-4 w-4" aria-hidden="true" />
+                  <span class="inline-block ml-2">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
+                </a>
+                <a
+                  href="javascript:;" 
+                  @click="toggle(message.uuid)"
+                  :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
+                  v-else>
+                  <chevron-up-icon class="h-4 w-4" aria-hidden="true" />
+                  <span class="inline-block ml-2">{{ translate('Weniger anzeigen') }}</span>
+                </a>
+              </template>
               <a 
                 :href="`/download/zip/${message.uuid}`" 
                 target="_blank" 
