@@ -74,7 +74,7 @@ class MessageController extends Controller
       'subject' => $request->input('subject'),
       'body' => $request->input('body'),
       'private' => $request->input('private'),
-      'intermediate' => $request->input('intermediate'),
+      'intermediate' => $request->input('intermediate') ? $request->input('intermediate') : 0,
       'internal' => auth()->user()->company->owner ? 1 : 0,
       'project_id' => $project->id,
       'user_id' => auth()->user()->id,
