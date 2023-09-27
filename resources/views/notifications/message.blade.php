@@ -72,7 +72,11 @@ An:
 <tr>
   <td class="py-10" style="vertical-align: middle">
     <span class="text-xs font-mono">
-      <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{$file['original_name']}}</a>
+      @if ($file['folder'])
+        <a href="{{url('')}}/storage/uploads/{{$file['folder']}}/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{$file['original_name']}}</a>
+      @else
+        <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{$file['original_name']}}</a>
+      @endif
     </span>
   </td>
 </tr>
