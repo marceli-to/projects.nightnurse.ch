@@ -97,19 +97,20 @@ class Media
       }
 
       $newFilename = $this->uniqueFileName($filename, $folder);
-
-      return 
-        Storage::move(
-          'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
-          'public/uploads' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $newFilename
-        );
-    }
-
-    return 
       Storage::move(
         'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
-        'public/uploads' . DIRECTORY_SEPARATOR . $filename
+        'public/uploads' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $newFilename
       );
+      return $newFilename;
+
+    }
+    Storage::move(
+      'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
+      'public/uploads' . DIRECTORY_SEPARATOR . $filename
+    );
+
+    return $filename;
+
   }
 
   /**

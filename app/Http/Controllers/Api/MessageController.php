@@ -96,11 +96,11 @@ class MessageController extends Controller
     {
       foreach($request->input('files') as $file)
       {
-        $media = (new Media())->copy($file['name'], $project->uuid);
+        $filename = (new Media())->copy($file['name'], $project->uuid);
 
         $messageFile = MessageFile::create([
           'uuid' => \Str::uuid(),
-          'name' => $file['name'],
+          'name' => $filename,
           'original_name' => $file['original_name'],
           'image_orientation' => $file['image_orientation'],
           'folder' => $project->uuid,
