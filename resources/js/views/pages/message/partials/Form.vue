@@ -86,7 +86,7 @@
                 </a>
               </list-action>
             </list-item>
-            <div class="form-group my-4 sm:my-6 lg:my-8" v-if="$store.state.user.admin">
+            <div class="form-group my-4 sm:my-6 lg:my-8" v-if="$store.state.user.admin && !$store.state.feedType == 'private'">
               <label class="mb-2 lg:mb-3">{{ translate('Zwischenstand?') }} {{  isIntermediate }}</label>
               <label class="relative !flex items-center cursor-pointer">
                 <input type="checkbox" value="1" v-model="data.intermediate" class="sr-only peer">
@@ -228,6 +228,7 @@ export default {
       isLoading: false,
       isVisible: false,
       isReply: false,
+      isSending: false,
       isProjectManager: false,
       hasUploads: false,
       hasValidUpload: true,
@@ -334,10 +335,12 @@ export default {
       localStorage.setItem(storageName, JSON.stringify(storage));
 
       if (this.validate()) {
+        this.isSending = true;
         this.data.intermediate = this.data.intermediate ? 1 : 0;
         this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
           this.$notify({ type: "success", text: this.messages.created });
           this.reset();
+
           window.scrollTo(0, 0);
         });
       }
@@ -345,6 +348,7 @@ export default {
 
     reset() {
       this.hide();
+      this.isSending = false;
       this.data = {
         subject: null,
         body: null,
@@ -576,10 +580,14 @@ export default {
 
     allowSubmit() {
       // Form submission is allowed if:
-      // 1. this.data.subject is not empty or null and this.data.files is empty and this.data.users is not empty
-      // 2. this.data.body is not empty and this.data.files is empty and this.data.users is not empty
-      // 3. this.data.files is not empty and this.data.users is not empty
-      if (this.data.subject && this.data.subject.length > 0 && this.data.files.length == 0 && this.data.users.length > 0 && this.hasValidUpload) {
+      // 1. isSending is false
+      // 2. this.data.subject is not empty or null and this.data.files is empty and this.data.users is not empty
+      // 3. this.data.body is not empty and this.data.files is empty and this.data.users is not empty
+      // 4. this.data.files is not empty and this.data.users is not empty
+      if (this.isSending) {
+        return false;
+      }
+      else if (this.data.subject && this.data.subject.length > 0 && this.data.files.length == 0 && this.data.users.length > 0 && this.hasValidUpload) {
         return true;
       }
       else if (this.data.body && this.data.body.length > 0 && this.data.files.length == 0 && this.data.users.length > 0 && this.hasValidUpload) {

@@ -83,8 +83,8 @@ export default {
         'Schliessen': 'close',
         'Abbrechen': 'cancel',
         'Zugriffsrechte': 'Access',
-        'archivierte Projekte': 'show archive',
-        'aktive Projekte': 'show active projects',
+        'Archivierte Projekte': 'Archived projects',
+        'Aktive Projekte': 'Active projects',
         'Switch language to': 'Sprache wechseln',
         'Bitte Empfänger auswählen': 'Please seledt at least one recipient',
         'Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?': 'No customer-side recipient was selected. Continue anyway?',
@@ -98,6 +98,7 @@ export default {
         'Warten auf Upload': 'Waiting for upload to finish',
         'Nachricht senden': 'Send message',
         'Private Nachricht senden': 'Send private message',
+        'Zwischenstände anzeigen': 'Project Step',
         'Dieses Projekt ist archiviert. Alle Dateien werden ungefähr 30 Tage nach Abschluss gelöscht.': 'This project has been archived. The attached files will be deleted approximately 30 days after the end of the project.',
       },
 
