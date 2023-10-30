@@ -73,7 +73,9 @@
       <label>{{ translate('Team') }}</label>
       <select v-model="data.team_id">
         <option :value="null">--</option>
-        <option :value="t.id" v-for="t in data.company.teams" :key="t.id">{{t.description}}</option>
+        <option :value="t.id" v-for="t in data.company.teams" :key="t.id">
+          {{t.description}}
+        </option>
       </select>
     </div>
 

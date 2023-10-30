@@ -33,6 +33,7 @@
         "@tinymce/tinymce-vue": "^3.2.8",
         "@vue-hero-icons/outline": "^1.7.2",
         "@vue-hero-icons/solid": "^1.7.2",
+        "markerjs2": "^2.31.2",
         "moment": "^2.29.4",
         "nprogress": "^0.2.0",
         "vue-advanced-cropper": "^0.16.10",

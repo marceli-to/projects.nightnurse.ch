@@ -261,6 +261,10 @@ class ProjectController extends Controller
     $data['uuid'] = \Str::uuid();
     $project = Project::create($data);
 
+    // Set 'last_activity' to current timestamp
+    $project->last_activity = now();
+    $project->save();
+
     // Handle companies & users (pivot tables)
     $companies = collect($request->input('companies'))->pluck('id');
     $project->companies()->sync($companies);
