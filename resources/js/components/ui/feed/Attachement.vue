@@ -50,14 +50,14 @@
 import { AnnotationIcon } from "@vue-hero-icons/outline";
 import FileType from "@/components/ui/misc/FileType.vue";
 import Helpers from "@/mixins/Helpers";
-import Markup from "@/components/ui/Markup.vue";
+import Markup from "@/components/ui/markup/Markup.vue";
 
 export default {
 
   components: {
     FileType,
     AnnotationIcon,
-    Markup
+    //Markup
   },
 
   mixins: [

@@ -64,7 +64,8 @@
     @apply bg-dark border-dark text-white 
   }
 
-  input[type="checkbox"].checkbox {
+  input[type="checkbox"].checkbox,
+  input[type="radio"].checkbox {
     @apply accent-dark h-4 w-4 border !border-gray-200 border-highlight rounded bg-white focus:outline-none mr-2 cursor-pointer
   }
 }
@@ -73,11 +74,13 @@
   @apply flex items-center;
 }
 
-.form-check input[type="checkbox"].checkbox + label {
+.form-check input[type="checkbox"].checkbox + label,
+.form-check input[type="radio"].checkbox + label {
   @apply text-sm text-dark font-sans cursor-pointer select-none
 }
 
-.form-check input[type="checkbox"].checkbox:checked + label {
+.form-check input[type="checkbox"].checkbox:checked + label,
+.form-check input[type="radio"].checkbox:checked + label {
   @apply bg-transparent border-0 text-dark
 }
 

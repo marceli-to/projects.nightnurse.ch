@@ -76,6 +76,8 @@ export default {
         'Aktionen': 'Actions',
         'Antworten': 'Reply',
         'Empfänger auswählen': 'Select recipients',
+        'Hauptkunde auswählen': 'Select main client',
+        'Kunde auswählen': 'Select client',
         'Ja': 'Yes',
         'Nein': 'No',
         'Neue Nachricht': 'New message',

@@ -54,37 +54,33 @@
 
     <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group !mb-0']">
       <label>{{ translate('Hauptkunde') }} <asterisk /></label>
-      <select v-model="data.company_id" @change="updateMainCompany($event)">
-        <option value="null">{{ translate('Bitte wählen...') }}</option>
-        <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
-      </select>
-      <div class="flex justify-end">
-        <button-widget :label="translate('Kunde hinzufügen')" @click="$refs.widgetCompanyCreate.show()" />
+      <div class="text-dark text-sm lg:text-base mt-0 block w-full px-0 py-1 lg:py-2 border-0 border-bottom">
+        {{ data.company.name }}
+      </div>
+      <div class="flex justify-between mb-6 sm:mb-8">
+        <button-widget :label="translate('Hauptkunde auswählen')" @click="$refs.widgetMainCompanySelect.show()" />
+        <button-widget :label="translate('Kunde hinzufügen')" @click="$refs.widgetMainCompanyCreate.show()" />
       </div>
     </div>
 
-    <div class="form-group !mb-0">
+    <div class="form-group">
       <label>{{ translate('Weitere Kunden') }}</label>
-      <select name="companies" @change="addCompany($event)">
-        <option value="null">{{ translate('Bitte wählen...') }}</option>
-        <option v-for="c in settings.companies" :key="c.id" :value="c.id">{{ c.full_name }}</option>
-      </select>
-      <div class="flex justify-end">
-        <button-widget :label="translate('Kunde hinzufügen')" @click="$refs.widgetCompanyCreate.show()" />
+      <div v-if="data.companies" class="text-dark text-sm lg:text-base mt-0 block w-full px-0 py-1 lg:py-2 border-0 border-bottom">
+        <div class="flex flex-wrap gap-4 mb-1">
+          <a 
+            href="javascript:;"
+            class="rounded-sm inline-flex w-auto items-center bg-gray-300 hover:bg-highlight hover:text-white transition-all px-2 py-2 text-dark font-mono text-xs sm:text-sm no-underline"
+            v-for="d in data.companies" 
+            :key="d.id"
+            @click.prevent="deselectCompany(d.id)">
+            <span class="inline-block mr-3">{{ d.full_name }}</span>
+            <x-icon class="h-5 w-5" aria-hidden="true"></x-icon>
+          </a>
+        </div>
       </div>
-    </div>
-
-    <div v-if="data.companies" class="form-group">
-      <div class="flex flex-wrap">
-        <a 
-          href="javascript:;"
-          class="rounded-sm inline-flex w-auto items-center bg-dark hover:bg-highlight px-3 py-2 lg:px-4 lg:py-3 text-white font-mono mr-4 mb-4 text-xs sm:text-sm no-underline"
-          v-for="d in data.companies" 
-          :key="d.id"
-          @click.prevent="removeCompany(d.id)">
-          <span class="inline-block mr-3">{{ d.full_name }}</span>
-          <x-icon class="h-5 w-5" aria-hidden="true"></x-icon>
-        </a>
+      <div class="flex justify-between">
+        <button-widget :label="translate('Kunde auswählen')" @click="$refs.widgetCompanySelect.show()" />
+        <button-widget :label="translate('Kunde hinzufügen')" @click="$refs.widgetCompanyCreate.show()" />
       </div>
     </div>
 
@@ -258,6 +254,25 @@
     <company-create-widget @createdCompany="createdCompany($event)" />
   </lightbox>
 
+  <lightbox ref="widgetMainCompanyCreate">
+    <company-create-widget @createdCompany="createdMainCompany($event)" />
+  </lightbox>
+
+  <lightbox ref="widgetMainCompanySelect" v-if="isFetched">
+    <company-select-widget 
+      :companyId="data.company_id" 
+      :type="'single'"
+      :companies="settings.companies" 
+      @selectMainCompany="selectMainCompany($event)" />
+  </lightbox>
+
+  <lightbox ref="widgetCompanySelect" v-if="isFetched">
+    <company-select-widget 
+      :companies="settings.companies"
+      :type="'multiple'" 
+      @selectCompany="selectCompany($event)" />
+  </lightbox>
+
   <lightbox ref="widgetUserCreate">
     <user-create-widget :companyUuid="companyUuid" @createdUser="createdUser($event)" />
   </lightbox>
@@ -283,6 +298,7 @@ import Asterisk from "@/components/ui/form/Asterisk.vue";
 import Lightbox from "@/components/ui/layout/Lightbox.vue";
 import ButtonWidget from "@/components/ui/ButtonWidget.vue";
 import CompanyCreateWidget from '@/views/pages/company/components/WidgetCreate.vue';
+import CompanySelectWidget from '@/views/pages/company/components/WidgetSelect.vue';
 import UserCreateWidget from '@/views/pages/company/user/components/WidgetCreate.vue';
 import ProjectQuoteWidget from '@/views/pages/project/components/WidgetQuote.vue';
 
@@ -304,6 +320,7 @@ export default {
     NProgress,
     Lightbox,
     CompanyCreateWidget,
+    CompanySelectWidget,
     UserCreateWidget,
     ProjectQuoteWidget,
     ButtonWidget
@@ -335,6 +352,7 @@ export default {
         users: [],
         quotes: [],
       },
+      keyword: null,
 
       companyUuid: null,
 
@@ -449,8 +467,7 @@ export default {
       }));
     },
 
-    addCompany(event) {
-      const id = parseInt(event.target.value);
+    selectCompany(id) {
       const idx = this.data.companies.findIndex(x => x.id === id);
       if (idx == -1 && id != "null") {
         const index = this.settings.companies.findIndex(x => x.id === id);
@@ -463,10 +480,8 @@ export default {
       }
     },
 
-    removeCompany(id) {
+    deselectCompany(id) {
       const idx = this.data.companies.findIndex(x => x.id === id);
-     
-      // remove all company associated users
       if (this.data.companies[idx].users) {
         this.data.companies[idx].users.forEach(user => {
           const i = this.data.users.findIndex(x => x.id === user.id)
@@ -484,8 +499,8 @@ export default {
       }
     },
 
-    updateMainCompany(event) {
-      const id = parseInt(event.target.value);
+    selectMainCompany(id) {
+
       const idx = this.settings.companies.findIndex(x => x.id === id);
       if (idx > -1) {
         // remove all company associated users
@@ -500,6 +515,7 @@ export default {
           }
         }
         this.data.company = this.settings.companies[idx];
+        this.data.company_id = id;
       }
       else {
         this.data.company = null;
@@ -508,11 +524,26 @@ export default {
       if (this.isUpdate()) {
         this.quickSave();
       }
+      this.$refs.widgetMainCompanySelect.hide();
     },
 
     createdCompany(company) {
       this.settings.companies.unshift(company);
+      this.data.companies.push(company);
       this.$refs.widgetCompanyCreate.hide();
+      if (this.isUpdate()) {
+        this.quickSave();
+      }
+    },
+
+    createdMainCompany(company) {
+      this.settings.companies.unshift(company);
+      this.data.company = company;
+      this.data.company_id = company.id;
+      this.$refs.widgetMainCompanyCreate.hide();
+      if (this.isUpdate()) {
+        this.quickSave();
+      }
     },
 
     createdQuote(quote) {
