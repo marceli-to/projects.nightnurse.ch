@@ -35,13 +35,13 @@
           {{ file.original_name | truncate(45, '...') }} – {{ file.size | filesize(file.size) }}<br>
          </div>
       </a>
-      <a href="" class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3 mt-1">
+      <!-- <a href="" class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3 mt-1">
         <div class="relative">
           <annotation-icon class="h-4 w-4 mr-2"  aria-hidden="true" />
           <div class="rounded-full bg-highlight w-[7px] h-[7px] absolute -top-[2px] right-[6px]"></div>
         </div>
         Comments
-      </a>
+      </a> -->
       <!-- <markup :image="file"></markup> -->
     </template>
   </div>
