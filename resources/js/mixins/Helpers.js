@@ -34,5 +34,12 @@ export default {
       }
       return `/img/small/${file.name}`;
     },
+
+    largeImageUri(file) {
+      if (file.folder) {
+        return `/img/large/${file.folder}/${file.name}`;
+      }
+      return `/img/large/${file.name}`;
+    },
   }
 };

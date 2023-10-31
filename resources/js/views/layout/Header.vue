@@ -13,7 +13,7 @@
       <menu-alt-3-icon aria-hidden="true" />
     </a>
   </div>
-  <div class="fixed z-40 w-screen h-screen inset-0 bg-black bg-opacity-60 z-1001" v-if="hasMenu">
+  <div class="fixed w-screen h-screen inset-0 bg-black bg-opacity-60 z-[2001]" v-if="hasMenu">
     <nav class="fixed z-50 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[300px] sm:max-w-lg bg-white rounded-md p-4 space-y-5">
       <div class="mb-3 sm:mb-4 relative">
         <a href="javascript:;" @click="toggleMenu()" class="text-gray-400 hover:text-highlight block absolute top-0 right-0">

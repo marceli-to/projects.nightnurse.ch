@@ -62,3 +62,12 @@ body {
 ::-webkit-scrollbar-thumb:window-inactive {
   background-color: #bbb;
 }	
+
+/* hide a link <a href="https://markerjs.com/"> */
+a[href^="https://markerjs.com/"] {
+  display: none !important;
+}
+
+.__markerjs2_ {
+  @apply !z-[3000] !w-auto
+}
