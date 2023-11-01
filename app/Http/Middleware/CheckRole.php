@@ -16,7 +16,7 @@ class CheckRole
    */
   public function handle($request, Closure $next, $role)
   {
-    if (Auth::user()->isAdmin() === FALSE && Auth::user()->isEditor() === FALSE)
+    if (Auth::user()->isAdmin() === FALSE && Auth::user()->isClient() === FALSE)
     {
       return abort(403);
     }

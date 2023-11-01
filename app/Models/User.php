@@ -1,5 +1,6 @@
 <?php
 namespace App\Models;
+use App\Models\Role;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -57,20 +58,6 @@ class User extends Authenticatable implements MustVerifyEmail
    * @var array
    */
   protected $appends = ['short_name', 'full_name', 'acronym'];
-
-
-  public function permissions()
-  {
-    if ($this->role_id == 1)
-    {
-      return [
-        'private' => TRUE,
-        'clients' => TRUE
-      ];
-    }
-
-    return [];
-  }
 
 
   /**
@@ -136,16 +123,16 @@ class User extends Authenticatable implements MustVerifyEmail
 
   public function isAdmin()
   {
-    return $this->role_id == 1 ? TRUE : FALSE;
+    return Role::find($this->role_id)->isAdmin();
   }
 
   /**
-   * Role helper for editors
+   * Role helper for clients
    */
 
-  public function isEditor()
+  public function isClient()
   {
-    return $this->role_id == 2 ? TRUE : FALSE;
+    return Role::find($this->role_id)->isClient();
   }
 
   /**

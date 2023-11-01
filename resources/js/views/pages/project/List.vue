@@ -2,12 +2,17 @@
 <div v-if="isFetched">
   <content-header>
     <template #icon>
-      <router-link :to="{ name: 'project-create' }" class="btn-add" v-if="$store.state.user.admin">
+      <router-link :to="{ name: 'project-create' }" class="btn-add" v-if="$store.state.user.admin && !isArchive">
         <plus-sm-icon class="h-5 w-5" aria-hidden="true" />
       </router-link>
     </template>
     <template #title>
-      {{ translate('Projekte') }}
+      <template v-if="isArchive">
+        {{ translate('Archivierte Projekte') }}
+      </template>
+      <template v-else>
+        {{ translate('Projekte') }}
+      </template>
     </template>
 
   </content-header>
@@ -19,8 +24,7 @@
     </a>
     <a href="" 
       @click.prevent="archived()" 
-      class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight"
-      v-if="$store.state.user.admin">
+      class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight">
       <folder-icon class="h-4 w-4" aria-hidden="true" />
       <span v-if="isArchive" class="block ml-2">{{ translate('Aktive Projekte') }}</span>
       <span v-else class="block ml-2">{{ translate('Archivierte Projekte') }}</span>
@@ -58,13 +62,20 @@
         </div>
       </div>
       <div class="col-span-2 md:col-span-2">
-        <div class="flex items-center justify-end" v-if="$store.state.user.admin">
-          <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
-            <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
-          </router-link>
-          <a href="" @click.prevent="destroy(d.uuid)">
-            <trash-icon class="icon-list" aria-hidden="true" />
-          </a>
+        <div class="flex items-center justify-end">
+          <template v-if="$store.state.user.admin">
+            <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
+              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+            </router-link>
+            <a href="" @click.prevent="destroy(d.uuid)">
+              <trash-icon class="icon-list" aria-hidden="true" />
+            </a>
+          </template>
+          <!-- <template v-else>
+            <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
+              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+            </router-link>
+          </template> -->
         </div>
       </div>
     </div>
@@ -87,7 +98,6 @@
             <br class="sm:hidden">{{ d.company.name }}
           </span>
         </router-link>
-
         <div v-if="d.preview_messages" :class="[showIntermediates ? 'flex' : '', '']">
           <template v-if="showIntermediates">
             <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" :class="[message.intermediate ? 'mt-2' : '', '']">
@@ -100,23 +110,26 @@
             </div>
           </template>
         </div>
-
-
       </div>
       <div class="col-span-2 md:col-span-2">
-        <div class="flex items-center justify-end" v-if="$store.state.user.admin">
-          <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
-            <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
-          </router-link>
-          <a href="" @click.prevent="destroy(d.uuid)">
-            <trash-icon class="icon-list" aria-hidden="true" />
-          </a>
+        <div class="flex items-center justify-end">
+          <template v-if="$store.state.user.admin">
+            <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
+              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+            </router-link>
+            <a href="" @click.prevent="destroy(d.uuid)">
+              <trash-icon class="icon-list" aria-hidden="true" />
+            </a>
+          </template>
+          <!-- <template v-else>
+            <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
+              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+            </router-link>
+          </template> -->
         </div>
       </div>
     </div>
   </div>
-
-
 </div>
 </template>
 <script>

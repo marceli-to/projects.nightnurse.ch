@@ -87,7 +87,7 @@ class Message extends Base
   }
 
   /**
-   * Scope for intermediate messages
+   * Scope for messages flagged as intermediate (Zwischenstand)
    * 
    */
 
@@ -102,7 +102,7 @@ class Message extends Base
    */
   public function scopeLimitByRole($query)
   {
-    if (auth()->user()->isEditor())
+    if (auth()->user()->isClient())
     {
       return $query->where('private', 0);
     }

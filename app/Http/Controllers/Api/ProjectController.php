@@ -57,7 +57,7 @@ class ProjectController extends Controller
   
     // Get user projects
     $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
-    $projects = Project::with('company')
+    $projects = Project::active()->with('company')
       ->with(['previewMessages' => function ($query) {
         $query->with('sender', 'files')->limit(3);
       }])
@@ -101,6 +101,18 @@ class ProjectController extends Controller
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
     }
 
+    // Get user projects
+    $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
+    $projects = Project::archive()->with('company')
+      ->with(['previewMessages' => function ($query) {
+        $query->with('sender', 'files')->limit(3);
+      }])
+      ->whereIn('id', $ids)
+      ->orderBy('last_activity', 'DESC')
+      ->orderBy('number', 'DESC')
+      ->get();
+    
+    return response()->json(['projects' => ProjectListResource::collection($projects)]);
   }
 
   /**

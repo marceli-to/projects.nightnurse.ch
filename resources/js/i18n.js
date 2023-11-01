@@ -5,6 +5,7 @@ export default {
 
       en: {
         'Projekte': 'Projects',
+        'Archivierte Projekte': 'Archived projects',
         'Projekt bearbeiten': 'Edit project',
         'Projekt erstellen': 'Create project',
         'Projekt erfasst': 'Project created',
