@@ -55,15 +55,9 @@ An:
   <td class="py-15" style="vertical-align: middle">
     <span class="text-xs font-mono">
       @if ($file['folder'])
-        <a href="{{url('')}}/storage/uploads/{{$file['folder']}}/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">
-          {{$file['original_name']}}
-        </a>
-        <br>{{ \ReadableSize($file['size'])}}
+        <a href="{{url('')}}/storage/uploads/{{$file['folder']}}/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{ $file['original_name'] }}</a><br>{{ \ReadableSize($file['size'])}}
       @else
-        <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">
-          {{$file['original_name']}}
-        </a>
-        <br>{{ \ReadableSize($file['size'])}}
+        <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{ $file['original_name'] }}</a><br>{{ \ReadableSize($file['size'])}}
       @endif
     </span>
   </td>
@@ -75,11 +69,9 @@ An:
   <td class="py-10" style="vertical-align: middle">
     <span class="text-xs font-mono">
       @if ($file['folder'])
-        <a href="{{url('')}}/storage/uploads/{{$file['folder']}}/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{$file['original_name']}}</a>
-        <br>{{ \ReadableSize($file['size'])}}
+        <a href="{{url('')}}/storage/uploads/{{$file['folder']}}/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{ $file['original_name'] }}</a><br>{{ \ReadableSize($file['size'])}}
       @else
-        <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{$file['original_name']}}</a>
-        <br>{{ \ReadableSize($file['size'])}}
+        <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{ $file['original_name'] }}</a><br>{{ \ReadableSize($file['size'])}}
       @endif
     </span>
   </td>

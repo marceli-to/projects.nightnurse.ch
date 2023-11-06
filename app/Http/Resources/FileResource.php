@@ -20,7 +20,7 @@ class FileResource extends JsonResource
       'folder' => $this->folder,
       'extension' => $this->extension,
       'preview' => $this->preview,
-      'size' => $this->size,
+      'size' => \ReadableSize($this->size),
     ];
   }
 }

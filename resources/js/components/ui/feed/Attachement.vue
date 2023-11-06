@@ -14,7 +14,7 @@
           <file-type :extension="file.extension" />
         </div>
         <div :class="[file.preview ? 'py-1 sm:py-2 lg:py-3' : '', 'font-mono text-xs']">
-          {{ file.original_name | truncate(45, '...') }} – {{ file.size | filesize(file.size) }}
+          {{ file.original_name | truncate(45, '...') }} – {{ file.size }}
         </div>
       </a>
     </template>
@@ -32,7 +32,7 @@
           <file-type :extension="file.extension" />
         </div>
         <div class="font-mono text-xs">
-          {{ file.original_name | truncate(45, '...') }} – {{ file.size | filesize(file.size) }}<br>
+          {{ file.original_name | truncate(45, '...') }} – {{ file.size }}<br>
          </div>
       </a>
       <!-- <a href="" class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3 mt-1">
