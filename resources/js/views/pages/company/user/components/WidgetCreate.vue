@@ -9,19 +9,19 @@
     <div v-if="hasErrors" class="text-sm font-mono mb-2 text-red-500">
       {{errors.message}}
     </div>
+    <template v-if="errors.validEmailDomain == false">
+      <div class="flex items-start py-2 px-3 mr-1 mb-4 rounded-sm bg-yellow-500 text-white text-xs font-mono">
+        <exclamation-icon class="shrink-0 block w-6 h-auto mr-2 mt-0.5" />
+        <div class="hyphens-auto leading-5">{{ translate('Die E-Mail-Adresse stimmt nicht mit der Kundendomain überein. Soll diese trotzdem gespeichert werden? Falls die Person zu einer anderen Firma gehört, bitte bei dieser Firma hinzufügen.') }}</div>
+      </div>
+    </template>
     <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('E-Mail') }} <asterisk /></label>
       <input type="email" v-model="data.email" @blur="validateEmailDomain()">
       <required :text="translate('Pflichtfeld')" />
     </div>
     <footer>
-      <div class="mt-6 lg:mt-8">
-        <template v-if="errors.validEmailDomain == false">
-          <div class="flex items-start py-2 px-3 mr-1 mb-4 rounded-sm bg-yellow-500 text-white text-xs font-mono">
-            <exclamation-icon class="block w-10 h-auto mr-2 mt-0.5" />
-            <div class="hyphens-auto leading-5">{{ translate('Die E-Mail-Adresse stimmt nicht mit der Kundendomain überein. Soll diese trotzdem gespeichert werden?') }}</div>
-          </div>
-        </template>
+      <div class="mt-4 lg:mt-6">
         <button :disabled="isPending ? true : false" type="submit" class="btn-primary" @click.prevent="store()">
           {{ translate('Speichern') }}
         </button>
