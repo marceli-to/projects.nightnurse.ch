@@ -72,7 +72,7 @@
               :private="message.private">
             </feed-item-attachement>
             <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4">
-              <template  v-if="(message.files.length > 3)">
+              <template v-if="(message.files.length > 3)">
                 <a 
                   href="javascript:;" 
                   @click="toggle(message.uuid)"
@@ -177,6 +177,7 @@ export default {
   data() {
     return {
 
+      truncateLimit: 3,
       message: null,
 
       // Routes
@@ -209,7 +210,8 @@ export default {
 
   mounted() {
     this.message = this.$props.item;
-    this.hasTruncateFiles = this.message.files.length > 3 ? true : false;
+    this.truncateLimit = this.getTruncateLimit(this.message);
+    this.hasTruncateFiles = this.message.files.length > this.truncateLimit ? true : false;
     this.isLoaded = true;
     this.hideMessageBody = this.$props.filesOnly;
   },
@@ -247,6 +249,10 @@ export default {
         NProgress.done();
       });
     },
+
+    getTruncateLimit(message) {
+      return message.intermediate ? 20 : 3;
+    }
   },
 
   watch: {
