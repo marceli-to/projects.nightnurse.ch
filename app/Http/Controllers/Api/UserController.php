@@ -210,4 +210,47 @@ class UserController extends Controller
     return false;
   }
 
+  /**
+   * Validate email domain
+   *
+   * @param  Request $request
+   * @return \Illuminate\Http\Response
+   */
+
+  public function validateEmailDomain(Request $request)
+  {
+    // validate email address
+    if (!filter_var($request->input('email'), FILTER_VALIDATE_EMAIL))
+    {
+      // set valid to true even if email is not valid
+      // validation will pick it up at a later point in the process
+      return response()->json(['valid' => true]);
+    }
+    
+    // get company by uuid
+    $company = Company::with('users')->where('uuid', $request->input('company_uuid'))->get()->first();
+
+    // get domain from email
+    $emailDomain = explode('@', $request->input('email'))[1];
+
+    // check if domain is in company email domains
+    $valid = false;
+
+    // get most used email domain from company->users
+    $domains = [];
+    foreach ($company->users as $user)
+    {
+      $domains[] = explode('@', $user->email)[1];
+    }
+    $domain = array_count_values($domains);
+    arsort($domain);
+    $domain = array_key_first($domain);
+
+    if ($domain == $emailDomain)
+    {
+      $valid = true;
+    }
+    return response()->json(['valid' => $valid]);
+  }
+
 }
