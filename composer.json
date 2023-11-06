@@ -25,6 +25,7 @@
         "nesbot/carbon": "^2.36",
         "omniphx/forrest": "2.*",
         "opcodesio/log-viewer": "^2.3",
+        "pharaonic/laravel-readable": "^1.0",
         "pusher/pusher-php-server": "^7.2",
         "qruto/laravel-wave": "^0.6.0",
         "rakutentech/laravel-request-docs": "^1.30",
