@@ -6,18 +6,21 @@
         {{ translate('Benutzer hinzufügen') }}
       </template>
     </content-header>
-    <div v-if="hasErrors" class="text-sm font-mono mb-2 text-red-500">
-      {{errors.message}}
-    </div>
-    <template v-if="errors.validEmailDomain == false">
+    <template v-if="hasErrors && errors.email">
+      <div class="flex items-center py-2 px-3 mr-1 mb-4 rounded-sm bg-red-500 text-white text-xs font-mono">
+        <exclamation-icon class="shrink-0 block w-6 h-auto mr-2 mt-0.5" />
+        <div class="hyphens-auto leading-5">{{ translate(errors.message) }}</div>
+      </div>
+    </template>
+    <template v-if="hasErrors && errors.domain">
       <div class="flex items-start py-2 px-3 mr-1 mb-4 rounded-sm bg-yellow-500 text-white text-xs font-mono">
         <exclamation-icon class="shrink-0 block w-6 h-auto mr-2 mt-0.5" />
         <div class="hyphens-auto leading-5">{{ translate('Die E-Mail-Adresse stimmt nicht mit der Kundendomain überein. Soll diese trotzdem gespeichert werden? Falls die Person zu einer anderen Firma gehört, bitte bei dieser Firma hinzufügen.') }}</div>
       </div>
     </template>
-    <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
+    <div class="form-group">
       <label>{{ translate('E-Mail') }} <asterisk /></label>
-      <input type="email" v-model="data.email" @blur="validateEmailDomain()">
+      <input type="email" v-model="data.email" @focus="clearErrors()">
       <required :text="translate('Pflichtfeld')" />
     </div>
     <footer>
@@ -66,20 +69,20 @@ export default {
       // Model
       data: {
         email: null,
-        company_uuid: this.$props.companyUuid
+        company_uuid: this.$props.companyUuid,
+        hasDomainConfirmation: false,
       },
 
       // Validation
       errors: {
         email: false,
+        domain: false,
         company_uuid: false,
-        validEmailDomain: true,
       },
 
       // Routes
       routes: {
-        post: '/api/user/register',
-        validate: '/api/user/validate/email-domain',
+        store: '/api/user/register',
       },
 
       // State
@@ -97,32 +100,54 @@ export default {
         this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
         return;
       }
+
       NProgress.start();
-      this.axios.post(this.routes.post, this.data).then(response => {
-        this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
-        this.$emit('createdUser', response.data.user);
+      this.isPending = true;
+      this.axios.post(this.routes.store, this.data).then(response => {
+        this.isPending = false;
         NProgress.done();
+
+        if (response.data.error == 'invalid_domain') {
+          this.errors.domain = true;
+          this.data.hasDomainConfirmation = true;
+          this.hasErrors = true;
+          return false;
+        }
+        else {
+          this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
+          this.$emit('createdUser', response.data.user);
+        }
+
       }).catch(error => {
-        this.hasErrors = true;
+        this.errors.email = true;
         this.errors.message = error.response.data.errors.email[0];
+        this.hasErrors = true;
+        this.isPending = false;
         NProgress.done();
       });
     },
 
-    validateEmailDomain() {
-      const data = {
-        email: this.data.email,
-        company_uuid: this.data.company_uuid,
-      };
-      this.isPending = true;
+    clearErrors() {
+      this.errors.email = false;
+      this.errors.domain = false;
       this.hasErrors = false;
-      NProgress.start();
-      this.axios.post(this.routes.validate, data).then(response => {
-        NProgress.done();
-        this.isPending = false;
-        this.errors.validEmailDomain = response.data.valid;
-      });
-    },
+    }
+
+    // validateDomain() {
+    //   const data = {
+    //     email: this.data.email,
+    //     company_uuid: this.data.company_uuid,
+    //   };
+    //   this.isPending = true;
+    //   this.hasErrors = false;
+    //   NProgress.start();
+    //   this.axios.post(this.routes.validate, data).then(response => {
+    //     NProgress.done();
+    //     this.errors.message = error.response.data.errors.email[0];
+    //     this.errors.validEmailDomain = response.data.valid;
+    //     return response.data.valid;
+    //   });
+    // },
 
   },
 };

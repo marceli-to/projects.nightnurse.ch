@@ -162,6 +162,11 @@ class UserController extends Controller
   {
     // Check for existing but deleted user first
     $user = User::withTrashed()->where('email', $request->input('email'))->get()->first();
+
+    if (!$this->validateDomain($request))
+    {
+      return response()->json(['error' => 'invalid_domain']);
+    }
     
     if ($user)
     {
@@ -211,22 +216,20 @@ class UserController extends Controller
   }
 
   /**
-   * Validate email domain
+   * Validate domain
    *
-   * @param  Request $request
+   * @param Request $request
    * @return \Illuminate\Http\Response
    */
 
-  public function validateEmailDomain(Request $request)
+  protected function validateDomain(Request $request)
   {
-    // validate email address
-    if (!filter_var($request->input('email'), FILTER_VALIDATE_EMAIL))
-    {
-      // set valid to true even if email is not valid
-      // validation will pick it up at a later point in the process
-      return response()->json(['valid' => true]);
-    }
     
+    if($request->input('hasDomainConfirmation'))
+    {
+      return true;
+    }
+
     // get company by uuid
     $company = Company::with('users')->where('uuid', $request->input('company_uuid'))->get()->first();
 
@@ -250,7 +253,7 @@ class UserController extends Controller
     {
       $valid = true;
     }
-    return response()->json(['valid' => $valid]);
+    return $valid;
   }
 
 }
