@@ -112,7 +112,8 @@
           </template>
         </button>
       </content-footer>
-      
+      <confirm-recipients ref="confirmRecipients" />
+      <confirm-intermediate ref="confirmIntermediate" @deny="sendAsDefault()" @confirm="sendAsIntermediate()" />
     </div>
   </form>
 </div>
@@ -141,6 +142,9 @@ import NProgress from 'nprogress';
 import UserSelector from "@/components/ui/form/UserSelector.vue";
 import UserSelection from "@/components/ui/form/UserSelection.vue";
 import FeedItemReply from "@/components/ui/feed/Reply.vue";
+import Lightbox from "@/components/ui/layout/Lightbox.vue";
+import ConfirmIntermediate from '@/views/pages/message/components/ConfirmIntermediate.vue';
+import ConfirmRecipients from '@/views/pages/message/components/ConfirmRecipients.vue';
 
 export default {
   
@@ -170,7 +174,10 @@ export default {
     NProgress,
     UserSelector,
     UserSelection,
-    FeedItemReply
+    FeedItemReply,
+    Lightbox,
+    ConfirmIntermediate,
+    ConfirmRecipients
   },
 
   mixins: [i18n],
@@ -239,7 +246,8 @@ export default {
         confirm: 'Bitte löschen bestätigen',
         deleted: 'Datei gelöscht',
         image_exceeds_max_size: 'max. Dateigrösse überschritten',
-        image_type_not_allowed: 'Dateityp nicht erlaubt'
+        image_type_not_allowed: 'Dateityp nicht erlaubt',
+        confirm_recipients: null,
       },
 
       // Dropzone config
@@ -319,30 +327,24 @@ export default {
     },
 
     submit() {
-      this.store();
+
+      this.handleIntermediates().then(result => {
+        this.validateRecipients().then(result => {
+          if (result === false) return;
+          this.store();
+        })
+      });
     },
 
     store() {
-
-      // Next upgrade: store the last recipients in local storage
-      //---------------------------------------------------------------------------
-      // Store this.data.private and this.data.users to local storage as one object
-      // so that we can pre-select the values when the user returns to the page
-      const storage = {
-        users: this.data.users,
-      };
-      const storageName = `recipients-${this.$route.params.uuid}-${this.data.private ? 'private' : 'public'}`;
-      localStorage.setItem(storageName, JSON.stringify(storage));
-
-      if (this.validate()) {
-        this.isSending = true;
-        this.data.intermediate = this.data.intermediate ? 1 : 0;
-        this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
-          this.$notify({ type: "success", text: this.messages.created });
-          this.reset();
-          window.scrollTo(0, 0);
-        });
-      }
+      this.isSending = true;
+      this.data.intermediate = this.data.intermediate ? 1 : 0;
+      this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
+        this.saveRecipients();
+        this.$notify({ type: "success", text: this.messages.created });
+        this.reset();
+        window.scrollTo(0, 0);
+      });
     },
 
     reset() {
@@ -358,24 +360,29 @@ export default {
       this.$parent.fetch();
     },
 
-    validate() {
-      // If the user is an admin (i.e. belongs to the owner company),
-      // and the array of external recipients is empty, check that
-      // at least one recipient is a non-owner-recipient
-      const external_users = this.data.users.filter((user) => user.company_id != 1);
-      const internal_users = this.data.users.filter((user) => user.team_id == 1);
-      
-      if (!this.$store.state.user.admin && internal_users.length == 0) {
-        if (!confirm(this.translate('Es wurde kein Nightnurse-Empfänger ausgewählt. Trotzdem fortfahren?'))) {
-          return false;
+    async validateRecipients() {
+      try {
+        const external_users = this.data.users.filter((user) => user.company_id != 1);
+        const internal_users = this.data.users.filter((user) => user.team_id == 1);
+        let message;
+
+        if (!this.$store.state.user.admin && internal_users.length == 0) {
+          message = this.translate('Es wurde kein Nightnurse-Empfänger ausgewählt. Trotzdem fortfahren?');
         }
-      }
-      else if (this.$store.state.user.admin && external_users.length == 0 && this.data.private == 0) {
-        if (!confirm(this.translate('Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?'))) {
-          return false;
+        else if (this.$store.state.user.admin && external_users.length == 0 && this.data.private == 0) {
+          message = this.translate('Es wurde kein kundenseitiger Empfänger ausgewählt. Trotzdem fortfahren?');
         }
+        else {
+          return true;
+        }
+        const result = await this.$refs.confirmRecipients.show({
+          message: message
+        });
+        return result;
       }
-      return true;
+      catch (error) {
+        throw error;
+      }
     },
 
     // Add/remove recipients
@@ -409,6 +416,12 @@ export default {
       this.addOrRemoveRecipient(true, this.$props.message.sender);
 
       this.removePreSelectedUser(this.$store.state.user);
+    },
+
+    saveRecipients() {
+      const storage = { users: this.data.users };
+      const storageName = `recipients-${this.$route.params.uuid}-${this.data.private ? 'private' : 'public'}`;
+      localStorage.setItem(storageName, JSON.stringify(storage));
     },
 
     // Add preselected recipients
@@ -474,6 +487,26 @@ export default {
       })
     },
 
+    // Handle intermediates
+    async handleIntermediates() {
+
+      try {
+        // if one of the files starts with the project.number, ask the user if 
+        // he wants to send the message as an intermediate marked message
+        const possibleIntermediate = this.data.files.some(file => file.name.startsWith(this.project.number));
+        if (possibleIntermediate && !this.data.intermediate && this.$store.state.user.admin && this.$store.state.feedType != 'private') {
+          const result = await this.$refs.confirmIntermediate.show();
+          return result;
+        }
+        else {
+          return true;
+        }
+      }
+      catch (error) {
+        throw error;
+      }
+    },
+
     /** 
      * Image/File Upload 
      */
@@ -519,7 +552,6 @@ export default {
         }
       }
       else {
-        // console.log(file.upload.filename, this.project);
         this.$refs.dropzone.removeFile(file);
       }
     },

@@ -6,6 +6,12 @@ a.btn-primary {
   @apply block w-auto max-w-xs p-4 md:py-4 md:px-5 font-mono text-white text-xs sm:text-sm bg-dark hover:bg-highlight active:bg-highlight focus:outline-none transition ease-in-out duration-150 rounded-sm no-underline
 }
 
+button.btn-secondary,
+input[type="submit"].btn-secondary,
+a.btn-secondary {
+  @apply block w-auto max-w-xs p-0 font-mono text-left text-gray-600 text-xs sm:text-sm bg-transparent hover:bg-transparent active:bg-transparent focus:outline-none transition ease-in-out duration-150 rounded-sm underline hover:no-underline underline-offset-2
+}
+
 a.btn-icon {
   @apply inline-flex items-center w-auto text-base text-dark hover:text-highlight no-underline mt-1.5 sm:mt-0 mr-2
 }

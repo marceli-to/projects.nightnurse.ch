@@ -21,7 +21,7 @@
     <div class="mb-1 w-full">
       <template v-if="filteredAssociates">
         <div v-for="(user, index) in filteredAssociates" 
-          :key="user.uuid" 
+          :key="'associate-' + user.uuid" 
           class="form-check w-full py-2 px-1 border-b">
           <input 
             type="checkbox" 
@@ -41,7 +41,7 @@
       </template>
 
       <div v-for="(user, index) in filteredUsers" 
-        :key="user.uuid" 
+        :key="'user-' + user.uuid" 
         :class="[index < 6 ? 'flex' : 'hidden', 'form-check w-full py-2 px-1 border-b']" :data-truncatable="$props.client.uuid" :data-truncatable-index="index">
         <input 
           type="checkbox" 

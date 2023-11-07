@@ -102,6 +102,7 @@ export default {
         'Nachricht senden': 'Send message',
         'Private Nachricht senden': 'Send private message',
         'Zwischenstände anzeigen': 'Project Step',
+        'Nachricht als Zwischenstand markieren?': 'Mark message as project step?',
         'Dieses Projekt ist archiviert. Alle Dateien werden ungefähr 30 Tage nach Abschluss gelöscht.': 'This project has been archived. The attached files will be deleted approximately 30 days after the end of the project.',
       },
 
