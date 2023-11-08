@@ -14,7 +14,7 @@ class ProjectStateController extends Controller
    */
   public function get()
   {
-    return new DataCollection(ProjectState::get());
+    return new DataCollection(ProjectState::orderBy('position', 'ASC')->get());
   }
 
   /**

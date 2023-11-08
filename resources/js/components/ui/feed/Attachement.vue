@@ -8,6 +8,7 @@
           :src="smallImageUri(file)" 
           height="100" 
           width="100"
+          loading="lazy"
           :class="[file.image_orientation == 'portrait' ? 'w-1/2' : 'w-full', '!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto bg-light rounded-sm']"
           v-if="file.preview" />
         <div class="mr-2 lg:mr-3 py-1" v-else>
@@ -26,6 +27,7 @@
           :src="thumbnailImageUri(file)" 
           height="100" 
           width="100"
+          loading="lazy"
           class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
           v-if="file.preview" />
         <div class="mr-2 lg:mr-3 py-1" v-else>

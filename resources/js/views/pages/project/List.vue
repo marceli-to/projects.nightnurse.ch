@@ -22,14 +22,17 @@
       <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
       <span class="block ml-2">{{ translate('Zwischenstände anzeigen') }}</span>
     </a>
-    <a href="" 
-      @click.prevent="archived()" 
-      class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight">
-      <folder-icon class="h-4 w-4" aria-hidden="true" />
-      <span v-if="isArchive" class="block ml-2">{{ translate('Aktive Projekte') }}</span>
-      <span v-else class="block ml-2">{{ translate('Archivierte Projekte') }}</span>
-    </a>
 
+    <div>
+      <select 
+        v-model="type" 
+        @change="selectType()"
+        class="!border-none text-xs font-mono text-gray-400 min-w-[215px] text-right pr-2">
+        <option value="active">{{ translate('Aktive Projekte') }}</option>
+        <option value="concluded">{{ translate('Abgeschlossene Projekte') }}</option>
+        <option value="archived">{{ translate('Archivierte Projekte') }}</option>
+      </select>
+    </div>  
   </div>
 
   <div v-if="data.user_projects.length" class="max-w-5xl">
@@ -176,11 +179,18 @@ export default {
 
       // Routes
       routes: {
-        list: '/api/projects',
-        listArchive: '/api/projects-archive',
+        // list: '/api/projects',
+        // listArchive: '/api/projects-archive',
+        list: {
+          active: '/api/projects',
+          archived: '/api/projects/archive',
+          concluded: '/api/projects/concluded',
+        },
         toggle: '/api/project/state',
         destroy: '/api/project'
       },
+
+      type: 'active',
 
       // States
       isLoading: false,
@@ -198,20 +208,16 @@ export default {
   },
 
   created() {
-    this.fetch();
     this.setPageTitle();
+    this.setType();
   },
 
   methods: {
 
     fetch() {
-      let route = this.routes.list;
-      if (this.isArchive) {
-        route = this.routes.listArchive;
-      }
 
       NProgress.start();
-      this.axios.get(route).then(response => {
+      this.axios.get(this.routes.list[this.type]).then(response => {
         this.data.user_projects = response.data.user_projects ? response.data.user_projects : [];
         this.data.projects = response.data.projects ? response.data.projects : [];
         this.isFetched = true;
@@ -239,8 +245,18 @@ export default {
       }
     },
 
-    archived() {
-      this.isArchive = this.isArchive ? false : true;
+    selectType() {
+      this.$router.push({ name: 'projects', params: { type: this.type } });
+      this.fetch();
+    },
+
+    setType() {
+      if (!this.$route.params.type) {
+        this.type = 'active';
+      }
+      else {
+        this.type = this.$route.params.type;
+      }
       this.fetch();
     },
 

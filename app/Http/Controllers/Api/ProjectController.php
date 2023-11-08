@@ -74,7 +74,7 @@ class ProjectController extends Controller
    * 
    * @return \Illuminate\Http\Response
    */
-  public function getArchive()
+  public function getArchived()
   {
     if (auth()->user()->isAdmin())
     {
@@ -104,6 +104,52 @@ class ProjectController extends Controller
     // Get user projects
     $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
     $projects = Project::archive()->with('company')
+      ->with(['previewMessages' => function ($query) {
+        $query->with('sender', 'files')->limit(3);
+      }])
+      ->whereIn('id', $ids)
+      ->orderBy('last_activity', 'DESC')
+      ->orderBy('number', 'DESC')
+      ->get();
+    
+    return response()->json(['projects' => ProjectListResource::collection($projects)]);
+  }
+
+  /**
+   * Get a list of concluded projects
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getConcluded()
+  {
+    if (auth()->user()->isAdmin())
+    {
+      $user_projects = Project::concluded()->with('state', 'company', 'companies', 'manager')
+                      ->with(['previewMessages' => function ($query) {
+                        $query->with('sender', 'files')->limit(3);
+                      }])
+                      ->orderBy('last_activity', 'DESC')
+                      ->orderBy('number', 'DESC')
+                      ->where('user_id', auth()->user()->id)
+                      ->get();
+        
+
+      // Get 'all projects'
+     $projects = Project::concluded()->with('state', 'company', 'companies', 'manager')
+                    ->with(['previewMessages' => function ($query) {
+                      $query->with('sender', 'files')->limit(3);
+                    }])
+                    ->orderBy('last_activity', 'DESC')
+                    ->orderBy('number', 'DESC')
+                    ->where('user_id', '!=', auth()->user()->id)
+                    ->get();
+
+      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+    }
+
+    // Get user projects
+    $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
+    $projects = Project::concluded()->with('company')
       ->with(['previewMessages' => function ($query) {
         $query->with('sender', 'files')->limit(3);
       }])

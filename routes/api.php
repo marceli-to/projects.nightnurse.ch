@@ -73,7 +73,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
   // Projects
   Route::get('projects', [ProjectController::class, 'get']);
-  Route::get('projects-archive', [ProjectController::class, 'getArchive']);
+  Route::get('projects/archive', [ProjectController::class, 'getArchived']);
+  Route::get('projects/concluded', [ProjectController::class, 'getConcluded']);
   Route::get('project/users/{project:uuid}', [ProjectController::class, 'getProjectUsers']);
   Route::get('project/{project:uuid}', [ProjectController::class, 'find']);
 

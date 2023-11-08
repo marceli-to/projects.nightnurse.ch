@@ -12,14 +12,8 @@ const routes = [
   },
   {
     name: 'projects',
-    path: '/projects/:archive?',
+    path: '/projects/:type?',
     component: ProjectIndex,
-  },
-
-  {
-    name: 'projects-archive',
-    path: '/projects/archive',
-    component: ProjectArchive,
   },
 
   {

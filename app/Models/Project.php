@@ -111,6 +111,11 @@ class Project extends Base
     return $query->where('project_state_id', 2);
   }
 
+  public function scopeConcluded($query)
+  {
+    return $query->where('project_state_id', 3);
+  }
+
   /**
    * Mutator for date_start
    * @param Date $value

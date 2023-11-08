@@ -10,5 +10,6 @@ class ProjectState extends Base
   
 	protected $fillable = [
     'description',
+    'position'
 	];
 }

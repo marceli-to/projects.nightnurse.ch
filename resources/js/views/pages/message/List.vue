@@ -168,7 +168,7 @@
   </template>
 
   <content-footer v-if="!hasForm">
-    <router-link :to="{ name: 'projects' }" class="form-helper form-helper-footer">
+    <router-link :to="{ name: 'projects', params: { type: project.state.description } }" class="form-helper form-helper-footer">
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
