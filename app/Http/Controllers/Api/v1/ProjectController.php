@@ -85,9 +85,21 @@ class ProjectController extends Controller
    * @param  Project $project
    * @return \Illuminate\Http\Response
    */
-  public function destroy(Project $project, ProjectService $projectService)
+  public function delete(Project $project, ProjectService $projectService)
   {
     $projectService->delete($project);
+    return response()->json('successfully deleted');
+  }
+
+  /**
+   * Remove a project
+   *
+   * @param  Project $project
+   * @return \Illuminate\Http\Response
+   */
+  public function forceDelete(Project $project, ProjectService $projectService)
+  {
+    $projectService->delete($project, TRUE);
     return response()->json('successfully deleted');
   }
 
