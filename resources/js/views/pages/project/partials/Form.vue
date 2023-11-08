@@ -161,12 +161,22 @@
               :ref="data.company.uuid"
               :checked="checkUser(user.id)"
               @change="toggleOne($event, user.id)">
-            <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-              {{ user.firstname }} {{ user.name }}
-            </label>
-            <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-              {{ user.email }}
-            </label>
+              <template v-if="user.register_complete">
+                <label class="inline-block text-gray-800" :for="user.uuid">
+                  {{ user.firstname }} {{ user.name }} ({{ user.email }})
+                </label>
+              </template>
+              <template v-else>
+                <label class="inline-block text-gray-800" :for="user.uuid">
+                  {{ user.email }}
+                </label>
+              </template>
+              <!-- <router-link 
+                :to="{name: 'user-update', params: { companyUuid: data.company.uuid, uuid: user.uuid }}" 
+                class="block text-gray-400 ml-2 hover:text-highlight"
+                v-if="user.register_complete">
+                <pencil-alt-icon class="w-4 h-4" aria-hidden="true" />
+              </router-link> -->
           </div>
         </div>
       </div>
@@ -174,7 +184,7 @@
     </div>
 
     <!-- other clients -->
-    <div class="form-group" v-if="data.companies.length">
+    <div class="form-group mt-6 lg:mt-8" v-if="data.companies.length">
       <div class="sm:grid sm:grid-cols-2 md:grid-cols-3">
         <div v-for="company in data.companies" :key="company.uuid" class="mb-4 lg:mb-8">
           <div class="form-check mb-2">
@@ -198,12 +208,16 @@
                   :ref="company.uuid"
                   :checked="checkUser(user.id)"
                   @change="toggleOne($event, user.id)">
-                <label class="inline-block text-gray-800" :for="user.uuid" v-if="user.register_complete">
-                  {{ user.firstname }} {{ user.name }}
-                </label>
-                <label class="inline-block text-gray-800" :for="user.uuid" v-else>
-                  {{ user.email }}
-                </label>
+                <template v-if="user.register_complete">
+                  <label class="inline-block text-gray-800" :for="user.uuid">
+                    {{ user.firstname }} {{ user.name }} ({{ user.email }})
+                  </label>
+                </template>
+                <template v-else>
+                  <label class="inline-block text-gray-800" :for="user.uuid">
+                    {{ user.email }}
+                  </label>
+                </template>
               </div>
             </div>
           </div>
@@ -288,7 +302,7 @@ import { TheMask } from "vue-the-mask";
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
 import ErrorHandling from "@/mixins/ErrorHandling";
-import { XIcon, ArrowLeftIcon, PlusSmIcon, PencilAltIcon, TrashIcon, ExternalLinkIcon } from "@vue-hero-icons/outline";
+import { XIcon, ArrowLeftIcon, PlusSmIcon, PencilAltIcon, PencilIcon, TrashIcon, ExternalLinkIcon } from "@vue-hero-icons/outline";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import ContentGrid from "@/components/ui/layout/Grid.vue";
@@ -316,6 +330,7 @@ export default {
     PencilAltIcon,
     PlusSmIcon,
     ExternalLinkIcon,
+    PencilIcon,
     TrashIcon,
     NProgress,
     Lightbox,

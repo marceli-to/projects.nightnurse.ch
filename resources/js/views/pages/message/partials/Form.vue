@@ -113,7 +113,7 @@
         </button>
       </content-footer>
       <confirm-recipients ref="confirmRecipients" />
-      <confirm-intermediate ref="confirmIntermediate" @deny="sendAsDefault()" @confirm="sendAsIntermediate()" />
+      <confirm-intermediate ref="confirmIntermediate" />
     </div>
   </form>
 </div>
