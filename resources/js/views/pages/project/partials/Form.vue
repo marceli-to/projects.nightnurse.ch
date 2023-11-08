@@ -54,7 +54,7 @@
 
     <div :class="[errors.company_id ? 'is-invalid' : '', 'form-group !mb-0']">
       <label>{{ translate('Hauptkunde') }} <asterisk /></label>
-      <div class="text-dark text-sm lg:text-base mt-0 block w-full px-0 py-1 lg:py-2 border-0 border-bottom">
+      <div class="text-dark text-sm lg:text-base mt-0 block w-full px-0 py-1 lg:py-2 border-0 border-bottom" v-if="data.company">
         {{ data.company.name }}
       </div>
       <div class="flex justify-between mb-6 sm:mb-8">
