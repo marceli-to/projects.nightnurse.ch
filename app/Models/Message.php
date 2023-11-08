@@ -45,7 +45,7 @@ class Message extends Base
 
   public function project()
   {
-    return $this->hasOne(Project::class, 'id', 'project_id');
+    return $this->hasOne(Project::class, 'id', 'project_id')->withTrashed();
   }
 
   public function message()

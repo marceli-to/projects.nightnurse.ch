@@ -37,9 +37,6 @@ class ProjectResource extends JsonResource
       'internal_users' => auth()->user()->isAdmin() ? UserWithCompanyResource::collection(Team::find(Team::TEAM_BUENOS_AIRES)->users) : null,
       'users' => UserWithCompanyResource::collection($this->users),
       'quotes' => ProjectQuoteResource::collection($this->quotes),
-
-      // @todo: remove this
-      // 'is_first_message' => $this->messages->count() == 0 ? TRUE : FALSE,
     ];
   }
 }

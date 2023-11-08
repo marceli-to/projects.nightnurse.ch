@@ -19,7 +19,8 @@ class ProjectService
    */
 
   public function delete(Project $project, $forceDelete = FALSE)
-  {
+  { 
+    // Force delete
     if ($forceDelete)
     {
       // Get all messages (including soft deleted) for this project
@@ -57,6 +58,10 @@ class ProjectService
       $project->forceDelete();
       return TRUE;
     }
+
+    // Softdelete
+    $project->project_state_id = 4;
+    $project->save();
 
     // Delete the project
     $project->delete();

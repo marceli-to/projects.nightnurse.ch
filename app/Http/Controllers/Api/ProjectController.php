@@ -162,6 +162,54 @@ class ProjectController extends Controller
   }
 
   /**
+   * Get a list of trashed projects
+   * 
+   * @return \Illuminate\Http\Response
+   */
+  public function getTrashed()
+  {
+    if (auth()->user()->isAdmin())
+    {
+      $user_projects = Project::withTrashed()->with('state', 'company', 'companies', 'manager')
+                      ->with(['previewMessages' => function ($query) {
+                        $query->with('sender', 'files')->limit(3);
+                      }])
+                      ->orderBy('last_activity', 'DESC')
+                      ->orderBy('number', 'DESC')
+                      ->where('user_id', auth()->user()->id)
+                      ->where('deleted_at', '!=', null)
+                      ->get();
+        
+
+      // Get 'all projects'
+     $projects = Project::withTrashed()->with('state', 'company', 'companies', 'manager')
+                    ->with(['previewMessages' => function ($query) {
+                      $query->with('sender', 'files')->limit(3);
+                    }])
+                    ->orderBy('last_activity', 'DESC')
+                    ->orderBy('number', 'DESC')
+                    ->where('user_id', '!=', auth()->user()->id)
+                    ->where('deleted_at', '!=', null)
+                    ->get();
+
+      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+    }
+
+    // Get user projects
+    $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
+    $projects = Project::withTrashed()->with('company')
+      ->with(['previewMessages' => function ($query) {
+        $query->with('sender', 'files')->limit(3);
+      }])
+      ->whereIn('id', $ids)
+      ->orderBy('last_activity', 'DESC')
+      ->orderBy('number', 'DESC')
+      ->get();
+    
+    return response()->json(['projects' => ProjectListResource::collection($projects)]);
+  }
+
+  /**
    * Get a list of users associated with the project
    * 
    * @param Project $project
@@ -294,7 +342,7 @@ class ProjectController extends Controller
    */
   public function find(Project $project)
   {
-    $project = Project::with(
+    $project = Project::withTrashed()->with(
       'state', 
       'company.users', 
       'company.teams',

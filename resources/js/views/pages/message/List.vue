@@ -144,8 +144,11 @@
 
   <template>
     <feed>
-      <feed-archive-info v-if="project.state.id == 2" />
-      
+
+      <template v-if="project.state.id > 1">
+        <feed-archive-info :state="project.state.description" />
+      </template>
+
       <feedback-list :items="feedbacks.data" />
       <feedback-form :uuid="$route.params.uuid" @stored="addFeedback" v-if="showFeedbackForm" />
 
@@ -172,7 +175,7 @@
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
-    <template v-if="project.state.description == 'active' && $store.state.user">
+    <template v-if="(project.state.description == 'active' || project.state.description == 'concluded') && $store.state.user">
       <template v-if="$store.state.user.admin && ($store.state.feedType == 'private' || ($store.state.feedType == 'public' && $store.state.user.can.create_public_message))">
         <a href="javascript:;" @click="toggleForm()" class="btn-create">
           <plus-circle-icon class="h-5 w-5" aria-hidden="true" />

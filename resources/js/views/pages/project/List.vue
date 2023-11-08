@@ -2,19 +2,13 @@
 <div v-if="isFetched">
   <content-header>
     <template #icon>
-      <router-link :to="{ name: 'project-create' }" class="btn-add" v-if="$store.state.user.admin && !isArchive">
+      <router-link :to="{ name: 'project-create' }" class="btn-add" v-if="$store.state.user.admin">
         <plus-sm-icon class="h-5 w-5" aria-hidden="true" />
       </router-link>
     </template>
     <template #title>
-      <template v-if="isArchive">
-        {{ translate('Archivierte Projekte') }}
-      </template>
-      <template v-else>
-        {{ translate('Projekte') }}
-      </template>
+      {{ translate('Projekte') }}
     </template>
-
   </content-header>
 
   <div class="flex justify-between w-full mb-4 sm:mb-6 lg:mb-8">
@@ -31,6 +25,7 @@
         <option value="active">{{ translate('Aktive Projekte') }}</option>
         <option value="concluded">{{ translate('Abgeschlossene Projekte') }}</option>
         <option value="archived">{{ translate('Archivierte Projekte') }}</option>
+        <option value="trashed">{{ translate('Gelöschte Projekte') }}</option>
       </select>
     </div>  
   </div>
@@ -187,6 +182,7 @@ export default {
           active: '/api/projects',
           archived: '/api/projects/archive',
           concluded: '/api/projects/concluded',
+          trashed: '/api/projects/trashed',
         },
         toggle: '/api/project/state',
         destroy: {
