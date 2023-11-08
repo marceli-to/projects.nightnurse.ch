@@ -29,7 +29,7 @@ class ProjectService
       foreach ($messages as $message)
       {
         // Get all files for the message
-        $files = $message->files;
+        $files = $message->files()->withTrashed()->get();
 
         $this->media->removeMany($files);
         $this->media->removeFolder($project->uuid);
@@ -37,7 +37,7 @@ class ProjectService
         // Loop through each file and delete it
         foreach ($files as $file)
         {
-          $file->delete();
+          $file->forceDelete();
         }
 
         // Delete the message users
