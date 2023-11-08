@@ -7,6 +7,7 @@
             :src="thumbnailImageUri(file)" 
             height="100" 
             width="100"
+            loading="lazy"
             class="!mt-0 !mb-0 mr-1 lg:mr-2 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm group-hover:opacity-75 group-hover:transition-opacity"
             v-if="file.preview" />
         </a>
