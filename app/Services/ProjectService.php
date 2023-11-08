@@ -5,7 +5,6 @@ use App\Services\Media;
 
 class ProjectService
 { 
-
   protected $media;
 
   public function __construct(Media $media)
@@ -16,36 +15,51 @@ class ProjectService
    * Delete a project entirely
    *
    * @param  Project $project
-   * @param  Media $media
+   * @param  Boolean $forceDelete
    */
 
-  public function delete(Project $project)
+  public function delete(Project $project, $forceDelete = FALSE)
   {
-    // Get and delete all messages
-    $messages = $project->messages;
-
-    // Loop through each message
-    foreach ($messages as $message)
+    if ($forceDelete)
     {
-      // Get all files for the message
-      $files = $message->files;
+      // Get all messages (including soft deleted) for this project
+      $messages = $project->messages()->withTrashed()->get();
 
-      $this->media->removeMany($files);
-      $this->media->removeFolder($project->uuid);
-
-      // Loop through each file and delete it
-      foreach ($files as $file)
+      // Loop through each message
+      foreach ($messages as $message)
       {
-        $file->delete();
+        // Get all files for the message
+        $files = $message->files;
+
+        $this->media->removeMany($files);
+        $this->media->removeFolder($project->uuid);
+
+        // Loop through each file and delete it
+        foreach ($files as $file)
+        {
+          $file->delete();
+        }
+
+        // Delete the message users
+        $message->users()->detach();
+
+        // Delete the message
+        $message->forceDelete();
       }
 
-      // Delete the message
-      $message->delete();
+      // Delete companies
+      $project->companies()->detach();
+
+      // Delete the project users
+      $project->users()->detach();
+
+      // force delete the project
+      $project->forceDelete();
+      return TRUE;
     }
 
     // Delete the project
     $project->delete();
-
     return TRUE;
   }
 }

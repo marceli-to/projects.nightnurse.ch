@@ -123,7 +123,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('project', [ProjectController::class, 'store']);
     Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
     Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
-    Route::delete('project/{project:uuid}', [ProjectController::class, 'destroy']);
+    Route::delete('project/force/{project:uuid}', [ProjectController::class, 'forceDelete']);
+    Route::delete('project/{project:uuid}', [ProjectController::class, 'delete']);
 
     // Project states
     Route::get('project-states', [ProjectStateController::class, 'get']);

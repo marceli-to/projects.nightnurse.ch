@@ -133,6 +133,8 @@
       </div>
     </div>
   </div>
+
+  <confirm-destroy ref="confirmDestroy" @softDelete="softDelete()" @forceDelete="forceDelete()" />
 </div>
 </template>
 <script>
@@ -144,6 +146,7 @@ import Separator from "@/components/ui/misc/Separator.vue";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ProjectListItem from "@/views/pages/project/components/ListItem.vue";
 import ProjectThumbnailItem from "@/views/pages/project/components/ThumbnailItem.vue";
+import ConfirmDestroy from '@/views/pages/project/components/ConfirmDestroy.vue';
 
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
@@ -163,7 +166,8 @@ export default {
     Separator,
     NProgress,
     ProjectListItem,
-    ProjectThumbnailItem
+    ProjectThumbnailItem,
+    ConfirmDestroy
   },
 
   mixins: [ErrorHandling, Helpers, i18n, PageTitle],
@@ -179,18 +183,21 @@ export default {
 
       // Routes
       routes: {
-        // list: '/api/projects',
-        // listArchive: '/api/projects-archive',
         list: {
           active: '/api/projects',
           archived: '/api/projects/archive',
           concluded: '/api/projects/concluded',
         },
         toggle: '/api/project/state',
-        destroy: '/api/project'
+        destroy: {
+          soft: '/api/project',
+          force: '/api/project/force',
+        }
       },
 
       type: 'active',
+
+      itemToDelete: null,
 
       // States
       isLoading: false,
@@ -235,14 +242,25 @@ export default {
       });
     },
 
-    destroy(uuid, event) {
-      if (confirm(this.translate('Bitte löschen bestätigen'))) {
-        NProgress.start();
-        this.axios.delete(`${this.routes.destroy}/${uuid}`).then(response => {
-          this.fetch();
-          NProgress.done();
-        });
-      }
+    destroy(uuid) {
+      this.itemToDelete = uuid;
+      this.$refs.confirmDestroy.show();
+    },
+
+    softDelete() {
+      NProgress.start();
+      this.axios.delete(`${this.routes.destroy.soft}/${this.itemToDelete}`).then(response => {
+        this.fetch();
+        NProgress.done();
+      });
+    },
+
+    forceDelete() {
+      NProgress.start();
+      this.axios.delete(`${this.routes.destroy.force}/${this.itemToDelete}`).then(response => {
+        this.fetch();
+        NProgress.done();
+      });
     },
 
     selectType() {
