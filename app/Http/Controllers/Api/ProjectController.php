@@ -202,6 +202,7 @@ class ProjectController extends Controller
         $query->with('sender', 'files')->limit(3);
       }])
       ->whereIn('id', $ids)
+      ->where('deleted_at', '!=', null)
       ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
       ->get();

@@ -25,7 +25,7 @@ class MessageController extends Controller
    */
   public function get(Project $project)
   {
-    $this->authorize('containsProject', $project);
+    //$this->authorize('containsProject', $project);
 
     $messages = Message::limitByRole()
       ->with(

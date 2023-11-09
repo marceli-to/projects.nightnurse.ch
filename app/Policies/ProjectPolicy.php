@@ -17,7 +17,8 @@ class ProjectPolicy
    */
   public function containsProject(User $user, Project $project)
   {
-    return $user->projects->contains($project->id) || auth()->user()->isAdmin();
+    $user_projects = $user->projects()->withTrashed()->get();
+    return $user_projects->contains($project->id) || auth()->user()->isAdmin();
   }
 
 }
