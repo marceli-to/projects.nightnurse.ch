@@ -16,6 +16,7 @@ class ProjectService
    *
    * @param  Project $project
    * @param  Boolean $forceDelete
+   * @return Boolean
    */
 
   public function delete(Project $project, $forceDelete = FALSE)
@@ -65,6 +66,21 @@ class ProjectService
 
     // Delete the project
     $project->delete();
+    return TRUE;
+  }
+
+  /**
+   * Restore a project
+   * 
+   * @param Project $project
+   * @return Boolean
+   */
+
+  public function restore(Project $project)
+  {
+    $project->restore();
+    $project->project_state_id = 1;
+    $project->save();
     return TRUE;
   }
 }

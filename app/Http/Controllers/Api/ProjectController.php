@@ -456,11 +456,9 @@ class ProjectController extends Controller
    * @return \Illuminate\Http\Response
    */
   
-  public function restore(Project $project)
+  public function restore(Project $project, ProjectService $projectService)
   {
-    $project->restore();
-    $project->project_state_id = 1;
-    $project->save();
+    $projectService->restore($project);
     return response()->json('successfully restored');
   }
 
