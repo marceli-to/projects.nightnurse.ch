@@ -125,6 +125,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('project', [ProjectController::class, 'store']);
     Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
     Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
+    Route::get('project/restore/{project:uuid}', [ProjectController::class, 'restore'])->withTrashed();
     Route::delete('project/force/{project:uuid}', [ProjectController::class, 'forceDelete'])->withTrashed();
     Route::delete('project/{project:uuid}', [ProjectController::class, 'delete'])->withTrashed();
 

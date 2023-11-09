@@ -450,6 +450,21 @@ class ProjectController extends Controller
   }
 
   /**
+   * Restores a project
+   * 
+   * @param Project $project
+   * @return \Illuminate\Http\Response
+   */
+  
+  public function restore(Project $project)
+  {
+    $project->restore();
+    $project->project_state_id = 1;
+    $project->save();
+    return response()->json('successfully restored');
+  }
+
+  /**
    * Store or update pivot data
    * 
    * @param Project $project

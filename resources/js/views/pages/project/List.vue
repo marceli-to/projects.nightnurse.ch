@@ -60,12 +60,17 @@
         </div>
       </div>
       <div class="col-span-2 md:col-span-2">
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-end gap-x-2">
           <template v-if="$store.state.user.admin">
-            <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
-              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+            <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}" :title="translate('Bearbeiten')">
+              <pencil-alt-icon class="icon-list" aria-hidden="true" />
             </router-link>
-            <a href="" @click.prevent="destroy(d.uuid)">
+            <template v-if="type == 'trashed'">
+              <a href="" @click.prevent="restore(d.uuid)" :title="translate('Wiederherstellen')">
+                <refresh-icon class="icon-list" aria-hidden="true" />
+              </a>
+            </template>
+            <a href="" @click.prevent="destroy(d.uuid)" :title="translate('Löschen')">
               <trash-icon class="icon-list" aria-hidden="true" />
             </a>
           </template>
@@ -110,11 +115,16 @@
         </div>
       </div>
       <div class="col-span-2 md:col-span-2">
-        <div class="flex items-center justify-end">
+        <div class="flex items-center justify-end gap-x-2">
           <template v-if="$store.state.user.admin">
             <router-link :to="{name: 'project-update', params: { uuid: d.uuid }}">
-              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+              <pencil-alt-icon class="icon-list" aria-hidden="true" />
             </router-link>
+            <template v-if="type == 'trashed'">
+              <a href="" @click.prevent="restore(d.uuid)" :title="translate('Wiederherstellen')">
+                <refresh-icon class="icon-list" aria-hidden="true" />
+              </a>
+            </template>
             <a href="" @click.prevent="destroy(d.uuid)">
               <trash-icon class="icon-list" aria-hidden="true" />
             </a>
@@ -133,7 +143,17 @@
 </div>
 </template>
 <script>
-import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, TrashIcon, AnnotationIcon, ArchiveIcon, SwitchHorizontalIcon, FolderIcon } from "@vue-hero-icons/outline";
+import { 
+  PlusCircleIcon, 
+  PlusSmIcon, 
+  PencilAltIcon, 
+  TrashIcon, 
+  AnnotationIcon, 
+  ArchiveIcon, 
+  SwitchHorizontalIcon, 
+  FolderIcon,
+  RefreshIcon
+} from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import PageTitle from "@/mixins/PageTitle";
@@ -157,6 +177,7 @@ export default {
     ArchiveIcon,
     FolderIcon,
     SwitchHorizontalIcon,
+    RefreshIcon,
     ContentHeader,
     Separator,
     NProgress,
@@ -188,7 +209,8 @@ export default {
         destroy: {
           soft: '/api/project',
           force: '/api/project/force',
-        }
+        },
+        restore: '/api/project/restore',
       },
 
       type: 'active',
@@ -241,6 +263,14 @@ export default {
     destroy(uuid) {
       this.itemToDelete = uuid;
       this.$refs.confirmDestroy.show();
+    },
+
+    restore(uuid) {
+      NProgress.start();
+      this.axios.get(`${this.routes.restore}/${uuid}`).then(response => {
+        this.fetch();
+        NProgress.done();
+      });
     },
 
     softDelete() {
