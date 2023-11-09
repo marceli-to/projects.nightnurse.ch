@@ -21,7 +21,7 @@
         </a>
       </div>
       <ul class="list-none !p-0 m-0 !mt-4">
-        <li class="block !p-0 !m-0" v-if="$store.state.user.admin">
+        <li class="block !p-0 !m-0" v-if="$store.state.user.admin || $store.state.user.client_admin">
           <menu-item :route="'projects'">
             <folder-icon class="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-4" aria-hidden="true" />
             {{ translate('Projekte') }}
@@ -37,6 +37,12 @@
           <menu-item :route="'notifications'">
             <speakerphone-icon class="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-4" aria-hidden="true" />
             {{ translate('Notifications') }}
+          </menu-item>
+        </li>
+        <li class="block !p-0 !m-0" v-if="$store.state.user.client_admin">
+          <menu-item :route="'employees'" :params="{ companyUuid: $store.state.user.company.uuid }">
+            <users-icon class="h-4 w-4 sm:h-6 sm:w-6 mr-2 sm:mr-4" aria-hidden="true" />
+            {{ translate('Mitarbeiter') }}
           </menu-item>
         </li>
         <li class="block !p-0 !m-0">
@@ -69,7 +75,15 @@
 </header>
 </template>
 <script>
-import { XIcon, UsersIcon, FolderIcon, OfficeBuildingIcon, UserCircleIcon, MenuAlt3Icon, SpeakerphoneIcon } from "@vue-hero-icons/outline";
+import { 
+  XIcon, 
+  UsersIcon, 
+  FolderIcon, 
+  OfficeBuildingIcon, 
+  UserCircleIcon, 
+  MenuAlt3Icon, 
+  SpeakerphoneIcon
+} from "@vue-hero-icons/outline";
 import { LogoutIcon } from "@vue-hero-icons/solid"
 import MenuItem from '@/components/ui/menu/Item';
 import MenuItemLabel from '@/components/ui/menu/Label';

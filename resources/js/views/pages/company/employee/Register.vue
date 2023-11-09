@@ -5,6 +5,9 @@
       {{ title }}
     </template>
   </content-header>
+  <div class="text-dark text-sm lg:text-base max-w-3xl mb-4 lg:mb-8">
+    {{ translate('Nach dem Absenden des untenstehenden Formulars erhält der/die Mitarbeitende eine Mail mit einem Link, um sein Profil anlegen zu können.') }}
+  </div>
   <form @submit.prevent="submit" v-if="isFetched" class="max-w-5xl">
     <div v-if="hasErrors" class="text-sm font-mono mb-2 text-red-500">
       {{errors.message}}
@@ -24,7 +27,7 @@
     </div>
     <content-footer>
       <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
-      <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
+      <router-link :to="{ name: 'employees'}" class="form-helper form-helper-footer">
         <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
         <span>{{ translate('Zurück') }}</span>
       </router-link>
@@ -69,8 +72,6 @@ export default {
       // Model
       data: {
         email: null,
-        company_uuid: this.$route.params.companyUuid,
-        has_domain_confirmation: true,
         language_id: 1,
       },
 
@@ -84,7 +85,7 @@ export default {
 
       // Routes
       routes: {
-        post: '/api/user/register',
+        post: '/api/employee/register',
         languages: '/api/languages',
       },
 
@@ -106,8 +107,8 @@ export default {
       this.hasErrors = false;
       this.errors.message = null;
       this.axios.post(this.routes.post, this.data).then(response => {
-        this.$router.push({ name: "users" });
-        this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
+        this.$router.push({ name: "employees" });
+        this.$notify({ type: "success", text: this.translate('Mitarbeiter erfasst') });
         NProgress.done();
       })
       .catch(error => {
@@ -130,7 +131,7 @@ export default {
 
   computed: {
     title() {
-      return "Benutzer einladen";
+      return "Mitarbeiter anlegen";
     }
   }
 };

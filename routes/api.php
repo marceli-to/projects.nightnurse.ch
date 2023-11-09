@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\UploadController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\EmployeeController;
 use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ProjectQuoteController;
@@ -115,6 +116,18 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::post('reaction', [ReactionController::class, 'store']);
 
   Route::get('notification/latest', [NotificationController::class, 'findLatest']);
+
+  // Routes for client admins
+  Route::middleware('role:client_admin')->group(function(){
+    Route::get('employees', [EmployeeController::class, 'get']);
+    Route::get('employee/{user:uuid}', [EmployeeController::class, 'find']);
+    Route::post('employee', [EmployeeController::class, 'store']);
+    Route::post('employee/register', [EmployeeController::class, 'register']);
+    Route::get('employee/invite/{user:uuid}', [EmployeeController::class, 'invite']);
+    Route::put('employee/{user:uuid}', [EmployeeController::class, 'update']);
+    Route::delete('employee/{user:uuid}', [EmployeeController::class, 'destroy']);
+
+  });
 
   // Routes for admins only
   Route::middleware('role:admin')->group(function() {

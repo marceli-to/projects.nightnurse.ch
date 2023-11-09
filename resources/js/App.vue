@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="flex min-h-screen flex-col">
   <notifications />
   <page-header>
   </page-header>

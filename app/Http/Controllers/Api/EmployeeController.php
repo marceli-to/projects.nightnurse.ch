@@ -4,15 +4,15 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Company;
 use App\Http\Resources\DataCollection;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\EmployeeStoreRequest;
+use App\Http\Requests\EmployeeUpdateRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Requests\UserInviteRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class EmployeeController extends Controller
 {
   /**
    * Get a list of users
@@ -20,61 +20,10 @@ class UserController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function get(Company $company)
+  public function get()
   {
-    $users = User::with('company.teams')->orderBy('name')->where('company_id', $company->id)->get();
+    $users = User::with('company.teams')->orderBy('name')->where('company_id', auth()->user()->company_id)->get();
     return new DataCollection($users);
-  }
-
-  /**
-   * Get a list of users
-   * 
-   * @return \Illuminate\Http\Response
-   */
-  public function getStaff()
-  {
-    return new DataCollection(User::staff()->orderBy('firstname')->get());
-  }
-
-  /**
-   * Get users info by authenticated user
-   */
-  public function getAuthenticated()
-  {
-    $user  = User::with('language')->findOrFail(auth()->user()->id);
-    $data = [
-      'uuid' => $user->uuid,
-      'company' => [
-        'uuid' => $user->company->uuid,
-        'name' => $user->company->name,
-      ],
-      'firstname' => $user->firstname, 
-      'name' => $user->name,
-      'email' => $user->email,
-      'language' => $user->language->acronym,
-    ];
-
-    if ($user->isClientAdmin())
-    {
-      $data['client_admin'] = TRUE;
-      $data['can'] = [
-        'edit_project_access' => TRUE,
-        'edit_users' => TRUE,
-      ];
-    }
-
-    if ($user->isAdmin())
-    {
-      $data['admin'] = TRUE;
-      $data['can'] = [
-        'create_private_message' => TRUE,
-        'create_public_message' => $user->team_id == 1 ? TRUE : FALSE,
-        'access_private_messages' => TRUE,
-        'access_public_messages' => TRUE,
-      ];
-    }
-
-    return response()->json($data);
   }
 
   /**
@@ -85,16 +34,16 @@ class UserController extends Controller
    */
   public function find(User $user)
   {
-    return response()->json(User::with('company.teams')->findOrFail($user->id));
+    return response()->json(User::with('company')->findOrFail($user->id));
   }
 
   /**
    * Store a newly created user
    *
-   * @param  \Illuminate\Http\UserStoreRequest $request
+   * @param  \Illuminate\Http\EmployeeStoreRequest $request
    * @return \Illuminate\Http\Response
    */
-  public function store(UserStoreRequest $request)
+  public function store(EmployeeStoreRequest $request)
   {
     $user = User::create([
       'uuid' => \Str::uuid(),
@@ -105,11 +54,11 @@ class UserController extends Controller
       'email_verified_at' => \Carbon\Carbon::now(),
       'password' => \Hash::make($request->input('password')),
       'language_id' => $request->input('language_id'),
-      'company_id' => $request->input('company_id'),
-      'team_id' => $request->input('company_id') ? $request->input('company_id') : NULL,
+      'company_id' => auth()->user()->company->id,
       'gender_id' => $request->input('gender_id'),
-      'role_id' => $request->input('role_id'),
-      'vertec_id' => $request->input('vertec_id') ? $request->input('vertec_id') : NULL,
+      'role_id' => 2,
+      'team_id' => NULL,
+      'vertec_id' => NULL,
     ]);
     return response()->json(['userId' => $user->id]);
   }
@@ -118,10 +67,10 @@ class UserController extends Controller
    * Update a user for a given user
    *
    * @param User $user
-   * @param  \Illuminate\Http\UserUpdateRequest $request
+   * @param  \Illuminate\Http\EmployeeUpdateRequest $request
    * @return \Illuminate\Http\Response
    */
-  public function update(User $user, UserUpdateRequest $request)
+  public function update(User $user, EmployeeUpdateRequest $request)
   {
     $user = User::findOrFail($user->id);
     $user->update($request->except(['password', 'password_confirmation']));
@@ -175,11 +124,6 @@ class UserController extends Controller
   {
     // Check for existing but deleted user first
     $user = User::withTrashed()->where('email', $request->input('email'))->get()->first();
-
-    if (!$this->validateDomain($request))
-    {
-      return response()->json(['error' => 'invalid_domain']);
-    }
     
     if ($user)
     {
@@ -189,19 +133,15 @@ class UserController extends Controller
       return response()->json(['user' => $user]);
     }
     
-    // Get company
-    $company = Company::where('uuid', $request->input('company_uuid'))->get()->first();
-
     // Create user
     $user = User::create([
       'uuid' => \Str::uuid(),
       'email' => $request->input('email'),
       'email_verified_at' => \Carbon\Carbon::now(),
       'language_id' => 1,
-      'company_id' => $company->id,
+      'company_id' => auth()->user()->company->id,
       'gender_id' => 1,
-      'role_id' => $company->owner ? 1 : 2,
-      'team_id' => $company->owner ? $company->id : NULL,
+      'role_id' => 2,
     ]);
     $this->invite($user);
     return response()->json(['user' => $user]);
@@ -226,47 +166,6 @@ class UserController extends Controller
       }     
     }
     return false;
-  }
-
-  /**
-   * Validate domain
-   *
-   * @param Request $request
-   * @return \Illuminate\Http\Response
-   */
-
-  protected function validateDomain(Request $request)
-  {
-    
-    if($request->input('has_domain_confirmation'))
-    {
-      return true;
-    }
-
-    // get company by uuid
-    $company = Company::with('users')->where('uuid', $request->input('company_uuid'))->get()->first();
-
-    // get domain from email
-    $emailDomain = explode('@', $request->input('email'))[1];
-
-    // check if domain is in company email domains
-    $valid = false;
-
-    // get most used email domain from company->users
-    $domains = [];
-    foreach ($company->users as $user)
-    {
-      $domains[] = explode('@', $user->email)[1];
-    }
-    $domain = array_count_values($domains);
-    arsort($domain);
-    $domain = array_key_first($domain);
-
-    if ($domain == $emailDomain)
-    {
-      $valid = true;
-    }
-    return $valid;
   }
 
 }

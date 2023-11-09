@@ -14,18 +14,17 @@ class CheckRole
    * @param  string  $role
    * @return mixed
    */
-  public function handle($request, Closure $next, $role)
+  public function handle($request, Closure $next, ...$roles)
   {
     if (Auth::user()->isAdmin() === FALSE && Auth::user()->isClient() === FALSE)
     {
       return abort(403);
     }
 
-    if ($role == 'admin' && !Auth::user()->isAdmin())
+    if (count($roles) === 1 && $roles[0] === 'admin' && !Auth::user()->isAdmin())
     {
       return abort(403);
     }
-
     return $next($request);
   }
 }

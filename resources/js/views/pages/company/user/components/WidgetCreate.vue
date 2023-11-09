@@ -70,7 +70,7 @@ export default {
       data: {
         email: null,
         company_uuid: this.$props.companyUuid,
-        hasDomainConfirmation: false,
+        has_domain_confirmation: false,
       },
 
       // Validation
@@ -109,7 +109,7 @@ export default {
 
         if (response.data.error == 'invalid_domain') {
           this.errors.domain = true;
-          this.data.hasDomainConfirmation = true;
+          this.data.has_domain_confirmation = true;
           this.hasErrors = true;
           return false;
         }

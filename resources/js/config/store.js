@@ -23,5 +23,5 @@ export default new Vuex.Store({
     feedType(state, feedType) {
       state.feedType = feedType;
     }
-  }
+  },
 });

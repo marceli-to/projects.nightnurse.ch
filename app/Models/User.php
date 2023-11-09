@@ -136,6 +136,15 @@ class User extends Authenticatable implements MustVerifyEmail
   }
 
   /**
+   * Role helper for client admins
+   */
+
+  public function isClientAdmin()
+  {
+    return Role::find($this->role_id)->isClientAdmin();
+  }
+
+  /**
    * Get the user's full name.
    *
    * @param  string  $value

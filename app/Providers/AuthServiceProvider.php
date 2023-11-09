@@ -1,6 +1,7 @@
 <?php
 namespace App\Providers;
 use App\Policies\ProjectPolicy;
+use App\Policies\CompanyPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 
@@ -13,6 +14,7 @@ class AuthServiceProvider extends ServiceProvider
    */
   protected $policies = [
     Project::class => ProjectPolicy::class,
+    Company::class => CompanyPolicy::class,
   ];
 
   /**

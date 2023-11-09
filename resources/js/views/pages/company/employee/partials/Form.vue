@@ -6,16 +6,19 @@
     </template>
   </content-header>
   <form @submit.prevent="submit" v-if="isFetched && isFetchedSettings" class="max-w-5xl">
+
     <div :class="[errors.firstname ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('Vorname') }} <asterisk /></label>
       <input type="text" v-model="data.firstname">
       <required :text="translate('Pflichtfeld')" />
     </div>
+
     <div :class="[errors.name ? 'is-invalid' : '', 'form-group']">
       <label>{{ translate('Name') }} <asterisk /></label>
       <input type="text" v-model="data.name">
       <required :text="translate('Pflichtfeld')" />
     </div>
+
     <div class="form-group">
       <label>{{ translate('Telefon') }}</label>
       <input type="text" v-model="data.phone">
@@ -35,13 +38,6 @@
         </select>
       </div>
     </content-grid>
-
-    <div class="form-group">
-      <label>{{ translate('Kunde') }}</label>
-      <select v-model="data.company_id">
-        <option :value="c.id" v-for="c in settings.companies" :key="c.id">{{c.name}}, {{c.city}}</option>
-      </select>
-    </div>
 
     <h4 class="mb-3 lg:mb-4">{{ translate('Zugangsdaten') }}</h4>
     <div :class="[errors.email ? 'is-invalid' : '', 'form-group']">
@@ -66,31 +62,10 @@
       <label>{{ translate('Passwort wiederholen') }}</label>
       <input type="password" v-model="data.password_confirmation" data-field-password autocomplete="off">
     </div>
-    <div :class="[errors.role_id ? 'is-invalid' : '', 'form-group']">
-      <label>{{ translate('Rolle') }}</label>
-      <select v-model="data.role_id">
-        <option :value="r.id" v-for="r in settings.roles" :key="r.id">{{r.description}}</option>
-      </select>
-    </div>
-
-    <div class="form-group" v-if="data.company.teams">
-      <label>{{ translate('Team') }}</label>
-      <select v-model="data.team_id">
-        <option :value="null">--</option>
-        <option :value="t.id" v-for="t in data.company.teams" :key="t.id">
-          {{t.description}}
-        </option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>{{ translate('Vertec Id') }}</label>
-      <input type="text" v-model="data.vertec_id">
-    </div>
 
     <content-footer>
       <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
-      <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
+      <router-link :to="{ name: 'employees'}" class="form-helper form-helper-footer">
         <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
         <span>{{ translate('Zurück') }}</span>
       </router-link>
@@ -144,20 +119,12 @@ export default {
         password_confirmation: null,
         gender_id: null,
         language_id: null,
-        company_id: null,
-        team_id: null,
-        vertec_id: null,
-        company: {
-          teams: null
-        }
       },
 
       // Settings
       settings: {
         genders: [],
         languages: [],
-        companies: [],
-        roles: [],
       },
 
       // Validation
@@ -167,14 +134,13 @@ export default {
         email: false,
         gender_id: false,
         language_id: false,
-        company_id: false,
       },
 
       // Routes
       routes: {
-        fetch: '/api/user',
-        post: '/api/user',
-        put: '/api/user'
+        fetch: '/api/employee',
+        post: '/api/employee',
+        put: '/api/employee'
       },
 
       // States
@@ -221,7 +187,7 @@ export default {
     store() {
       NProgress.start();
       this.axios.post(this.routes.post, this.data).then(response => {
-        this.$router.push({ name: "users" });
+        this.$router.push({ name: "employees" });
         this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
         NProgress.done();
       });
@@ -230,7 +196,7 @@ export default {
     update() {
       NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
-        this.$router.push({ name: "users" });
+        this.$router.push({ name: "employees" });
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         NProgress.done();
       });
@@ -243,23 +209,15 @@ export default {
       this.axios.all([
         this.axios.get(`/api/genders`),
         this.axios.get(`/api/languages`),
-        this.axios.get(`/api/companies`),
-        this.axios.get(`/api/roles`),
       ]).then(axios.spread((...responses) => {
         this.settings = {
           genders: responses[0].data.data,
           languages: responses[1].data.data,
-          companies: responses[2].data.data,
-          roles: responses[3].data.data,
         };
 
         this.isFetched = true;
         this.isFetchedSettings = true;
         NProgress.done();
-
-        // set default company
-        const index = this.settings.companies.findIndex(x => x.uuid === this.$route.params.companyUuid);
-        this.data.company_id = this.settings.companies[index].id;
       }));
     },
 
@@ -308,7 +266,9 @@ export default {
 
   computed: {
     title() {
-      return this.$props.type == "update" ? this.translate('Benutzer bearbeiten')  : this.translate('Benutzer hinzufügen');
+      return this.$props.type == "update" ? 
+        this.translate('Mitarbeiter bearbeiten') : 
+        this.translate('Mitarbeiter hinzufügen');
     }
   }
 };
