@@ -19,9 +19,7 @@ class HandleProjectRedirect
     // 2. get the project by uuid
     // 3. make sure the request uri is like '/projects/project/{uuid}/messages' or '/projects/project/{uuid}/messages/private'
     // 4. redirect to '/project/{project->slug}/messages' or '/project/{project->slug}/messages/private'
-
-    // fix the below code to make it work as described above
-    
+   
     if (preg_match('/^\/projects\/project\/[a-z0-9-]+\/messages\/private$/', $request->getRequestUri()))
     {
       $uuid = explode('/', $request->getRequestUri())[3];
