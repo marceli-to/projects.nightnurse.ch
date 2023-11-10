@@ -116,6 +116,8 @@ export default {
         'Abgeschlossene Projekte': 'Concluded projects',
         'Gelöschte Projekte': 'Deleted projects',
         'Es sind noch keine Offerten vorhanden...': 'No quotes yet...',
+        'Seite nicht gefunden': 'Page not found',
+        'Sorry, ich konnte die gewünschte Seite leider nicht finden!': 'Sorry, I could not find the requested page!',
 
       },
 
