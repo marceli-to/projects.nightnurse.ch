@@ -6,7 +6,7 @@
     </template>
   </content-header>
   <div class="text-dark text-sm lg:text-base max-w-3xl mb-4 lg:mb-8">
-    {{ translate('Nach dem Absenden des untenstehenden Formulars erhält der/die Mitarbeitende eine Mail mit einem Link, um sein Profil anlegen zu können.') }}
+    {{ translate('Nach dem Absenden des untenstehenden Formulars erhält der/die Mitarbeitende eine Mail mit einem Link, um sein Profil vervollständigen zu können.') }}
   </div>
   <form @submit.prevent="submit" v-if="isFetched" class="max-w-5xl">
     <div v-if="hasErrors" class="text-sm font-mono mb-2 text-red-500">
