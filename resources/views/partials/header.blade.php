@@ -21,4 +21,4 @@
 <meta name="format-detection" content="telephone=no">
 <link href="{{ mix('assets/css/app.css') }}" type="text/css" rel="stylesheet" />
 </head>
-<body class="prose lg:prose-lg max-w-none">
+<body class="prose lg:prose-lg max-w-none overflow-y-auto">
