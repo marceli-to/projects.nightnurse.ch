@@ -18,6 +18,7 @@
           {{d.firstname}} {{ d.name }}
           <span class="hidden sm:inline"><separator />{{ d.email }}</span>
           <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
+          <pill v-if="d.role_id == 3" class="bg-green-500">{{ translate('Admin') }}</pill>
           <pill v-if="d.team_id" class="bg-blue-500">{{ getTeam(d.id) }}</pill>
         </div>
         <div v-else>
@@ -161,7 +162,7 @@ export default {
 
     copy(uuid) {
       let APP_URL = process.env.MIX_APP_URL;
-      navigator.clipboard.writeText(`https://projects.nightnurse.ch/register/${uuid}`).then(() => {
+      navigator.clipboard.writeText(`${APP_URL}/register/${uuid}`).then(() => {
         this.$notify({ type: "success", text: this.translate('Einladungslink kopiert') });
       });
     },

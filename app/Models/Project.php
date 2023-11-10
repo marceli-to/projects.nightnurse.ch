@@ -4,16 +4,18 @@ use App\Models\Base;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Cviebrock\EloquentSluggable\Sluggable;
 use \Staudenmeir\EloquentEagerLimit\HasEagerLimit;
 
 class Project extends Base
 {
-  use HasFactory, SoftDeletes, HasEagerLimit;
+  use HasFactory, SoftDeletes, HasEagerLimit, Sluggable;
 
 	protected $fillable = [
     'uuid',
     'number',
     'name',
+    'slug',
     'color',
     'date_start',
     'date_end',
@@ -207,6 +209,20 @@ class Project extends Base
       $url = "https://" . $url;
     }
     return $url;
+  }
+
+  /**
+   * Return the sluggable configuration array for this model.
+   *
+   * @return array
+   */
+  public function sluggable(): array
+  {
+    return [
+      'slug' => [
+        'source' => ['number', 'name'],
+      ]
+    ];
   }
 
 }

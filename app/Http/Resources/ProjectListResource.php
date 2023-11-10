@@ -16,6 +16,7 @@ class ProjectListResource extends JsonResource
       'uuid' => $this->uuid,
       'number' => $this->number,
       'name' => $this->name,
+      'slug' => $this->slug,
       'color' => $this->color,
       'last_activity'=> $this->last_activity,
       'company' => CompanyResource::make($this->company),

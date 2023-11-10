@@ -1,6 +1,6 @@
 <template>
   <div :class="[message.internal ? 'bg-gray-100' : '', 'py-1 mb-2']">
-    <router-link :to="{name: 'messages', params: { uuid: project.uuid }}" class="relative text-dark font-normal no-underline">
+    <router-link :to="{name: 'messages', params: { slug: project.slug }}" class="relative text-dark font-normal no-underline">
       <span class="text-gray-500 text-xs sm:text-sm pl-1">
         <span class="">{{ message.message_date_time }}</span><separator />
         <span v-if="message.sender">{{message.sender.full_name | truncate(15, '...')}}</span>

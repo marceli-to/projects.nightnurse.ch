@@ -331,7 +331,7 @@ export default {
   mounted() {
     this.fetch();
 
-    window.Echo.channel(`timeline.${this.$route.params.uuid}`).listen('MessageSent', (e) => {
+    window.Echo.channel(`timeline.${this.$route.params.slug}`).listen('MessageSent', (e) => {
       if (e.message.private === 1 && !this.canAccessPrivateMessages) {
         return;
       }
@@ -362,10 +362,10 @@ export default {
       this.isFetched = false;
       NProgress.start();
       this.axios.all([
-        this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`),
-        this.axios.get(`${this.routes.project}/${this.$route.params.uuid}`),
+        this.axios.get(`${this.routes.list}/${this.$route.params.slug}`),
+        this.axios.get(`${this.routes.project}/${this.$route.params.slug}`),
         this.axios.get(`${this.routes.reactionTypes}`),
-        this.axios.get(`${this.routes.feedback.list}/${this.$route.params.uuid}`),
+        this.axios.get(`${this.routes.feedback.list}/${this.$route.params.slug}`),
       ]).then(axios.spread((...responses) => {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;

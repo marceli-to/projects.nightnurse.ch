@@ -7,7 +7,6 @@ use App\Http\Controllers\ImageController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\QuoteController;
 
-
 /*
 |--------------------------------------------------------------------------
 | Routes for my.nightnurse.ch
@@ -58,7 +57,7 @@ Route::get('/img/{template}/{filename}/{maxW?}/{maxH?}/{coords?}', [ImageControl
 |
 */
 
-Route::middleware('auth:sanctum', 'verified')->group(function() {
+Route::middleware('auth:sanctum', 'verified', 'project-redirect')->group(function() {
   Route::get('{any?}', function () {
     return view('layout.authenticated');
   })->where('any', '^((?!storage).)*$')->name('projects');

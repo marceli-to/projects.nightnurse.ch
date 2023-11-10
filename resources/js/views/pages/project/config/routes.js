@@ -18,13 +18,13 @@ const routes = [
 
   {
     name: 'project-create',
-    path: '/projects/project/create',
+    path: '/project/create',
     component: ProjectCreate,
   },
   
   {
     name: 'project-update',
-    path: '/projects/project/update/:uuid/:redirect?',
+    path: '/project/update/:slug/:redirect?',
     component: ProjectUpdate,
   },
 ];
