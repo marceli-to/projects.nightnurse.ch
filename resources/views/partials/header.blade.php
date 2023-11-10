@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="overflow-y-auto">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="overflow-y-scroll">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,4 +21,4 @@
 <meta name="format-detection" content="telephone=no">
 <link href="{{ mix('assets/css/app.css') }}" type="text/css" rel="stylesheet" />
 </head>
-<body class="prose lg:prose-lg max-w-none overflow-y-auto">
+<body class="prose lg:prose-lg max-w-none">
