@@ -2,7 +2,7 @@
   <div>
     <content-header>
       <template #title>
-       {{ translate('Seite nicht gefunden') }}
+       {{ translate('404 – Seite nicht gefunden') }}
       </template>
     </content-header>
     <main>

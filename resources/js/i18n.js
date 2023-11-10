@@ -116,8 +116,10 @@ export default {
         'Abgeschlossene Projekte': 'Concluded projects',
         'Gelöschte Projekte': 'Deleted projects',
         'Es sind noch keine Offerten vorhanden...': 'No quotes yet...',
-        'Seite nicht gefunden': 'Page not found',
+        '404 – Seite nicht gefunden': '404 - Page not found',
         'Sorry, ich konnte die gewünschte Seite leider nicht finden!': 'Sorry, I could not find the requested page!',
+        '403 – Zugriff verweigert': '403 - Access denied',
+        'Sorry, du hast keinen Zugriff auf diese Seite!': 'Sorry, you do not have access to this page!',
 
       },
 
