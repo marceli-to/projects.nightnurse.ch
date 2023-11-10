@@ -120,7 +120,7 @@
       </template>
       <template v-else>
         <div class="flex justify-between items-center px-0 py-1 lg:py-2 border-0 border-bottom text-sm text-gray-400 italic">
-          Es sind noch keine Offerten vorhanden.
+          {{ translate('Es sind noch keine Offerten vorhanden...') }}
         </div>
       </template>
 

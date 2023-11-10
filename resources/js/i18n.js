@@ -105,6 +105,18 @@ export default {
         'Nachricht als Zwischenstand markieren?': 'Mark message as project step?',
         'Dieses Projekt ist archiviert. Alle Dateien werden ungefähr 30 Tage nach Abschluss gelöscht.': 'This project has been archived. The attached files will be deleted approximately 30 days after the end of the project.',
         'Nach dem Absenden des untenstehenden Formulars erhält der/die Mitarbeitende eine Mail mit einem Link, um sein Profil vervollständigen zu können.': 'After submitting the form below, the employee will receive an email with a link to complete his profile.',
+        'Mitarbeiter': 'Employees',
+        'Mitarbeiter verwalten': 'Manage employees',
+        'Mitarbeiter bearbeiten': 'Edit employee',
+        'Einladungslink kopiert': 'Invitation link copied',
+        'Empfänger bestätigen': 'Confirm recipient',
+        'Bestätigen': 'Confirm',
+        'Hinzufügen': 'Add',
+        'Suche...': 'Search...',
+        'Abgeschlossene Projekte': 'Concluded projects',
+        'Gelöschte Projekte': 'Deleted projects',
+        'Es sind noch keine Offerten vorhanden...': 'No quotes yet...',
+
       },
 
       defaultLang: 'de',
