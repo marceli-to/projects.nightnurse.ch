@@ -17,10 +17,18 @@ class HandleProjectRedirect
     // if request uri is like '/projects/project/{uuid}/messages' (uuid is a wildcard):
     // 1. extract the uuid
     // 2. get the project by uuid
-    // 3. make sure the request uri is like '/projects/project/{uuid}/messages'
-    // 4. redirect to '/project/{project->slug}/messages'
+    // 3. make sure the request uri is like '/projects/project/{uuid}/messages' or '/projects/project/{uuid}/messages/private'
+    // 4. redirect to '/project/{project->slug}/messages' or '/project/{project->slug}/messages/private'
 
-    if (preg_match('/^\/projects\/project\/[a-z0-9-]+\/messages$/', $request->getRequestUri()))
+    // fix the below code to make it work as described above
+    
+    if (preg_match('/^\/projects\/project\/[a-z0-9-]+\/messages\/private$/', $request->getRequestUri()))
+    {
+      $uuid = explode('/', $request->getRequestUri())[3];
+      $project = \App\Models\Project::where('uuid', $uuid)->first();
+      return redirect('/project/' . $project->slug . '/messages/private');
+    }
+    else if (preg_match('/^\/projects\/project\/[a-z0-9-]+\/messages$/', $request->getRequestUri()))
     {
       $uuid = explode('/', $request->getRequestUri())[3];
       $project = \App\Models\Project::where('uuid', $uuid)->first();
