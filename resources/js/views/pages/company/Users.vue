@@ -7,36 +7,78 @@
       </template>
     </content-header>
 
-    <list v-if="data.length">
-      <list-item v-for="d in data" :key="d.uuid">
-        <div class="flex items-center">
-          <div v-if="d.register_complete">
-            {{ d.name }}, {{d.firstname}}
-            <!-- <span class="hidden sm:inline"><separator />{{ d.email }}</span> -->
-            <span class="inline"><separator />{{ d.company.name }}</span>
-            <!-- <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
-            <pill v-if="d.role_id == 3" class="bg-green-500">{{ translate('Admin') }}</pill>
-            <pill v-if="d.team_id" class="bg-blue-500">{{ getTeam(d.id) }}</pill> -->
-          </div>
-          <div v-else>
-            {{ d.email }}
-            <pill v-if="d.register_complete == 0" class="bg-yellow-500">{{ translate('Pendent') }}</pill>
-          </div>
-        </div>
-        <list-action>
-          <router-link :to="{name: 'user-update', params: { companyUuid: d.company.uuid, uuid: d.uuid, redirect: '/companies/users' }}">
-            <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
-          </router-link>
-          <a href="" @click.prevent="destroy(d.uuid)">
-            <trash-icon class="icon-list" aria-hidden="true" />
-          </a>
-        </list-action>
-      </list-item>
-    </list>
+    <div class="flex justify-start w-full mb-2 sm:mb-4 lg:mb-6">
+      <a href="javascript:;" @click.prevent="switchView()" class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight">
+        <template v-if="isGrouped">
+          <view-list-icon class="h-4 w-4" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Einfache Liste') }}</span>
+        </template>
+        <template v-else>
+          <view-grid-icon class="h-4 w-4" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Gruppiert nach Firmen') }}</span>
+        </template>
+      </a>
+    </div>
 
-    <list-empty v-else>
-      {{ translate('Es sind noch keine Daten vorhanden') }}
-    </list-empty>
+    <template v-if="isGrouped">
+      <div v-for="(group, index) in data" :key="index">
+        <h4>{{ group.length && group[0].company ? group[0].company.name : null }}</h4>
+        <list v-if="group.length">
+          <list-item v-for="d in group" :key="d.uuid">
+            <div class="flex items-center">
+              <div v-if="d.register_complete">
+                {{ d.name }}, {{d.firstname}}
+                <span class="hidden sm:inline"><separator />{{ d.email }}</span>
+                <span class="inline"><separator />{{ d.company.name }}</span>
+                <!-- <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
+                <pill v-if="d.role_id == 3" class="bg-green-500">{{ translate('Admin') }}</pill>
+                <pill v-if="d.team_id" class="bg-blue-500">{{ getTeam(d.id) }}</pill> -->
+              </div>
+              <div v-else>
+                {{ d.email }}
+                <pill v-if="d.register_complete == 0" class="bg-yellow-500">{{ translate('Pendent') }}</pill>
+              </div>
+            </div>
+            <list-action>
+              <router-link :to="{name: 'user-update', params: { companyUuid: d.company.uuid, uuid: d.uuid, redirect: '/companies/users' }}">
+                <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+              </router-link>
+              <a href="" @click.prevent="destroy(d.uuid)">
+                <trash-icon class="icon-list" aria-hidden="true" />
+              </a>
+            </list-action>
+          </list-item>
+        </list>
+      </div>
+    </template>
+    <template v-else>
+      <list v-if="data.length">
+        <list-item v-for="d in data" :key="d.uuid">
+          <div class="flex items-center">
+            <div v-if="d.register_complete">
+              {{ d.name }}, {{d.firstname}}
+              <span class="hidden sm:inline"><separator />{{ d.email }}</span>
+              <span class="inline"><separator />{{ d.company.name }}</span>
+              <!-- <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
+              <pill v-if="d.role_id == 3" class="bg-green-500">{{ translate('Admin') }}</pill>
+              <pill v-if="d.team_id" class="bg-blue-500">{{ getTeam(d.id) }}</pill> -->
+            </div>
+            <div v-else>
+              {{ d.email }}
+              <pill v-if="d.register_complete == 0" class="bg-yellow-500">{{ translate('Pendent') }}</pill>
+            </div>
+          </div>
+          <list-action>
+            <router-link :to="{name: 'user-update', params: { companyUuid: d.company.uuid, uuid: d.uuid, redirect: '/companies/users' }}">
+              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+            </router-link>
+            <a href="" @click.prevent="destroy(d.uuid)">
+              <trash-icon class="icon-list" aria-hidden="true" />
+            </a>
+          </list-action>
+        </list-item>
+      </list>
+    </template>
 
     <content-footer>
       <router-link :to="{ name: 'companies'}" class="btn-primary">
@@ -47,7 +89,7 @@
   </div>
 </template>
 <script>
-import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, UsersIcon, TrashIcon, MailIcon, LinkIcon } from "@vue-hero-icons/outline";
+import { PlusCircleIcon, PlusSmIcon, PencilAltIcon, UsersIcon, TrashIcon, MailIcon, LinkIcon, ViewGridIcon, ViewListIcon } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
 import PageTitle from "@/mixins/PageTitle";
@@ -72,6 +114,8 @@ export default {
     TrashIcon,
     MailIcon,
     LinkIcon,
+    ViewGridIcon,
+    ViewListIcon,
     ContentHeader,
     ContentFooter,
     Separator,
@@ -93,25 +137,28 @@ export default {
 
       // Routes
       routes: {
-        list: '/api/users',
+        list: '/api/users/all',
         destroy: '/api/user',
       },
 
       // States
       isLoading: false,
       isFetched: false,
+      isGrouped: false,
     };
   },
 
   created() {
     this.fetch();
+    this.isGrouped = this.$store.state.userListIsGrouped ? true : false;
   },
 
   methods: {
 
     fetch() {
       NProgress.start();
-      this.axios.get(this.routes.list).then(response => {
+      const uri = this.isGrouped || this.$store.state.userListIsGrouped ? `${this.routes.list}/grouped` : this.routes.list;
+      this.axios.get(uri).then(response => {
         this.data = response.data.data;
         this.isFetched = true;
         NProgress.done();
@@ -134,8 +181,13 @@ export default {
         const team = user.company.teams.find(x => x.id === user.team_id);
         return team.description
       }
+    },
+
+    switchView() {
+      this.isGrouped = !this.isGrouped;
+      this.$store.commit('userListIsGrouped', this.isGrouped ? true : false);
+      this.fetch();
     }
   },
-
 }
 </script>

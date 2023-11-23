@@ -163,7 +163,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('company/{company:uuid}', [CompanyController::class, 'destroy']);
 
     // Users
-    Route::get('users', [UserController::class, 'all']);
+    Route::get('users/all/{grouped?}', [UserController::class, 'all']);
     Route::get('users/staff', [UserController::class, 'getStaff']);
     Route::get('users/{company:uuid}', [UserController::class, 'get']);
     Route::get('user/{user:uuid}', [UserController::class, 'find']);

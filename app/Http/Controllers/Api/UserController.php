@@ -32,11 +32,22 @@ class UserController extends Controller
    * @return \Illuminate\Http\Response
    */
 
-  public function all()
+  public function all($grouped = FALSE)
   {
+    if ($grouped)
+    {
+      $users = User::with('company.teams')->orderBy('name')->get()->groupBy('company.name');
+      // order by company name
+      $users = $users->sortBy(function ($user, $key) {
+        return $user->first()->company->name;
+      });
+      return new DataCollection($users);
+    }
+
     $users = User::with('company.teams')->orderBy('name')->get();
     return new DataCollection($users);
   }
+
 
   /**
    * Get a list of users

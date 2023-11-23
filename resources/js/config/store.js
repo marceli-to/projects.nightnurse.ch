@@ -22,6 +22,9 @@ export default new Vuex.Store({
     },
     feedType(state, feedType) {
       state.feedType = feedType;
+    },
+    userListIsGrouped(state, userListIsGrouped) {
+      state.userListIsGrouped = userListIsGrouped;
     }
   },
 });
