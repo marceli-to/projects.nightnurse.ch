@@ -90,10 +90,17 @@
 
     <content-footer>
       <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
-      <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer">
+
+      <router-link :to="{ name: redirect.route }" class="form-helper form-helper-footer" v-if="redirect.has">
         <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
         <span>{{ translate('Zurück') }}</span>
       </router-link>
+
+      <router-link :to="{ name: 'users', params: { companyUuid: $route.params.companyUuid}}" class="form-helper form-helper-footer" v-else>
+        <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
+        <span>{{ translate('Zurück') }}</span>
+      </router-link>
+
     </content-footer>
 
   </form>
@@ -174,13 +181,19 @@ export default {
       routes: {
         fetch: '/api/user',
         post: '/api/user',
-        put: '/api/user'
+        put: '/api/user',
       },
 
       // States
       isFetched: true,
       isFetchedSettings: true,
       isLoading: false,
+
+      // Redirect
+      redirect: {
+        has: false,
+        route: 'users'
+      }
     };
   },
 
@@ -190,6 +203,11 @@ export default {
     }
     this.getSettings();
     this.setPageTitle('Benutzer');
+
+    if (this.$route.params.redirect) {
+      this.redirect.has = true;
+      this.redirect.route = this.$route.params.redirect;
+    }
   },
 
   methods: {
@@ -221,7 +239,7 @@ export default {
     store() {
       NProgress.start();
       this.axios.post(this.routes.post, this.data).then(response => {
-        this.$router.push({ name: "users" });
+        this.$router.push({ name: this.redirect.route });
         this.$notify({ type: "success", text: this.translate('Benutzer erfasst') });
         NProgress.done();
       });
@@ -230,7 +248,7 @@ export default {
     update() {
       NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
-        this.$router.push({ name: "users" });
+        this.$router.push({ name: this.redirect.route });
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         NProgress.done();
       });

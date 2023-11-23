@@ -10,6 +10,14 @@
       {{ translate('Kunden') }}
     </template>
   </content-header>
+
+  <div class="flex justify-start w-full mb-2 sm:mb-4 lg:mb-6">
+    <router-link :to="{ name: 'companies-users' }" class="text-xs font-mono text-gray-400 flex justify-end items-center no-underline hover:text-highlight">
+      <users-icon class="h-4 w-4" aria-hidden="true" />
+      <span class="block ml-2">{{ translate('Liste aller Benutzer') }}</span>
+    </router-link>
+  </div>
+
   <list v-if="data.length">
     <list-item v-for="d in data" :key="d.uuid">
       <div class="flex items-center">

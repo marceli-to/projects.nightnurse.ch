@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
   /**
-   * Get a list of users
+   * Get a list of users by company
    * 
    * @return \Illuminate\Http\Response
    */
@@ -23,6 +23,18 @@ class UserController extends Controller
   public function get(Company $company)
   {
     $users = User::with('company.teams')->orderBy('name')->where('company_id', $company->id)->get();
+    return new DataCollection($users);
+  }
+
+  /**
+   * Get a list of all users
+   * 
+   * @return \Illuminate\Http\Response
+   */
+
+  public function all()
+  {
+    $users = User::with('company.teams')->orderBy('name')->get();
     return new DataCollection($users);
   }
 

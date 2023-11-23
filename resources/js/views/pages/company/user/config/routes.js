@@ -23,7 +23,7 @@ const routes = [
   
   {
     name: 'user-update',
-    path: '/companies/company/:companyUuid/users/user/update/:uuid',
+    path: '/companies/company/:companyUuid/users/user/update/:uuid/:redirect?',
     component: UserUpdate,
   },
 

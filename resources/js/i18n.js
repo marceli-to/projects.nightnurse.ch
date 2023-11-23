@@ -128,6 +128,8 @@ export default {
         'Mitarbeiter anlegen': 'Add employee',
         'Bitte alle mit * markierten Felder prüfen!': 'Please check all fields marked with *!',
         'E-Mail-Adresse ist ungültig.': 'Email address is invalid.',
+        'Liste aller Benutzer': 'List all users',
+        'Alle Benutzer': 'All users',
 
       },
 
