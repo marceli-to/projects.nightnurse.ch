@@ -161,22 +161,14 @@
               :ref="data.company.uuid"
               :checked="checkUser(user.id)"
               @change="toggleOne($event, user.id)">
-              <template v-if="user.register_complete">
-                <label class="inline-block text-gray-800" :for="user.uuid">
-                  {{ user.firstname }} {{ user.name }} ({{ user.email }})
-                </label>
-              </template>
-              <template v-else>
-                <label class="inline-block text-gray-800" :for="user.uuid">
-                  {{ user.email }}
-                </label>
-              </template>
-              <!-- <router-link 
-                :to="{name: 'user-update', params: { companyUuid: data.company.uuid, uuid: user.uuid }}" 
-                class="block text-gray-400 ml-2 hover:text-highlight"
-                v-if="user.register_complete">
+              <label class="inline-block text-gray-800" :for="user.uuid">
+                {{ user.email }}
+              </label>
+              <router-link 
+                :to="{name: 'user-update', params: { companyUuid: data.company.uuid, uuid: user.uuid, redirect: `/project/update/${$route.params.slug}/${$route.params.uuid}`}}" 
+                class="block text-gray-400 ml-2 hover:text-highlight">
                 <pencil-alt-icon class="w-4 h-4" aria-hidden="true" />
-              </router-link> -->
+              </router-link>
           </div>
         </div>
       </div>
@@ -208,16 +200,14 @@
                   :ref="company.uuid"
                   :checked="checkUser(user.id)"
                   @change="toggleOne($event, user.id)">
-                <template v-if="user.register_complete">
-                  <label class="inline-block text-gray-800" :for="user.uuid">
-                    {{ user.firstname }} {{ user.name }} ({{ user.email }})
-                  </label>
-                </template>
-                <template v-else>
                   <label class="inline-block text-gray-800" :for="user.uuid">
                     {{ user.email }}
                   </label>
-                </template>
+                  <router-link 
+                    :to="{name: 'user-update', params: { companyUuid: data.company.uuid, uuid: user.uuid, redirect: `/project/update/${$route.params.slug}/${$route.params.uuid}`}}" 
+                    class="block text-gray-400 ml-2 hover:text-highlight">
+                    <pencil-alt-icon class="w-4 h-4" aria-hidden="true" />
+                  </router-link>
               </div>
             </div>
           </div>

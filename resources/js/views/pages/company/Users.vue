@@ -24,7 +24,7 @@
           </div>
         </div>
         <list-action>
-          <router-link :to="{name: 'user-update', params: { companyUuid: d.company.uuid, uuid: d.uuid, redirect: 'companies-users' }}">
+          <router-link :to="{name: 'user-update', params: { companyUuid: d.company.uuid, uuid: d.uuid, redirect: '/companies/users' }}">
             <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
           </router-link>
           <a href="" @click.prevent="destroy(d.uuid)">
