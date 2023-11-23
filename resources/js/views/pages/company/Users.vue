@@ -29,10 +29,6 @@
               <div v-if="d.register_complete">
                 {{ d.name }}, {{d.firstname}}
                 <span class="hidden sm:inline"><separator />{{ d.email }}</span>
-                <span class="inline"><separator />{{ d.company.name }}</span>
-                <!-- <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
-                <pill v-if="d.role_id == 3" class="bg-green-500">{{ translate('Admin') }}</pill>
-                <pill v-if="d.team_id" class="bg-blue-500">{{ getTeam(d.id) }}</pill> -->
               </div>
               <div v-else>
                 {{ d.email }}
@@ -59,9 +55,6 @@
               {{ d.name }}, {{d.firstname}}
               <span class="hidden sm:inline"><separator />{{ d.email }}</span>
               <span class="inline"><separator />{{ d.company.name }}</span>
-              <!-- <pill v-if="d.role_id == 1">{{ translate('Admin') }}</pill>
-              <pill v-if="d.role_id == 3" class="bg-green-500">{{ translate('Admin') }}</pill>
-              <pill v-if="d.team_id" class="bg-blue-500">{{ getTeam(d.id) }}</pill> -->
             </div>
             <div v-else>
               {{ d.email }}
