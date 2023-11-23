@@ -99,10 +99,10 @@ export default {
       }
 
       if (this.hasErrors) {
-        this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
+        this.$notify({ type: "danger", text: this.translate(`Bitte alle mit * markierten Felder prüfen!`)});
         return;
       }
-
+      
       NProgress.start();
       this.axios.post(this.routes.post, this.data).then(response => {
         this.$notify({ type: "success", text: this.translate('Offerte erfasst') });

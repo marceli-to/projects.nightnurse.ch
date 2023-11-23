@@ -79,20 +79,20 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('projects/archive', [ProjectController::class, 'getArchived']);
   Route::get('projects/concluded', [ProjectController::class, 'getConcluded']);
   Route::get('projects/trashed', [ProjectController::class, 'getTrashed']);
-  Route::get('project/users/{project:slug}', [ProjectController::class, 'getProjectUsers']);
-  Route::get('project/{project:slug}', [ProjectController::class, 'find'])->withTrashed();
+  Route::get('project/users/{project:uuid}', [ProjectController::class, 'getProjectUsers']);
+  Route::get('project/{project:uuid}', [ProjectController::class, 'find'])->withTrashed();
 
   // Messages
   Route::get('message/users/{message:uuid}', [MessageUserController::class, 'get']);
 
   // Messages
-  Route::get('messages/{project:slug}', [MessageController::class, 'get'])->withTrashed();
+  Route::get('messages/{project:uuid}', [MessageController::class, 'get'])->withTrashed();
   Route::get('message/{message:uuid}', [MessageController::class, 'find']);
-  Route::post('message/queue/{project:slug}', [MessageController::class, 'store']);
+  Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
 
   // Feedbacks
-  Route::get('feedbacks/{project:slug}', [FeedbackController::class, 'get'])->withTrashed();
+  Route::get('feedbacks/{project:uuid}', [FeedbackController::class, 'get'])->withTrashed();
   Route::post('feedback', [FeedbackController::class, 'store']);
 
   // Profile
@@ -126,6 +126,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('employee/invite/{user:uuid}', [EmployeeController::class, 'invite']);
     Route::put('employee/{user:uuid}', [EmployeeController::class, 'update']);
     Route::delete('employee/{user:uuid}', [EmployeeController::class, 'destroy']);
+    Route::get('project/access/{project:uuid}', [ProjectController::class, 'access']);
+    Route::put('project/access/{project:uuid}', [ProjectController::class, 'updateAccess']);
 
   });
 
@@ -137,11 +139,11 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::delete('project/quote/{projectQuote:uuid}', [ProjectQuoteController::class, 'destroy']);
     Route::get('project/companies/{project:uuid}', [ProjectController::class, 'getProjectCompanies']);
     Route::post('project', [ProjectController::class, 'store']);
-    Route::put('project/{project:slug}', [ProjectController::class, 'update']);
-    Route::get('project/state/{project:slug}', [ProjectController::class, 'toggle']);
-    Route::get('project/restore/{project:slug}', [ProjectController::class, 'restore'])->withTrashed();
-    Route::delete('project/force/{project:slug}', [ProjectController::class, 'forceDelete'])->withTrashed();
-    Route::delete('project/{project:slug}', [ProjectController::class, 'delete'])->withTrashed();
+    Route::put('project/{project:uuid}', [ProjectController::class, 'update']);
+    Route::get('project/state/{project:uuid}', [ProjectController::class, 'toggle']);
+    Route::get('project/restore/{project:uuid}', [ProjectController::class, 'restore'])->withTrashed();
+    Route::delete('project/force/{project:uuid}', [ProjectController::class, 'forceDelete'])->withTrashed();
+    Route::delete('project/{project:uuid}', [ProjectController::class, 'delete'])->withTrashed();
 
     // Project states
     Route::get('project-states', [ProjectStateController::class, 'get']);

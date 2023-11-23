@@ -40,7 +40,7 @@ class MessageResource extends JsonResource
         'body' => $this->message ? $this->message->body : null,
         'body_preview' => $this->message ? $this->message->body_preview : null,
       ],
-      'uri' => env('APP_URL') . '/project/'. $this->project->slug .'/messages',
+      'uri' => env('APP_URL') . '/project/'. $this->project->slug . '/' . $this->project->uuid,
 
       // Group reactions by its type and get the users in an array
       'reactions' => $this->reactions->groupBy('reaction_type_id')->map(function ($reactionGroup) {

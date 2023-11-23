@@ -13,7 +13,7 @@
         </a>
       </div>
     </div>
-    <router-link :to="{name: 'messages', params: { uuid: project.uuid }}" class="relative text-dark font-normal no-underline pr-2">
+    <router-link :to="{name: 'messages', params: { slug: project.slug, uuid: project.uuid }}" class="relative text-dark font-normal no-underline pr-2">
       <span class="mt-2 inline-flex">{{ message.message_date_time }}</span><separator />{{ message.sender.acronym }}
     </router-link>
   </div>

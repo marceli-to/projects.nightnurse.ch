@@ -12,7 +12,7 @@
         <div class="text-dark" v-else>
           {{project.number}} {{project.name}}
         </div>
-        <router-link :to="{name: 'project-update', params: { uuid: project.uuid, redirect: 'messages' }}" v-if="$store.state.user.admin">
+        <router-link :to="{name: 'project-update', params: { slug: project.slug, uuid: project.uuid, redirect: 'messages' }}" v-if="$store.state.user.admin">
           <pencil-alt-icon class="icon-list mb-1 ml-1 sm:ml-2" aria-hidden="true" />
         </router-link>
       </div>
@@ -331,7 +331,7 @@ export default {
   mounted() {
     this.fetch();
 
-    window.Echo.channel(`timeline.${this.$route.params.slug}`).listen('MessageSent', (e) => {
+    window.Echo.channel(`timeline.${this.$route.params.uuid}`).listen('MessageSent', (e) => {
       if (e.message.private === 1 && !this.canAccessPrivateMessages) {
         return;
       }
@@ -362,10 +362,10 @@ export default {
       this.isFetched = false;
       NProgress.start();
       this.axios.all([
-        this.axios.get(`${this.routes.list}/${this.$route.params.slug}`),
-        this.axios.get(`${this.routes.project}/${this.$route.params.slug}`),
+        this.axios.get(`${this.routes.list}/${this.$route.params.uuid}`),
+        this.axios.get(`${this.routes.project}/${this.$route.params.uuid}`),
         this.axios.get(`${this.routes.reactionTypes}`),
-        this.axios.get(`${this.routes.feedback.list}/${this.$route.params.slug}`),
+        this.axios.get(`${this.routes.feedback.list}/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
         this.feedItems = responses[0].data.data ? responses[0].data.data : responses[0].data;
         this.project = responses[1].data;

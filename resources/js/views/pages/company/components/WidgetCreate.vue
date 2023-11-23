@@ -85,7 +85,7 @@ export default {
 
       if (this.data.name == null) {
         this.errors.name = true;
-        this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
+        this.$notify({ type: "danger", text: this.translate(`Bitte alle mit * markierten Felder prüfen!`)});
         return;
       }
       NProgress.start();

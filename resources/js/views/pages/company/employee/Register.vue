@@ -131,7 +131,7 @@ export default {
 
   computed: {
     title() {
-      return "Mitarbeiter anlegen";
+      return this.translate('Mitarbeiter anlegen');
     }
   }
 };

@@ -292,8 +292,8 @@ export default {
     fetch() {
       this.isFetched = false;
       this.axios.all([
-        this.axios.get(`${this.routes.fetchProject}/${this.$route.params.slug}`),
-        this.axios.get(`${this.routes.fetchUsers}/${this.$route.params.slug}`),
+        this.axios.get(`${this.routes.fetchProject}/${this.$route.params.uuid}`),
+        this.axios.get(`${this.routes.fetchUsers}/${this.$route.params.uuid}`),
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
         this.project.clients = responses[1].data.clients;
@@ -338,7 +338,7 @@ export default {
     store() {
       this.isSending = true;
       this.data.intermediate = this.data.intermediate ? 1 : 0;
-      this.axios.post(`${this.routes.post}/${this.$route.params.slug}`, this.data).then(response => {
+      this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
         this.saveRecipients();
         this.$notify({ type: "success", text: this.messages.created });
         this.reset();
@@ -428,7 +428,7 @@ export default {
 
       // Next upgrade: check if there are any preselected recipients in local storage
       //-----------------------------------------------------------------------------
-      const storageName = `recipients-${this.$route.params.slug}-${this.$store.state.feedType}`;
+      const storageName = `recipients-${this.$route.params.uuid}-${this.$store.state.feedType}`;
       const storage = JSON.parse(localStorage.getItem(storageName));
       // If there are users, loop over them and add them to the recipients array
       if (storage && storage.users.length > 0) {

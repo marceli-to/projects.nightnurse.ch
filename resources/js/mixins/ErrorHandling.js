@@ -1,6 +1,9 @@
 import NProgress from 'nprogress';
+import i18n from "@/i18n";
 
 export default {
+
+  mixins: [i18n],
 
   data() {
     return { 
@@ -56,7 +59,7 @@ export default {
       }
       this.errors = data.body;
       NProgress.done();
-      this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
+      this.$notify({ type: "danger", text: this.translate(`Bitte alle mit * markierten Felder prüfen!`)});
     },
 
     serverError(data) {

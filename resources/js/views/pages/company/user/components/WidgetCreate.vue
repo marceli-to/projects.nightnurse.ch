@@ -25,7 +25,7 @@
     </div>
     <footer>
       <div class="mt-4 lg:mt-6">
-        <button :disabled="isPending ? true : false" type="submit" class="btn-primary" @click.prevent="store()">
+        <button :disabled="isPending ? true : false" type="submit" class="btn-primary p-2 md:!py-3 md:!px-3" @click.prevent="store()">
           {{ translate('Speichern') }}
         </button>
       </div>
@@ -43,6 +43,7 @@ import Required from "@/components/ui/form/Required.vue";
 import Asterisk from "@/components/ui/form/Asterisk.vue";
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
+import Lightbox from "@/components/ui/layout/Lightbox.vue";
 
 export default {
   
@@ -55,6 +56,7 @@ export default {
     Required,
     Asterisk,
     NProgress,
+    Lightbox
   },
 
   mixins: [i18n],
@@ -97,7 +99,7 @@ export default {
 
       if (this.data.email == null) {
         this.errors.email = true;
-        this.$notify({ type: "danger", text: `Bitte alle mit * markierten Felder prüfen!`});
+        this.$notify({ type: "danger", text: this.translate(`Bitte alle mit * markierten Felder prüfen!`)});
         return;
       }
 
@@ -132,23 +134,6 @@ export default {
       this.errors.domain = false;
       this.hasErrors = false;
     }
-
-    // validateDomain() {
-    //   const data = {
-    //     email: this.data.email,
-    //     company_uuid: this.data.company_uuid,
-    //   };
-    //   this.isPending = true;
-    //   this.hasErrors = false;
-    //   NProgress.start();
-    //   this.axios.post(this.routes.validate, data).then(response => {
-    //     NProgress.done();
-    //     this.errors.message = error.response.data.errors.email[0];
-    //     this.errors.validEmailDomain = response.data.valid;
-    //     return response.data.valid;
-    //   });
-    // },
-
   },
 };
 </script>

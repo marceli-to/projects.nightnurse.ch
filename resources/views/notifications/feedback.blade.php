@@ -32,6 +32,6 @@
 </div>
 @endif
 <div class="pb-5 text-right text-xs text-slate font-mono">
-  <a href="{{url('')}}/projects/project/{{$feedback['project']['uuid']}}/messages" class="text-xs text-slate font-mono">Open in Browser</a>
+  <a href="{{url('')}}/project/{{$feedback['project']['slug']}}/{{$feedback['project']['uuid']}}" class="text-xs text-slate font-mono">Open in Browser</a>
 </div>
 @endcomponent

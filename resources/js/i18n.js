@@ -33,6 +33,7 @@ export default {
         'Benutzer': 'Users',
         'Benutzer bearbeiten': 'Edit user',
         'Benutzer hinzufügen': 'Add user',
+        'Benutzer erstellen': 'Create user',
         'Projektleiter': 'Project Lead',
         'Bitte wählen...': 'Please choose...',
         'Projektstart': 'Project Start',
@@ -120,6 +121,13 @@ export default {
         'Sorry, ich konnte die gewünschte Seite leider nicht finden!': 'Sorry, I could not find the requested page!',
         '403 – Zugriff verweigert': '403 - Access denied',
         'Sorry, du hast keinen Zugriff auf diese Seite!': 'Sorry, you do not have access to this page!',
+        'Zugriffe verwalten': 'Manage access',
+        'Projekt-Zugriffe verwalten': 'Manage project access',
+        'Wiederherstellen': 'Restore',
+        'Bearbeiten': 'Edit',
+        'Mitarbeiter anlegen': 'Add employee',
+        'Bitte alle mit * markierten Felder prüfen!': 'Please check all fields marked with *!',
+        'E-Mail-Adresse ist ungültig.': 'Email address is invalid.',
 
       },
 

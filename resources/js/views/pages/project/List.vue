@@ -34,12 +34,12 @@
     <div v-for="d in data.user_projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
       <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
-        <router-link :to="{name: 'messages', params: { slug: d.slug }}" class="relative text-dark font-normal no-underline">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
           {{d.number}}
         </router-link>
       </div>
       <div class="col-span-8 md:col-span-9">
-        <router-link :to="{name: 'messages', params: { slug: d.slug }}" class="relative text-dark font-normal no-underline">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
           <span class="font-bold">{{ d.name }}</span>
           <span v-if="d.company">
             <separator class="hidden sm:inline-block" />
@@ -62,23 +62,23 @@
       <div class="col-span-2 md:col-span-2">
         <div class="flex items-center justify-end gap-x-2">
           <template v-if="$store.state.user.admin">
-            <router-link :to="{name: 'project-update', params: { slug: d.slug }}" :title="translate('Bearbeiten')">
+            <router-link :to="{name: 'project-update', params: { slug: d.slug, uuid: d.uuid }}" :title="translate('Bearbeiten')">
               <pencil-alt-icon class="icon-list" aria-hidden="true" />
             </router-link>
             <template v-if="type == 'trashed'">
-              <a href="" @click.prevent="restore(d.slug)" :title="translate('Wiederherstellen')">
+              <a href="" @click.prevent="restore(d.uuid)" :title="translate('Wiederherstellen')">
                 <refresh-icon class="icon-list" aria-hidden="true" />
               </a>
             </template>
-            <a href="" @click.prevent="destroy(d.slug)" :title="translate('Löschen')">
+            <a href="" @click.prevent="destroy(d.uuid)" :title="translate('Löschen')">
               <trash-icon class="icon-list" aria-hidden="true" />
             </a>
           </template>
-          <!-- <template v-else>
-            <router-link :to="{name: 'project-update', params: { slug: d.slug }}">
-              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+          <template v-else-if="$store.state.user.client_admin">
+            <router-link :to="{name: 'project-access', params: { slug: d.slug, uuid: d.uuid }}" :title="translate('Zugriffe verwalten')">
+              <users-icon class="icon-list" aria-hidden="true" />
             </router-link>
-          </template> -->
+          </template>
         </div>
       </div>
     </div>
@@ -89,12 +89,12 @@
     <div v-for="d in data.projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
       <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
-        <router-link :to="{name: 'messages', params: { slug: d.slug }}" class="relative text-dark font-normal no-underline">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
           {{d.number}}
         </router-link>
       </div>
       <div class="col-span-8 md:col-span-9">
-        <router-link :to="{name: 'messages', params: { slug: d.slug }}" class="relative text-dark font-normal no-underline">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
           <span class="font-bold">{{ d.name }}</span>
           <span v-if="d.company">
             <separator class="hidden sm:inline-block" />
@@ -117,23 +117,23 @@
       <div class="col-span-2 md:col-span-2">
         <div class="flex items-center justify-end gap-x-2">
           <template v-if="$store.state.user.admin">
-            <router-link :to="{name: 'project-update', params: { slug: d.slug }}">
+            <router-link :to="{name: 'project-update', params: { slug: d.slug, uuid: d.uuid }}">
               <pencil-alt-icon class="icon-list" aria-hidden="true" />
             </router-link>
             <template v-if="type == 'trashed'">
-              <a href="" @click.prevent="restore(d.slug)" :title="translate('Wiederherstellen')">
+              <a href="" @click.prevent="restore(d.uuid)" :title="translate('Wiederherstellen')">
                 <refresh-icon class="icon-list" aria-hidden="true" />
               </a>
             </template>
-            <a href="" @click.prevent="destroy(d.slug)">
+            <a href="" @click.prevent="destroy(d.uuid)" :title="translate('Löschen')">
               <trash-icon class="icon-list" aria-hidden="true" />
             </a>
           </template>
-          <!-- <template v-else>
-            <router-link :to="{name: 'project-update', params: { slug: d.slug }}">
-              <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+          <template v-else-if="$store.state.user.client_admin">
+            <router-link :to="{name: 'project-access', params: { slug: d.slug, uuid: d.uuid }}" :title="translate('Zugriffe verwalten')">
+              <users-icon class="icon-list" aria-hidden="true" />
             </router-link>
-          </template> -->
+          </template>
         </div>
       </div>
     </div>
@@ -152,7 +152,8 @@ import {
   ArchiveIcon, 
   SwitchHorizontalIcon, 
   FolderIcon,
-  RefreshIcon
+  RefreshIcon,
+  UsersIcon
 } from "@vue-hero-icons/outline";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Helpers from "@/mixins/Helpers";
@@ -178,6 +179,7 @@ export default {
     FolderIcon,
     SwitchHorizontalIcon,
     RefreshIcon,
+    UsersIcon,
     ContentHeader,
     Separator,
     NProgress,

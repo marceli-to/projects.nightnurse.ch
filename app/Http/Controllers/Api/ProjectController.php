@@ -464,6 +464,69 @@ class ProjectController extends Controller
   }
 
   /**
+   * Get a list of users associated with the project
+   * 
+   * @param Project $project
+   * @return \Illuminate\Http\Response
+   */
+  public function access(Project $project)
+  {
+    $this->authorize('containsProject', $project);
+
+    // get the users company with all users
+    $company = Company::with('users')->findOrFail(auth()->user()->company_id);
+    $users = [];
+    if ($company->users->count() > 0)
+    {
+      foreach($company->users as $user)
+      {
+        // Check if the user is already associated with the project
+        $associated = ProjectUser::where('project_id', $project->id)->where('user_id', $user->id)->count() > 0;
+        $users[] = [
+          'id' => $user->id,
+          'uuid' => $user->uuid,
+          'firstname' => $user->firstname,
+          'name' => $user->name,
+          'email' => $user->email,
+          'register_complete' => $user->register_complete,
+          'associated' => $associated
+        ];
+      }
+    }
+    return response()->json($users);
+  }
+
+  public function updateAccess(Project $project, Request $request)
+  {
+    $this->authorize('containsProject', $project);
+    $project_users = $request->input('users');
+
+    // remove the currently logged in user from the $project_users array
+    $user = auth()->user();
+    $project_users = array_filter($project_users, function($u) use ($user) {
+      return $u['uuid'] != $user->uuid;
+    });
+
+    // Add or remove project_users from the project based on associated (true/false)
+    foreach($project_users as $u)
+    {
+      $user = User::findOrFail($u['id']);
+      if ($u['associated'])
+      {
+        ProjectUser::create([
+          'project_id' => $project->id,
+          'user_id' => $user->id,
+        ]);
+      }
+      else
+      {
+        ProjectUser::where('project_id', $project->id)->where('user_id', $user->id)->delete();
+      }
+    }
+    return response()->json('successfully updated');
+  }
+
+  /**
    * Store or update pivot data
    * 
    * @param Project $project

@@ -8,6 +8,7 @@ use App\Http\Requests\EmployeeStoreRequest;
 use App\Http\Requests\EmployeeUpdateRequest;
 use App\Http\Requests\UserRegisterRequest;
 use App\Http\Requests\UserInviteRequest;
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -144,7 +145,7 @@ class EmployeeController extends Controller
       'role_id' => 2,
     ]);
     $this->invite($user);
-    return response()->json(['user' => $user]);
+    return response()->json(['user' =>  UserResource::make($user)]);
   }
 
   /**

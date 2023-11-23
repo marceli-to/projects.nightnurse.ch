@@ -250,7 +250,7 @@
     <content-footer>
       <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
       <template v-if="$route.params.redirect">
-        <router-link :to="{ name: 'messages', params: { slug: $route.params.slug } }" class="form-helper form-helper-footer">
+        <router-link :to="{ name: 'messages', params: { slug: $route.params.slug, uuid: $route.params.uuid } }" class="form-helper form-helper-footer">
           <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
           <span>{{ translate('Zurück') }}</span>
         </router-link>
@@ -411,7 +411,7 @@ export default {
     fetch() {
       NProgress.start();
       this.isFetched = false;
-      this.axios.get(`${this.routes.fetch}/${this.$route.params.slug}`).then(response => {
+      this.axios.get(`${this.routes.fetch}/${this.$route.params.uuid}`).then(response => {
         this.data = response.data;
         this.isFetched = true;
         NProgress.done();
@@ -439,13 +439,13 @@ export default {
 
     update() {
       NProgress.start();
-      this.axios.put(`${this.routes.put}/${this.$route.params.slug}`, this.data).then(response => {
+      this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
 
         // Redirect if necessary
         if (this.$route.params.redirect) {
           this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
           NProgress.done();
-          this.$router.push({ name: "messages", params: { slug: this.$route.params.slug }});
+          this.$router.push({ name: "messages", params: { slug: this.$route.params.slug, uuid: this.$route.params.uuid }});
           return;
         }
 
@@ -457,7 +457,7 @@ export default {
 
     quickSave() {
       NProgress.start();
-      this.axios.put(`${this.routes.put}/${this.$route.params.slug}`, this.data).then(response => {
+      this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
         NProgress.done();
       });
     },

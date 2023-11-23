@@ -5,8 +5,7 @@ const routes = [
 
   {
     name: 'messages',
-    // path: '/projects/project/:uuid/messages/:view?',
-    path: '/project/:slug/messages/:view?',
+    path: '/project/:slug/:uuid/:view?',
     component: MessageIndex,
   },
 
