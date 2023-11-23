@@ -129,7 +129,7 @@
               <trash-icon class="icon-list" aria-hidden="true" />
             </a>
           </template>
-          <template v-else-if="$store.state.user.client_admin">
+          <template v-else-if="$store.state.user.client_admin && d.state == 'active'">
             <router-link :to="{name: 'project-access', params: { slug: d.slug, uuid: d.uuid }}" :title="translate('Zugriffe verwalten')">
               <users-icon class="icon-list" aria-hidden="true" />
             </router-link>

@@ -21,6 +21,7 @@ class ProjectListResource extends JsonResource
       'last_activity'=> $this->last_activity,
       'company' => CompanyResource::make($this->company),
       'preview_messages' => MessageListResource::collection($this->previewMessages),
+      'state' =>$this->state->description
     ];
   }
 }
