@@ -48,8 +48,10 @@ class FetchMails extends Command
     
     if ($messages)
     {
+
       foreach($messages as $message)
       {
+
         // get recipient
         $recipient = $message->getAttributes()["to"][0]->mail;
 
@@ -64,9 +66,47 @@ class FetchMails extends Command
 
         $text_body = $message->getTextBody();
 
-        dd($text_body);
+        // search for the part '--Reply below this line--' in the message body and extract the text after it
+        $reply_text = explode('--Reply below this line--', $text_body);
+        $reply_text = $text_body[1];
 
-        // we're only interested in text after 
+        // remove all html tags from the reply text
+        $reply_text = strip_tags($reply_text);
+
+        dd($reply_text);
+
+        // if $reply_text is empty, delete the message and continue with the next one
+        if (empty($reply_text))
+        {
+          $message->delete();
+          continue;
+        }
+        else
+        {
+          // get project id from message uuid
+          $project_id = Project::where('uuid', $uuid)->first();
+
+          // if there is no project with the given uuid, delete the message and continue with the next one
+          if (empty($project_id))
+          {
+            $message->delete();
+            continue;
+          }
+
+          // // create new message
+          // $new_message = new Message();
+          // $new_message->project_id = $project_id;
+          // $new_message->sender_id = 1; // TODO: get sender id from message
+          // $new_message->subject = $message->getSubject();
+          // $new_message->body = $reply_text;
+          // $new_message->save();
+
+          // // delete message
+          // $message->delete();
+        }
+
+
+        
 
         // echo $message->getSubject().'<br />';
         // echo 'Attachments: '.$message->getAttachments()->count().'<br />';

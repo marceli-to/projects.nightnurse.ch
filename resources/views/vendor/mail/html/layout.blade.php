@@ -49,7 +49,7 @@ width: 100% !important;
 </td>
 </tr>
 </table>
-{{-- -----Reply below this line----- --}}
+{{-- --Reply below this line-- --}}
 </body>
 </html>
 

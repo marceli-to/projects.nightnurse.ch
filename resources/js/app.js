@@ -29,6 +29,9 @@ Vue.use(Notifications);
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
+// Vue Konva
+import VueKonva from 'vue-konva';
+Vue.use(VueKonva);
 
 // Store
 import store from '@/config/store';
@@ -36,6 +39,7 @@ import store from '@/config/store';
 // Routes
 import baseRoutes from '@/config/routes';
 import projectRoutes from '@/views/pages/project/config/routes';
+import markupRoutes from '@/views/pages/markup/config/routes';
 import companyRoutes from '@/views/pages/company/config/routes';
 import userRoutes from '@/views/pages/company/user/config/routes';
 import messageRoutes from '@/views/pages/message/config/routes';
@@ -55,7 +59,8 @@ const router = new VueRouter(
       ...userRoutes,
       ...messageRoutes,
       ...profileRoutes,
-      ...notificationRoutes
+      ...notificationRoutes,
+      ...markupRoutes
     ]
   }
 );

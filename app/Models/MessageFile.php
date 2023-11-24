@@ -29,6 +29,5 @@ class MessageFile extends Base
   {
     return $this->belongsTo(Message::class);
   }
- 
 
 }
