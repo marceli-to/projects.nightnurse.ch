@@ -68,9 +68,9 @@
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
-    <a href="javascript:;" class="btn-create">
+    <a href="javascript:;" class="btn-create" @click="lock()">
       <save-icon class="h-5 w-5" aria-hidden="true" />
-      <span class="block ml-2">{{ translate('Speichern') }}</span>
+      <span class="block ml-2">{{ translate('Speichern & Freigeben') }}</span>
     </a>
   </content-footer>
 </div>
@@ -140,6 +140,7 @@ export default {
 
       routes: {
         get: '/api/markups',
+        lock: '/api/markups/lock',
         create: '/api/markup',
         update: '/api/markup',
         delete: '/api/markup',
@@ -168,7 +169,7 @@ export default {
 
     // add event handler for outside click (markupState)
     document.addEventListener('click', (e) => {
-      if (!this.$refs.markupStage.contains(e.target)) {
+      if (this.$refs.markupStage && !this.$refs.markupStage.contains(e.target)) {
         this.reset();
       }
     });
@@ -358,6 +359,8 @@ export default {
     // CRUD
     fetch() {
       NProgress.start();
+      this.elements = [];
+      this.comments = [];
       this.axios.get(`${this.routes.get}/${this.$props.image.uuid}`).then((response) => {
         const data = response.data.data;
         data.forEach((element) => {
@@ -404,7 +407,6 @@ export default {
       };
       NProgress.start();
       this.axios.post(`${this.routes.comment}`, data).then(response => {
-        this.$notify({ type: "success", text: this.translate('Kommentar gespeichert') });
         this.comments.push(response.data.comment);
         const element = this.elements.find(
           (r) => r.name === this.selectedShapeName
@@ -415,6 +417,15 @@ export default {
         this.selectedShapeName = '';
         this.resetComments();
         NProgress.done();
+      });
+    },
+
+    lock() {
+      NProgress.start();
+      this.axios.get(`${this.routes.lock}/${this.$props.image.uuid}`).then(response => {
+        NProgress.done();
+        this.$notify({ type: "success", text: this.translate('Markierungen und Kommentare gespeichert') });
+        this.fetch();
       });
     },
 

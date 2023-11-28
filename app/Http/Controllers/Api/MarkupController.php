@@ -68,6 +68,27 @@ class MarkupController extends Controller
   }
 
   /**
+   * Add 'is_locked' to all markups that belong to a message file and a user
+   * 
+   * @param  MessageFile $messageFile
+   * @return \Illuminate\Http\Response
+   */
+  public function lock(MessageFile $messageFile)
+  {
+    $markups = Markup::where('message_file_id', $messageFile->id)->where('user_id', auth()->user()->id)->get();
+
+    foreach ($markups as $markup)
+    {
+      $markup->is_locked = true;
+      $markup->save();
+    }
+
+    return response()->json([
+      'message' => 'Markups locked',
+    ]);
+  }
+
+  /**
    * Delete a markup
    * 
    * @param  \Illuminate\Http\Request $request
