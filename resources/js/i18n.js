@@ -130,6 +130,11 @@ export default {
         'E-Mail-Adresse ist ungültig.': 'Email address is invalid.',
         'Liste aller Benutzer': 'List all users',
         'Alle Benutzer': 'All users',
+        'Kommentare': 'Comments',
+        'Speichern & Freigeben': 'Save and share',
+        'Ihr Kommentar': 'Your comment',
+        'Kommentar speichern': 'Save comment',
+        'Markierungen und Kommentare gespeichert': 'Annotations and comments saved',
 
       },
 

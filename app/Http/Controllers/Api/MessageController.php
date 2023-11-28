@@ -30,7 +30,7 @@ class MessageController extends Controller
     $messages = Message::limitByRole()
       ->with(
         'sender', 
-        'files', 
+        'files.markups', 
         'users', 
         'message',
         'reactions.user', 

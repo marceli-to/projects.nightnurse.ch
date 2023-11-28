@@ -18,8 +18,8 @@ class MarkupController extends Controller
    */
   public function get(MessageFile $messageFile)
   {
-    // $project = Project::where('id', $messageFile->message->project_id)->first();
-    // $this->authorize('containsProject', $project);
+    $project = Project::where('id', $messageFile->message->project_id)->first();
+    $this->authorize('containsProject', $project);
 
     $markups = Markup::where('message_file_id', $messageFile->id)->get();
     return response()->json([

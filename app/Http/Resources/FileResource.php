@@ -21,6 +21,7 @@ class FileResource extends JsonResource
       'extension' => $this->extension,
       'preview' => $this->preview,
       'size' => \ReadableSize($this->size),
+      'markups' => MarkupResource::collection($this->markups),
     ];
   }
 }
