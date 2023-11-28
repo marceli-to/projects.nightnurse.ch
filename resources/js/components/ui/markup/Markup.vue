@@ -1,63 +1,90 @@
 <template>
-  <div class="sm:grid sm:grid-cols-12 sm:gap-x-8">
+<div>
+  <div class="sm:grid sm:grid-cols-12 sm:gap-x-4 min-w-[980px] overflow-x-auto" ref="markupStage">
     <div class="sm:col-span-9">
 
       <markup-menu 
         @addRectangle="addRectangle"
         @addCircle="addCircle"
         @addComment="addComment"
-        @deleteElement="deleteElement"
-        :hasSelectedShape="hasSelectedShape">
+        @deleteElement="destroy"
+        :canDelete="canDelete">
       </markup-menu>
 
       <div 
         ref="image"
-        class="w-full aspect-video"
-        :style="`background-image: url(${largeImageUri(image)}); background-repeat: no-repeat; background-size: contain; background-position: center;`">
+        class="w-full aspect-video bg-no-repeat bg-contain bg-center bg-light"
+        :style="`background-image: url(${largeImageUri(image)});`">
         <v-stage 
           ref="stage"
           :config="configStage"
           @mousedown="handleStageMouseDown"
           @touchstart="handleStageMouseDown">
           <v-layer ref="layer">
-
             <div v-for="(element, index) in elements" :key="element.name">
               <template v-if="element.type === 'rect'">
-                <v-rect :config="element" @transformend="handleTransformEnd" />
+                <v-rect :config="element" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
               </template>
               <template v-if="element.type === 'circle'">
-                <v-circle :config="element" @transformend="handleTransformEnd" />
+                <v-circle :config="element" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
               </template>
               <template v-if="element.type === 'comment'">
-                <v-image :config="element" @click="handleCommentClick"/>
+                <v-image :config="element" @dragend="handleCommentDragEnd" class="cursor-pointer"/>
               </template>
             </div>
-
             <v-transformer ref="transformer" />
           </v-layer>
         </v-stage>
       </div>
     </div>
     <div class="sm:col-span-3">
+      <template v-if="comments.length">
+        <comment 
+          v-for="(comment, index) in comments" 
+          :key="comment.uuid" 
+          :comment="comment"
+          :highlighted="highlightedComment">
+        </comment>
+      </template>
       <template v-if="hasCommentForm">
         <div class="form-group">
           <textarea 
             v-model="comment" 
             rows="5" 
-            class="border-2 rounded p-1 lg:p-2 placeholder:text-sm lg:placeholder:text-base" 
+            class="border-2 focus:border-gray-200 rounded-sm py-2 px-2 text-xs lg:text-sm placeholder:text-xs lg:placeholder:text-sm placeholder:text-gray-300" 
             :placeholder="translate('Ihr Kommentar')">
           </textarea>
+          <div class="flex justify-end">
+            <button type="submit" class="font-mono font-semi !leading-none text-xs text-dark hover:text-highlight mt-2 lg:mt-3" @click="save()" v-if="hasSelectedShape">
+              {{ translate('Kommentar speichern') }}
+            </button>
+          </div>
         </div>
       </template>
     </div>
   </div>
+  <content-footer>
+    <router-link :to="{name: 'messages', params: { slug: $props.project.slug, uuid: $props.project.uuid }}" class="form-helper form-helper-footer">
+      <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
+      <span>{{ translate('Zurück') }}</span>
+    </router-link>
+    <a href="javascript:;" class="btn-create">
+      <save-icon class="h-5 w-5" aria-hidden="true" />
+      <span class="block ml-2">{{ translate('Speichern') }}</span>
+    </a>
+  </content-footer>
+</div>
 </template>
 <script>
 import i18n from "@/i18n";
+import NProgress from 'nprogress';
 import Konva from 'konva';
 import { Stage, Layer, Rect, Circle, Image, Transformer } from 'vue-konva';
 import Helpers from "@/mixins/Helpers";
 import MarkupMenu from '@/components/ui/markup/Menu.vue';
+import Comment from '@/components/ui/markup/Comment.vue';
+import { ArrowLeftIcon, SaveIcon } from "@vue-hero-icons/outline";
+import ContentFooter from "@/components/ui/layout/Footer.vue";
 
 export default {
 
@@ -65,9 +92,18 @@ export default {
 
   components: {
     MarkupMenu,
+    Comment,
+    ContentFooter,
+    ArrowLeftIcon,
+    SaveIcon,
+    NProgress
   },
 
   props: {
+    project: {
+      type: Object,
+      default: null,
+    },
     image: {
       type: Object,
       default: null,
@@ -81,8 +117,15 @@ export default {
         height: 200
       },
 
+      colors: {
+        default: 'blue',
+        highlight: '#ff008b',
+      },
+
       elements: [],
 
+      comments: [],
+      highlightedComment: null,
       selectedShapeName: '',
       selectedShapeType: null,
 
@@ -90,8 +133,18 @@ export default {
       comment: null,
 
       // States
+      isFetched: false,
       hasSelectedShape: false,
       hasCommentForm: false,
+      canDelete: false,
+
+      routes: {
+        get: '/api/markups',
+        create: '/api/markup',
+        update: '/api/markup',
+        delete: '/api/markup',
+        comment: '/api/markup/comment',
+      }
     }
   },
 
@@ -100,26 +153,25 @@ export default {
     this.configStage.width = this.$refs.image.clientWidth;
     this.configStage.height = this.$refs.image.clientHeight;
 
+    this.preloadIcons();
+    this.fetch();
+
     // add event handler for delete key
     window.addEventListener('keydown', (e) => {
+      if (!this.hasSelectedShape || !this.canDelete) {
+        return;
+      }
       if (e.keyCode === 46) {
-        this.deleteElement();
+        this.destroy();
       }
     });
-  },
 
-  created() {
-    const commmentIcon = new window.Image();
-    commmentIcon.src = "/assets/img/annotation.svg";
-    commmentIcon.onload = () => {
-      this.commmentIcon = commmentIcon;
-    };
-
-    const commmentIconActive = new window.Image();
-    commmentIconActive.src = "/assets/img/annotation-active.svg";
-    commmentIconActive.onload = () => {
-      this.commmentIconActive = commmentIconActive;
-    };
+    // add event handler for outside click (markupState)
+    document.addEventListener('click', (e) => {
+      if (!this.$refs.markupStage.contains(e.target)) {
+        this.reset();
+      }
+    });
   },
 
   methods: {
@@ -142,32 +194,54 @@ export default {
       } else {
         element.strokeWidth = desiredStrokeWidth / e.target.scaleY();
       }
+      this.update(element);
     },
 
-    // handleCommentDragStart(e) {
-    //   e.target.image(this.commmentIconActive);
-    // },
+    handleShapeDragEnd(e) {
+      // shape is dragged, let us save new attrs back to the node
+      // find element in our state
+      const element = this.elements.find(
+        (r) => r.name === this.selectedShapeName
+      );
+      // update the state
+      element.x = e.target.x();
+      element.y = e.target.y();
+      element.stroke = this.colors.default;
+      this.update(element);
+    },
 
-    // handleCommentDragEnd(e) {
-    //   e.target.image(this.commmentIcon);
-    // },
+    handleCommentDragEnd(e) {
+      const element = this.elements.find(
+        (r) => r.name === this.selectedShapeName
+      );
+      // update the state
+      element.x = e.target.x();
+      element.y = e.target.y();
+      this.update(element);
+    },
 
     handleCommentClick(e) {
-      this.resetCommentIcons(e.target.name());
+
+      if (e.target.attrs.editable) {
+        this.hasSelectedShape = true;
+        this.canDelete = true;
+
+        if (e.target.attrs.commentable) {
+          this.hasCommentForm = true;
+        }
+      }
       this.selectedShapeName = e.target.name();
-      this.hasSelectedShape = true;
-      this.hasCommentForm = true;
+      this.resetComments(this.selectedShapeName);
+      this.highlightedComment = this.selectedShapeName;
+      e.target.image(this.commmentIconActive);
+
     },
 
     handleStageMouseDown(e) {
      
       // clicked on stage - clear selection
       if (e.target === e.target.getStage()) {
-        this.selectedShapeName = 'null';
-        this.hasSelectedShape = false;
-        this.hasCommentForm = false;
-        this.resetCommentIcons();
-        this.updateTransformer();
+        this.reset();
         return;
       }
 
@@ -180,21 +254,30 @@ export default {
 
       const clickedOnComment = e.target.attrs.type == 'comment';
       if (clickedOnComment) {
-        this.hasSelectedShape = true;
-        this.selectedShapeName = e.target.name();
-
-        // set the image to this.commmentIconActive
-        e.target.image(this.commmentIconActive);
+        this.handleCommentClick(e);
         return;
       }
 
       // find clicked elements by its name
       const name = e.target.name();
       const element = this.elements.find((r) => r.name === name);
+
+      if (element && element.owner !== this.$store.state.user.uuid || element.editable === false) {
+        this.$refs.transformer.getNode().nodes([]);
+        return;
+      }
+
       if (element) {
+        element.stroke = this.colors.highlight;
         this.selectedShapeName = name;
         this.hasSelectedShape = true;
-      } else {
+        if (element.editable) {
+          this.canDelete = true;
+        }
+
+      } 
+      else {
+        element.stroke = this.colors.default;
         this.selectedShapeName = '';
         this.hasSelectedShape = false;
       }
@@ -223,7 +306,10 @@ export default {
       }
     },
 
-    resetCommentIcons(exceptName = null) {
+    resetComments(exceptName = null) {
+
+      // remove highlight from all comments
+      this.highlightedComment = null;
 
       // get all comments from this.elements
       const comments = this.elements.filter(
@@ -250,63 +336,203 @@ export default {
       });
     },
 
-    // CRUD
-    deleteElement() {
-      
-      const elements = this.elements.filter(
-        (r) => r.name !== this.selectedShapeName
-      );
-      this.elements = elements;
-      this.selectedShapeName = '';
+    resetShapesColors() {
+      this.elements.forEach((element) => {
+        if (element.type === 'comment') {
+          return;
+        }
+        element.stroke = this.colors.default;
+      });
+    },
+
+    reset() {
+      this.selectedShapeName = 'null';
+      this.hasSelectedShape = false;
+      this.hasCommentForm = false;
+      this.canDelete = false;
+      this.resetComments();
+      this.resetShapesColors();
       this.updateTransformer();
     },
 
+    // CRUD
+    fetch() {
+      NProgress.start();
+      this.axios.get(`${this.routes.get}/${this.$props.image.uuid}`).then((response) => {
+        const data = response.data.data;
+        data.forEach((element) => {
+          if (element.shape.type === 'comment') {
+            element.shape.image = this.commmentIcon;
+            if (element.comment) {
+              this.comments.push({
+                uuid: element.uuid,
+                shape_uuid: element.shape_uuid,
+                comment: element.comment,
+                author: element.author,
+                author_company: element.author_company,
+                date: element.date,
+              });
+            }
+          }
+          this.elements.push(element.shape);
+        });
+        NProgress.done();
+      })
+    },
+
+    create(element) {
+      const data = {
+        uuid: this.$props.image.uuid,
+        element: element,
+      };
+      this.axios.post(this.routes.create, data).then(response => {
+      });
+    },
+
+    update(element) {
+      const data = {
+        uuid: this.$props.image.uuid,
+        element: element,
+      };
+      this.axios.put(`${this.routes.update}/${element.name}`, data).then(response => { });
+    },
+
+    save() {
+      const data = {
+        shape_uuid: this.selectedShapeName,
+        comment: this.comment,
+      };
+      NProgress.start();
+      this.axios.post(`${this.routes.comment}`, data).then(response => {
+        this.$notify({ type: "success", text: this.translate('Kommentar gespeichert') });
+        this.comments.push(response.data.comment);
+        const element = this.elements.find(
+          (r) => r.name === this.selectedShapeName
+        );
+        element.commentable = false;
+        this.comment = null;
+        this.hasCommentForm = false;
+        this.selectedShapeName = '';
+        this.resetComments();
+        NProgress.done();
+      });
+    },
+
+    destroy() {
+      if (!this.selectedShapeName) {
+        return;
+      }
+      this.axios.delete(`${this.routes.delete}/${this.selectedShapeName}`).then(response => {
+        this.removeElement();
+      });
+    },
+
     addRectangle() {
-      const rect = {
+      const element = {
         type: 'rect',
-        x: 10,
-        y: 10,
-        width: 100,
-        height: 100,
+        x: 50,
+        y: 50,
+        width: 50,
+        height: 50,
         scaleX: 1,
         scaleY: 1,
         rotation: 0,
-        name: 'rect_' + this.getRandomString(),
+        name: this.getUuid(),
         draggable: true,
-        stroke: this.getRandomColor(),
+        stroke: 'blue',
         strokeWidth: 3,
+        editable: true,
+        owner: this.$store.state.user.uuid
       };
-      this.elements.push(rect);
+      this.elements.push(element);
+      this.create(element);
     },
 
     addCircle() {
-      const circle = {
+      const element = {
         type: 'circle',
-        x: 150,
-        y: 150,
+        x: 50,
+        y: 50,
         width: 100,
         height: 100,
         scaleX: 1,
         scaleY: 1,
         rotation: 0,
-        name: 'circle_' + this.getRandomString(),
+        name: this.getUuid(),
         draggable: true,
         stroke: 'blue',
-        strokeWidth: 2,
+        strokeWidth: 3,
+        editable: true,
+        owner: this.$store.state.user.uuid
       };
-      this.elements.push(circle);
+      this.elements.push(element);
+      this.create(element);
     },
 
     addComment() {
-      const comment = {
+      const element = {
         type: 'comment',
-        x: 150,
-        y: 150,
-        name: 'comment_' + this.getRandomString(),
+        x: 50,
+        y: 50,
+        name: this.getUuid(),
         draggable: true,
+        commentable: true,
+        editable: true,
         image: this.commmentIcon,
+        owner: this.$store.state.user.uuid
       };
-      this.elements.push(comment);
+      this.elements.push(element);
+      this.create(element);
+    },
+
+    highlightComment(name) {
+      // remove attribute is_highlighted from all other comments
+      this.comments.forEach((element) => {
+        if (element.shape_uuid == name) {
+          element.is_highlighted = true;
+        }
+        else {
+          element.is_highlighted = false;
+        }
+      });
+    },
+
+    removeElement() {
+      const elements = this.elements.filter(
+        (r) => r.name !== this.selectedShapeName
+      );
+      
+      // find comment in this.comments
+      const comment = this.comments.find(
+        (r) => r.shape_uuid === this.selectedShapeName
+      );
+
+      // remove comment from this.comments
+      if (comment) {
+        const index = this.comments.indexOf(comment);
+        this.comments.splice(index, 1);
+      }
+
+      this.elements = elements;
+      this.selectedShapeName = '';
+      this.hasSelectedShape = false;
+      this.hasCommentForm = false;
+      this.canDelete = false;
+      this.updateTransformer();
+    },
+
+    preloadIcons() {
+      const commmentIcon = new window.Image();
+      commmentIcon.src = "/assets/img/annotation.svg";
+      commmentIcon.onload = () => {
+        this.commmentIcon = commmentIcon;
+      };
+
+      const commmentIconActive = new window.Image();
+      commmentIconActive.src = "/assets/img/annotation-active.svg";
+      commmentIconActive.onload = () => {
+        this.commmentIconActive = commmentIconActive;
+      };
     },
 
     getRandomString() {
@@ -321,7 +547,18 @@ export default {
         color += letters[Math.floor(Math.random() * 16)];
       }
       return color;
-    }
+    },
+
+    getUuid() {
+      // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
+      let dt = new Date().getTime();
+      const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+      });
+      return uuid;
+    },
   },
 
 };

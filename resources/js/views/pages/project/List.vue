@@ -163,7 +163,6 @@ import ContentHeader from "@/components/ui/layout/Header.vue";
 import ProjectListItem from "@/views/pages/project/components/ListItem.vue";
 import ProjectThumbnailItem from "@/views/pages/project/components/ThumbnailItem.vue";
 import ConfirmDestroy from '@/views/pages/project/components/ConfirmDestroy.vue';
-
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
 

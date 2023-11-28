@@ -30,4 +30,9 @@ class MessageFile extends Base
     return $this->belongsTo(Message::class);
   }
 
+  public function markups()
+  {
+    return $this->hasMany(Markup::class);
+  }
+
 }

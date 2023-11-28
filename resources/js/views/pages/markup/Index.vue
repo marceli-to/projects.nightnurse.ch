@@ -38,7 +38,7 @@
     </div>
   </header>
 
-  <markup :image="file"></markup>
+  <markup :image="file" :project="project"></markup>
 
 </div>
 </template>

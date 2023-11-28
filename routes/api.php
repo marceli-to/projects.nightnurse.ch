@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ProjectQuoteController;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CompanyProjectController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\MarkupController;
 use App\Http\Controllers\Api\MessageController;
 use App\Http\Controllers\Api\MessageFileController;
 use App\Http\Controllers\Api\MessageUserController;
@@ -95,6 +96,13 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('message/{message:uuid}', [MessageController::class, 'find']);
   Route::post('message/queue/{project:uuid}', [MessageController::class, 'store']);
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
+
+  // Markups
+  Route::get('markups/{messageFile:uuid}', [MarkupController::class, 'get']);
+  Route::post('markup/comment', [MarkupController::class, 'comment']);
+  Route::post('markup', [MarkupController::class, 'create']);
+  Route::put('markup/{markup:shape_uuid}', [MarkupController::class, 'update']);
+  Route::delete('markup/{shapeId}', [MarkupController::class, 'delete']);
 
   // Feedbacks
   Route::get('feedbacks/{project:uuid}', [FeedbackController::class, 'get'])->withTrashed();
