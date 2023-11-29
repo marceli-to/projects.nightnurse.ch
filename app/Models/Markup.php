@@ -64,8 +64,8 @@ class Markup extends Model
 
   public function getCanEditAttribute()
   {
-    $shape = json_decode($this->shape);
-    return auth()->user()->uuid === $shape->owner ? TRUE : FALSE;
+    $element = json_decode($this->shape);
+    return auth()->user()->uuid === $element->shape->owner ? TRUE : FALSE;
   }
 
 }

@@ -22,14 +22,14 @@
           @touchstart="handleStageMouseDown">
           <v-layer ref="layer">
             <div v-for="(element, index) in elements" :key="element.name">
-              <template v-if="element.type === 'rect'">
-                <v-rect :config="element" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
+              <template v-if="element.shape.type === 'rect'">
+                <v-rect :config="element.shape" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
               </template>
-              <template v-if="element.type === 'circle'">
-                <v-circle :config="element" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
+              <template v-if="element.shape.type === 'circle'">
+                <v-circle :config="element.shape" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
               </template>
-              <template v-if="element.type === 'comment'">
-                <v-image :config="element" @dragend="handleCommentDragEnd" class="cursor-pointer"/>
+              <template v-if="element.shape.type === 'comment'">
+                <v-image :config="element.shape" @dragend="handleCommentDragEnd" class="cursor-pointer"/>
               </template>
             </div>
             <v-transformer ref="transformer" />
@@ -68,7 +68,7 @@
       <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
       <span>{{ translate('Zurück') }}</span>
     </router-link>
-    <a href="javascript:;" class="btn-create" @click="lock()">
+    <a href="javascript:;" :class="[hasUnlockedElements == false ? 'pointer-events-none !bg-gray-200' : '', 'btn-create']" @click="lock()">
       <save-icon class="h-5 w-5" aria-hidden="true" />
       <span class="block ml-2">{{ translate('Speichern & Freigeben') }}</span>
     </a>
@@ -137,6 +137,7 @@ export default {
       hasSelectedShape: false,
       hasCommentForm: false,
       canDelete: false,
+      hasUnlockedElements: false,
 
       routes: {
         get: '/api/markups',
@@ -181,19 +182,19 @@ export default {
       // shape is transformed, let us save new attrs back to the node
       // find element in our state
       const element = this.elements.find(
-        (r) => r.name === this.selectedShapeName
+        (r) => r.shape.name === this.selectedShapeName
       );
       // update the state
-      element.x = e.target.x();
-      element.y = e.target.y();
-      element.rotation = e.target.rotation();
-      element.scaleX = e.target.scaleX();
-      element.scaleY = e.target.scaleY();
+      element.shape.x = e.target.x();
+      element.shape.y = e.target.y();
+      element.shape.rotation = e.target.rotation();
+      element.shape.scaleX = e.target.scaleX();
+      element.shape.scaleY = e.target.scaleY();
       const desiredStrokeWidth = 3; // The desired stroke width in pixels
       if (e.target.scaleX() > e.target.scaleY()) {
-        element.strokeWidth = desiredStrokeWidth / e.target.scaleX();
+        element.shape.strokeWidth = desiredStrokeWidth / e.target.scaleX();
       } else {
-        element.strokeWidth = desiredStrokeWidth / e.target.scaleY();
+        element.shape.strokeWidth = desiredStrokeWidth / e.target.scaleY();
       }
       this.update(element);
     },
@@ -202,26 +203,28 @@ export default {
       // shape is dragged, let us save new attrs back to the node
       // find element in our state
       const element = this.elements.find(
-        (r) => r.name === this.selectedShapeName
+        (r) => r.shape.name === this.selectedShapeName
       );
       // update the state
-      element.x = e.target.x();
-      element.y = e.target.y();
-      element.stroke = this.colors.default;
+      element.shape.x = e.target.x();
+      element.shape.y = e.target.y();
+      element.shape.stroke = this.colors.default;
       this.update(element);
     },
 
     handleCommentDragEnd(e) {
       const element = this.elements.find(
-        (r) => r.name === this.selectedShapeName
+        (r) => r.shape.name === this.selectedShapeName
       );
       // update the state
-      element.x = e.target.x();
-      element.y = e.target.y();
+      element.shape.x = e.target.x();
+      element.shape.y = e.target.y();
       this.update(element);
     },
 
     handleCommentClick(e) {
+
+      console.log(e.target.attrs);
 
       if (e.target.attrs.editable) {
         this.hasSelectedShape = true;
@@ -261,24 +264,24 @@ export default {
 
       // find clicked elements by its name
       const name = e.target.name();
-      const element = this.elements.find((r) => r.name === name);
+      const element = this.elements.find((r) => r.shape.name === name);
 
-      if (element && element.owner !== this.$store.state.user.uuid || element.editable === false) {
+      if (element && element.shape.owner !== this.$store.state.user.uuid || element.shape.editable === false) {
         this.$refs.transformer.getNode().nodes([]);
         return;
       }
 
       if (element) {
-        element.stroke = this.colors.highlight;
+        element.shape.stroke = this.colors.highlight;
         this.selectedShapeName = name;
         this.hasSelectedShape = true;
-        if (element.editable) {
+        if (element.shape.editable) {
           this.canDelete = true;
         }
 
       } 
       else {
-        element.stroke = this.colors.default;
+        element.shape.stroke = this.colors.default;
         this.selectedShapeName = '';
         this.hasSelectedShape = false;
       }
@@ -314,24 +317,24 @@ export default {
 
       // get all comments from this.elements
       const comments = this.elements.filter(
-        (r) => r.type === 'comment'
+        (r) => r.shape.type === 'comment'
       );
 
       // remove exceptName from comments
       if (exceptName) {
         comments.forEach((element, index) => {
-          if (element.name === exceptName) {
+          if (element.shape.name === exceptName) {
             comments.splice(index, 1);
           }
         });
       }
 
       comments.forEach((element) => {
-        if (element.type === 'comment') {
+        if (element.shape.type === 'comment') {
           const commmentIcon = new window.Image();
           commmentIcon.src = "/assets/img/annotation.svg";
           commmentIcon.onload = () => {
-            element.image = commmentIcon;
+            element.shape.image = commmentIcon;
           };
         }
       });
@@ -339,10 +342,10 @@ export default {
 
     resetShapesColors() {
       this.elements.forEach((element) => {
-        if (element.type === 'comment') {
+        if (element.shape.type === 'comment') {
           return;
         }
-        element.stroke = this.colors.default;
+        element.shape.stroke = this.colors.default;
       });
     },
 
@@ -377,8 +380,9 @@ export default {
               });
             }
           }
-          this.elements.push(element.shape);
+          this.elements.push(element);
         });
+
         NProgress.done();
       })
     },
@@ -397,7 +401,7 @@ export default {
         uuid: this.$props.image.uuid,
         element: element,
       };
-      this.axios.put(`${this.routes.update}/${element.name}`, data).then(response => { });
+      this.axios.put(`${this.routes.update}/${element.shape.name}`, data).then(response => { });
     },
 
     save() {
@@ -409,9 +413,9 @@ export default {
       this.axios.post(`${this.routes.comment}`, data).then(response => {
         this.comments.push(response.data.comment);
         const element = this.elements.find(
-          (r) => r.name === this.selectedShapeName
+          (r) => r.shape.name === this.selectedShapeName
         );
-        element.commentable = false;
+        element.shape.commentable = false;
         this.comment = null;
         this.hasCommentForm = false;
         this.selectedShapeName = '';
@@ -440,20 +444,23 @@ export default {
 
     addRectangle() {
       const element = {
-        type: 'rect',
-        x: 50,
-        y: 50,
-        width: 50,
-        height: 50,
-        scaleX: 1,
-        scaleY: 1,
-        rotation: 0,
-        name: this.getUuid(),
-        draggable: true,
-        stroke: 'blue',
-        strokeWidth: 3,
-        editable: true,
-        owner: this.$store.state.user.uuid
+        is_locked: 0,
+        shape: {
+          type: 'rect',
+          x: 50,
+          y: 50,
+          width: 50,
+          height: 50,
+          scaleX: 1,
+          scaleY: 1,
+          rotation: 0,
+          name: this.getUuid(),
+          draggable: true,
+          stroke: 'blue',
+          strokeWidth: 3,
+          editable: true,
+          owner: this.$store.state.user.uuid
+        }
       };
       this.elements.push(element);
       this.create(element);
@@ -461,20 +468,23 @@ export default {
 
     addCircle() {
       const element = {
-        type: 'circle',
-        x: 50,
-        y: 50,
-        width: 100,
-        height: 100,
-        scaleX: 1,
-        scaleY: 1,
-        rotation: 0,
-        name: this.getUuid(),
-        draggable: true,
-        stroke: 'blue',
-        strokeWidth: 3,
-        editable: true,
-        owner: this.$store.state.user.uuid
+        is_locked: 0,
+        shape: {
+          type: 'circle',
+          x: 50,
+          y: 50,
+          width: 100,
+          height: 100,
+          scaleX: 1,
+          scaleY: 1,
+          rotation: 0,
+          name: this.getUuid(),
+          draggable: true,
+          stroke: 'blue',
+          strokeWidth: 3,
+          editable: true,
+          owner: this.$store.state.user.uuid
+        }
       };
       this.elements.push(element);
       this.create(element);
@@ -482,15 +492,18 @@ export default {
 
     addComment() {
       const element = {
-        type: 'comment',
-        x: 50,
-        y: 50,
-        name: this.getUuid(),
-        draggable: true,
-        commentable: true,
-        editable: true,
-        image: this.commmentIcon,
-        owner: this.$store.state.user.uuid
+        is_locked: 0,
+        shape: {
+          type: 'comment',
+          x: 50,
+          y: 50,
+          name: this.getUuid(),
+          draggable: true,
+          commentable: true,
+          editable: true,
+          image: this.commmentIcon,
+          owner: this.$store.state.user.uuid
+        }
       };
       this.elements.push(element);
       this.create(element);
@@ -510,7 +523,7 @@ export default {
 
     removeElement() {
       const elements = this.elements.filter(
-        (r) => r.name !== this.selectedShapeName
+        (r) => r.shape.name !== this.selectedShapeName
       );
       
       // find comment in this.comments
@@ -570,6 +583,25 @@ export default {
       });
       return uuid;
     },
+  },
+
+  watch: {
+    // watch for changes in elements (attribute 'is_locked')
+    elements: {
+      handler: function () {
+        // if any element has 'is_locked' = 0, alert('has unlocked elements')
+        const unlockedElements = this.elements.filter(
+          (r) => r.is_locked == 0
+        );
+        if (unlockedElements.length) {
+          this.hasUnlockedElements = true;
+        }
+        else {
+          this.hasUnlockedElements = false;
+        }
+      },
+      deep: true
+    }
   },
 
 };

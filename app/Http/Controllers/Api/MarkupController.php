@@ -40,7 +40,7 @@ class MarkupController extends Controller
       'shape' => json_encode(
         $request->input('element')
       ),
-      'shape_uuid' => $request->input('element')['name'],
+      'shape_uuid' => $request->input('element')['shape']['name'],
       'user_id' => auth()->user()->id,
       'message_file_id' => MessageFile::where('uuid', $request->input('uuid'))->first()->id
     ]);
