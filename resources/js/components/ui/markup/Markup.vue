@@ -179,18 +179,15 @@ export default {
   methods: {
 
     handleTransformEnd(e) {
-      // shape is transformed, let us save new attrs back to the node
-      // find element in our state
       const element = this.elements.find(
         (r) => r.shape.name === this.selectedShapeName
       );
-      // update the state
       element.shape.x = e.target.x();
       element.shape.y = e.target.y();
       element.shape.rotation = e.target.rotation();
       element.shape.scaleX = e.target.scaleX();
       element.shape.scaleY = e.target.scaleY();
-      const desiredStrokeWidth = 3; // The desired stroke width in pixels
+      const desiredStrokeWidth = 3;
       if (e.target.scaleX() > e.target.scaleY()) {
         element.shape.strokeWidth = desiredStrokeWidth / e.target.scaleX();
       } else {
