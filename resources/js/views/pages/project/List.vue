@@ -46,7 +46,7 @@
             <br class="sm:hidden">{{ d.company.name }}
           </span>
         </router-link>
-        <div v-if="d.preview_messages" :class="[showIntermediates ? 'flex' : '', '']">
+        <div v-if="d.preview_messages" :class="[showIntermediates ? 'flex flex-wrap gap-x-6' : '', '']">
           <template v-if="showIntermediates">
             <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" :class="[message.intermediate ? 'mt-2' : '', '']">
               <project-thumbnail-item :message="message" :project="d" v-if="message.intermediate"/>

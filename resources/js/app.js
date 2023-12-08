@@ -33,6 +33,10 @@ Vue.use(VueRouter);
 import VueKonva from 'vue-konva';
 Vue.use(VueKonva);
 
+import VueDraggableResizable from 'vue-draggable-resizable';
+import 'vue-draggable-resizable/dist/VueDraggableResizable.css';
+Vue.component('vue-draggable-resizable', VueDraggableResizable);
+
 // Store
 import store from '@/config/store';
 

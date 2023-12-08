@@ -59,7 +59,7 @@
             <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
               <div class="flex items-center no-underline hover:text-highlight py-2">
                 <img 
-                  :src="`/img/thumbnail/${d.name}`" 
+                  :src="`/img/thumbnail/${d.name}?v=${Date.now()}`" 
                   height="100" 
                   width="100"
                   class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"

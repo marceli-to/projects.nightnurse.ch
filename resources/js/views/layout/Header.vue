@@ -1,11 +1,6 @@
 <template>
 <header class="bg-light">
-  <div class="bg-white w-full max-w-5xl px-4 lg:px-6 pt-2 sm:pt-4 pb-1 relative mx-auto flex justify-between items-center">
-    <!--
-    <router-link :to="{ name: 'projects' }" :force="true" class="btn-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.14 44.9" class="w-8 h-auto"><polygon points="8.16 0 0 10.21 0 44.9 8.16 34.7 8.16 0"></polygon><polygon points="29.25 43.31 10.89 17.11 10.89 1.6 29.25 27.79 29.25 43.31" class="brand-fill"></polygon><polygon points="40.14 0 31.98 10.21 31.98 44.9 40.14 34.7 40.14 0" class="brand-fill"></polygon></svg>
-    </router-link>
-    -->
+  <div :class="[this.$route.name == 'markup' ? '' : 'max-w-5xl', 'bg-white w-full px-4 lg:px-6 pt-2 sm:pt-4 pb-1 relative mx-auto flex justify-between items-center']">
     <a href="/projects" class="btn-icon">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.14 44.9" class="w-8 h-auto"><polygon points="8.16 0 0 10.21 0 44.9 8.16 34.7 8.16 0"></polygon><polygon points="29.25 43.31 10.89 17.11 10.89 1.6 29.25 27.79 29.25 43.31" class="brand-fill"></polygon><polygon points="40.14 0 31.98 10.21 31.98 44.9 40.14 34.7 40.14 0" class="brand-fill"></polygon></svg>
     </a>

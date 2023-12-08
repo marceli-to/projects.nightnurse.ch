@@ -39,6 +39,7 @@
         "vue-advanced-cropper": "^0.16.10",
         "vue-axios": "^2.1.5",
         "vue-axios-interceptors": "^0.3.1",
+        "vue-draggable-resizable": "^2.3.0",
         "vue-fabric-wrapper": "^0.3.71",
         "vue-feather-icons": "^5.1.0",
         "vue-konva": "^2.1.7",

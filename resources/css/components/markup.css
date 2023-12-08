@@ -1,0 +1,12 @@
+.shape {
+  @apply cursor-pointer border-2 border-blue-700 absolute z-10;
+  user-select: none !important;
+}
+
+.shape.is-active {
+  @apply border-highlight z-[2000] cursor-move;
+}
+
+.shape.shape--circle {
+  border-radius: 100%;
+}

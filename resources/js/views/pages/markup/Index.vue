@@ -38,7 +38,9 @@
     </div>
   </header>
 
-  <markup :image="file" :project="project"></markup>
+  <!-- <markup :image="file" :project="project"></markup> -->
+
+  <markup-test :image="file" :project="project"></markup-test>
 
 </div>
 </template>
@@ -49,12 +51,14 @@ import Helpers from "@/mixins/Helpers";
 import PageTitle from "@/mixins/PageTitle";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Markup from "@/components/ui/markup/Markup.vue";
+import MarkupTest from "@/components/ui/markup/MarkupTest.vue";
 
 export default {
 
   components: {
     NProgress,
-    Markup
+    Markup,
+    MarkupTest
   },
 
   mixins: [ErrorHandling, Helpers, PageTitle, i18n],

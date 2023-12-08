@@ -260,7 +260,6 @@ class UserController extends Controller
 
   protected function validateDomain(Request $request)
   {
-    
     if($request->input('has_domain_confirmation'))
     {
       return true;
