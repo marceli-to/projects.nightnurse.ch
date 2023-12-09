@@ -38,9 +38,9 @@ class MarkupController extends Controller
     $markup = Markup::create([
       'uuid' => \Str::uuid(),
       'shape' => json_encode(
-        $request->input('element')
+        $request->input('element')['shape']
       ),
-      'shape_uuid' => $request->input('element')['shape']['name'],
+      'shape_uuid' => $request->input('element')['shape']['id'],
       'user_id' => auth()->user()->id,
       'message_file_id' => MessageFile::where('uuid', $request->input('uuid'))->first()->id
     ]);
@@ -60,7 +60,8 @@ class MarkupController extends Controller
   
   public function update(Markup $markup, Request $request)
   {
-    $markup->shape = json_encode($request->input('element'));
+    $markup->shape = json_encode($request->input('element')['shape']);
+    $markup->comment = isset($request->input('element')['comment']) ? $request->input('element')['comment'] : NULL;
     $markup->save();
     return response()->json([
       'markup' => MarkupResource::make($markup),

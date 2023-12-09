@@ -1,67 +1,57 @@
 <template>
-<div>
-  <div class="sm:grid sm:grid-cols-12 sm:gap-x-4 min-w-[980px] overflow-x-auto" ref="markupStage">
-    <div class="sm:col-span-9">
-
-      <markup-menu 
-        @addRectangle="addRectangle"
-        @addCircle="addCircle"
-        @addComment="addComment"
-        @deleteElement="destroy"
-        :canDelete="canDelete">
-      </markup-menu>
-
-      <div 
-        ref="image"
-        class="w-full aspect-video bg-no-repeat bg-contain bg-center bg-light"
-        :style="`background-image: url(${largeImageUri(image)});`">
-        <v-stage 
-          ref="stage"
-          :config="configStage"
-          @mousedown="handleStageMouseDown"
-          @touchstart="handleStageMouseDown">
-          <v-layer ref="layer">
-            <div v-for="(element, index) in elements" :key="element.name">
-              <template v-if="element.shape.type === 'rect'">
-                <v-rect :config="element.shape" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
-              </template>
-              <template v-if="element.shape.type === 'circle'">
-                <v-circle :config="element.shape" @transformend="handleTransformEnd" @dragend="handleShapeDragEnd" />
-              </template>
-              <template v-if="element.shape.type === 'comment'">
-                <v-image :config="element.shape" @dragend="handleCommentDragEnd" class="cursor-pointer"/>
-              </template>
-            </div>
-            <v-transformer ref="transformer" />
-          </v-layer>
-        </v-stage>
-      </div>
-    </div>
-    <div class="sm:col-span-3">
-      <template v-if="comments.length">
-        <comment 
-          v-for="(comment, index) in comments" 
-          :key="comment.uuid" 
-          :comment="comment"
-          :highlighted="highlightedComment">
-        </comment>
-      </template>
-      <template v-if="hasCommentForm">
-        <div class="form-group">
-          <textarea 
-            v-model="comment" 
-            rows="5" 
-            class="border-2 focus:border-gray-200 rounded-sm py-2 px-2 text-xs lg:text-sm placeholder:text-xs lg:placeholder:text-sm placeholder:text-gray-300" 
-            :placeholder="translate('Ihr Kommentar')">
+<div class="w-full lg:flex lg:gap-x-4 pt-4 sm:pt-6 lg:pt-10 pb-32">
+  <div class="w-full">
+    <markup-menu 
+      @addRectangle="addRectangle"
+      @addCircle="addCircle"
+      @addComment="addComment"
+      @deleteElement="destroy"
+      :canDelete="canDelete">
+    </markup-menu>
+    <div 
+      ref="stage"
+      class="w-full bg-no-repeat bg-contain bg-center-left bg-light"
+      :style="`background-image: url(${largeImageUri(image)}); aspect-ratio: ${image.image_ratio}`">
+      <vue-draggable-resizable 
+        v-for="element in elements" :key="element.id"
+        :w="element.shape.width" 
+        :h="element.shape.height" 
+        :x="element.shape.x"
+        :y="element.shape.y"
+        :class-name="element.shape.className"
+        class-name-active="is-active" 
+        @dragging="onDragging" 
+        @resizing="onResize" 
+        @resizestop="onResizeStop"
+        @activated="onActivated(element.shape.id)"
+        @dragstop="onDragStop"
+        :onDragStart="onDragStart"
+        @deactivated="onDeactivated"
+        :data-id="element.shape.id"
+        :parent="true"
+        :resizable="element.shape.resizable">
+        <template v-if="element.shape.type === 'comment'">
+          <annotation-icon class="h-6 w-6" aria-hidden="true" />
+          <textarea
+            class="bg-highlight bg-opacity-80 p-1 text-white mt-2 text-xs lg:p-2 w-40 h-20 !border-none rounded-md overflow-auto relative z-50"
+            @blur="blur(element)"
+            @focus="focus(element)"
+            v-model="element.comment"
+            v-if="element.shape.id == selected && !isDragging">
           </textarea>
-          <div class="flex justify-end">
-            <button type="submit" class="font-mono font-semi !leading-none text-xs text-dark hover:text-highlight mt-2 lg:mt-3" @click="save()" v-if="hasSelectedShape">
-              {{ translate('Kommentar speichern') }}
-            </button>
-          </div>
-        </div>
-      </template>
+        </template>
+      </vue-draggable-resizable>
     </div>
+  </div>
+  <div class="mt-5 lg:mt-0 w-full lg:w-[250px] xl:w-[350px]">
+    <template v-if="comments.length">
+      <markup-comment 
+        v-for="(comment, index) in comments" 
+        :key="comment.uuid" 
+        :comment="comment"
+        :highlighted="highlightedComment">
+      </markup-comment>
+    </template>
   </div>
   <content-footer>
     <router-link :to="{name: 'messages', params: { slug: $props.project.slug, uuid: $props.project.uuid }}" class="form-helper form-helper-footer">
@@ -75,35 +65,38 @@
   </content-footer>
 </div>
 </template>
+
 <script>
+// https://vuejsexamples.com/vue2-component-for-resizable-rotable-and-draggable-elements/
+import { ArrowLeftIcon, SaveIcon, AnnotationIcon } from "@vue-hero-icons/outline";
+import Helpers from "@/mixins/Helpers";
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
-import Konva from 'konva';
-import { Stage, Layer, Rect, Circle, Image, Transformer } from 'vue-konva';
-import Helpers from "@/mixins/Helpers";
+import VueDraggableResizable from 'vue-draggable-resizable'
 import MarkupMenu from '@/components/ui/markup/Menu.vue';
-import Comment from '@/components/ui/markup/Comment.vue';
-import { ArrowLeftIcon, SaveIcon } from "@vue-hero-icons/outline";
+import MarkupComment from '@/components/ui/markup/Comment.vue';
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 
 export default {
 
-  mixins: [i18n, Helpers],
-
   components: {
-    MarkupMenu,
-    Comment,
     ContentFooter,
     ArrowLeftIcon,
     SaveIcon,
-    NProgress
+    AnnotationIcon,
+    VueDraggableResizable,
+    MarkupMenu,
+    MarkupComment,
   },
+
+  mixins: [i18n, Helpers],
 
   props: {
     project: {
       type: Object,
       default: null,
     },
+
     image: {
       type: Object,
       default: null,
@@ -112,248 +105,132 @@ export default {
 
   data() {
     return {
-      configStage: {
-        width: 200,
-        height: 200
-      },
 
-      colors: {
-        default: 'blue',
-        highlight: '#ff008b',
-      },
-
+      // Elements
       elements: [],
 
+      // Comments
       comments: [],
-      highlightedComment: null,
-      selectedShapeName: '',
-      selectedShapeType: null,
 
-      commmentIcon: null,
-      comment: null,
+      // Acitve comment
+      highlightedComment: null,
+
+      // Dragging
+      dragStartX: 0,
+      dragStartY: 0,
+
+      // Selected element
+      selected: null,
+      lastSelected: null,
+
+      // Stage dimensions
+      stageRectangle: null,
+
+      // Temp comment used for blur event
+      tempComment: null,
 
       // States
       isFetched: false,
-      hasSelectedShape: false,
-      hasCommentForm: false,
+      isDragging: false,
       canDelete: false,
       hasUnlockedElements: false,
 
+      // Routes
       routes: {
         get: '/api/markups',
         lock: '/api/markups/lock',
         create: '/api/markup',
         update: '/api/markup',
         delete: '/api/markup',
-        comment: '/api/markup/comment',
-      }
+      },
     }
   },
 
-  // set width and height of canvas to match image
   mounted() {
-    this.configStage.width = this.$refs.image.clientWidth;
-    this.configStage.height = this.$refs.image.clientHeight;
-
-    this.preloadIcons();
     this.fetch();
+    this.stageRectangle = this.$refs.stage.getBoundingClientRect();
 
-    // add event handler for delete key
-    window.addEventListener('keydown', (e) => {
-      if (!this.hasSelectedShape || !this.canDelete) {
-        return;
-      }
-      if (e.keyCode === 46) {
-        this.destroy();
-      }
-    });
+    window.addEventListener('resize', this.onResizeWindow);
+    window.addEventListener('keydown', this.onKeyDown);
 
-    // add event handler for outside click (markupState)
-    document.addEventListener('click', (e) => {
-      if (this.$refs.markupStage && !this.$refs.markupStage.contains(e.target)) {
-        this.reset();
-      }
-    });
+  },
+
+  beforeDestroy() {
+    window.removeEventListener('resize', this.onResizeWindow);
   },
 
   methods: {
 
-    handleTransformEnd(e) {
-      const element = this.elements.find(
-        (r) => r.shape.name === this.selectedShapeName
-      );
-      element.shape.x = e.target.x();
-      element.shape.y = e.target.y();
-      element.shape.rotation = e.target.rotation();
-      element.shape.scaleX = e.target.scaleX();
-      element.shape.scaleY = e.target.scaleY();
-      const desiredStrokeWidth = 3;
-      if (e.target.scaleX() > e.target.scaleY()) {
-        element.shape.strokeWidth = desiredStrokeWidth / e.target.scaleX();
-      } else {
-        element.shape.strokeWidth = desiredStrokeWidth / e.target.scaleY();
-      }
-      this.update(element);
-    },
-
-    handleShapeDragEnd(e) {
-      // shape is dragged, let us save new attrs back to the node
-      // find element in our state
-      const element = this.elements.find(
-        (r) => r.shape.name === this.selectedShapeName
-      );
-      // update the state
-      element.shape.x = e.target.x();
-      element.shape.y = e.target.y();
-      element.shape.stroke = this.colors.default;
-      this.update(element);
-    },
-
-    handleCommentDragEnd(e) {
-      const element = this.elements.find(
-        (r) => r.shape.name === this.selectedShapeName
-      );
-      // update the state
-      element.shape.x = e.target.x();
-      element.shape.y = e.target.y();
-      this.update(element);
-    },
-
-    handleCommentClick(e) {
-
-      console.log(e.target.attrs);
-
-      if (e.target.attrs.editable) {
-        this.hasSelectedShape = true;
-        this.canDelete = true;
-
-        if (e.target.attrs.commentable) {
-          this.hasCommentForm = true;
+    // CRUD
+    addRectangle() {
+      const element = {
+        is_locked: 0,
+        shape: {
+          id: this.getUuid(),
+          owner: this.$store.state.user.uuid,
+          type: 'rectangle',
+          width: 100, 
+          height: 100, 
+          x: 10, 
+          y: 10, 
+          className: 'shape', 
+          editable: true,
+          resizable: true
         }
-      }
-      this.selectedShapeName = e.target.name();
-      this.resetComments(this.selectedShapeName);
-      this.highlightedComment = this.selectedShapeName;
-      e.target.image(this.commmentIconActive);
-
+      };
+      this.elements.push(element);
+      this.create(element);
     },
 
-    handleStageMouseDown(e) {
-     
-      // clicked on stage - clear selection
-      if (e.target === e.target.getStage()) {
-        this.reset();
-        return;
-      }
-
-      // clicked on transformer - do nothing
-      const clickedOnTransformer = e.target.getParent().className === 'Transformer';
-      if (clickedOnTransformer) {
-        this.hasSelectedShape = false;
-        return;
-      }
-
-      const clickedOnComment = e.target.attrs.type == 'comment';
-      if (clickedOnComment) {
-        this.handleCommentClick(e);
-        return;
-      }
-
-      // find clicked elements by its name
-      const name = e.target.name();
-      const element = this.elements.find((r) => r.shape.name === name);
-
-      if (element && element.shape.owner !== this.$store.state.user.uuid || element.shape.editable === false) {
-        this.$refs.transformer.getNode().nodes([]);
-        return;
-      }
-
-      if (element) {
-        element.shape.stroke = this.colors.highlight;
-        this.selectedShapeName = name;
-        this.hasSelectedShape = true;
-        if (element.shape.editable) {
-          this.canDelete = true;
+    addCircle() {
+      const element = {
+        is_locked: 0,
+        shape: {
+          id: this.getUuid(),
+          owner: this.$store.state.user.uuid,
+          type: 'circle',
+          width: 100, 
+          height: 100, 
+          x: 10, 
+          y: 10,
+          className: 'shape shape--circle', 
+          editable: true,
+          resizable: true
         }
-
-      } 
-      else {
-        element.shape.stroke = this.colors.default;
-        this.selectedShapeName = '';
-        this.hasSelectedShape = false;
-      }
-      this.updateTransformer();
+      };
+      this.elements.push(element);
+      this.create(element);
     },
 
-    updateTransformer() {
-      // here we need to manually attach or detach Transformer node
-      const transformerNode = this.$refs.transformer.getNode();
-      const stage = transformerNode.getStage();
-      const { selectedShapeName } = this;
-
-      const selectedNode = stage.findOne('.' + selectedShapeName);
-      // do nothing if selected node is already attached
-      if (selectedNode === transformerNode.node()) {
-        return;
-      }
-
-      if (selectedNode) {
-        // attach to another node
-        transformerNode.nodes([selectedNode]);
-      } 
-      else {
-        // remove transformer
-        transformerNode.nodes([]);
-      }
-    },
-
-    resetComments(exceptName = null) {
-
-      // remove highlight from all comments
-      this.highlightedComment = null;
-
-      // get all comments from this.elements
-      const comments = this.elements.filter(
-        (r) => r.shape.type === 'comment'
-      );
-
-      // remove exceptName from comments
-      if (exceptName) {
-        comments.forEach((element, index) => {
-          if (element.shape.name === exceptName) {
-            comments.splice(index, 1);
-          }
-        });
-      }
-
-      comments.forEach((element) => {
-        if (element.shape.type === 'comment') {
-          const commmentIcon = new window.Image();
-          commmentIcon.src = "/assets/img/annotation.svg";
-          commmentIcon.onload = () => {
-            element.shape.image = commmentIcon;
-          };
+    addComment() {
+      const element = {
+        is_locked: 0,
+        shape: {
+          id: this.getUuid(),
+          owner: this.$store.state.user.uuid,
+          type: 'comment',
+          width: 20, 
+          height: 20, 
+          x: 10,
+          y: 10,
+          className: 'shape shape--comment', 
+          commentable: true,
+          editable: true,
+          resizable: false
         }
+      };
+      this.elements.push(element);
+      this.create(element);
+    },
+
+    create(element) {
+      const data = {
+        uuid: this.$props.image.uuid,
+        element: element,
+      };
+      this.axios.post(this.routes.create, data).then(response => {
+        // console.log(response.data);
       });
-    },
-
-    resetShapesColors() {
-      this.elements.forEach((element) => {
-        if (element.shape.type === 'comment') {
-          return;
-        }
-        element.shape.stroke = this.colors.default;
-      });
-    },
-
-    reset() {
-      this.selectedShapeName = 'null';
-      this.hasSelectedShape = false;
-      this.hasCommentForm = false;
-      this.canDelete = false;
-      this.resetComments();
-      this.resetShapesColors();
-      this.updateTransformer();
     },
 
     // CRUD
@@ -365,7 +242,6 @@ export default {
         const data = response.data.data;
         data.forEach((element) => {
           if (element.shape.type === 'comment') {
-            element.shape.image = this.commmentIcon;
             if (element.comment) {
               this.comments.push({
                 uuid: element.uuid,
@@ -379,18 +255,8 @@ export default {
           }
           this.elements.push(element);
         });
-
         NProgress.done();
       })
-    },
-
-    create(element) {
-      const data = {
-        uuid: this.$props.image.uuid,
-        element: element,
-      };
-      this.axios.post(this.routes.create, data).then(response => {
-      });
     },
 
     update(element) {
@@ -398,27 +264,40 @@ export default {
         uuid: this.$props.image.uuid,
         element: element,
       };
-      this.axios.put(`${this.routes.update}/${element.shape.name}`, data).then(response => { });
+      this.axios.put(`${this.routes.update}/${element.shape.id}`, data).then(response => {
+        if (response.data.markup.shape.type == 'comment') {
+          // find comment in this.comments
+          const comment = this.comments.find(
+            (r) => r.shape_uuid === element.shape.id
+          );
+          // update comment in this.comments
+          if (comment) {
+            comment.comment = response.data.markup.comment;
+          }
+          this.tempComment = null;
+        }
+      });
     },
 
-    save() {
-      const data = {
-        shape_uuid: this.selectedShapeName,
-        comment: this.comment,
-      };
-      NProgress.start();
-      this.axios.post(`${this.routes.comment}`, data).then(response => {
-        this.comments.push(response.data.comment);
-        const element = this.elements.find(
-          (r) => r.shape.name === this.selectedShapeName
-        );
-        element.shape.commentable = false;
-        this.comment = null;
-        this.hasCommentForm = false;
-        this.selectedShapeName = '';
-        this.resetComments();
-        NProgress.done();
+    destroy() {
+      if (!this.lastSelected) {
+        return;
+      }
+      this.axios.delete(`${this.routes.delete}/${this.lastSelected}`).then(response => {
+        this.removeElement();
       });
+    },
+
+    blur(element) {
+      if (element.comment === this.tempComment) {
+        return;
+      }
+      this.update(element);
+    },
+
+    focus(element) {
+      this.tempComment = element.comment;
+      event.stopPropagation();
     },
 
     lock() {
@@ -430,102 +309,15 @@ export default {
       });
     },
 
-    destroy() {
-      if (!this.selectedShapeName) {
-        return;
-      }
-      this.axios.delete(`${this.routes.delete}/${this.selectedShapeName}`).then(response => {
-        this.removeElement();
-      });
-    },
-
-    addRectangle() {
-      const element = {
-        is_locked: 0,
-        shape: {
-          type: 'rect',
-          x: 50,
-          y: 50,
-          width: 50,
-          height: 50,
-          scaleX: 1,
-          scaleY: 1,
-          rotation: 0,
-          name: this.getUuid(),
-          draggable: true,
-          stroke: 'blue',
-          strokeWidth: 3,
-          editable: true,
-          owner: this.$store.state.user.uuid
-        }
-      };
-      this.elements.push(element);
-      this.create(element);
-    },
-
-    addCircle() {
-      const element = {
-        is_locked: 0,
-        shape: {
-          type: 'circle',
-          x: 50,
-          y: 50,
-          width: 100,
-          height: 100,
-          scaleX: 1,
-          scaleY: 1,
-          rotation: 0,
-          name: this.getUuid(),
-          draggable: true,
-          stroke: 'blue',
-          strokeWidth: 3,
-          editable: true,
-          owner: this.$store.state.user.uuid
-        }
-      };
-      this.elements.push(element);
-      this.create(element);
-    },
-
-    addComment() {
-      const element = {
-        is_locked: 0,
-        shape: {
-          type: 'comment',
-          x: 50,
-          y: 50,
-          name: this.getUuid(),
-          draggable: true,
-          commentable: true,
-          editable: true,
-          image: this.commmentIcon,
-          owner: this.$store.state.user.uuid
-        }
-      };
-      this.elements.push(element);
-      this.create(element);
-    },
-
-    highlightComment(name) {
-      // remove attribute is_highlighted from all other comments
-      this.comments.forEach((element) => {
-        if (element.shape_uuid == name) {
-          element.is_highlighted = true;
-        }
-        else {
-          element.is_highlighted = false;
-        }
-      });
-    },
-
     removeElement() {
+      // find element in this.elements
       const elements = this.elements.filter(
-        (r) => r.shape.name !== this.selectedShapeName
+        (r) => r.shape.id !== this.lastSelected
       );
       
       // find comment in this.comments
       const comment = this.comments.find(
-        (r) => r.shape_uuid === this.selectedShapeName
+        (r) => r.shape_uuid === this.lastSelected
       );
 
       // remove comment from this.comments
@@ -535,27 +327,96 @@ export default {
       }
 
       this.elements = elements;
-      this.selectedShapeName = '';
-      this.hasSelectedShape = false;
-      this.hasCommentForm = false;
+      this.lastSelected = null
       this.canDelete = false;
-      this.updateTransformer();
     },
 
-    preloadIcons() {
-      const commmentIcon = new window.Image();
-      commmentIcon.src = "/assets/img/annotation.svg";
-      commmentIcon.onload = () => {
-        this.commmentIcon = commmentIcon;
-      };
-
-      const commmentIconActive = new window.Image();
-      commmentIconActive.src = "/assets/img/annotation-active.svg";
-      commmentIconActive.onload = () => {
-        this.commmentIconActive = commmentIconActive;
-      };
+    // Events
+    onResize(x, y, width, height) {
+      const element = this.elements.find(el => el.id === this.selected)
+      if (element) {
+        element.x = x
+        element.y = y
+        element.width = width
+        element.height = height
+      }
     },
 
+    onResizeStop(x, y, width, height) {
+      const element = this.elements.find(el => el.shape.id === this.selected)
+      if (element) {
+        element.shape.x = x
+        element.shape.y = y
+        element.shape.width = width
+        element.shape.height = height
+        this.update(element);
+      }
+    },
+
+    onDragging(x, y) {
+      this.isDragging = true;
+      const element = this.elements.find(el => el.id === this.selected);
+      if (element) {
+        element.shape.x = x
+        element.shape.y = y
+      }
+    },
+
+    onDragStart(x, y) {
+      this.dragStartX = x;
+      this.dragStartY = y;
+    },
+
+    onDragStop(x, y) {
+      this.isDragging = false;
+      const element = this.elements.find(el => el.shape.id === this.selected)
+      const canUpdate = (this.dragStartX !== x || this.dragStartY !== y) ? true : false;
+      if (element && canUpdate) {
+        element.shape.x = x
+        element.shape.y = y
+        this.dragStartX = null;
+        this.dragStartY = null;
+        this.update(element);
+      }
+    },
+
+    onActivated(id) {
+      this.selected = id;
+      this.lastSelected = id;
+      this.canDelete = true;
+    },
+
+    onDeactivated() {
+      this.selected = null;
+    },
+
+    onResizeWindow() {
+      // get the current container dimensions
+      const containerRect = this.$refs.stage.getBoundingClientRect();
+      // calculate the ratio of old dimensions to new dimensions
+      const widthRatio = containerRect.width / this.stageRectangle.width;
+      const heightRatio = containerRect.height / this.stageRectangle.height;
+      // update the initial container dimensions for next time
+      this.stageRectangle = containerRect;
+      // update the element dimensions
+      this.elements.forEach(element => {
+        element.shape.x *= widthRatio;
+        element.shape.y *= heightRatio;
+        element.shape.width *= widthRatio;
+        element.shape.height *= heightRatio;
+      });
+    },
+
+    onKeyDown(event) {
+      if (!this.lastSelected || !this.canDelete) {
+        return;
+      }
+      if (event.key === 'Delete') {
+        this.destroy();
+      }
+    },
+
+    // Helpers
     getRandomString() {
       const randString = Math.random().toString(36).substring(2,24);
       return randString;
@@ -571,7 +432,6 @@ export default {
     },
 
     getUuid() {
-      // https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
       let dt = new Date().getTime();
       const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
         const r = (dt + Math.random()*16)%16 | 0;
@@ -580,6 +440,7 @@ export default {
       });
       return uuid;
     },
+
   },
 
   watch: {
@@ -600,6 +461,7 @@ export default {
       deep: true
     }
   },
-
-};
+}
 </script>
+
+```

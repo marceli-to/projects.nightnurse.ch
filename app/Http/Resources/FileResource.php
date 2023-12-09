@@ -17,6 +17,7 @@ class FileResource extends JsonResource
       'name' => $this->name,
       'original_name' => $this->original_name,
       'image_orientation' => $this->image_orientation,
+      'image_ratio' => $this->image_ratio,
       'folder' => $this->folder,
       'extension' => $this->extension,
       'preview' => $this->preview,

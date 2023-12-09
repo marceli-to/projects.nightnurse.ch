@@ -1,5 +1,6 @@
 <template>
-<div v-if="isFetched" class="max-w-5xl">
+<div v-if="isFetched">
+  <!-- 
   <header class="mb-4 md:mb-6 pt-2 sm:pt-3 pb-2 md:pb-4 sticky top-0 bg-white z-40 border-bottom -ml-[1px] pl-[1px]">
     <div class="relative">
       <div class="text-xl lg:text-2xl font-bold mb-2 sm:mb-3 flex items-end sm:max-w-2xl leading-snug sm:leading-normal">
@@ -33,15 +34,11 @@
             <div class="text-sm text-dark">{{project.date_end ? project.date_end : '-'}}</div>
           </div>
         </div>
-
       </div>
     </div>
   </header>
-
-  <!-- <markup :image="file" :project="project"></markup> -->
-
-  <markup-test :image="file" :project="project"></markup-test>
-
+  -->
+  <markup :image="file" :project="project"></markup>
 </div>
 </template>
 <script>
@@ -51,14 +48,12 @@ import Helpers from "@/mixins/Helpers";
 import PageTitle from "@/mixins/PageTitle";
 import ErrorHandling from "@/mixins/ErrorHandling";
 import Markup from "@/components/ui/markup/Markup.vue";
-import MarkupTest from "@/components/ui/markup/MarkupTest.vue";
 
 export default {
 
   components: {
     NProgress,
     Markup,
-    MarkupTest
   },
 
   mixins: [ErrorHandling, Helpers, PageTitle, i18n],

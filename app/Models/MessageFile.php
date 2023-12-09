@@ -14,6 +14,7 @@ class MessageFile extends Base
     'name',
     'original_name',
     'image_orientation',
+    'image_ratio',
     'folder',
     'extension',
     'size',

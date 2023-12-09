@@ -103,6 +103,7 @@ class MessageController extends Controller
           'name' => $filename,
           'original_name' => $file['original_name'],
           'image_orientation' => $file['image_orientation'],
+          'image_ratio' => $file['image_ratio'],
           'folder' => $project->uuid,
           'extension' => $file['extension'] ,
           'size' => $file['size'],

@@ -12,22 +12,22 @@ class MarkupResource extends JsonResource
    */
   public function toArray($request)
   {
-    $element = json_decode($this->shape);
-    $element->shape->editable = true;
-    $element->shape->draggable = true;
-    $element->shape->commentable = $this->can_edit && !$this->comment ? true : false;
+    $shape = json_decode($this->shape);
+    $shape->editable = true;
+    $shape->draggable = true;
+    $shape->commentable = $this->can_edit && !$this->comment ? true : false;
     
     if ($this->is_locked || !$this->can_edit)
     {
-      $element->shape->editable = false;
-      $element->shape->draggable = false;
-      $element->shape->commentable = false;
+      $shape->editable = false;
+      $shape->draggable = false;
+      $shape->commentable = false;
     }
     
     return [
       'uuid' => $this->uuid,
       'date' => $this->date_string,
-      'shape' => $element->shape,
+      'shape' => $shape,
       'shape_uuid' => $this->shape_uuid,
       'is_locked' => $this->is_locked,
       'comment' => $this->comment,

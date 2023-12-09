@@ -1,7 +1,7 @@
 <template>
   <div class="text-gray-300 flex mb-4 lg:mb-6">
     <div class="shrink-0">
-      <AnnotationIcon :class="[comment.shape_uuid == highlighted ? 'text-highlight' : 'text-gray-300', 'h-5 w-5']" />
+      <annotation-icon :class="[comment.shape_uuid == highlighted ? 'text-highlight' : 'text-gray-300', 'h-5 w-5']" />
     </div>
     <div class="ml-2">
       <header class="text-xs font-mono">

@@ -28,7 +28,7 @@ class Media
    *  Image file types
    */
 
-  protected $previewable_image_types = [
+  protected $image_types = [
     'png', 'jpg', 'jpeg', 'gif'
   ];
   
@@ -75,6 +75,7 @@ class Media
       'name' => $filename, 
       'original_name' => $name, 
       'image_orientation' => ($file_data !== FALSE && $file_data[0] > $file_data[1]) ? 'landscape' : 'portrait',
+      'image_ratio' => $file_data !== FALSE && in_array($filetype, $this->$image_types) ? $file_data[0] .'/'. $file_data[1] : NULL,
       'extension' => $filetype, 
       'size' => $filesize,
       'preview' => $previewable ? TRUE : FALSE
@@ -595,7 +596,7 @@ class Media
  
   protected function previewable($file_data = NULL, $filetype = NULL)
   {
-    if (in_array(strtolower($filetype), $this->previewable_image_types))
+    if (in_array(strtolower($filetype), $this->image_types))
     {
       if ($file_data[0] <= 6000)
       {

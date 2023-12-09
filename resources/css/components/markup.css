@@ -4,9 +4,21 @@
 }
 
 .shape.is-active {
-  @apply border-highlight z-[2000] cursor-move;
+  @apply border-highlight cursor-move !z-[10000];
 }
 
 .shape.shape--circle {
   border-radius: 100%;
+}
+
+.shape.shape--comment {
+  @apply !border-none text-blue-700;
+}
+
+.shape.shape--comment.is-active {
+  @apply text-highlight;
+}
+
+.shape.shape--comment.is-active textarea {
+  @apply !z-[10000]
 }
