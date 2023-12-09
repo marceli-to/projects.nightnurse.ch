@@ -23,21 +23,21 @@
         @dragging="onDragging" 
         @resizing="onResize" 
         @resizestop="onResizeStop"
-        @activated="onActivated(element.shape.id)"
+        @activated="onActivated(element.uuid)"
         @dragstop="onDragStop"
         :onDragStart="onDragStart"
         @deactivated="onDeactivated"
-        :data-id="element.shape.id"
+        :data-id="element.uuid"
         :parent="true"
         :resizable="element.shape.resizable">
         <template v-if="element.shape.type === 'comment'">
           <annotation-icon class="h-6 w-6" aria-hidden="true" />
           <textarea
             class="bg-highlight bg-opacity-80 p-1 text-white mt-2 text-xs lg:p-2 w-40 h-20 !border-none rounded-md overflow-auto relative z-50"
-            @blur="blur(element)"
-            @focus="focus(element)"
+            @blur="updateComment(element)"
+            @focus="tempSaveComment(element)"
             v-model="element.comment"
-            v-if="element.shape.id == selected && !isDragging">
+            v-if="element.uuid == selected && !isDragging && element.is_locked === 0">
           </textarea>
         </template>
       </vue-draggable-resizable>
@@ -149,10 +149,8 @@ export default {
   mounted() {
     this.fetch();
     this.stageRectangle = this.$refs.stage.getBoundingClientRect();
-
     window.addEventListener('resize', this.onResizeWindow);
     window.addEventListener('keydown', this.onKeyDown);
-
   },
 
   beforeDestroy() {
@@ -229,7 +227,7 @@ export default {
         element: element,
       };
       this.axios.post(this.routes.create, data).then(response => {
-        // console.log(response.data);
+        element.uuid = response.data.markup.uuid;
       });
     },
 
@@ -245,7 +243,6 @@ export default {
             if (element.comment) {
               this.comments.push({
                 uuid: element.uuid,
-                shape_uuid: element.shape_uuid,
                 comment: element.comment,
                 author: element.author,
                 author_company: element.author_company,
@@ -256,6 +253,7 @@ export default {
           this.elements.push(element);
         });
         NProgress.done();
+        this.setShape();
       })
     },
 
@@ -264,15 +262,24 @@ export default {
         uuid: this.$props.image.uuid,
         element: element,
       };
-      this.axios.put(`${this.routes.update}/${element.shape.id}`, data).then(response => {
-        if (response.data.markup.shape.type == 'comment') {
-          // find comment in this.comments
+      this.axios.put(`${this.routes.update}/${element.uuid}`, data).then(response => {
+        if (element.comment && response.data.markup.shape.type == 'comment') {
+
+          // update or push comment
           const comment = this.comments.find(
-            (r) => r.shape_uuid === element.shape.id
+            (r) => r.uuid === response.data.markup.uuid
           );
-          // update comment in this.comments
           if (comment) {
             comment.comment = response.data.markup.comment;
+          }
+          else {
+            this.comments.push({
+              uuid: response.data.markup.uuid,
+              comment: response.data.markup.comment,
+              author: response.data.markup.author,
+              author_company: response.data.markup.author_company,
+              date: response.data.markup.date,
+            });
           }
           this.tempComment = null;
         }
@@ -288,16 +295,15 @@ export default {
       });
     },
 
-    blur(element) {
+    updateComment(element) {
       if (element.comment === this.tempComment) {
         return;
       }
       this.update(element);
     },
 
-    focus(element) {
+    tempSaveComment(element) {
       this.tempComment = element.comment;
-      event.stopPropagation();
     },
 
     lock() {
@@ -312,12 +318,12 @@ export default {
     removeElement() {
       // find element in this.elements
       const elements = this.elements.filter(
-        (r) => r.shape.id !== this.lastSelected
+        (r) => r.uuid !== this.lastSelected
       );
       
       // find comment in this.comments
       const comment = this.comments.find(
-        (r) => r.shape_uuid === this.lastSelected
+        (r) => r.uuid === this.lastSelected
       );
 
       // remove comment from this.comments
@@ -331,9 +337,44 @@ export default {
       this.canDelete = false;
     },
 
+    setShape() {
+      this.elements.forEach(element => {
+        if (!element.shape.relative) {
+          return;
+        }
+        const stageRect = this.$refs.stage.getBoundingClientRect();
+        const elementX = stageRect.width * element.shape.relative.x / 100;
+        const elementY = stageRect.height * element.shape.relative.y / 100;
+        const elementWidth = stageRect.width * element.shape.relative.width / 100;
+        const elementHeight = stageRect.height * element.shape.relative.height / 100;
+
+        element.shape.x = elementX;
+        element.shape.y = elementY;
+        element.shape.width = elementWidth;
+        element.shape.height = elementHeight;
+      });
+    },
+
+    updateShape() {
+      // get the current container dimensions
+      const containerRect = this.$refs.stage.getBoundingClientRect();
+      // calculate the ratio of old dimensions to new dimensions
+      const widthRatio = containerRect.width / this.stageRectangle.width;
+      const heightRatio = containerRect.height / this.stageRectangle.height;
+      // update the initial container dimensions for next time
+      this.stageRectangle = containerRect;
+      // update the element dimensions
+      this.elements.forEach(element => {
+        element.shape.x *= widthRatio;
+        element.shape.y *= heightRatio;
+        element.shape.width *= widthRatio;
+        element.shape.height *= heightRatio;
+      });
+    },
+
     // Events
     onResize(x, y, width, height) {
-      const element = this.elements.find(el => el.id === this.selected)
+      const element = this.elements.find(el => el.uuid === this.selected)
       if (element) {
         element.x = x
         element.y = y
@@ -343,7 +384,7 @@ export default {
     },
 
     onResizeStop(x, y, width, height) {
-      const element = this.elements.find(el => el.shape.id === this.selected)
+      const element = this.elements.find(el => el.uuid === this.selected)
       if (element) {
         element.shape.x = x
         element.shape.y = y
@@ -355,10 +396,10 @@ export default {
 
     onDragging(x, y) {
       this.isDragging = true;
-      const element = this.elements.find(el => el.id === this.selected);
+      const element = this.elements.find(el => el.uuid === this.selected);
       if (element) {
-        element.shape.x = x
-        element.shape.y = y
+        element.shape.x = x;
+        element.shape.y = y;
       }
     },
 
@@ -369,11 +410,39 @@ export default {
 
     onDragStop(x, y) {
       this.isDragging = false;
-      const element = this.elements.find(el => el.shape.id === this.selected)
+      const element = this.elements.find(el => el.uuid === this.selected);
+      // update only if the element has moved
       const canUpdate = (this.dragStartX !== x || this.dragStartY !== y) ? true : false;
       if (element && canUpdate) {
-        element.shape.x = x
-        element.shape.y = y
+        element.shape.x = x;
+        element.shape.y = y;
+
+        // get the x and y position and the width and height of the element relative to the stage in percent
+        const stageRect = this.$refs.stage.getBoundingClientRect();
+        const elementRect = document.querySelector(`[data-id="${element.uuid}"]`).getBoundingClientRect();
+        const elementY = (elementRect.top - stageRect.top) / stageRect.height * 100;
+        const elementX = (elementRect.left - stageRect.left) / stageRect.width * 100;
+        const elementWidth = elementRect.width / stageRect.width * 100;
+        const elementHeight = elementRect.height / stageRect.height * 100;
+
+        // create an object 'relative'
+        element.shape.relative = {
+          x: elementX,
+          y: elementY,
+          width: elementWidth,
+          height: elementHeight,
+        };
+
+        // if the element.shape.x is right of theh center of the stage, move the comment to the left
+        if (element.shape.type == 'comment') {
+          if (element.shape.x > stageRect.width / 2) {
+            element.shape.className = 'shape shape--comment shape--comment-rtl';
+          }
+          else {
+            element.shape.className = 'shape shape--comment shape--comment-ltr';
+          }
+        }
+
         this.dragStartX = null;
         this.dragStartY = null;
         this.update(element);
@@ -391,20 +460,7 @@ export default {
     },
 
     onResizeWindow() {
-      // get the current container dimensions
-      const containerRect = this.$refs.stage.getBoundingClientRect();
-      // calculate the ratio of old dimensions to new dimensions
-      const widthRatio = containerRect.width / this.stageRectangle.width;
-      const heightRatio = containerRect.height / this.stageRectangle.height;
-      // update the initial container dimensions for next time
-      this.stageRectangle = containerRect;
-      // update the element dimensions
-      this.elements.forEach(element => {
-        element.shape.x *= widthRatio;
-        element.shape.y *= heightRatio;
-        element.shape.width *= widthRatio;
-        element.shape.height *= heightRatio;
-      });
+      this.updateShape();
     },
 
     onKeyDown(event) {

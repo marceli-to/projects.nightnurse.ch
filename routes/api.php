@@ -102,8 +102,8 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::get('markups/{messageFile:uuid}', [MarkupController::class, 'get']);
   Route::post('markup/comment', [MarkupController::class, 'comment']);
   Route::post('markup', [MarkupController::class, 'create']);
-  Route::put('markup/{markup:shape_uuid}', [MarkupController::class, 'update']);
-  Route::delete('markup/{shapeId}', [MarkupController::class, 'delete']);
+  Route::put('markup/{markup:uuid}', [MarkupController::class, 'update']);
+  Route::delete('markup/{markup:uuid}', [MarkupController::class, 'delete']);
 
   // Feedbacks
   Route::get('feedbacks/{project:uuid}', [FeedbackController::class, 'get'])->withTrashed();

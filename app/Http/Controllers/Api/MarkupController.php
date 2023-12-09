@@ -40,7 +40,6 @@ class MarkupController extends Controller
       'shape' => json_encode(
         $request->input('element')['shape']
       ),
-      'shape_uuid' => $request->input('element')['shape']['id'],
       'user_id' => auth()->user()->id,
       'message_file_id' => MessageFile::where('uuid', $request->input('uuid'))->first()->id
     ]);
@@ -92,13 +91,12 @@ class MarkupController extends Controller
   /**
    * Delete a markup
    * 
+   * @param Markup $markup
    * @param  \Illuminate\Http\Request $request
    * @return \Illuminate\Http\Response
    */
-  public function delete($shapeId = NULL)
+  public function delete(Markup $markup)
   {
-    $markup = Markup::where('shape_uuid', $shapeId)->first();
-
     if ($markup->user_id !== auth()->user()->id)
     {
       return response()->json([
@@ -109,31 +107,6 @@ class MarkupController extends Controller
     $markup->delete();
     return response()->json([
       'message' => 'Markup deleted',
-    ]);
-  }
-
-  /** 
-   * Save a comment
-   * 
-   * @param  \Illuminate\Http\Request $request
-   * @return \Illuminate\Http\Response
-   */
-  public function comment(Request $request)
-  {
-    $markup = Markup::where('shape_uuid', $request->input('shape_uuid'))->first();
-
-    if ($markup->user_id !== auth()->user()->id)
-    {
-      return response()->json([
-        'message' => 'You are not allowed to comment on this markup',
-      ], 403);
-    }
-
-    $markup->comment = $request->input('comment');
-    $markup->save();
-
-    return response()->json([
-      'comment' => MarkupResource::make($markup),
     ]);
   }
 }

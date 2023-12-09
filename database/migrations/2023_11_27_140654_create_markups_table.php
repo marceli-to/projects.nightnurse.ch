@@ -16,7 +16,6 @@ return new class extends Migration
     Schema::create('markups', function (Blueprint $table) {
       $table->id();
       $table->string('uuid', 36);
-      $table->string('shape_uuid', 36);
       $table->text('shape');
       $table->text('comment')->nullable();
       $table->tinyInteger('is_locked')->default(0);

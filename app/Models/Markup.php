@@ -15,7 +15,6 @@ class Markup extends Model
 	protected $fillable = [
     'uuid',
     'shape',
-    'shape_uuid',
     'comment',
     'is_locked',
     'message_file_id',

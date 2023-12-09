@@ -28,7 +28,6 @@ class MarkupResource extends JsonResource
       'uuid' => $this->uuid,
       'date' => $this->date_string,
       'shape' => $shape,
-      'shape_uuid' => $this->shape_uuid,
       'is_locked' => $this->is_locked,
       'comment' => $this->comment,
       'author' => $this->author,
