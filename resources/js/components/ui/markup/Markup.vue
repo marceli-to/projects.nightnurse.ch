@@ -33,13 +33,13 @@
         :resizable="element.resizable">
         <template v-if="element.type === 'comment'">
           <annotation-icon class="h-6 w-6" aria-hidden="true" />
-          <textarea
-            class="bg-highlight bg-opacity-80 p-1 text-white mt-2 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
-            @blur="updateComment(element)"
-            @focus="tempSaveComment(element)"
-            v-model="element.comment"
-            v-if="element.uuid == selected && !isDragging && element.is_locked === 0">
-          </textarea>
+          <template v-if="element.uuid == selected && !isDragging">
+            <textarea
+              class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-2 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
+              :disabled="!element.is_owner || element.is_locked"
+              v-model="element.comment">
+            </textarea>
+          </template>
         </template>
       </vue-draggable-resizable>
     </div>
@@ -50,7 +50,9 @@
         v-for="(comment, index) in comments" 
         :key="comment.uuid" 
         :comment="comment"
-        :highlighted="highlightedComment">
+        :highlighted="highlightedComment"
+        @mouseover="addHighlight"
+        @mouseout="removeHighlight">
       </markup-comment>
     </template>
   </div>
@@ -202,17 +204,17 @@ export default {
     addComment() {
       const element = {
         is_locked: false,
+        type: 'comment',
+        resizable: false,
+        draggable: true,
+        commentable: true,
         shape: {
           id: this.getUuid(),
-          type: 'comment',
           width: 20, 
           height: 20, 
           x: 10,
           y: 10,
           className: 'is-active shape shape--comment', 
-          commentable: true,
-          editable: true,
-          resizable: false,
         }
       };
       this.elements.push(element);
@@ -292,17 +294,6 @@ export default {
       this.axios.delete(`${this.routes.delete}/${this.lastSelected}`).then(response => {
         this.removeElement();
       });
-    },
-
-    updateComment(element) {
-      if (element.comment === this.tempComment) {
-        return;
-      }
-      this.update(element);
-    },
-
-    tempSaveComment(element) {
-      this.tempComment = element.comment;
     },
 
     lock() {
@@ -468,18 +459,45 @@ export default {
       }
     },
 
+    addHighlight(id) {
+      // add class 'is-active' to the element
+      const element = this.getElement(id);
+      if (element) {
+        element.shape.className += ' is-active';
+        this.highlightedComment = id;
+      }
+    },
+
+    removeHighlight(id) {
+      this.elements.forEach(element => {
+        element.shape.className = element.shape.className.replace(' is-active', '');
+      });
+      this.highlightedComment = null;
+    },
+
     onActivated(id) {
       const element = this.getElement(id);
+      this.selected = id;
+
+      if (element.type === 'comment') {
+        this.tempComment = element.comment;
+        this.highlightedComment = id;
+      }
+
       if (!element.is_owner) {
         return;
       }
       this.canDelete = element.is_locked ? false : true;
-      this.selected = id;
       this.lastSelected = id;
     },
 
     onDeactivated() {
+      const element = this.getElement(this.selected);
+      if (element.is_owner && element.comment && element.comment !== this.tempComment) {
+        this.update(element);
+      }
       this.selected = null;
+      this.highlightedComment = null;
     },
 
     onResizeWindow() {

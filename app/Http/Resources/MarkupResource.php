@@ -16,6 +16,7 @@ class MarkupResource extends JsonResource
     return [
       'uuid' => $this->uuid,
       'date' => $this->date_string,
+      'type' => $this->type,
       'shape' => json_decode($this->shape),
       'is_owner' => $this->user_id === auth()->user()->id ? TRUE : FALSE,
       'is_locked' => $this->is_locked ? TRUE : FALSE,

@@ -14,6 +14,19 @@
   @apply !border-blue-700 !cursor-default;
 }
 
+.shape.shape--comment.is-active,
+.shape.shape--comment.is-active:hover,
+.shape.shape--comment.is-disabled,
+.shape.shape--comment.is-disabled:hover,
+.shape.shape--comment.is-locked,
+.shape.shape--comment.is-locked:hover {
+  @apply !cursor-pointer;
+}
+
+.shape.shape--comment:hover {
+  @apply !text-highlight;
+}
+
 .shape.is-locked {
   @apply !cursor-default;
 }
@@ -33,6 +46,7 @@
 
 .shape.shape--comment.is-active textarea {
   @apply !z-[10000] absolute left-0;
+  -webkit-text-fill-color: white !important;
 }
 
 .shape.shape--comment.shape--comment-rtl textarea {

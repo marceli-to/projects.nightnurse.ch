@@ -76,9 +76,13 @@ class MarkupController extends Controller
   public function lock(MessageFile $messageFile)
   {
     $markups = Markup::where('message_file_id', $messageFile->id)->where('user_id', auth()->user()->id)->get();
-
     foreach ($markups as $markup)
     {
+      // don't lock if type is comment and comment is empty
+      if ($markup->type === 'comment' && $markup->comment === NULL)
+      {
+        continue;
+      }
       $markup->is_locked = true;
       $markup->save();
     }
