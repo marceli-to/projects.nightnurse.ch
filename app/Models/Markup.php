@@ -14,6 +14,7 @@ class Markup extends Model
 
 	protected $fillable = [
     'uuid',
+    'type',
     'shape',
     'comment',
     'is_locked',
@@ -63,8 +64,7 @@ class Markup extends Model
 
   public function getCanEditAttribute()
   {
-    $element = json_decode($this->shape);
-    return auth()->user()->uuid === $element->owner ? TRUE : FALSE;
+    return auth()->user()->id === $this->user_id ? TRUE : FALSE;
   }
 
 }

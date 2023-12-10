@@ -7,6 +7,17 @@
   @apply border-highlight cursor-move !z-[10000];
 }
 
+.shape.is-active.is-locked,
+.shape.is-active.is-locked:hover,
+.shape.is-disabled,
+.shape.is-disabled:hover {
+  @apply !border-blue-700 !cursor-default;
+}
+
+.shape.is-locked {
+  @apply !cursor-default;
+}
+
 .shape.shape--circle {
   border-radius: 100%;
 }
@@ -18,6 +29,7 @@
 .shape.shape--comment.is-active {
   @apply text-highlight;
 }
+
 
 .shape.shape--comment.is-active textarea {
   @apply !z-[10000] absolute left-0;

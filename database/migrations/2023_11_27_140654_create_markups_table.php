@@ -16,9 +16,10 @@ return new class extends Migration
     Schema::create('markups', function (Blueprint $table) {
       $table->id();
       $table->string('uuid', 36);
+      $table->string('type', 50);
       $table->text('shape');
       $table->text('comment')->nullable();
-      $table->tinyInteger('is_locked')->default(0);
+      $table->boolean('is_locked')->default(FALSE);
       $table->foreignId('message_file_id')->constrained();
       $table->foreignId('user_id')->constrained();
       $table->softDeletes();

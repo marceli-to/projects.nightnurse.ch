@@ -20,7 +20,6 @@ class MarkupController extends Controller
   {
     $project = Project::where('id', $messageFile->message->project_id)->first();
     $this->authorize('containsProject', $project);
-
     $markups = Markup::where('message_file_id', $messageFile->id)->get();
     return response()->json([
       'data' => MarkupResource::collection($markups),
@@ -37,6 +36,7 @@ class MarkupController extends Controller
   {
     $markup = Markup::create([
       'uuid' => \Str::uuid(),
+      'type' => $request->input('element')['type'],
       'shape' => json_encode(
         $request->input('element')['shape']
       ),

@@ -18,7 +18,7 @@
         :h="element.shape.height" 
         :x="element.shape.x"
         :y="element.shape.y"
-        :class-name="element.shape.className"
+        :class-name="getElementClassNames(element.uuid)"
         class-name-active="is-active" 
         @dragging="onDragging" 
         @resizing="onResize" 
@@ -29,11 +29,12 @@
         @deactivated="onDeactivated"
         :data-id="element.uuid"
         :parent="true"
-        :resizable="element.shape.resizable">
-        <template v-if="element.shape.type === 'comment'">
+        :draggable="element.draggable"
+        :resizable="element.resizable">
+        <template v-if="element.type === 'comment'">
           <annotation-icon class="h-6 w-6" aria-hidden="true" />
           <textarea
-            class="bg-highlight bg-opacity-80 p-1 text-white mt-2 text-xs lg:p-2 w-40 h-20 !border-none rounded-md overflow-auto relative z-50"
+            class="bg-highlight bg-opacity-80 p-1 text-white mt-2 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
             @blur="updateComment(element)"
             @focus="tempSaveComment(element)"
             v-model="element.comment"
@@ -162,18 +163,17 @@ export default {
     // CRUD
     addRectangle() {
       const element = {
-        is_locked: 0,
+        is_locked: false,
+        type: 'rectangle',
+        resizable: true,
+        draggable: true,
         shape: {
           id: this.getUuid(),
-          owner: this.$store.state.user.uuid,
-          type: 'rectangle',
+          className: 'shape', 
           width: 100, 
           height: 100, 
           x: 10, 
           y: 10, 
-          className: 'shape', 
-          editable: true,
-          resizable: true
         }
       };
       this.elements.push(element);
@@ -182,18 +182,17 @@ export default {
 
     addCircle() {
       const element = {
-        is_locked: 0,
+        is_locked: false,
+        type: 'circle',
+        resizable: true,
+        draggable: true,
         shape: {
           id: this.getUuid(),
-          owner: this.$store.state.user.uuid,
-          type: 'circle',
           width: 100, 
           height: 100, 
           x: 10, 
           y: 10,
           className: 'shape shape--circle', 
-          editable: true,
-          resizable: true
         }
       };
       this.elements.push(element);
@@ -202,19 +201,18 @@ export default {
 
     addComment() {
       const element = {
-        is_locked: 0,
+        is_locked: false,
         shape: {
           id: this.getUuid(),
-          owner: this.$store.state.user.uuid,
           type: 'comment',
           width: 20, 
           height: 20, 
           x: 10,
           y: 10,
-          className: 'shape shape--comment', 
+          className: 'is-active shape shape--comment', 
           commentable: true,
           editable: true,
-          resizable: false
+          resizable: false,
         }
       };
       this.elements.push(element);
@@ -228,6 +226,7 @@ export default {
       };
       this.axios.post(this.routes.create, data).then(response => {
         element.uuid = response.data.markup.uuid;
+        element.is_owner = response.data.markup.is_owner;
       });
     },
 
@@ -239,7 +238,7 @@ export default {
       this.axios.get(`${this.routes.get}/${this.$props.image.uuid}`).then((response) => {
         const data = response.data.data;
         data.forEach((element) => {
-          if (element.shape.type === 'comment') {
+          if (element.type === 'comment') {
             if (element.comment) {
               this.comments.push({
                 uuid: element.uuid,
@@ -263,7 +262,7 @@ export default {
         element: element,
       };
       this.axios.put(`${this.routes.update}/${element.uuid}`, data).then(response => {
-        if (element.comment && response.data.markup.shape.type == 'comment') {
+        if (element.comment && response.data.markup.type == 'comment') {
 
           // update or push comment
           const comment = this.comments.find(
@@ -312,7 +311,26 @@ export default {
         NProgress.done();
         this.$notify({ type: "success", text: this.translate('Markierungen und Kommentare gespeichert') });
         this.fetch();
+        this.canDelete = false;
       });
+    },
+
+    getElement(id) {
+      return this.elements.find(el => el.uuid === id);
+    },
+
+    getElementClassNames(id) {
+      const element = this.getElement(id);
+      let classNames = element.shape.className;
+
+      if (!element.is_owner) {
+        classNames += ' is-disabled';
+      }
+
+      if (element.is_locked) {
+        classNames += element.is_locked ? ' is-locked' : '';
+      }
+      return classNames;
     },
 
     removeElement() {
@@ -339,19 +357,20 @@ export default {
 
     setShape() {
       this.elements.forEach(element => {
-        if (!element.shape.relative) {
+        if (!element.shape.relative_attributes) {
           return;
         }
         const stageRect = this.$refs.stage.getBoundingClientRect();
-        const elementX = stageRect.width * element.shape.relative.x / 100;
-        const elementY = stageRect.height * element.shape.relative.y / 100;
-        const elementWidth = stageRect.width * element.shape.relative.width / 100;
-        const elementHeight = stageRect.height * element.shape.relative.height / 100;
+        const elementX = stageRect.width * element.shape.relative_attributes.x / 100;
+        const elementY = stageRect.height * element.shape.relative_attributes.y / 100;
+        const elementWidth = stageRect.width * element.shape.relative_attributes.width / 100;
+        const elementHeight = stageRect.height * element.shape.relative_attributes.height / 100;
 
-        element.shape.x = elementX;
-        element.shape.y = elementY;
-        element.shape.width = elementWidth;
-        element.shape.height = elementHeight;
+        // round to 0 decimal places, parse to int
+        element.shape.x = parseInt(elementX.toFixed(0));
+        element.shape.y = parseInt(elementY.toFixed(0));
+        element.shape.width = parseInt(elementWidth.toFixed(0));
+        element.shape.height = parseInt(elementHeight.toFixed(0));
       });
     },
 
@@ -374,7 +393,7 @@ export default {
 
     // Events
     onResize(x, y, width, height) {
-      const element = this.elements.find(el => el.uuid === this.selected)
+      const element = this.getElement(this.selected);
       if (element) {
         element.x = x
         element.y = y
@@ -384,7 +403,7 @@ export default {
     },
 
     onResizeStop(x, y, width, height) {
-      const element = this.elements.find(el => el.uuid === this.selected)
+      const element = this.getElement(this.selected);
       if (element) {
         element.shape.x = x
         element.shape.y = y
@@ -396,7 +415,7 @@ export default {
 
     onDragging(x, y) {
       this.isDragging = true;
-      const element = this.elements.find(el => el.uuid === this.selected);
+      const element = this.getElement(this.selected);
       if (element) {
         element.shape.x = x;
         element.shape.y = y;
@@ -410,7 +429,7 @@ export default {
 
     onDragStop(x, y) {
       this.isDragging = false;
-      const element = this.elements.find(el => el.uuid === this.selected);
+      const element = this.getElement(this.selected);
       // update only if the element has moved
       const canUpdate = (this.dragStartX !== x || this.dragStartY !== y) ? true : false;
       if (element && canUpdate) {
@@ -426,7 +445,7 @@ export default {
         const elementHeight = elementRect.height / stageRect.height * 100;
 
         // create an object 'relative'
-        element.shape.relative = {
+        element.shape.relative_attributes = {
           x: elementX,
           y: elementY,
           width: elementWidth,
@@ -434,7 +453,7 @@ export default {
         };
 
         // if the element.shape.x is right of theh center of the stage, move the comment to the left
-        if (element.shape.type == 'comment') {
+        if (element.type == 'comment') {
           if (element.shape.x > stageRect.width / 2) {
             element.shape.className = 'shape shape--comment shape--comment-rtl';
           }
@@ -450,9 +469,13 @@ export default {
     },
 
     onActivated(id) {
+      const element = this.getElement(id);
+      if (!element.is_owner) {
+        return;
+      }
+      this.canDelete = element.is_locked ? false : true;
       this.selected = id;
       this.lastSelected = id;
-      this.canDelete = true;
     },
 
     onDeactivated() {
@@ -503,9 +526,9 @@ export default {
     // watch for changes in elements (attribute 'is_locked')
     elements: {
       handler: function () {
-        // if any element has 'is_locked' = 0, alert('has unlocked elements')
+        // if any element has 'is_locked' = false, alert('has unlocked elements')
         const unlockedElements = this.elements.filter(
-          (r) => r.is_locked == 0
+          (r) => r.is_locked == false && r.is_owner == true
         );
         if (unlockedElements.length) {
           this.hasUnlockedElements = true;
