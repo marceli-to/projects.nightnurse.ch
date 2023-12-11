@@ -25,6 +25,24 @@
           <label>{{ translate('Betreff') }}</label>
           <input type="text" v-model="data.subject">
         </div>
+
+        <!-- Markups -->
+        <template v-if="hasMarkupComments">
+          <div class="form-group">
+            <label class="mb-2 lg:mb-3">{{ translate('Kommentare') }}</label>
+            <div class="flex gap-2 lg:gap-4">
+              <div v-for="comment in data.markup.comments" :key="comment.uuid" class="text-gray-400 p-1 md:max-w-sm lg:p-2 bg-light rounded-md w-auto" v-if="comment.comment">
+                <header class="text-xs text-gray-400 font-mono">
+                  {{ comment.date }} – {{ comment.author }}
+                </header>
+                <div class="text-dark text-sm leading-[1.5] mt-1">
+                  {{ comment.comment }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
+
         <div class="form-group mt-6 lg:mt-8">
           <label class="mb-2 lg:mb-3">{{ translate('Mitteilung') }}</label>
           <tinymce-editor
@@ -35,7 +53,7 @@
         </div>
 
         <!-- Files -->
-        <div class="form-group">
+        <div class="form-group" v-if="allowUploads">
           <label class="mb-2 lg:mb-3">{{ translate('Dateien') }}</label>
           <vue-dropzone
             ref="dropzone"
@@ -54,7 +72,6 @@
               <div>{{ translate('max. Grösse 250 MB') }}</div>
             </div>
           </vue-dropzone>
-
           <list v-if="hasUploads" class="my-4 sm:my-6 lg:my-8">
             <list-item v-for="(d, i) in data.files" :key="i" class="!p-0 border-gray-100 border-b">
               <div class="flex items-center no-underline hover:text-highlight py-2">
@@ -202,6 +219,7 @@ export default {
         message_uuid: null,
         users: [],
         files: [],
+        markup: {},
       },
 
       project: {
@@ -238,7 +256,9 @@ export default {
       isSending: false,
       isProjectManager: false,
       hasUploads: false,
+      hasMarkupComments: false,
       hasValidUpload: true,
+      allowUploads: true,
 
       // Messages
       messages: {
@@ -319,6 +339,13 @@ export default {
         else {
           // handle recipients in case of a new message
           this.handleRecipients();
+        }
+
+        if (this.$store.state.hasMarkUps) {
+          this.data.markup = this.$store.state.markup;
+          this.data.subject = `${this.translate('Neue Markierungen für Bild')} ${this.$store.state.markup.image.original_name}`;
+          this.hasMarkupComments = this.data.markup.comments.length > 0 ? true : false;
+          this.allowUploads = false;
         }
 
         this.isFetched = true;
@@ -596,6 +623,9 @@ export default {
     hide() {
       this.isVisible = false;
       this.isReply = false;
+      this.hasMarkupComments = false;
+      this.allowUploads = true;
+      this.$store.commit('hasMarkUps', false);
       this.$emit('cancelMessage');
     },
 

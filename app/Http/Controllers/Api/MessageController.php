@@ -3,9 +3,11 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Http\Resources\MessageResource;
+use App\Http\Resources\MarkupCommentResource;
 use App\Models\Message;
 use App\Models\MessageFile;
 use App\Models\MessageUser;
+use App\Models\Markup;
 use App\Models\Project;
 use App\Models\ProjectUser;
 use App\Models\CompanyProject;
@@ -31,6 +33,7 @@ class MessageController extends Controller
       ->with(
         'sender', 
         'files.markups', 
+        'commentableFile.markups',
         'users', 
         'message',
         'reactions.user', 
@@ -79,6 +82,22 @@ class MessageController extends Controller
       'project_id' => $project->id,
       'user_id' => auth()->user()->id,
     ]);
+
+    // Markup?
+    $markupComments = [];
+    if ($request->input('markup'))
+    {
+      foreach($request->input('markup')['comments'] as $comment)
+      {
+        $markupComments[] = $comment;
+      }
+
+      // add comments to message as json
+      $message->comments = $markupComments;
+      $message->is_comment = 1;
+      $message->commentable_file_id = $request->input('markup')['image']['id'];
+      $message->save();
+    }
 
     // Reply?
     if ($request->input('message_uuid'))

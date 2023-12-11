@@ -75,7 +75,7 @@ class Media
       'name' => $filename, 
       'original_name' => $name, 
       'image_orientation' => ($file_data !== FALSE && $file_data[0] > $file_data[1]) ? 'landscape' : 'portrait',
-      'image_ratio' => $file_data !== FALSE && in_array($filetype, $this->$image_types) ? $file_data[0] .'/'. $file_data[1] : NULL,
+      'image_ratio' => $file_data !== FALSE && in_array($filetype, $this->image_types) ? $file_data[0] .'/'. $file_data[1] : NULL,
       'extension' => $filetype, 
       'size' => $filesize,
       'preview' => $previewable ? TRUE : FALSE

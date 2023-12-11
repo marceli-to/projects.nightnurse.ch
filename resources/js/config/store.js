@@ -6,9 +6,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     user: false,
+    hasMarkUps: false,
     feedType: 'public',
     recipients: [],
     reactionTypes: [],
+    markup: {}, 
   },
   mutations: {
     user(state, user) {
@@ -25,6 +27,15 @@ export default new Vuex.Store({
     },
     userListIsGrouped(state, userListIsGrouped) {
       state.userListIsGrouped = userListIsGrouped;
-    }
+    },
+
+    hasMarkUps(state, hasMarkUps) {
+      state.hasMarkUps = hasMarkUps;
+    },
+
+    markup(state, markups) {
+      state.markup = markups;
+    },
+
   },
 });

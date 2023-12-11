@@ -92,7 +92,7 @@
     @cancelMessage="hideForm()" 
     v-if="hasForm">
   </message-form>
-  
+   
   <div class="sm:flex justify-between">
     <template v-if="$store.state.user.admin">
       <template v-if="$store.state.feedType == 'private'">
@@ -354,6 +354,10 @@ export default {
     if (this.$route.params.view == 'private') {
       this.setFeedType('private');
     }
+
+    if (this.$route.params.view == 'feedback') {
+      this.setFeedType('public');
+    }
   },
 
   methods: {
@@ -373,11 +377,15 @@ export default {
         this.reactionTypes = responses[2].data;
         this.$store.commit('reactionTypes', this.reactionTypes);
         this.feedbacks = responses[3].data;
+        if (this.$store.state.hasMarkUps) {
+          this.hasForm = true;
+        }
         this.isFetched = true;
         this.message = null;
         this.canAccessPrivateMessages = this.$store.state.user.can ? this.$store.state.user.can.access_private_messages : false;
         this.setPageTitle(this.project.title);
         NProgress.done();
+
       }));
     },
 

@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <lightbox ref="widgetUserSelection" :maxWidth="'w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[500px]'" :styles="'top-4 lg:top-12 translate-y-0'">
+  <lightbox ref="widgetUserSelection" :maxWidth="'w-full max-w-[300px] sm:max-w-[400px] lg:max-w-[500px]'" :styles="'top-1/2 -translate-y-1/2'">
     <h2 class="text-lg lg:text-lg font-bold !mt-0 mb-4 sm:mb-3">{{ translate('Empfänger auswählen') }}</h2>
     <div class="mt-3 mb-6 pr-5 relative">
       <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center">

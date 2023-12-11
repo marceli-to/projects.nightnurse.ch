@@ -24,7 +24,10 @@ class Message extends Base
     'internal',
     'project_id',
     'user_id',
-    'message_id', 
+    'message_id',
+    'comments',
+    'is_comment',
+    'commentable_file_id', 
 	];
 
   protected $appends = [
@@ -51,6 +54,11 @@ class Message extends Base
   public function message()
   {
     return $this->hasOne(Message::class, 'id', 'message_id');
+  }
+
+  public function commentableFile()
+  {
+    return $this->hasOne(MessageFile::class, 'id', 'commentable_file_id');
   }
 
 	public function users()

@@ -95,6 +95,7 @@ export default {
   mixins: [i18n, Helpers],
 
   props: {
+
     project: {
       type: Object,
       default: null,
@@ -297,12 +298,23 @@ export default {
     },
 
     lock() {
+
+      // redirect to route 'messages'
+
       NProgress.start();
       this.axios.get(`${this.routes.lock}/${this.$props.image.uuid}`).then(response => {
         NProgress.done();
+
+        const data = {
+          image: this.$props.image,
+          project: this.$props.project,
+          comments: response.data.comments,
+        };
+        this.$store.commit('markup', data);
+        this.$store.commit('hasMarkUps', true);
+
+        this.$router.push({ name: 'messages', params: { slug: this.$props.project.slug, uuid: this.$props.project.uuid } });
         this.$notify({ type: "success", text: this.translate('Markierungen und Kommentare gespeichert') });
-        this.fetch();
-        this.canDelete = false;
       });
     },
 

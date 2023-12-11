@@ -135,7 +135,8 @@ export default {
         'Ihr Kommentar': 'Your comment',
         'Kommentar speichern': 'Save comment',
         'Markierungen und Kommentare gespeichert': 'Annotations and comments saved',
-
+        'Neue Markierungen für Bild': 'New annotations for image',
+        'Kommentare': 'Comments',
       },
 
       defaultLang: 'de',

@@ -5,6 +5,7 @@ use App\Http\Resources\DataCollection;
 use App\Models\Markup;
 use App\Models\MessageFile;
 use App\Http\Resources\MarkupResource;
+use App\Http\Resources\MarkupCommentResource;
 use App\Models\Project;
 use App\Http\Requests\MarkupStoreRequest;
 use Illuminate\Http\Request;
@@ -75,20 +76,34 @@ class MarkupController extends Controller
    */
   public function lock(MessageFile $messageFile)
   {
-    $markups = Markup::where('message_file_id', $messageFile->id)->where('user_id', auth()->user()->id)->get();
+    $markups = Markup::where('message_file_id', $messageFile->id)
+      ->where('user_id', auth()->user()->id)
+      ->where('is_locked', 0)
+      ->get();
+
+    $comments = [];
     foreach ($markups as $markup)
     {
-      // don't lock if type is comment and comment is empty
-      if ($markup->type === 'comment' && $markup->comment === NULL)
-      {
-        continue;
+      // treat comments differently
+      if ($markup->type == 'comment')
+      { 
+        // add and lock comment if it exists
+        if ($markup->comment)
+        {
+          $markup->is_locked = true;
+          $markup->save();
+          $comments[] = MarkupCommentResource::make($markup);
+        }
       }
-      $markup->is_locked = true;
-      $markup->save();
+      else
+      {
+        $markup->is_locked = true;
+        $markup->save();
+      }
     }
 
     return response()->json([
-      'message' => 'Markups locked',
+      'comments' => $comments,
     ]);
   }
 

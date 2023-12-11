@@ -42,6 +42,9 @@ class MessageResource extends JsonResource
       ],
       'uri' => env('APP_URL') . '/project/'. $this->project->slug . '/' . $this->project->uuid,
 
+      // Add commentable files
+      'commentable' => FileResource::make($this->commentableFile),
+
       // Group reactions by its type and get the users in an array
       'reactions' => $this->reactions->groupBy('reaction_type_id')->map(function ($reactionGroup) {
 
