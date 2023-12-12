@@ -1,17 +1,20 @@
 <template>
-<div class="w-full lg:flex lg:gap-x-4 pt-4 sm:pt-6 lg:pt-10 pb-32">
-  <div class="w-full">
+  <div class="">
+  <div class="grid grid-cols-markup">
     <markup-menu 
       @addRectangle="addRectangle"
       @addCircle="addCircle"
       @addComment="addComment"
       @deleteElement="destroy"
+      @zoomIn="zoomIn"
+      @zoomOut="zoomOut"
       :canDelete="canDelete">
     </markup-menu>
     <div 
       ref="stage"
-      class="w-full bg-no-repeat bg-contain bg-center-left bg-light"
-      :style="`background-image: url(${largeImageUri(image)}); aspect-ratio: ${image.image_ratio}`">
+      class="w-full bg-no-repeat bg-contain bg-center-left bg-light overflow-hidden relative"
+      :style="`aspect-ratio: ${image.image_ratio}`">
+      <img :src="largeImageUri(image)" width="100%" height="100%" class="absolute top-0 left-0 !m-0 !select-none -z-1" ref="stageImage" :style="`aspect-ratio: ${image.image_ratio}`"/>
       <vue-draggable-resizable 
         v-for="element in elements" :key="element.id"
         :w="element.shape.width" 
@@ -29,13 +32,14 @@
         @deactivated="onDeactivated"
         :data-id="element.uuid"
         :parent="true"
+        :rotatable="true"
         :draggable="element.draggable"
         :resizable="element.resizable">
         <template v-if="element.type === 'comment'">
           <annotation-icon class="h-6 w-6" aria-hidden="true" />
           <template v-if="element.uuid == selected && !isDragging">
             <textarea
-              class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-2 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
+              class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
               :disabled="!element.is_owner || element.is_locked"
               v-model="element.comment">
             </textarea>
@@ -43,18 +47,18 @@
         </template>
       </vue-draggable-resizable>
     </div>
-  </div>
-  <div class="mt-5 lg:mt-0 w-full lg:w-[250px] xl:w-[350px]">
-    <template v-if="comments.length">
-      <markup-comment 
-        v-for="(comment, index) in comments" 
-        :key="comment.uuid" 
-        :comment="comment"
-        :highlighted="highlightedComment"
-        @mouseover="addHighlight"
-        @mouseout="removeHighlight">
-      </markup-comment>
-    </template>
+    <div class="mt-4 px-2">
+      <template v-if="comments.length">
+        <markup-comment 
+          v-for="(comment, index) in comments" 
+          :key="comment.uuid" 
+          :comment="comment"
+          :highlighted="highlightedComment"
+          @mouseover="addHighlight"
+          @mouseout="removeHighlight">
+        </markup-comment>
+      </template>
+    </div>
   </div>
   <content-footer>
     <router-link :to="{name: 'messages', params: { slug: $props.project.slug, uuid: $props.project.uuid }}" class="form-helper form-helper-footer">
@@ -66,6 +70,7 @@
       <span class="block ml-2">{{ translate('Speichern & Freigeben') }}</span>
     </a>
   </content-footer>
+
 </div>
 </template>
 
@@ -155,6 +160,16 @@ export default {
     this.stageRectangle = this.$refs.stage.getBoundingClientRect();
     window.addEventListener('resize', this.onResizeWindow);
     window.addEventListener('keydown', this.onKeyDown);
+
+    // add event listener for scroll. scroll up should zoom in, scroll down should zoom out
+    // this.$refs.stage.addEventListener('wheel', (event) => {
+    //   if (event.deltaY < 0) {
+    //     this.zoomIn();
+    //   }
+    //   else {
+    //     this.zoomOut();
+    //   }
+    // });
   },
 
   beforeDestroy() {
@@ -298,13 +313,9 @@ export default {
     },
 
     lock() {
-
-      // redirect to route 'messages'
-
       NProgress.start();
       this.axios.get(`${this.routes.lock}/${this.$props.image.uuid}`).then(response => {
         NProgress.done();
-
         const data = {
           image: this.$props.image,
           project: this.$props.project,
@@ -312,7 +323,6 @@ export default {
         };
         this.$store.commit('markup', data);
         this.$store.commit('hasMarkUps', true);
-
         this.$router.push({ name: 'messages', params: { slug: this.$props.project.slug, uuid: this.$props.project.uuid } });
         this.$notify({ type: "success", text: this.translate('Markierungen und Kommentare gespeichert') });
       });
@@ -375,6 +385,38 @@ export default {
         element.shape.width = parseInt(elementWidth.toFixed(0));
         element.shape.height = parseInt(elementHeight.toFixed(0));
       });
+    },
+
+    zoomIn() {
+      const zoomPercentage = 5; // Zoom percentage
+
+      // Calculate the zoom factor
+      const zoomFactor = 1 + zoomPercentage / 100;
+
+      // Zoom the stage
+      this.stageRectangle.width *= zoomFactor;
+      this.stageRectangle.height *= zoomFactor;
+
+      // Zoom the elements
+      this.elements.forEach(element => {
+        element.shape.x *= zoomFactor;
+        element.shape.y *= zoomFactor;
+        element.shape.width *= zoomFactor;
+        element.shape.height *= zoomFactor;
+      });
+
+      // zoom the stage image
+      const stageImage = this.$refs.stageImage;
+      const stageImageRect = stageImage.getBoundingClientRect();
+      stageImageRect.width *= zoomFactor;
+      stageImageRect.height *= zoomFactor;
+      stageImage.style.width = stageImageRect.width + 'px';
+      stageImage.style.height = stageImageRect.height + 'px';
+    },
+
+
+    zoomOut() {
+
     },
 
     updateShape() {
@@ -477,6 +519,7 @@ export default {
       if (element) {
         element.shape.className += ' is-active';
         this.highlightedComment = id;
+        this.selected = id;
       }
     },
 
@@ -485,6 +528,7 @@ export default {
         element.shape.className = element.shape.className.replace(' is-active', '');
       });
       this.highlightedComment = null;
+      this.selected = null;
     },
 
     onActivated(id) {

@@ -43,16 +43,15 @@
   @apply text-highlight;
 }
 
-
 .shape.shape--comment.is-active textarea {
   @apply !z-[10000] absolute left-0;
   -webkit-text-fill-color: white !important;
 }
 
 .shape.shape--comment.shape--comment-rtl textarea {
-  @apply !right-0 !left-auto;
+  @apply !right-1 !left-auto;
 }
 
 .shape.shape--comment.shape--comment-ltr textarea {
-  @apply !left-0 !right-auto;
+  @apply !left-1 !right-auto;
 }
