@@ -137,6 +137,9 @@ export default {
         'Markierungen und Kommentare gespeichert': 'Annotations and comments saved',
         'Neue Markierungen für Bild': 'New annotations for image',
         'Kommentare': 'Comments',
+        'Dateinnamenprüfung fehlgeschlagen': 'Filename check failed',
+        'Der Name einer der hochgeladene Dateien entspricht nicht der Projektnummer. Trotzdem fortfahren?': 'The name of at least one of the uploaded files does not match the project number. Continue anyway?',
+        'Nachricht erfasst': 'Message created',
       },
 
       defaultLang: 'de',

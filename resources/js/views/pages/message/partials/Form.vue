@@ -131,6 +131,7 @@
       </content-footer>
       <confirm-recipients ref="confirmRecipients" />
       <confirm-intermediate ref="confirmIntermediate" />
+      <confirm-non-matching-files ref="confirmNonMatchingFiles" />
     </div>
   </form>
 </div>
@@ -162,6 +163,7 @@ import FeedItemReply from "@/components/ui/feed/Reply.vue";
 import Lightbox from "@/components/ui/layout/Lightbox.vue";
 import ConfirmIntermediate from '@/views/pages/message/components/ConfirmIntermediate.vue';
 import ConfirmRecipients from '@/views/pages/message/components/ConfirmRecipients.vue';
+import ConfirmNonMatchingFiles from '@/views/pages/message/components/ConfirmNonMatchingFiles.vue';
 
 export default {
   
@@ -194,7 +196,8 @@ export default {
     FeedItemReply,
     Lightbox,
     ConfirmIntermediate,
-    ConfirmRecipients
+    ConfirmRecipients,
+    ConfirmNonMatchingFiles
   },
 
   mixins: [i18n],
@@ -262,7 +265,7 @@ export default {
 
       // Messages
       messages: {
-        created: 'Nachricht erfasst!',
+        created: 'Nachricht erfasst',
         confirm: 'Bitte löschen bestätigen',
         deleted: 'Datei gelöscht',
         image_exceeds_max_size: 'max. Dateigrösse überschritten',
@@ -356,8 +359,10 @@ export default {
 
       this.handleIntermediates().then(result => {
         this.validateRecipients().then(result => {
+          this.handleUploads().then(result => {
           if (result === false) return;
-          this.store();
+            this.store();
+          })
         })
       });
     },
@@ -367,7 +372,7 @@ export default {
       this.data.intermediate = this.data.intermediate ? 1 : 0;
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
         this.saveRecipients();
-        this.$notify({ type: "success", text: this.messages.created });
+        this.$notify({ type: "success", text: this.translate(this.messages.created) });
         this.reset();
         window.scrollTo(0, 0);
       });
@@ -522,6 +527,30 @@ export default {
         const possibleIntermediate = this.data.files.some(file => file.name.startsWith(this.project.number));
         if (possibleIntermediate && !this.data.intermediate && this.$store.state.user.admin && this.$store.state.feedType != 'private') {
           const result = await this.$refs.confirmIntermediate.show();
+          return result;
+        }
+        else {
+          return true;
+        }
+      }
+      catch (error) {
+        throw error;
+      }
+    },
+
+    async handleUploads() {
+
+      // return true if no files or user is not admin
+      if (this.data.files.length == 0 || !this.$store.state.user.admin) {
+        return true;
+      }
+
+      try {
+        // if one of the files does not start with the project.number, 
+        // require the user to confirm the upload
+        const possibleNonMatchingFiles = this.data.files.some(file => !file.name.startsWith(this.project.number));
+        if (possibleNonMatchingFiles && this.$store.state.user.admin && this.$store.state.feedType != 'private') {
+          const result = await this.$refs.confirmNonMatchingFiles.show();
           return result;
         }
         else {
