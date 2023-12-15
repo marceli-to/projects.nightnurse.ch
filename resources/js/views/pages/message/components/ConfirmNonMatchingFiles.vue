@@ -52,6 +52,7 @@ export default {
       this.$refs.lightbox.hide();
       this.resolvePromise(false);
     },
+    
     confirm() {
       this.$refs.lightbox.hide();
       this.resolvePromise(true);
