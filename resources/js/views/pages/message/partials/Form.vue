@@ -225,6 +225,9 @@ export default {
         markup: {},
       },
 
+      hasDraft: false,
+      draftName: null,
+
       project: {
         number: null,
         name: null,
@@ -304,6 +307,9 @@ export default {
   created() {
     this.fetch();
     this.data.private = this.$store.state.feedType === 'private' ? 1 : 0;
+
+    // Handle drafts
+    this.handleDrafts();
   },
 
   methods: {
@@ -372,6 +378,7 @@ export default {
       this.data.intermediate = this.data.intermediate ? 1 : 0;
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
         this.saveRecipients();
+        this.removeDraft();
         this.$notify({ type: "success", text: this.translate(this.messages.created) });
         this.reset();
         window.scrollTo(0, 0);
@@ -457,6 +464,11 @@ export default {
 
     // Add preselected recipients
     handleRecipients() {
+
+      // Abort if we load a draft
+      if (this.hasDraft) {
+        return;
+      }
 
       // Next upgrade: check if there are any preselected recipients in local storage
       //-----------------------------------------------------------------------------
@@ -661,6 +673,27 @@ export default {
     toggle() {
       this.isVisible = this.isVisible ? false : true;
     },
+
+    handleDrafts() {
+      this.draftName = `draft-${this.$route.params.uuid}`;
+      if (localStorage.getItem(this.draftName)) {
+        this.getDraft();
+      }
+    },
+
+    getDraft() {
+      this.hasDraft = true;
+      this.data = JSON.parse(localStorage.getItem(this.draftName)).data;
+      if (this.data.files.length > 0) {
+        this.hasUploads = true;
+      }
+    },
+
+    removeDraft() {
+      localStorage.removeItem(this.draftName);
+      this.hasDraft = false;
+    },
+
   },
 
   computed: {
@@ -690,6 +723,16 @@ export default {
         return false;
       }
     },
-  }
+  },
+
+  watch: {
+    data: {
+      handler() {
+        // store all changes to this.data in local storage.
+        localStorage.setItem(this.draftName, JSON.stringify( { data: this.data } ));
+      },
+      deep: true,
+    },
+  },
 };
 </script>
