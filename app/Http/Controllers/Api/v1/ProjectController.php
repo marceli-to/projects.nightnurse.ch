@@ -58,6 +58,11 @@ class ProjectController extends Controller
     $project->update($request->all());
     $project->save();
 
+    // Handle companies
+    $companies = $request->input('companies');
+    $project->companies()->sync($companies);
+
+    // Handle users
     if ($request->input('users'))
     {
       $this->handleUsers($project, $request->input('users'));
