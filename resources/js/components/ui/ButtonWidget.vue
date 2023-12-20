@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-start mt-2">
+  <div :class="`flex justify-start mt-2 ${cls}`">
     <a href="javascript:;" 
       class="text-xs font-mono text-dark flex items-center no-underline hover:text-highlight"
       @click="$emit('click')">
@@ -19,6 +19,10 @@ export default {
 
   props: {
     label: {
+      type: String,
+      default: null
+    },
+    cls: {
       type: String,
       default: null
     }

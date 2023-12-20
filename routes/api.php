@@ -86,6 +86,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
   // Message files
   Route::get('message/file/{messageFile:uuid}', [MessageFileController::class, 'find']);
+  Route::get('message/files/{message:uuid}', [MessageFileController::class, 'get']);
 
 
   // Messages

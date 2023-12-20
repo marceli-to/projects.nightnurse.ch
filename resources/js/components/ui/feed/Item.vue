@@ -65,6 +65,7 @@
             <feed-item-attachement
               :key="message.commentable.uuid"
               :file="message.commentable"
+              :message="message"
               :truncate="false"
               :intermediate="message.intermediate"
               :private="message.private">
@@ -81,6 +82,7 @@
               :file="file"
               :truncate="hasTruncateFiles"
               :intermediate="message.intermediate"
+              :message="message"
               :private="message.private">
             </feed-item-attachement>
             <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4">

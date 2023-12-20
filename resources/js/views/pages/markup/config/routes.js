@@ -4,7 +4,7 @@ const routes = [
 
   {
     name: 'markup',
-    path: '/project/:slug/:uuid/markup/:fileUuid',
+    path: '/project/:slug/:uuid/markup/:messageUuid/:imageUuid',
     component: MarkupIndex,
   },
 

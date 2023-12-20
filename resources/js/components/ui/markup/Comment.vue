@@ -2,7 +2,7 @@
   <a href="javascript:;" 
     @mouseover="$emit('mouseover', comment.uuid)" 
     @mouseout="$emit('mouseout')"
-    :class="[highlighted == comment.uuid ? 'bg-light' : '', 'no-underline text-gray-400 flex mb-4 lg:mb-6 p-1 lg:p-2 rounded-md w-auto']">
+    :class="[highlighted == comment.uuid ? 'bg-gray-100' : '', 'no-underline text-gray-400 flex mb-4 lg:mb-6 p-1 lg:p-2 rounded-md w-full']">
     <div class="shrink-0">
       <annotation-icon class="text-gray-400 h-5 w-5" />
     </div>

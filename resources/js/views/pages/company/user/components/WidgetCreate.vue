@@ -35,7 +35,6 @@
 </template>
 <script>
 import { ArrowLeftIcon, ExclamationIcon } from "@vue-hero-icons/outline";
-import ErrorHandling from "@/mixins/ErrorHandling";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";

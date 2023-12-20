@@ -18,6 +18,7 @@ class Markup extends Model
     'shape',
     'comment',
     'is_locked',
+    'message_id',
     'message_file_id',
     'user_id',
 	];
@@ -33,6 +34,11 @@ class Markup extends Model
   public function messageFile()
   {
     return $this->hasOne(MessageFile::class, 'id', 'message_file_id');
+  }
+
+  public function message()
+  {
+    return $this->hasOne(Message::class, 'id', 'message_id');
   }
 
 	public function user()

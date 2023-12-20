@@ -356,7 +356,6 @@ export default {
           this.hasMarkupComments = this.data.markup.comments.length > 0 ? true : false;
           this.allowUploads = false;
         }
-
         this.isFetched = true;
       }));
     },
@@ -666,7 +665,9 @@ export default {
       this.isReply = false;
       this.hasMarkupComments = false;
       this.allowUploads = true;
+      this.$store.commit('markup', {});
       this.$store.commit('hasMarkUps', false);
+      this.removeDraft();
       this.$emit('cancelMessage');
     },
 

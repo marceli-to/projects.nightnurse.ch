@@ -19,14 +19,19 @@
         </div>
       </a>
       <router-link 
-        :to="{name: 'markup', params: { slug: $route.params.slug, uuid: $route.params.uuid, fileUuid: file.uuid }}"
+        :to="{name: 'markup', params: { slug: $route.params.slug, uuid: $route.params.uuid, messageUuid: message.uuid, imageUuid: file.uuid }}"
         class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3"
         v-if="file.preview">
         <div class="relative">
           <annotation-icon class="h-4 w-4 mr-2"  aria-hidden="true" />
           <div class="rounded-full bg-highlight w-[7px] h-[7px] absolute -top-[2px] right-[6px]" v-if="file.markups.length"></div>
         </div>
-        {{ translate('Kommentare') }}
+        <template v-if="file.markups.length">
+          {{ file.markups.length }} {{ translate('Kommentare') }}
+        </template>
+        <template v-else>
+          {{ translate('Kommentieren') }}
+        </template>
       </router-link>
     </template>
     <template v-else>
@@ -48,14 +53,22 @@
          </div>
       </a>
       <router-link 
-        :to="{name: 'markup', params: { slug: $route.params.slug, uuid: $route.params.uuid, fileUuid: file.uuid }}"
+        :to="{name: 'markup', params: { slug: $route.params.slug, uuid: $route.params.uuid, messageUuid: message.uuid, imageUuid: file.uuid }}"
         class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3 mt-1"
         v-if="file.preview">
         <div class="relative">
           <annotation-icon class="h-4 w-4 mr-2"  aria-hidden="true" />
           <div class="rounded-full bg-highlight w-[7px] h-[7px] absolute -top-[2px] right-[6px]" v-if="file.markups.length"></div>
         </div>
-        {{ translate('Kommentare') }}
+        <template v-if="file.markups.length == 1">
+          {{ file.markups.length }} {{ translate('Kommentar') }}
+        </template>
+        <template v-else-if="file.markups.length > 1">
+          {{ file.markups.length }} {{ translate('Kommentare') }}
+        </template>
+        <template v-else>
+          {{ translate('Kommentieren') }}
+        </template>
       </router-link>
     </template>
   </div>
@@ -84,6 +97,11 @@ export default {
   props: {
 
     file: {
+      type: Object,
+      default: null
+    },
+
+    message: {
       type: Object,
       default: null
     },

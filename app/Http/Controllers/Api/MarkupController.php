@@ -22,8 +22,16 @@ class MarkupController extends Controller
     $project = Project::where('id', $messageFile->message->project_id)->first();
     $this->authorize('containsProject', $project);
     $markups = Markup::where('message_file_id', $messageFile->id)->get();
+
+    // find unlocked markups
+    $unlockedMarkups = Markup::where('message_file_id', $messageFile->id)
+      ->where('is_locked', 0)
+      ->where('user_id', auth()->user()->id)
+      ->get();
+        
     return response()->json([
       'data' => MarkupResource::collection($markups),
+      'has_unlocked_markups' => $unlockedMarkups->count() > 0 ? true : false,
     ]);
   }
 
@@ -42,6 +50,7 @@ class MarkupController extends Controller
         $request->input('element')['shape']
       ),
       'user_id' => auth()->user()->id,
+      'message_id' => MessageFile::where('uuid', $request->input('uuid'))->first()->message_id,
       'message_file_id' => MessageFile::where('uuid', $request->input('uuid'))->first()->id
     ]);
 

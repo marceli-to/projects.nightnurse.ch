@@ -12,7 +12,6 @@ class MarkupResource extends JsonResource
    */
   public function toArray($request)
   {
-  
     return [
       'uuid' => $this->uuid,
       'date' => $this->date_string,

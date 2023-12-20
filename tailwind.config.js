@@ -8,7 +8,7 @@ module.exports = {
 
     extend: {
       gridTemplateColumns: {
-        'markup': '56px minmax(auto, 1fr) 300px',
+        'markup': '64px minmax(auto, 1fr) 280px',
       },
       fontFamily: {
         'sans': ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'sans']

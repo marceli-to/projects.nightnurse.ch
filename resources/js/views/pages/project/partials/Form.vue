@@ -262,20 +262,22 @@
     <company-create-widget @createdCompany="createdMainCompany($event)" />
   </lightbox>
 
-  <lightbox ref="widgetMainCompanySelect" v-if="isFetched">
     <company-select-widget 
+      ref="widgetMainCompanySelect"
       :companyId="data.company_id" 
       :type="'single'"
+      :title="'Hauptkunde auswählen'"
       :companies="settings.companies" 
-      @selectMainCompany="selectMainCompany($event)" />
-  </lightbox>
+      @selectMainCompany="selectMainCompany($event)"
+      v-if="isFetched" />
 
-  <lightbox ref="widgetCompanySelect" v-if="isFetched">
-    <company-select-widget 
-      :companies="settings.companies"
-      :type="'multiple'" 
-      @selectCompany="selectCompany($event)" />
-  </lightbox>
+  <company-select-widget 
+    ref="widgetCompanySelect"
+    :companies="settings.companies"
+    :type="'multiple'" 
+    :title="'Kunde auswählen'"
+    @selectCompany="selectCompany($event)"
+    v-if="isFetched" />
 
   <lightbox ref="widgetUserCreate">
     <user-create-widget :companyUuid="companyUuid" @createdUser="createdUser($event)" />
@@ -634,10 +636,8 @@ export default {
         this.data.companies[index].users.unshift(user);
       }
       this.companyUuid = null;
-
       this.addOrRemove(true, user.id);
       this.quickSave();
-
     },
 
     isUpdate() {

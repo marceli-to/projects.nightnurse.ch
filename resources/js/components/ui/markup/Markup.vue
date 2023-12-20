@@ -1,53 +1,63 @@
 <template>
-  <div class="">
-  <div class="grid grid-cols-markup">
-    <markup-menu 
-      @addRectangle="addRectangle"
-      @addCircle="addCircle"
-      @addComment="addComment"
-      @deleteElement="destroy"
-      @zoomIn="zoomIn"
-      @zoomOut="zoomOut"
-      :canDelete="canDelete">
-    </markup-menu>
-    <div 
-      ref="stage"
-      class="w-full bg-no-repeat bg-contain bg-center-left bg-light overflow-hidden relative"
-      :style="`aspect-ratio: ${image.image_ratio}`">
-      <img :src="largeImageUri(image)" width="100%" height="100%" class="absolute top-0 left-0 !m-0 !select-none -z-1" ref="stageImage" :style="`aspect-ratio: ${image.image_ratio}`"/>
-      <vue-draggable-resizable 
-        v-for="element in elements" :key="element.id"
-        :w="element.shape.width" 
-        :h="element.shape.height" 
-        :x="element.shape.x"
-        :y="element.shape.y"
-        :class-name="getElementClassNames(element.uuid)"
-        class-name-active="is-active" 
-        @dragging="onDragging" 
-        @resizing="onResize" 
-        @resizestop="onResizeStop"
-        @activated="onActivated(element.uuid)"
-        @dragstop="onDragStop"
-        :onDragStart="onDragStart"
-        @deactivated="onDeactivated"
-        :data-id="element.uuid"
-        :parent="true"
-        :rotatable="true"
-        :draggable="element.draggable"
-        :resizable="element.resizable">
-        <template v-if="element.type === 'comment'">
-          <annotation-icon class="h-6 w-6" aria-hidden="true" />
-          <template v-if="element.uuid == selected && !isDragging">
-            <textarea
-              class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
-              :disabled="!element.is_owner || element.is_locked"
-              v-model="element.comment">
-            </textarea>
-          </template>
+<div class="grid grid-cols-markup bg-gray-100">
+  <markup-menu 
+    @addRectangle="addRectangle"
+    @addCircle="addCircle"
+    @selectCircle="selectCircle"
+    @addComment="addComment"
+    @deleteElement="destroy"
+    @selectImage="fetch"
+    :canDelete="canDelete"
+    :image="currentImage ? currentImage : $props.image"
+    :images="$props.images"
+    :project="$props.project">
+  </markup-menu>
+  <div 
+    ref="stage"
+    class="w-auto max-h-[100vh] overflow-hidden relative"
+    :style="`aspect-ratio: ${currentImage ? currentImage.image_ratio : $props.image.image_ratio}`">
+    <img 
+      :src="largeImageUri(currentImage ? currentImage : $props.image)" 
+      width="100%" 
+      height="100%" 
+      draggable="false"
+      class="absolute max-h-[100vh] object-contain top-0 left-0 !m-0 !select-none -z-1" 
+      ref="stageImage" 
+      :style="`aspect-ratio: ${currentImage ? currentImage.image_ratio : $props.image.image_ratio}; drag: none; user-select: none;`"/>
+    <vue-draggable-resizable 
+      v-for="element in elements" :key="element.id"
+      :w="element.shape.width" 
+      :h="element.shape.height" 
+      :x="element.shape.x"
+      :y="element.shape.y"
+      :class-name="getElementClassNames(element.uuid)"
+      class-name-active="is-active" 
+      @dragging="onDragging" 
+      @resizing="onResize" 
+      @resizestop="onResizeStop"
+      @activated="onActivated(element.uuid)"
+      @dragstop="onDragStop"
+      :onDragStart="onDragStart"
+      @deactivated="onDeactivated"
+      :data-id="element.uuid"
+      :parent="true"
+      :rotatable="true"
+      :draggable="element.draggable"
+      :resizable="element.resizable">
+      <template v-if="element.type === 'comment'">
+        <annotation-icon class="h-6 w-6" aria-hidden="true" />
+        <template v-if="element.uuid == selected && !isDragging">
+          <textarea
+            class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
+            :disabled="!element.is_owner || element.is_locked"
+            v-model="element.comment">
+          </textarea>
         </template>
-      </vue-draggable-resizable>
-    </div>
-    <div class="mt-4 px-2">
+      </template>
+    </vue-draggable-resizable>
+  </div>
+  <div class="bg-white py-2 px-2 flex flex-col justify-between min-h-[100vh]">
+    <div>
       <template v-if="comments.length">
         <markup-comment 
           v-for="(comment, index) in comments" 
@@ -59,24 +69,27 @@
         </markup-comment>
       </template>
     </div>
+    <div>
+      <template v-if="hasUnlockedElements">
+        <a href="javascript:;" class="btn-create w-full" @click="lock()">
+          <save-icon class="h-5 w-5" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Speichern') }}</span>
+        </a>
+      </template>
+      <!-- <template v-if="$store.state.hasUnlockedMarkUps">
+        <a href="javascript:;" class="btn-create" @click="lock()">
+          <save-icon class="h-5 w-5" aria-hidden="true" />
+          <span class="block ml-2">{{ translate('Speichern & Schliessen') }}</span>
+        </a>
+      </template> -->
+    </div>
   </div>
-  <content-footer>
-    <router-link :to="{name: 'messages', params: { slug: $props.project.slug, uuid: $props.project.uuid }}" class="form-helper form-helper-footer">
-      <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
-      <span>{{ translate('Zurück') }}</span>
-    </router-link>
-    <a href="javascript:;" :class="[hasUnlockedElements == false ? 'pointer-events-none !bg-gray-200' : '', 'btn-create']" @click="lock()">
-      <save-icon class="h-5 w-5" aria-hidden="true" />
-      <span class="block ml-2">{{ translate('Speichern & Freigeben') }}</span>
-    </a>
-  </content-footer>
-
 </div>
 </template>
 
 <script>
 // https://vuejsexamples.com/vue2-component-for-resizable-rotable-and-draggable-elements/
-import { ArrowLeftIcon, SaveIcon, AnnotationIcon } from "@vue-hero-icons/outline";
+import { SaveIcon, AnnotationIcon, ChevronLeftIcon, ChevronRightIcon } from "@vue-hero-icons/outline";
 import Helpers from "@/mixins/Helpers";
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
@@ -89,9 +102,10 @@ export default {
 
   components: {
     ContentFooter,
-    ArrowLeftIcon,
     SaveIcon,
     AnnotationIcon,
+    ChevronRightIcon,
+    ChevronLeftIcon,
     VueDraggableResizable,
     MarkupMenu,
     MarkupComment,
@@ -110,6 +124,11 @@ export default {
       type: Object,
       default: null,
     },
+
+    images: {
+      type: Array,
+      default: null,
+    },
   },
 
   data() {
@@ -121,6 +140,9 @@ export default {
       // Comments
       comments: [],
 
+      // Active image
+      currentImage: null,
+
       // Acitve comment
       highlightedComment: null,
 
@@ -130,6 +152,7 @@ export default {
 
       // Selected element
       selected: null,
+      selectedType: null,
       lastSelected: null,
 
       // Stage dimensions
@@ -156,20 +179,11 @@ export default {
   },
 
   mounted() {
-    this.fetch();
+    this.currentImage = this.$props.image;
+    this.fetch(this.$props.image.uuid);
     this.stageRectangle = this.$refs.stage.getBoundingClientRect();
     window.addEventListener('resize', this.onResizeWindow);
     window.addEventListener('keydown', this.onKeyDown);
-
-    // add event listener for scroll. scroll up should zoom in, scroll down should zoom out
-    // this.$refs.stage.addEventListener('wheel', (event) => {
-    //   if (event.deltaY < 0) {
-    //     this.zoomIn();
-    //   }
-    //   else {
-    //     this.zoomOut();
-    //   }
-    // });
   },
 
   beforeDestroy() {
@@ -196,6 +210,11 @@ export default {
       };
       this.elements.push(element);
       this.create(element);
+    },
+
+    selectCircle() {
+      this.$refs.stage.style.cursor = 'copy';
+      this.selectedType = 'circle';
     },
 
     addCircle() {
@@ -239,7 +258,7 @@ export default {
 
     create(element) {
       const data = {
-        uuid: this.$props.image.uuid,
+        uuid: this.currentImage.uuid,
         element: element,
       };
       this.axios.post(this.routes.create, data).then(response => {
@@ -249,11 +268,12 @@ export default {
     },
 
     // CRUD
-    fetch() {
+    fetch(imageUuid) {
       NProgress.start();
       this.elements = [];
       this.comments = [];
-      this.axios.get(`${this.routes.get}/${this.$props.image.uuid}`).then((response) => {
+      this.currentImage = this.$props.images.find(image => image.uuid === imageUuid);
+      this.axios.get(`${this.routes.get}/${imageUuid}`).then((response) => {
         const data = response.data.data;
         data.forEach((element) => {
           if (element.type === 'comment') {
@@ -269,6 +289,7 @@ export default {
           }
           this.elements.push(element);
         });
+        this.stageRectangle = this.$refs.stage.getBoundingClientRect();
         NProgress.done();
         this.setShape();
       })
@@ -276,7 +297,7 @@ export default {
 
     update(element) {
       const data = {
-        uuid: this.$props.image.uuid,
+        uuid: this.currentImage.uuid,
         element: element,
       };
       this.axios.put(`${this.routes.update}/${element.uuid}`, data).then(response => {
@@ -314,16 +335,17 @@ export default {
 
     lock() {
       NProgress.start();
-      this.axios.get(`${this.routes.lock}/${this.$props.image.uuid}`).then(response => {
+      this.axios.get(`${this.routes.lock}/${this.currentImage.uuid}`).then(response => {
         NProgress.done();
         const data = {
-          image: this.$props.image,
+          image: this.currentImage,
           project: this.$props.project,
           comments: response.data.comments,
         };
-        this.$store.commit('markup', data);
-        this.$store.commit('hasMarkUps', true);
-        this.$router.push({ name: 'messages', params: { slug: this.$props.project.slug, uuid: this.$props.project.uuid } });
+        // this.$store.commit('markup', data);
+        // this.$store.commit('hasMarkUps', true);
+        // this.$router.push({ name: 'messages', params: { slug: this.$props.project.slug, uuid: this.$props.project.uuid } });
+        this.fetch(this.currentImage.uuid);
         this.$notify({ type: "success", text: this.translate('Markierungen und Kommentare gespeichert') });
       });
     },
@@ -385,38 +407,6 @@ export default {
         element.shape.width = parseInt(elementWidth.toFixed(0));
         element.shape.height = parseInt(elementHeight.toFixed(0));
       });
-    },
-
-    zoomIn() {
-      const zoomPercentage = 5; // Zoom percentage
-
-      // Calculate the zoom factor
-      const zoomFactor = 1 + zoomPercentage / 100;
-
-      // Zoom the stage
-      this.stageRectangle.width *= zoomFactor;
-      this.stageRectangle.height *= zoomFactor;
-
-      // Zoom the elements
-      this.elements.forEach(element => {
-        element.shape.x *= zoomFactor;
-        element.shape.y *= zoomFactor;
-        element.shape.width *= zoomFactor;
-        element.shape.height *= zoomFactor;
-      });
-
-      // zoom the stage image
-      const stageImage = this.$refs.stageImage;
-      const stageImageRect = stageImage.getBoundingClientRect();
-      stageImageRect.width *= zoomFactor;
-      stageImageRect.height *= zoomFactor;
-      stageImage.style.width = stageImageRect.width + 'px';
-      stageImage.style.height = stageImageRect.height + 'px';
-    },
-
-
-    zoomOut() {
-
     },
 
     updateShape() {
@@ -554,6 +544,11 @@ export default {
       }
       this.selected = null;
       this.highlightedComment = null;
+
+      // wait 400ms and set 'canDelete' to false
+      setTimeout(() => {
+        this.canDelete = false;
+      }, 400);
     },
 
     onResizeWindow() {
@@ -570,19 +565,6 @@ export default {
     },
 
     // Helpers
-    getRandomString() {
-      const randString = Math.random().toString(36).substring(2,24);
-      return randString;
-    },
-
-    getRandomColor() {
-      const letters = '0123456789ABCDEF';
-      let color = '#';
-      for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-      }
-      return color;
-    },
 
     getUuid() {
       let dt = new Date().getTime();
@@ -606,6 +588,7 @@ export default {
         );
         if (unlockedElements.length) {
           this.hasUnlockedElements = true;
+          this.$store.commit('hasUnlockedMarkUps', true);
         }
         else {
           this.hasUnlockedElements = false;
