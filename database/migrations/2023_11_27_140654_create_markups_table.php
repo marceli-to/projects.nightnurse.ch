@@ -20,8 +20,9 @@ return new class extends Migration
       $table->text('shape');
       $table->text('comment')->nullable();
       $table->boolean('is_locked')->default(FALSE);
-      $table->foreignId('message_file_id')->constrained();
-      $table->foreignId('user_id')->constrained();
+      $table->foreignId('message_id')->constrained()->onDelete('cascade');
+      $table->foreignId('message_file_id')->constrained()->onDelete('cascade');
+      $table->foreignId('user_id')->constrained()->onDelete('cascade');
       $table->softDeletes();
       $table->timestamps();
     });

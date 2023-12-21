@@ -58,26 +58,12 @@
               <div class="text-sm" v-html="message.body"></div>
             </template>
           </feed-item-body>
-
-          <div 
-            :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-3', '']"
-            v-if="message.commentable">
-            <feed-item-attachement
-              :key="message.commentable.uuid"
-              :file="message.commentable"
-              :message="message"
-              :truncate="false"
-              :intermediate="message.intermediate"
-              :private="message.private">
-            </feed-item-attachement>
-          </div>
-
           <div 
             :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-3', '']"
             v-if="message.files.length > 0">
             <feed-item-attachement 
               v-for="(file, idx) in message.files"
-              :key="file.uuid"
+              :key="idx"
               :index="idx"
               :file="file"
               :truncate="hasTruncateFiles"

@@ -1,5 +1,6 @@
 <?php
 namespace App\Http\Resources;
+use App\Models\MessageFile;
 use Illuminate\Http\Resources\Json\JsonResource;
  
 class FileResource extends JsonResource
@@ -22,7 +23,9 @@ class FileResource extends JsonResource
       'extension' => $this->extension,
       'preview' => $this->preview,
       'size' => \ReadableSize($this->size),
+      'locked_markups' => MarkupResource::collection($this->markups->where('is_locked', true)),
       'markups' => MarkupResource::collection($this->markups),
+      'message_uuid' => $this->message ? $this->message->uuid : null,
     ];
   }
 }

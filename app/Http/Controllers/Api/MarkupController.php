@@ -3,10 +3,12 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
 use App\Models\Markup;
+use App\Models\MarkupNotificationQueue;
+use App\Models\Message;
 use App\Models\MessageFile;
+use App\Models\Project;
 use App\Http\Resources\MarkupResource;
 use App\Http\Resources\MarkupCommentResource;
-use App\Models\Project;
 use App\Http\Requests\MarkupStoreRequest;
 use Illuminate\Http\Request;
 
@@ -21,17 +23,24 @@ class MarkupController extends Controller
   {
     $project = Project::where('id', $messageFile->message->project_id)->first();
     $this->authorize('containsProject', $project);
-    $markups = Markup::where('message_file_id', $messageFile->id)->get();
 
-    // find unlocked markups
-    $unlockedMarkups = Markup::where('message_file_id', $messageFile->id)
-      ->where('is_locked', 0)
-      ->where('user_id', auth()->user()->id)
-      ->get();
-        
+    // Get all markups for the message file
+    $markups = MarkupResource::collection(
+      Markup::where('message_file_id', $messageFile->id)->get()
+    );
+
+    // If a markup is not locked and does not belong to the current user, remove it
+    foreach ($markups as $key => $markup)
+    {
+      if ($markup->is_locked == false && $markup->user_id !== auth()->user()->id)
+      {
+        unset($markups[$key]);
+      }
+    }
+
     return response()->json([
-      'data' => MarkupResource::collection($markups),
-      'has_unlocked_markups' => $unlockedMarkups->count() > 0 ? true : false,
+      'markups' => $markups,
+      'has_unlocked_markups' => $this->hasUnlockedMarkups($messageFile->message_id),
     ]);
   }
 
@@ -78,30 +87,34 @@ class MarkupController extends Controller
   }
 
   /**
-   * Add 'is_locked' to all markups that belong to a message file and a user
+   * Save all markups
    * 
-   * @param  MessageFile $messageFile
+   * @param Message $message
+   * @param Boolean $notify
    * @return \Illuminate\Http\Response
    */
-  public function lock(MessageFile $messageFile)
+  public function save(Message $message, $notify = FALSE)
   {
-    $markups = Markup::where('message_file_id', $messageFile->id)
+    $markups = Markup::where('message_id', $message->id)
       ->where('user_id', auth()->user()->id)
       ->where('is_locked', 0)
       ->get();
 
-    $comments = [];
     foreach ($markups as $markup)
     {
-      // treat comments differently
+      // Treat comments differently
       if ($markup->type == 'comment')
       { 
-        // add and lock comment if it exists
+        // lock the comment if it has a comment
+        // delete the comment if it doesn't
         if ($markup->comment)
         {
           $markup->is_locked = true;
           $markup->save();
-          $comments[] = MarkupCommentResource::make($markup);
+        }
+        else
+        {
+          $markup->delete();
         }
       }
       else
@@ -111,8 +124,15 @@ class MarkupController extends Controller
       }
     }
 
+    if ($notify)
+    {
+      // Notify users
+      $this->notify($message);
+    }
+
     return response()->json([
-      'comments' => $comments,
+      'message' => 'Markups locked',
+      'message_id' => $message->id,
     ]);
   }
 
@@ -131,10 +151,68 @@ class MarkupController extends Controller
         'message' => 'You are not allowed to delete this markup',
       ], 403);
     }
-
     $markup->delete();
     return response()->json([
       'message' => 'Markup deleted',
+      'has_unlocked_markups' => $this->hasUnlockedMarkups(
+        MessageFile::where('id', $markup->message_file_id)->first()->message_id
+      ),
     ]);
+  }
+
+  /**
+   * Notify all users that a markup has been added
+   * 
+   * @param Message $message
+   * @return void
+   */
+  public function notify(Message $message)
+  {
+    // get the project with users by the message
+    $project = Project::where('id', $message->project_id)->with('users')->first();
+
+    // if the user is an admin, filter out all users that have role_id = 1
+    $users = [];
+    if (auth()->user()->isAdmin())
+    {
+      $users = $project->users->filter(function ($user) {
+        return $user->role_id !== 1;
+      });
+    }
+    else
+    {
+      // if the user is NOT an admin, filter out all users that do not have role id = 1
+      $users = $project->users->filter(function ($user) {
+        return $user->role_id === 1;
+      });
+
+      // add the project owner to the list
+      $users->push($project->manager);
+    }
+
+    // Loop through all users and create a notification queue entry
+    foreach ($users as $user)
+    {
+      MarkupNotificationQueue::create([
+        'message_id' => $message->id,
+        'user_id' => $user->id,
+        'sender_id' => auth()->user()->id,
+      ]);
+    }
+  }
+
+  /**
+   * Check if a message file has unlocked markups
+   * 
+   * @param Integer $messageId
+   * @return boolean
+   */
+  public function hasUnlockedMarkups($messageId)
+  {
+    $unlockedMarkups = Markup::where('message_id', $messageId)
+      ->where('is_locked', 0)
+      ->where('user_id', auth()->user()->id)
+      ->get();
+    return $unlockedMarkups->count() > 0 ? true : false;
   }
 }

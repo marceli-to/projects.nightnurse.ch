@@ -48,6 +48,7 @@ class AddRatio extends Command
       if (!in_array(strtolower($file->extension), $previewable_image_types))
       {
         $bar->advance();
+        $this->info('Skipping ' . $file->name);
         continue;
       }
 

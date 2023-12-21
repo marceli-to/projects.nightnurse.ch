@@ -2,6 +2,7 @@
 namespace App\Http\Resources;
 use App\Models\ReactionType;
 use App\Models\User;
+use App\Models\Message;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class MessageResource extends JsonResource
@@ -14,6 +15,12 @@ class MessageResource extends JsonResource
    */
   public function toArray($request)
   {
+    if ($this->markup_message_id)
+    {
+      // Get the markup message
+      $markupMessage = Message::find($this->markup_message_id);
+    }
+
     return [
       'uuid' => $this->uuid,
       'subject' => $this->subject,
@@ -30,7 +37,7 @@ class MessageResource extends JsonResource
       'message_date' => $this->message_date,
       'message_date_string' => $this->message_date_string,
       'deleted_at' => $this->deleted_at,
-      'files' => FileResource::collection($this->files),
+      'files' => $this->markup_message_id ? FileResource::collection($markupMessage->files) : FileResource::collection($this->files),
       'sender' => UserResource::make($this->sender),
       'users' => UserResource::collection($this->users),
       'is_reply' => $this->message ? true : false,
@@ -41,9 +48,6 @@ class MessageResource extends JsonResource
         'body_preview' => $this->message ? $this->message->body_preview : null,
       ],
       'uri' => env('APP_URL') . '/project/'. $this->project->slug . '/' . $this->project->uuid,
-
-      // Add commentable files
-      'commentable' => FileResource::make($this->commentableFile),
 
       // Group reactions by its type and get the users in an array
       'reactions' => $this->reactions->groupBy('reaction_type_id')->map(function ($reactionGroup) {

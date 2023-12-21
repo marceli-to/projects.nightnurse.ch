@@ -11,6 +11,8 @@ export default new Vuex.Store({
     feedType: 'public',
     recipients: [],
     reactionTypes: [],
+    markupFiles: [],
+    markupMessage: null,
     markup: {}, 
   },
   mutations: {
@@ -35,14 +37,25 @@ export default new Vuex.Store({
       state.userListIsGrouped = userListIsGrouped;
     },
 
-    hasMarkUps(state, hasMarkUps) {
-      state.hasMarkUps = hasMarkUps;
-    },
-
     hasUnlockedMarkUps(state, hasUnlockedMarkUps) {
       state.hasUnlockedMarkUps = hasUnlockedMarkUps;
     },
 
+    markupMessage(state, markupMessage) {
+      state.markupMessage = markupMessage;
+    },
+
+    // check and delete
+    markupFiles(state, markupFiles) {
+      state.markupFiles = markupFiles;
+    },
+
+    // check an delete
+    hasMarkUps(state, hasMarkUps) {
+      state.hasMarkUps = hasMarkUps;
+    },
+
+    // check and delete
     markup(state, markups) {
       state.markup = markups;
     },

@@ -26,23 +26,6 @@
           <input type="text" v-model="data.subject">
         </div>
 
-        <!-- Markups -->
-        <template v-if="hasMarkupComments">
-          <div class="form-group">
-            <label class="mb-2 lg:mb-3">{{ translate('Kommentare') }}</label>
-            <div class="flex gap-2 lg:gap-4">
-              <div v-for="comment in data.markup.comments" :key="comment.uuid" class="text-gray-400 p-1 md:max-w-sm lg:p-2 bg-light rounded-md w-auto" v-if="comment.comment">
-                <header class="text-xs text-gray-400 font-mono">
-                  {{ comment.date }} – {{ comment.author }}
-                </header>
-                <div class="text-dark text-sm leading-[1.5] mt-1">
-                  {{ comment.comment }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </template>
-
         <div class="form-group mt-6 lg:mt-8">
           <label class="mb-2 lg:mb-3">{{ translate('Mitteilung') }}</label>
           <tinymce-editor
@@ -222,7 +205,6 @@ export default {
         message_uuid: null,
         users: [],
         files: [],
-        markup: {},
       },
 
       hasDraft: false,
@@ -262,7 +244,6 @@ export default {
       isSending: false,
       isProjectManager: false,
       hasUploads: false,
-      hasMarkupComments: false,
       hasValidUpload: true,
       allowUploads: true,
 
@@ -350,12 +331,18 @@ export default {
           this.handleRecipients();
         }
 
-        if (this.$store.state.hasMarkUps) {
-          this.data.markup = this.$store.state.markup;
-          this.data.subject = `${this.translate('Neue Markierungen für Bild')} ${this.$store.state.markup.image.original_name}`;
-          this.hasMarkupComments = this.data.markup.comments.length > 0 ? true : false;
+        if (this.$store.state.markupMessage) {
+          this.data.markupMessage = this.$store.state.markupMessage;
+          this.data.subject = `${this.translate('Neue Markierungen/Kommentare')}`;
           this.allowUploads = false;
         }
+
+        // if (this.$store.state.markupFiles && this.$store.state.markupFiles.length > 0) {
+        //   this.data.markupFiles = this.$store.state.markupFiles;
+        //   this.data.subject = `${this.translate('Neue Markierungen/Kommentare')}`;
+        //   this.allowUploads = false;
+        // }
+
         this.isFetched = true;
       }));
     },
@@ -394,6 +381,8 @@ export default {
         users: [],
         files: [],
       };
+      this.$store.commit('markupMessage', null);
+      // this.$store.commit('markupFiles', []);
       this.$parent.fetch();
     },
 
@@ -663,10 +652,9 @@ export default {
     hide() {
       this.isVisible = false;
       this.isReply = false;
-      this.hasMarkupComments = false;
       this.allowUploads = true;
-      this.$store.commit('markup', {});
-      this.$store.commit('hasMarkUps', false);
+      this.$store.commit('markupMessage', null);
+      //this.$store.commit('markupFiles');
       this.removeDraft();
       this.$emit('cancelMessage');
     },

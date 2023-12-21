@@ -25,9 +25,6 @@ class Message extends Base
     'project_id',
     'user_id',
     'message_id',
-    'comments',
-    'is_comment',
-    'commentable_file_id', 
 	];
 
   protected $appends = [
@@ -56,9 +53,9 @@ class Message extends Base
     return $this->hasOne(Message::class, 'id', 'message_id');
   }
 
-  public function commentableFile()
+  public function markupMessage()
   {
-    return $this->hasOne(MessageFile::class, 'id', 'commentable_file_id');
+    return $this->hasOne(Message::class, 'id', 'markup_message_id');
   }
 
 	public function users()
@@ -70,6 +67,23 @@ class Message extends Base
   {
     return $this->hasMany(MessageFile::class, 'message_id', 'id');
   }
+
+  public function markupFiles()
+  {
+    return $this->hasMany(MessageFile::class, 'message_id', 'markup_message_id');
+  }
+
+  // public function markupFiles()
+  // {
+  //   return $this->hasManyThrough(
+  //     MessageFile::class, 
+  //     MessageMarkupFiles::class, 
+  //     'message_id', 
+  //     'id', 
+  //     'id', 
+  //     'message_file_id'
+  //   );
+  // }
 
   public function reactions()
   {

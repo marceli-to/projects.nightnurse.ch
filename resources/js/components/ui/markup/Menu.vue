@@ -1,5 +1,5 @@
 <template>
-  <nav class="bg-white pt-4 leading-none flex flex-col items-center justify-between">
+  <nav class="bg-light pt-4 leading-none flex flex-col items-center justify-between">
     <div>
       <a href="/projects" class="btn-icon flex justify-center !w-full !mr-0 !mb-4">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40.14 44.9" class="w-8 h-auto"><polygon points="8.16 0 0 10.21 0 44.9 8.16 34.7 8.16 0"></polygon><polygon points="29.25 43.31 10.89 17.11 10.89 1.6 29.25 27.79 29.25 43.31" class="brand-fill"></polygon><polygon points="40.14 0 31.98 10.21 31.98 44.9 40.14 34.7 40.14 0" class="brand-fill"></polygon></svg>
@@ -25,7 +25,7 @@
       </template>
     </div>
 
-    <div class="w-auto gap-y-1 flex flex-col justify-center rounded-md">
+    <div class="w-auto gap-y-2 flex flex-col justify-center rounded-md">
       <a href="javascript:;" @click="$emit('selectImage', thumbnail.uuid)"
         v-for="thumbnail in images"
         :key="thumbnail.uuid"
@@ -35,11 +35,11 @@
           height="100" 
           width="100"
           loading="lazy"
-          :class="[$props.image.uuid == thumbnail.uuid ? 'border-highlight' : 'border-transparent', 'border block h-auto max-w-[48px] !m-0 group-hover:border-highlight']" />
+          :class="[$props.image.uuid == thumbnail.uuid ? 'opacity-100' : 'border-transparent opacity-30', 'border block h-auto max-w-[48px] !m-0 group-hover:opacity-100 transition']" />
       </a>
     </div>
 
-    <div class="mt-12">
+    <div class="mb-12">
       <router-link :to="{name: 'messages', params: { slug: $props.project.slug, uuid: $props.project.uuid }}" class="text-black flex items-center justify-center p-3">
         <arrow-left-icon class="icon-list text-black h-5 w-5" aria-hidden="true" />
       </router-link>

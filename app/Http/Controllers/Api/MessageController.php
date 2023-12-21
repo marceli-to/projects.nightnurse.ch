@@ -6,6 +6,7 @@ use App\Http\Resources\MessageResource;
 use App\Http\Resources\MarkupCommentResource;
 use App\Models\Message;
 use App\Models\MessageFile;
+use App\Models\MessageMarkupFiles;
 use App\Models\MessageUser;
 use App\Models\Markup;
 use App\Models\Project;
@@ -33,7 +34,6 @@ class MessageController extends Controller
       ->with(
         'sender', 
         'files.markups', 
-        'commentableFile.markups',
         'users', 
         'message',
         'reactions.user', 
@@ -83,19 +83,10 @@ class MessageController extends Controller
       'user_id' => auth()->user()->id,
     ]);
 
-    // Markup?
-    $markupComments = [];
-    if ($request->input('markup'))
+    // Has markup message?
+    if ($request->input('markupMessage'))
     {
-      foreach($request->input('markup')['comments'] as $comment)
-      {
-        $markupComments[] = $comment;
-      }
-
-      // add comments to message as json
-      $message->comments = $markupComments;
-      $message->is_comment = 1;
-      $message->commentable_file_id = $request->input('markup')['image']['id'];
+      $message->markup_message_id = $request->input('markupMessage');
       $message->save();
     }
 
@@ -157,10 +148,14 @@ class MessageController extends Controller
       $project->save();
     }
 
-    $user = User::find(auth()->user()->id);
-    $message = Message::with('project.company', 'sender', 'files', 'users')->find($message->id);
-    $message->can_delete = false;
-    broadcast(new MessageSent($user, MessageResource::make($message), $project))->toOthers();
+    if (!$request->input('markupMessage'))
+    {
+      $user = User::find(auth()->user()->id);
+      $message = Message::with('project.company', 'sender', 'files', 'users')->find($message->id);
+      $message->can_delete = false;
+      broadcast(new MessageSent($user, MessageResource::make($message), $project))->toOthers();
+    }
+
     return response()->json(['messageId' => $message->id]);
   }
 

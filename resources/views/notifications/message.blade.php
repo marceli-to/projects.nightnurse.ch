@@ -35,17 +35,9 @@ An:
 {!! $message['body'] !!}
 </div>
 @endif
-@if (count(json_decode($message['comments'])) > 0)
-<div class="pt-10 message-body text-sm font-mono">
-<div><strong>Kommentare</strong></div>
-@foreach(json_decode($message['comments']) as $comment)
-<div class="pt-10 pb-10 border-bottom">
-<div class="text-xs font-mono">{{ $comment->date }} – {{ $comment->author }}:</div>
-<div class="text-xs font-mono pt-5">{{ $comment->comment }}</div>
-</div>
-@endforeach
+@if ($message['markupMessage']['uuid'] && isset($message['markupFiles'][0]))
 <div class="pt-20 pb-5 text-right text-xs text-slate font-mono">
-<a href="{{url('')}}/project/{{$message['project']['slug']}}/{{$message['project']['uuid']}}/markup/{{$message['commentableFile']['uuid']}}" class="text-xs text-slate font-mono">Kommentare und Markierungen anzeigen</a>
+<a href="{{url('')}}/project/{{$message['project']['slug']}}/{{$message['project']['uuid']}}/markup/{{$message['markupMessage']['uuid']}}/{{$message['markupFiles'][0]['uuid']}}" class="text-xs text-slate font-mono">Kommentare und Markierungen anzeigen</a>
 </div>
 </div>
 @else

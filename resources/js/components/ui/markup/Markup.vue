@@ -1,89 +1,86 @@
 <template>
-<div class="grid grid-cols-markup bg-gray-100">
-  <markup-menu 
-    @addRectangle="addRectangle"
-    @addCircle="addCircle"
-    @selectCircle="selectCircle"
-    @addComment="addComment"
-    @deleteElement="destroy"
-    @selectImage="fetch"
-    :canDelete="canDelete"
-    :image="currentImage ? currentImage : $props.image"
-    :images="$props.images"
-    :project="$props.project">
-  </markup-menu>
-  <div 
-    ref="stage"
-    class="w-auto max-h-[100vh] overflow-hidden relative"
-    :style="`aspect-ratio: ${currentImage ? currentImage.image_ratio : $props.image.image_ratio}`">
-    <img 
-      :src="largeImageUri(currentImage ? currentImage : $props.image)" 
-      width="100%" 
-      height="100%" 
-      draggable="false"
-      class="absolute max-h-[100vh] object-contain top-0 left-0 !m-0 !select-none -z-1" 
-      ref="stageImage" 
-      :style="`aspect-ratio: ${currentImage ? currentImage.image_ratio : $props.image.image_ratio}; drag: none; user-select: none;`"/>
-    <vue-draggable-resizable 
-      v-for="element in elements" :key="element.id"
-      :w="element.shape.width" 
-      :h="element.shape.height" 
-      :x="element.shape.x"
-      :y="element.shape.y"
-      :class-name="getElementClassNames(element.uuid)"
-      class-name-active="is-active" 
-      @dragging="onDragging" 
-      @resizing="onResize" 
-      @resizestop="onResizeStop"
-      @activated="onActivated(element.uuid)"
-      @dragstop="onDragStop"
-      :onDragStart="onDragStart"
-      @deactivated="onDeactivated"
-      :data-id="element.uuid"
-      :parent="true"
-      :rotatable="true"
-      :draggable="element.draggable"
-      :resizable="element.resizable">
-      <template v-if="element.type === 'comment'">
-        <annotation-icon class="h-6 w-6" aria-hidden="true" />
-        <template v-if="element.uuid == selected && !isDragging">
-          <textarea
-            class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
-            :disabled="!element.is_owner || element.is_locked"
-            v-model="element.comment">
-          </textarea>
+<div>
+  <div class="grid grid-cols-markup bg-white">
+    <markup-menu 
+      @addRectangle="addRectangle"
+      @addCircle="addCircle"
+      @selectCircle="selectCircle"
+      @addComment="addComment"
+      @deleteElement="destroy"
+      @selectImage="fetch"
+      :canDelete="canDelete"
+      :image="currentImage ? currentImage : $props.image"
+      :images="$props.images"
+      :project="$props.project">
+    </markup-menu>
+    <div 
+      ref="stage"
+      class="w-auto max-h-[100vh] overflow-hidden relative"
+      :style="`aspect-ratio: ${currentImage ? currentImage.image_ratio : $props.image.image_ratio}`">
+      <img 
+        :src="largeImageUri(currentImage ? currentImage : $props.image)" 
+        width="100%" 
+        height="100%" 
+        draggable="false"
+        class="absolute max-h-[100vh] object-contain top-0 left-0 !m-0 !select-none -z-1" 
+        ref="stageImage" 
+        :style="`aspect-ratio: ${currentImage ? currentImage.image_ratio : $props.image.image_ratio}; drag: none; user-select: none;`"/>
+      <vue-draggable-resizable 
+        v-for="element in elements" :key="element.id"
+        :w="element.shape.width" 
+        :h="element.shape.height" 
+        :x="element.shape.x"
+        :y="element.shape.y"
+        :class-name="getElementClassNames(element.uuid)"
+        class-name-active="is-active" 
+        @dragging="onDragging" 
+        @resizing="onResize" 
+        @resizestop="onResizeStop"
+        @activated="onActivated(element.uuid)"
+        @dragstop="onDragStop"
+        :onDragStart="onDragStart"
+        @deactivated="onDeactivated"
+        :data-id="element.uuid"
+        :parent="true"
+        :rotatable="true"
+        :draggable="element.draggable"
+        :resizable="element.resizable">
+        <template v-if="element.type === 'comment'">
+          <annotation-icon class="h-6 w-6" aria-hidden="true" />
+          <template v-if="element.uuid == selected && !isDragging">
+            <textarea
+              class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
+              :disabled="!element.is_owner || element.is_locked"
+              v-model="element.comment">
+            </textarea>
+          </template>
         </template>
-      </template>
-    </vue-draggable-resizable>
-  </div>
-  <div class="bg-white py-2 px-2 flex flex-col justify-between min-h-[100vh]">
-    <div>
-      <template v-if="comments.length">
-        <markup-comment 
-          v-for="(comment, index) in comments" 
-          :key="comment.uuid" 
-          :comment="comment"
-          :highlighted="highlightedComment"
-          @mouseover="addHighlight"
-          @mouseout="removeHighlight">
-        </markup-comment>
-      </template>
+      </vue-draggable-resizable>
     </div>
-    <div>
-      <template v-if="hasUnlockedElements">
-        <a href="javascript:;" class="btn-create w-full" @click="lock()">
-          <save-icon class="h-5 w-5" aria-hidden="true" />
-          <span class="block ml-2">{{ translate('Speichern') }}</span>
-        </a>
-      </template>
-      <!-- <template v-if="$store.state.hasUnlockedMarkUps">
-        <a href="javascript:;" class="btn-create" @click="lock()">
-          <save-icon class="h-5 w-5" aria-hidden="true" />
-          <span class="block ml-2">{{ translate('Speichern & Schliessen') }}</span>
-        </a>
-      </template> -->
+    <div class="bg-white border-l-2 border-l-gray-100 pt-2 pb-4 px-2 flex flex-col justify-between min-h-[100vh]">
+      <div>
+        <template v-if="comments.length">
+          <markup-comment 
+            v-for="(comment, index) in comments" 
+            :key="comment.uuid" 
+            :comment="comment"
+            :highlighted="highlightedComment"
+            @mouseover="addHighlight"
+            @mouseout="removeHighlight">
+          </markup-comment>
+        </template>
+      </div>
+      <div class="flex justify-end">
+        <template v-if="hasUnlockedElements || $store.state.hasUnlockedMarkUps">
+          <a href="javascript:;" class="btn-create w-full" @click="$refs.modalStore.show()">
+            <save-icon class="h-5 w-5" aria-hidden="true" />
+            <span class="block ml-2">{{ translate('Speichern') }}</span>
+          </a>
+        </template>
+      </div>
     </div>
   </div>
+  <markup-modal-store ref="modalStore" @save="save" @saveWithMessage="saveWithMessage" />
 </div>
 </template>
 
@@ -96,6 +93,7 @@ import NProgress from 'nprogress';
 import VueDraggableResizable from 'vue-draggable-resizable'
 import MarkupMenu from '@/components/ui/markup/Menu.vue';
 import MarkupComment from '@/components/ui/markup/Comment.vue';
+import MarkupModalStore from '@/components/ui/markup/ModalStore.vue';
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 
 export default {
@@ -109,6 +107,7 @@ export default {
     VueDraggableResizable,
     MarkupMenu,
     MarkupComment,
+    MarkupModalStore,
   },
 
   mixins: [i18n, Helpers],
@@ -170,7 +169,7 @@ export default {
       // Routes
       routes: {
         get: '/api/markups',
-        lock: '/api/markups/lock',
+        save: '/api/markups/save',
         create: '/api/markup',
         update: '/api/markup',
         delete: '/api/markup',
@@ -274,8 +273,8 @@ export default {
       this.comments = [];
       this.currentImage = this.$props.images.find(image => image.uuid === imageUuid);
       this.axios.get(`${this.routes.get}/${imageUuid}`).then((response) => {
-        const data = response.data.data;
-        data.forEach((element) => {
+        const elements = response.data.markups;
+        elements.forEach((element) => {
           if (element.type === 'comment') {
             if (element.comment) {
               this.comments.push({
@@ -289,6 +288,7 @@ export default {
           }
           this.elements.push(element);
         });
+        this.$store.commit('hasUnlockedMarkUps', response.data.has_unlocked_markups);
         this.stageRectangle = this.$refs.stage.getBoundingClientRect();
         NProgress.done();
         this.setShape();
@@ -330,22 +330,26 @@ export default {
       }
       this.axios.delete(`${this.routes.delete}/${this.lastSelected}`).then(response => {
         this.removeElement();
+        this.$store.commit('hasUnlockedMarkUps', response.data.has_unlocked_markups);
       });
     },
 
-    lock() {
+    save() {
       NProgress.start();
-      this.axios.get(`${this.routes.lock}/${this.currentImage.uuid}`).then(response => {
-        NProgress.done();
-        const data = {
-          image: this.currentImage,
-          project: this.$props.project,
-          comments: response.data.comments,
-        };
-        // this.$store.commit('markup', data);
-        // this.$store.commit('hasMarkUps', true);
-        // this.$router.push({ name: 'messages', params: { slug: this.$props.project.slug, uuid: this.$props.project.uuid } });
-        this.fetch(this.currentImage.uuid);
+      this.axios.get(`${this.routes.save}/${this.$route.params.messageUuid}/1`).then(response => {
+        NProgress.done();        
+        this.$router.push({ name: 'messages', params: { slug: this.$props.project.slug, uuid: this.$props.project.uuid } });
+        this.$notify({ type: "success", text: this.translate('Markierungen und Kommentare gespeichert') });
+      });
+    },
+
+    saveWithMessage() {
+      NProgress.start();
+      this.axios.get(`${this.routes.save}/${this.$route.params.messageUuid}`).then(response => {
+        NProgress.done();        
+        // this.$store.commit('markupFiles', response.data.files);
+        this.$store.commit('markupMessage', response.data.message_id);
+        this.$router.push({ name: 'messages', params: { slug: this.$props.project.slug, uuid: this.$props.project.uuid } });
         this.$notify({ type: "success", text: this.translate('Markierungen und Kommentare gespeichert') });
       });
     },
@@ -545,10 +549,10 @@ export default {
       this.selected = null;
       this.highlightedComment = null;
 
-      // wait 400ms and set 'canDelete' to false
+      // wait 100ms and set 'canDelete' to false
       setTimeout(() => {
         this.canDelete = false;
-      }, 400);
+      }, 100);
     },
 
     onResizeWindow() {
@@ -563,8 +567,6 @@ export default {
         this.destroy();
       }
     },
-
-    // Helpers
 
     getUuid() {
       let dt = new Date().getTime();

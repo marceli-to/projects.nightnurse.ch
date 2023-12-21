@@ -99,7 +99,7 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::delete('message/{message:uuid}', [MessageController::class, 'destroy']);
 
   // Markups
-  Route::get('markups/lock/{messageFile:uuid}', [MarkupController::class, 'lock']);
+  Route::get('markups/save/{message:uuid}/{notify?}', [MarkupController::class, 'save']);
   Route::get('markups/{messageFile:uuid}', [MarkupController::class, 'get']);
   Route::post('markup/comment', [MarkupController::class, 'comment']);
   Route::post('markup', [MarkupController::class, 'create']);

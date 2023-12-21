@@ -377,9 +377,13 @@ export default {
         this.reactionTypes = responses[2].data;
         this.$store.commit('reactionTypes', this.reactionTypes);
         this.feedbacks = responses[3].data;
-        if (this.$store.state.hasMarkUps) {
+        
+        if (this.$store.state.markupMessage) {
           this.hasForm = true;
         }
+        // if (this.$store.state.markupFiles && this.$store.state.markupFiles.length > 0) {
+        //   this.hasForm = true;
+        // }
         this.isFetched = true;
         this.message = null;
         this.canAccessPrivateMessages = this.$store.state.user.can ? this.$store.state.user.can.access_private_messages : false;

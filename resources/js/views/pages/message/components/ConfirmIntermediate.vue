@@ -1,5 +1,5 @@
 <template>
-  <lightbox ref="lightbox" :maxWidth="'max-w-[280px] lg:max-w-[400px]'">
+  <lightbox ref="lightbox" :maxWidth="'max-w-[280px] md:max-w-[400px]'">
     <div>
       <h2 class="text-lg lg:text-lg font-bold !mt-0 mb-4 sm:mb-3">
         {{ translate('Zwischenstand') }}

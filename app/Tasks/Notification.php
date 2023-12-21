@@ -5,7 +5,7 @@ class Notification
 {
   public function __invoke()
   {
-    $messageUsers = \App\Models\MessageUser::with('user.language', 'message.project.manager', 'message.files', 'message.sender', 'message.users', 'message.commentableFile')->where('processed', '=', 0)->get();
+    $messageUsers = \App\Models\MessageUser::with('user.language', 'message.project.manager', 'message.files', 'message.markupMessage', 'message.markupFiles', 'message.sender', 'message.users')->where('processed', '=', 0)->get();
     $messageUsers = collect($messageUsers)->splice(0, \Config::get('client.cron_chunk_size'));
     $env = app()->environment();
     
