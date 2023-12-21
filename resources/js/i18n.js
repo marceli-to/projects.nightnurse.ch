@@ -136,6 +136,7 @@ export default {
         'Kommentar speichern': 'Save comment',
         'Markierungen und Kommentare gespeichert': 'Annotations and comments saved',
         'Neue Markierungen für Bild': 'New annotations for image',
+        'Kommentar': 'Comment',
         'Kommentare': 'Comments',
         'Kommentieren': 'Comment',
         'Dateinnamenprüfung fehlgeschlagen': 'Filename check failed',
