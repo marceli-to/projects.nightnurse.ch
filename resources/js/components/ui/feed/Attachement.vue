@@ -26,8 +26,11 @@
           <annotation-icon class="h-4 w-4 mr-2"  aria-hidden="true" />
           <div class="rounded-full bg-highlight w-[7px] h-[7px] absolute -top-[2px] right-[6px]" v-if="file.markups.length"></div>
         </div>
-        <template v-if="file.markups.length">
-          {{ file.markups.length }} {{ translate('Kommentare') }}
+        <template v-if="file.locked_markups.length == 1">
+          {{ file.locked_markups.length }} {{ translate('Kommentar') }}
+        </template>
+        <template v-else-if="file.locked_markups.length > 1">
+          {{ file.locked_markups.length }} {{ translate('Kommentare') }}
         </template>
         <template v-else>
           {{ translate('Kommentieren') }}
