@@ -105,8 +105,7 @@ class MarkupController extends Controller
       // Treat comments differently
       if ($markup->type == 'comment')
       { 
-        // lock the comment if it has a comment
-        // delete the comment if it doesn't
+        // lock the comment if it has a comment or delete the comment if it doesn't
         if ($markup->comment)
         {
           $markup->is_locked = true;
