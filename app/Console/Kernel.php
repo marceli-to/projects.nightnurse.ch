@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
   protected function schedule(Schedule $schedule)
   {
     $schedule->call(new Notification)->everyMinute();
-    // $schedule->call(new Markup)->everyMinute();
+    $schedule->call(new Markup)->everyMinute();
     $schedule->call(new Feedback)->everyMinute();
     $schedule->call(new CleanUpFiles)->everyMinute();
   }
