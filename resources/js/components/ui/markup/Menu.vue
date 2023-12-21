@@ -39,7 +39,7 @@
       </a>
     </div>
 
-    <div class="mb-12">
+    <div>
       <router-link :to="{name: 'messages', params: { slug: $props.project.slug, uuid: $props.project.uuid }}" class="text-black flex items-center justify-center p-3">
         <arrow-left-icon class="icon-list text-black h-5 w-5" aria-hidden="true" />
       </router-link>
