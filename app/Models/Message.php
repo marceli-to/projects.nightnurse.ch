@@ -129,7 +129,7 @@ class Message extends Base
    */
   public function getCanDeleteAttribute($value)
   {
-    return $this->user_id == auth()->user()->id ? true : false;
+    return $this->user_id == auth()->user()->id && !$this->markupFiles ? true : false;
   }
 
   /**
