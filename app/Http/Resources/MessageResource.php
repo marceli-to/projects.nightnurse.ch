@@ -37,7 +37,7 @@ class MessageResource extends JsonResource
       'message_date' => $this->message_date,
       'message_date_string' => $this->message_date_string,
       'deleted_at' => $this->deleted_at,
-      'files' => $this->markup_message_id ? FileResource::collection($markupMessage?->files) : FileResource::collection($this->files),
+      'files' => $this->markup_message_id ? FileResource::collection($markupMessage->files) : FileResource::collection($this->files),
       'sender' => UserResource::make($this->sender),
       'users' => UserResource::collection($this->users),
       'is_reply' => $this->message ? true : false,
