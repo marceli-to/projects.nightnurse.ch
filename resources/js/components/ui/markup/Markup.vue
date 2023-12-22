@@ -42,6 +42,7 @@
         :onDragStart="onDragStart"
         @deactivated="onDeactivated"
         :data-id="element.uuid"
+        :data-shape-id="element.shape.id"
         :parent="true"
         :rotatable="true"
         :draggable="element.draggable"
@@ -305,7 +306,7 @@ export default {
           height: 20, 
           x: x,
           y: y,
-          className: 'shape shape--comment', 
+          className: 'shape shape--comment',
         }
       };
       this.isFresh = true;
@@ -314,6 +315,7 @@ export default {
     },
 
     create(element) {
+
       const data = {
         uuid: this.currentImage.uuid,
         element: element,
@@ -321,13 +323,16 @@ export default {
       this.axios.post(this.routes.create, data).then(response => {
         element.uuid = response.data.markup.uuid;
         element.is_owner = response.data.markup.is_owner;
-        this.selected = element.uuid;
-        this.$store.commit('hasUnlockedMarkUps', true);
-        if (element.commentable) {
-          this.selected = null;
-          this.isFresh = false;
-          element.shape.className = this.getCommentClassNames(element);
-        }
+        element.shape.relative_attributes = this.getRelativeAttributes(element);
+        this.axios.put(`${this.routes.update}/${element.uuid}`, {element: element}).then(response => {
+          this.selected = element.uuid;
+          this.$store.commit('hasUnlockedMarkUps', true);
+          if (element.commentable) {
+            this.selected = null;
+            this.isFresh = false;
+            element.shape.className = this.getCommentClassNames(element);
+          }
+        })
       });
     },
 
@@ -443,6 +448,24 @@ export default {
         return 'shape shape--comment shape--comment-rtl';
       }
       return 'shape shape--comment shape--comment-ltr';
+    },
+
+    getRelativeAttributes(element) {
+      // get the x and y position and the width and height of the element relative to the stage in percent
+      const stageRect = this.$refs.stage.getBoundingClientRect();
+      const elementRect = document.querySelector(`[data-shape-id="${element.shape.id}"]`).getBoundingClientRect();
+      const elementY = (elementRect.top - stageRect.top) / stageRect.height * 100;
+      const elementX = (elementRect.left - stageRect.left) / stageRect.width * 100;
+      const elementWidth = elementRect.width / stageRect.width * 100;
+      const elementHeight = elementRect.height / stageRect.height * 100;
+
+      // create an object 'relative'
+      return {
+        x: elementX,
+        y: elementY,
+        width: elementWidth,
+        height: elementHeight,
+      };
     },
 
     removeElement() {
