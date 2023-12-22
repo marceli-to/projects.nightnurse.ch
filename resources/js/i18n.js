@@ -142,6 +142,10 @@ export default {
         'Dateinnamenprüfung fehlgeschlagen': 'Filename check failed',
         'Der Name einer der hochgeladene Dateien entspricht nicht der Projektnummer. Trotzdem fortfahren?': 'The name of at least one of the uploaded files does not match the project number. Continue anyway?',
         'Nachricht erfasst': 'Message created',
+        'Weiter': 'Continue',
+        'Möchten Sie zusätzlich zu den Kommentaren noch eine Nachricht erfassen?': 'Would you like to add a message in addition to the comments?',
+        'Speichern & Schliessen': 'Save and close',
+        'Speichern & Nachricht': 'Save and message',
       },
 
       defaultLang: 'de',

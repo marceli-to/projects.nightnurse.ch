@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="min-w-[700px]">
   <div class="grid grid-cols-markup bg-white">
     <markup-menu 
       @addRectangle="addRectangle"
@@ -48,10 +48,10 @@
         :resizable="element.resizable">
         <template v-if="element.type === 'comment'">
           <annotation-icon class="h-6 w-6" aria-hidden="true" />
-          <template v-if="element.uuid == selected && !isDragging && element.is_owner">
+          <template v-if="element.uuid == selected && !isDragging && !isFresh">
             <textarea
               class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
-              :disabled="element.is_locked"
+              :disabled="!element.is_owner || element.is_locked"
               v-model="element.comment">
             </textarea>
           </template>
@@ -74,8 +74,8 @@
       <div class="flex justify-end">
         <template v-if="hasUnlockedElements || $store.state.hasUnlockedMarkUps">
           <a href="javascript:;" class="btn-create w-full" @click="$refs.modalStore.show()">
-            <save-icon class="h-5 w-5" aria-hidden="true" />
-            <span class="block ml-2">{{ translate('Speichern') }}</span>
+            <span class="block mr-2">{{ translate('Weiter') }}</span>
+            <arrow-narrow-right-icon class="h-5 w-5" aria-hidden="true" />
           </a>
         </template>
       </div>
@@ -87,7 +87,7 @@
 
 <script>
 // https://vuejsexamples.com/vue2-component-for-resizable-rotable-and-draggable-elements/
-import { SaveIcon, AnnotationIcon, ChevronLeftIcon, ChevronRightIcon } from "@vue-hero-icons/outline";
+import { SaveIcon, AnnotationIcon, ChevronLeftIcon, ChevronRightIcon, ArrowNarrowRightIcon } from "@vue-hero-icons/outline";
 import Helpers from "@/mixins/Helpers";
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
@@ -105,6 +105,7 @@ export default {
     AnnotationIcon,
     ChevronRightIcon,
     ChevronLeftIcon,
+    ArrowNarrowRightIcon,
     VueDraggableResizable,
     MarkupMenu,
     MarkupComment,
@@ -164,6 +165,7 @@ export default {
       // States
       isFetched: false,
       isDragging: false,
+      isFresh: false,
       canDelete: false,
       hasUnlockedElements: false,
 
@@ -306,6 +308,7 @@ export default {
           className: 'shape shape--comment', 
         }
       };
+      this.isFresh = true;
       this.elements.push(element);
       this.create(element);
     },
@@ -322,6 +325,7 @@ export default {
         this.$store.commit('hasUnlockedMarkUps', true);
         if (element.commentable) {
           this.selected = null;
+          this.isFresh = false;
           element.shape.className = this.getCommentClassNames(element);
         }
       });

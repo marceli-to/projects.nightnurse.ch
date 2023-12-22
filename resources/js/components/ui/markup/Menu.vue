@@ -25,7 +25,7 @@
       </template>
     </div>
 
-    <div class="w-auto gap-y-2 flex flex-col justify-center rounded-md">
+    <div class="w-auto gap-y-2 flex flex-col justify-center rounded-md -mt-[150px]">
       <a href="javascript:;" @click="$emit('selectImage', thumbnail.uuid)"
         v-for="thumbnail in images"
         :key="thumbnail.uuid"

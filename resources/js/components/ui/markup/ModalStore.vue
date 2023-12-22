@@ -1,22 +1,22 @@
 <template>
-  <lightbox ref="lightbox" :maxWidth="'max-w-[280px] md:max-w-[460px]'">
+  <lightbox ref="lightbox" :maxWidth="'max-w-[360px] md:max-w-[480px]'">
     <div>
       <h2 class="text-lg lg:text-lg font-bold !mt-0 mb-4 sm:mb-3">
         {{ translate('Aktion auswählen') }}
       </h2>
       <p>
-        {{ translate('Wählen Sie eine Aktion aus, um die Kommentare und Markierungen zu speichern und, falls gewünscht, eine Nachricht an die Projektbeteiligten zu senden.') }}
+        {{ translate('Möchten Sie zusätzlich zu den Kommentaren noch eine Nachricht erfassen?') }}
       </p>
-      <div class="flex gap-x-2 justify-between">
+      <div class="flex flex-col md:flex-row gap-y-2 md:gap-y-0 md:gap-x-2 md:justify-between">
         <a 
           href="javascript:;" 
-          class="btn-primary !bg-gray-400 hover:!bg-dark p-2 md:!py-3 md:!px-4 !w-auto !flex justify-center items-center"
+          class="btn-primary !bg-gray-400 hover:!bg-dark p-1 md:!py-3 md:!px-4 !w-auto !flex justify-center items-center md:leading-0"
           @click="save()">
-          {{ translate('Speichern & zurück') }}
+          {{ translate('Speichern & Schliessen') }}
         </a>
         <a 
           href="javascript:;" 
-          class="btn-primary p-2 md:!py-3 md:!px-4 !w-auto !flex justify-center items-center"
+          class="btn-primary p-1 md:!py-3 md:!px-4 !w-auto !flex justify-center items-center md:leading-0"
           @click="saveWithMessage()">
           {{ translate('Speichern & Nachricht') }}
         </a>
