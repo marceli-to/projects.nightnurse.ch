@@ -6,7 +6,6 @@ use App\Http\Resources\MessageResource;
 use App\Http\Resources\MarkupCommentResource;
 use App\Models\Message;
 use App\Models\MessageFile;
-use App\Models\MessageMarkupFiles;
 use App\Models\MessageUser;
 use App\Models\Markup;
 use App\Models\Project;

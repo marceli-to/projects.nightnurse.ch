@@ -4,10 +4,11 @@
     <markup-menu 
       @addRectangle="addRectangle"
       @addCircle="addCircle"
-      @selectCircle="selectCircle"
       @addComment="addComment"
       @deleteElement="destroy"
+      @selectShape="selectShape"
       @selectImage="fetch"
+      :selectedShape="selectedShape"
       :canDelete="canDelete"
       :image="currentImage ? currentImage : $props.image"
       :images="$props.images"
@@ -47,10 +48,10 @@
         :resizable="element.resizable">
         <template v-if="element.type === 'comment'">
           <annotation-icon class="h-6 w-6" aria-hidden="true" />
-          <template v-if="element.uuid == selected && !isDragging">
+          <template v-if="element.uuid == selected && !isDragging && element.is_owner">
             <textarea
               class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
-              :disabled="!element.is_owner || element.is_locked"
+              :disabled="element.is_locked"
               v-model="element.comment">
             </textarea>
           </template>
@@ -151,7 +152,7 @@ export default {
 
       // Selected element
       selected: null,
-      selectedType: null,
+      selectedShape: null,
       lastSelected: null,
 
       // Stage dimensions
@@ -181,18 +182,77 @@ export default {
     this.currentImage = this.$props.image;
     this.fetch(this.$props.image.uuid);
     this.stageRectangle = this.$refs.stage.getBoundingClientRect();
+
     window.addEventListener('resize', this.onResizeWindow);
     window.addEventListener('keydown', this.onKeyDown);
+
+    // Add event listener for 'click on stage' and add element
+    this.$refs.stage.addEventListener('click', (event) => {
+      if (!this.selectedShape) {
+        return;
+      }
+      const stageRect = this.$refs.stage.getBoundingClientRect();
+      const stageX = event.clientX - stageRect.left;
+      const stageY = event.clientY - stageRect.top;
+
+      switch (this.selectedShape) {
+        case 'circle':
+          this.addCircle(stageX, stageY);
+          this.$refs.stage.style.cursor = 'default';
+          this.selectedShape = null;
+        break;
+        case 'rectangle':
+          this.addRectangle(stageX, stageY);
+          this.$refs.stage.style.cursor = 'default';
+          this.selectedShape = null;
+        break;
+        case 'comment':
+          this.addComment(stageX, stageY);
+          this.$refs.stage.style.cursor = 'default';
+          this.selectedShape = null;
+        break;
+      }
+
+    });
+
+    // On right mouse click, remove the selected element
+    this.$refs.stage.addEventListener('contextmenu', (event) => {
+      // only if this.selectedShape is not null
+      if (!this.selectedShape) {
+        return;
+      }
+      event.preventDefault();
+      this.cancelShape();
+    });
+
+    // On 'esc' key, remove the selected element
+    window.addEventListener('keyup', (event) => {
+      if (event.key === 'Escape') {
+        this.cancelShape();
+      }
+    });
   },
 
   beforeDestroy() {
     window.removeEventListener('resize', this.onResizeWindow);
+    window.addEventListener('keydown', this.onKeyDown);
+    this.$refs.stage.removeEventListener('click', this.onStageClick);
   },
 
   methods: {
 
     // CRUD
-    addRectangle() {
+    selectShape(shape) {
+      this.$refs.stage.style.cursor = 'copy';
+      this.selectedShape = shape;
+    },
+
+    cancelShape() {
+      this.$refs.stage.style.cursor = 'default';
+      this.selectedShape = null;
+    },
+
+    addRectangle(x, y) {
       const element = {
         is_locked: false,
         type: 'rectangle',
@@ -203,20 +263,15 @@ export default {
           className: 'shape', 
           width: 100, 
           height: 100, 
-          x: 10, 
-          y: 10, 
+          x: x - 50, 
+          y: y - 50, 
         }
       };
       this.elements.push(element);
       this.create(element);
     },
 
-    selectCircle() {
-      this.$refs.stage.style.cursor = 'copy';
-      this.selectedType = 'circle';
-    },
-
-    addCircle() {
+    addCircle(x, y) {
       const element = {
         is_locked: false,
         type: 'circle',
@@ -226,8 +281,8 @@ export default {
           id: this.getUuid(),
           width: 100, 
           height: 100, 
-          x: 10, 
-          y: 10,
+          x: x - 50, 
+          y: y - 50,
           className: 'shape shape--circle', 
         }
       };
@@ -235,7 +290,7 @@ export default {
       this.create(element);
     },
 
-    addComment() {
+    addComment(x, y) {
       const element = {
         is_locked: false,
         type: 'comment',
@@ -246,9 +301,9 @@ export default {
           id: this.getUuid(),
           width: 20, 
           height: 20, 
-          x: 10,
-          y: 10,
-          className: 'is-active shape shape--comment', 
+          x: x,
+          y: y,
+          className: 'shape shape--comment', 
         }
       };
       this.elements.push(element);
@@ -263,6 +318,12 @@ export default {
       this.axios.post(this.routes.create, data).then(response => {
         element.uuid = response.data.markup.uuid;
         element.is_owner = response.data.markup.is_owner;
+        this.selected = element.uuid;
+        this.$store.commit('hasUnlockedMarkUps', true);
+        if (element.commentable) {
+          this.selected = null;
+          element.shape.className = this.getCommentClassNames(element);
+        }
       });
     },
 
@@ -370,6 +431,14 @@ export default {
         classNames += element.is_locked ? ' is-locked' : '';
       }
       return classNames;
+    },
+
+    getCommentClassNames(element) {
+      const stageRect = this.$refs.stage.getBoundingClientRect();
+      if (element.shape.x > stageRect.width / 2) {
+        return 'shape shape--comment shape--comment-rtl';
+      }
+      return 'shape shape--comment shape--comment-ltr';
     },
 
     removeElement() {
@@ -491,14 +560,9 @@ export default {
           height: elementHeight,
         };
 
-        // if the element.shape.x is right of theh center of the stage, move the comment to the left
+        // if the element is a comment and the element.shape.x is right of the center of the stage, move the comment to the left
         if (element.type == 'comment') {
-          if (element.shape.x > stageRect.width / 2) {
-            element.shape.className = 'shape shape--comment shape--comment-rtl';
-          }
-          else {
-            element.shape.className = 'shape shape--comment shape--comment-ltr';
-          }
+          element.shape.className = this.getCommentClassNames(element);
         }
 
         this.dragStartX = null;
@@ -543,16 +607,25 @@ export default {
 
     onDeactivated() {
       const element = this.getElement(this.selected);
+      if (!element) {
+        return;
+      }
+
       if (element.is_owner && element.comment && element.comment !== this.tempComment) {
         this.update(element);
       }
-      this.selected = null;
-      this.highlightedComment = null;
+      this.removeHighlight(this.selected);
 
-      // wait 100ms and set 'canDelete' to false
+      // wait 100ms and set 'canDelete' to false only if no other element is selected
       setTimeout(() => {
-        this.canDelete = false;
+        if (!this.selected) {
+          this.canDelete = false;
+        }
       }, 100);
+
+
+
+
     },
 
     onResizeWindow() {

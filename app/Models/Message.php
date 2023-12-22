@@ -73,18 +73,6 @@ class Message extends Base
     return $this->hasMany(MessageFile::class, 'message_id', 'markup_message_id');
   }
 
-  // public function markupFiles()
-  // {
-  //   return $this->hasManyThrough(
-  //     MessageFile::class, 
-  //     MessageMarkupFiles::class, 
-  //     'message_id', 
-  //     'id', 
-  //     'id', 
-  //     'message_file_id'
-  //   );
-  // }
-
   public function reactions()
   {
     return $this->hasMany(Reaction::class);
