@@ -35,7 +35,7 @@ An:
 {!! $message['body'] !!}
 </div>
 @endif
-@if ($message['markupMessage']['uuid'] && isset($message['markupFiles'][0]))
+@if (isset($message['markupMessage']) && $message['markupMessage']['uuid'] && isset($message['markupFiles'][0]))
 <div class="pt-20 pb-5 text-right text-xs text-slate font-mono">
 <a href="{{url('')}}/project/{{$message['project']['slug']}}/{{$message['project']['uuid']}}/markup/{{$message['markupMessage']['uuid']}}/{{$message['markupFiles'][0]['uuid']}}" class="text-xs text-slate font-mono">Kommentare und Markierungen anzeigen</a>
 </div>
