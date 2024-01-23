@@ -354,6 +354,9 @@ export default {
     if (this.$route.params.view == 'private') {
       this.setFeedType('private');
     }
+    else {
+      this.setFeedType('public');
+    }
 
     if (this.$route.params.view == 'feedback') {
       this.setFeedType('public');
@@ -437,10 +440,6 @@ export default {
         }
       }
       this.$store.commit('feedType', attribute);
-    },
-
-    resetFeedType() {
-      this.$store.commit('feedType', 'public');
     },
 
     filteredItems(items) {
