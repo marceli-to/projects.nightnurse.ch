@@ -350,7 +350,9 @@ export default {
     submit() {
 
       this.handleIntermediates().then(result => {
+        if (result === false) return;
         this.validateRecipients().then(result => {
+          if (result === false) return;
           this.handleUploads().then(result => {
           if (result === false) return;
             this.store();

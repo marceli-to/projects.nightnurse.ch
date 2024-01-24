@@ -21,7 +21,7 @@ use Illuminate\Http\Request;
 class ProjectController extends Controller
 {
   /**
-   * Get a list of projects
+   * Get a list of active & archived projects
    * 
    * @return \Illuminate\Http\Response
    */
@@ -65,7 +65,6 @@ class ProjectController extends Controller
       ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
       ->get();
-
     return response()->json(['projects' => ProjectListResource::collection($projects)]);
   }
 
@@ -86,7 +85,6 @@ class ProjectController extends Controller
                       ->orderBy('number', 'DESC')
                       ->where('user_id', auth()->user()->id)
                       ->get();
-        
 
       // Get 'all projects'
      $projects = Project::archive()->with('state', 'company', 'companies', 'manager')
@@ -97,7 +95,6 @@ class ProjectController extends Controller
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
                     ->get();
-
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
     }
 
@@ -111,7 +108,6 @@ class ProjectController extends Controller
       ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
       ->get();
-    
     return response()->json(['projects' => ProjectListResource::collection($projects)]);
   }
 
@@ -132,7 +128,6 @@ class ProjectController extends Controller
                       ->orderBy('number', 'DESC')
                       ->where('user_id', auth()->user()->id)
                       ->get();
-        
 
       // Get 'all projects'
      $projects = Project::concluded()->with('state', 'company', 'companies', 'manager')
@@ -143,7 +138,6 @@ class ProjectController extends Controller
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
                     ->get();
-
       return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
     }
 
@@ -157,7 +151,6 @@ class ProjectController extends Controller
       ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
       ->get();
-    
     return response()->json(['projects' => ProjectListResource::collection($projects)]);
   }
 
@@ -179,7 +172,6 @@ class ProjectController extends Controller
                       ->where('user_id', auth()->user()->id)
                       ->where('deleted_at', '!=', null)
                       ->get();
-        
 
       // Get 'all projects'
      $projects = Project::withTrashed()->with('state', 'company', 'companies', 'manager')

@@ -23750,7 +23750,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     submit: function submit() {
       var _this2 = this;
       this.handleIntermediates().then(function (result) {
+        if (result === false) return;
         _this2.validateRecipients().then(function (result) {
+          if (result === false) return;
           _this2.handleUploads().then(function (result) {
             if (result === false) return;
             _this2.store();
