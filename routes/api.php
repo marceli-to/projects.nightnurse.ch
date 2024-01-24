@@ -50,9 +50,9 @@ Route::middleware('auth:api')->group(function() {
   Route::post('v1/project', [ProjectApiController::class, 'store']);
   Route::put('v1/project/{project}', [ProjectApiController::class, 'update']);
   Route::get('v1/project/state/{project}', [ProjectApiController::class, 'toggle']);
-  Route::get('v1/project/restore/{project:uuid}', [ProjectApiController::class, 'restore'])->withTrashed();
-  Route::delete('v1/project/force/{project:uuid}', [ProjectApiController::class, 'forceDelete'])->withTrashed();
-  Route::delete('v1/project/{project:uuid}', [ProjectApiController::class, 'delete'])->withTrashed();
+  Route::get('v1/project/restore/{project}', [ProjectApiController::class, 'restore'])->withTrashed();
+  Route::delete('v1/project/force/{project}', [ProjectApiController::class, 'forceDelete'])->withTrashed();
+  Route::delete('v1/project/{project}', [ProjectApiController::class, 'delete'])->withTrashed();
 
   Route::post('v1/message', [MessageApiController::class, 'store']);
   Route::get('v1/messages/{project}', [MessageApiController::class, 'get']);
