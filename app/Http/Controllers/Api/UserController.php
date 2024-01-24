@@ -268,6 +268,12 @@ class UserController extends Controller
     // get company by uuid
     $company = Company::with('users')->where('uuid', $request->input('company_uuid'))->get()->first();
 
+    // return true if company has no users
+    if ($company->users->count() == 0)
+    {
+      return true;
+    }
+
     // get domain from email
     $emailDomain = explode('@', $request->input('email'))[1];
 

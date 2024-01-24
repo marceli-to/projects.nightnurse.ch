@@ -162,7 +162,12 @@
               :checked="checkUser(user.id)"
               @change="toggleOne($event, user.id)">
               <label class="inline-block text-gray-800" :for="user.uuid">
-                {{ user.email }}
+                <template v-if="user.full_name != user.email">
+                  {{ user.full_name }}, {{ user.email }}
+                </template>
+                <template v-else>
+                  {{ user.email }}
+                </template>
               </label>
               <router-link 
                 :to="{name: 'user-update', params: { companyUuid: data.company.uuid, uuid: user.uuid, redirect: `/project/update/${$route.params.slug}/${$route.params.uuid}`}}" 
@@ -201,7 +206,12 @@
                   :checked="checkUser(user.id)"
                   @change="toggleOne($event, user.id)">
                   <label class="inline-block text-gray-800" :for="user.uuid">
-                    {{ user.email }}
+                    <template v-if="user.full_name != user.email">
+                      {{ user.full_name }}, {{ user.email }}
+                    </template>
+                    <template v-else>
+                      {{ user.email }}
+                    </template>
                   </label>
                   <router-link 
                     :to="{name: 'user-update', params: { companyUuid: data.company.uuid, uuid: user.uuid, redirect: `/project/update/${$route.params.slug}/${$route.params.uuid}`}}" 
@@ -633,7 +643,12 @@ export default {
       // Other companies?
       const index = this.data.companies.findIndex(x => x.uuid === this.companyUuid);
       if (index > -1) {
-        this.data.companies[index].users.unshift(user);
+        if (this.data.companies[index].users) {
+          this.data.companies[index].users.unshift(user);
+        }
+        else {
+          this.data.companies[index].users = [user];
+        }
       }
       this.companyUuid = null;
       this.addOrRemove(true, user.id);

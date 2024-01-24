@@ -25713,7 +25713,11 @@ __webpack_require__.r(__webpack_exports__);
         return x.uuid === _this9.companyUuid;
       });
       if (index > -1) {
-        this.data.companies[index].users.unshift(user);
+        if (this.data.companies[index].users) {
+          this.data.companies[index].users.unshift(user);
+        } else {
+          this.data.companies[index].users = [user];
+        }
       }
       this.companyUuid = null;
       this.addOrRemove(true, user.id);
@@ -33277,7 +33281,7 @@ var render = function render() {
       attrs: {
         "for": user.uuid
       }
-    }, [_vm._v("\n                " + _vm._s(user.email) + "\n              ")]), _vm._v(" "), _c("router-link", {
+    }, [user.full_name != user.email ? [_vm._v("\n                  " + _vm._s(user.full_name) + ", " + _vm._s(user.email) + "\n                ")] : [_vm._v("\n                  " + _vm._s(user.email) + "\n                ")]], 2), _vm._v(" "), _c("router-link", {
       staticClass: "block text-gray-400 ml-2 hover:text-highlight",
       attrs: {
         to: {
@@ -33358,7 +33362,7 @@ var render = function render() {
         attrs: {
           "for": user.uuid
         }
-      }, [_vm._v("\n                    " + _vm._s(user.email) + "\n                  ")]), _vm._v(" "), _c("router-link", {
+      }, [user.full_name != user.email ? [_vm._v("\n                      " + _vm._s(user.full_name) + ", " + _vm._s(user.email) + "\n                    ")] : [_vm._v("\n                      " + _vm._s(user.email) + "\n                    ")]], 2), _vm._v(" "), _c("router-link", {
         staticClass: "block text-gray-400 ml-2 hover:text-highlight",
         attrs: {
           to: {
