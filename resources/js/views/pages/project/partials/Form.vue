@@ -240,7 +240,7 @@
     <content-footer>
       <button type="submit" class="btn-primary">{{ translate('Speichern') }}</button>
       <template v-if="$route.params.redirect">
-        <router-link :to="{ name: 'messages', params: { slug: $route.params.slug, uuid: $route.params.uuid } }" class="form-helper form-helper-footer">
+        <router-link :to="{ name: 'messages', params: { slug: $route.params.slug, uuid: $route.params.uuid, view: $store.state.feedType } }" class="form-helper form-helper-footer">
           <arrow-left-icon class="h-5 w-5" aria-hidden="true" />
           <span>{{ translate('Zurück') }}</span>
         </router-link>

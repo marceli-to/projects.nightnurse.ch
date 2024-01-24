@@ -427,19 +427,11 @@ export default {
     },
 
     setFeedType(attribute) {
-      if (attribute == 'public') {
-        this.$store.commit('feedType', attribute);
-        // remove /private if its there and push new route
-        this.$router.push({ path: this.$route.path.replace('/private', '') });
-      }
-      else if (attribute == 'private') {
-        this.$store.commit('feedType', attribute);
-        // add /private if its not already there and push new route
-        if (this.$route.path.indexOf('/private') == -1) {
-          this.$router.push({ path: `${this.$route.path}/private` });
-        }
+      if (attribute == this.$store.state.feedType) {
+        return;
       }
       this.$store.commit('feedType', attribute);
+      this.$router.push({ name: 'messages', params: { slug: this.$route.params.slug, uuid: this.$route.params.uuid, view: this.$store.state.feedType } })
     },
 
     filteredItems(items) {
