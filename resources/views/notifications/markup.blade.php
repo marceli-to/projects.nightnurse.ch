@@ -29,6 +29,6 @@
 <div class="pt-20 pb-5 text-right text-xs text-slate font-mono">
 <a href="{{url('')}}/project/{{$message['project']['slug']}}/{{$message['project']['uuid']}}/markup/{{$message['uuid']}}/{{$message['files'][0]['uuid']}}" class="text-xs text-slate font-mono">Kommentare und Markierungen anzeigen</a>
 </div>
-</div>
 @endif
+</div>
 @endcomponent
