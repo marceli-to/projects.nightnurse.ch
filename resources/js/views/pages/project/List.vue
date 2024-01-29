@@ -16,20 +16,18 @@
       <switch-horizontal-icon class="h-4 w-4" aria-hidden="true" />
       <span class="block ml-2">{{ translate('Zwischenstände anzeigen') }}</span>
     </a>
-
     <div>
       <select 
         v-model="type" 
         @change="selectType()"
         class="!border-none text-xs font-mono text-gray-400 min-w-[215px] text-right pr-2">
         <option value="active">{{ translate('Aktive Projekte') }}</option>
-        <option value="concluded">{{ translate('Abgeschlossene Projekte') }}</option>
         <option value="archived">{{ translate('Archivierte Projekte') }}</option>
-        <option value="trashed">{{ translate('Gelöschte Projekte') }}</option>
       </select>
     </div>  
   </div>
 
+  <!-- user projects -->
   <div v-if="data.user_projects.length" class="max-w-5xl">
     <div v-for="d in data.user_projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
@@ -82,11 +80,123 @@
         </div>
       </div>
     </div>
-    <hr class="max-w-5xl border-bottom !mt-10 !my-8 !lg:mt-12 !my-10">
+    <hr class="max-w-5xl border-bottom !mt-10 !lg:mt-12 !my-10">
   </div>
   
+  <!-- non user projects -->
   <div v-if="data.projects.length" class="max-w-5xl">
     <div v-for="d in data.projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
+      <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
+      <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+          {{d.number}}
+        </router-link>
+      </div>
+      <div class="col-span-8 md:col-span-9">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+          <span class="font-bold">{{ d.name }}</span>
+          <span v-if="d.company">
+            <separator class="hidden sm:inline-block" />
+            <br class="sm:hidden">{{ d.company.name }}
+          </span>
+        </router-link>
+        <div v-if="d.preview_messages" :class="[showIntermediates ? 'flex' : '', '']">
+          <template v-if="showIntermediates">
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" :class="[message.intermediate ? 'mt-2' : '', '']">
+              <project-thumbnail-item :message="message" :project="d" v-if="message.intermediate"/>
+            </div>
+          </template>
+          <template v-else>
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" class="mt-2">
+              <project-list-item :message="message" :project="d" />
+            </div>
+          </template>
+        </div>
+      </div>
+      <div class="col-span-2 md:col-span-2">
+        <div class="flex items-center justify-end gap-x-2">
+          <template v-if="$store.state.user.admin">
+            <router-link :to="{name: 'project-update', params: { slug: d.slug, uuid: d.uuid }}">
+              <pencil-alt-icon class="icon-list" aria-hidden="true" />
+            </router-link>
+            <template v-if="type == 'trashed'">
+              <a href="" @click.prevent="restore(d.uuid)" :title="translate('Wiederherstellen')">
+                <refresh-icon class="icon-list" aria-hidden="true" />
+              </a>
+            </template>
+            <a href="" @click.prevent="destroy(d.uuid)" :title="translate('Löschen')">
+              <trash-icon class="icon-list" aria-hidden="true" />
+            </a>
+          </template>
+          <template v-else-if="$store.state.user.client_admin && d.state == 'active'">
+            <router-link :to="{name: 'project-access', params: { slug: d.slug, uuid: d.uuid }}" :title="translate('Zugriffe verwalten')">
+              <users-icon class="icon-list" aria-hidden="true" />
+            </router-link>
+          </template>
+        </div>
+      </div>
+    </div>
+    <hr class="max-w-5xl border-bottom !mt-10 !lg:mt-12 !my-10">
+  </div>
+
+  <!-- concluded projects -->
+  <div v-if="data.concluded_projects.length" class="max-w-5xl opacity-40">
+    <div v-for="d in data.concluded_projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
+      <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
+      <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+          {{d.number}}
+        </router-link>
+      </div>
+      <div class="col-span-8 md:col-span-9">
+        <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
+          <span class="font-bold">{{ d.name }}</span>
+          <span v-if="d.company">
+            <separator class="hidden sm:inline-block" />
+            <br class="sm:hidden">{{ d.company.name }}
+          </span>
+        </router-link>
+        <div v-if="d.preview_messages" :class="[showIntermediates ? 'flex' : '', '']">
+          <template v-if="showIntermediates">
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" :class="[message.intermediate ? 'mt-2' : '', '']">
+              <project-thumbnail-item :message="message" :project="d" v-if="message.intermediate"/>
+            </div>
+          </template>
+          <template v-else>
+            <div v-for="(message, iteration) in d.preview_messages" :key="message.uuid" class="mt-2">
+              <project-list-item :message="message" :project="d" />
+            </div>
+          </template>
+        </div>
+      </div>
+      <div class="col-span-2 md:col-span-2">
+        <div class="flex items-center justify-end gap-x-2">
+          <template v-if="$store.state.user.admin">
+            <router-link :to="{name: 'project-update', params: { slug: d.slug, uuid: d.uuid }}">
+              <pencil-alt-icon class="icon-list" aria-hidden="true" />
+            </router-link>
+            <template v-if="type == 'trashed'">
+              <a href="" @click.prevent="restore(d.uuid)" :title="translate('Wiederherstellen')">
+                <refresh-icon class="icon-list" aria-hidden="true" />
+              </a>
+            </template>
+            <a href="" @click.prevent="destroy(d.uuid)" :title="translate('Löschen')">
+              <trash-icon class="icon-list" aria-hidden="true" />
+            </a>
+          </template>
+          <template v-else-if="$store.state.user.client_admin && d.state == 'active'">
+            <router-link :to="{name: 'project-access', params: { slug: d.slug, uuid: d.uuid }}" :title="translate('Zugriffe verwalten')">
+              <users-icon class="icon-list" aria-hidden="true" />
+            </router-link>
+          </template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- archived projects -->
+  <div v-if="data.archived_projects.length" class="max-w-5xl opacity-40">
+    <div v-for="d in data.archived_projects" :key="d.uuid" class="grid grid-cols-12 mb-6 sm:mb-8 lg:mb-10 text-xs sm:text-sm text-dark relative">
       <div class="absolute top-0 left-0 h-full w-[4px] rounded" :style="`background-color: ${d.color}`"></div>
       <div class="col-span-2 md:col-span-1 pl-2 sm:pl-3">
         <router-link :to="{name: 'messages', params: { slug: d.slug, uuid: d.uuid }}" class="relative text-dark font-normal no-underline">
@@ -195,7 +305,9 @@ export default {
       // Data
       data: {
         user_projects: [],
-        all_projects: [],
+        projects: [],
+        concluded_projects: [],
+        archived_projects: [],
       },
 
       // Routes
@@ -203,8 +315,6 @@ export default {
         list: {
           active: '/api/projects',
           archived: '/api/projects/archive',
-          concluded: '/api/projects/concluded',
-          trashed: '/api/projects/trashed',
         },
         toggle: '/api/project/state',
         destroy: {
@@ -241,11 +351,12 @@ export default {
   methods: {
 
     fetch() {
-
       NProgress.start();
       this.axios.get(this.routes.list[this.type]).then(response => {
         this.data.user_projects = response.data.user_projects ? response.data.user_projects : [];
+        this.data.concluded_projects = response.data.concluded_projects ? response.data.concluded_projects : [];
         this.data.projects = response.data.projects ? response.data.projects : [];
+        this.data.archived_projects = response.data.archived_projects ? response.data.archived_projects : [];
         this.isFetched = true;
         NProgress.done();
       });

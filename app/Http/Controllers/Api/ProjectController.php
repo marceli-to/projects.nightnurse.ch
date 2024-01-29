@@ -29,7 +29,6 @@ class ProjectController extends Controller
   {
     if (auth()->user()->isAdmin())
     {
-      // Get 'my projects'
       $user_projects = Project::with('state', 'company', 'companies', 'manager')
                       ->with(['previewMessages' => function ($query) {
                         $query->with('sender', 'files')->limit(3);
@@ -43,7 +42,6 @@ class ProjectController extends Controller
                       ->active()
                       ->get();
     
-      // Get 'all projects'
       $projects = Project::active()->with('state', 'company', 'companies', 'manager')
                     ->with(['previewMessages' => function ($query) {
                       $query->with('sender', 'files')->limit(3);
@@ -52,10 +50,9 @@ class ProjectController extends Controller
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
                     ->get();
-      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+      return response()->json(['user_projects' => $user_projects, 'projects' => $projects, 'concluded_projects' => $this->getConcluded()]);
     }
   
-    // Get user projects
     $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
     $projects = Project::active()->with('company')
       ->with(['previewMessages' => function ($query) {
@@ -65,7 +62,7 @@ class ProjectController extends Controller
       ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
       ->get();
-    return response()->json(['projects' => ProjectListResource::collection($projects)]);
+    return response()->json(['projects' => ProjectListResource::collection($projects), 'concluded_projects' => ProjectListResource::collection($this->getConcluded())]);
   }
 
   /**
@@ -95,7 +92,7 @@ class ProjectController extends Controller
                     ->orderBy('number', 'DESC')
                     ->where('user_id', '!=', auth()->user()->id)
                     ->get();
-      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+      return response()->json(['user_projects' => $user_projects, 'projects' => $projects, 'archived_projects' => $this->getTrashed()]);
     }
 
     // Get user projects
@@ -108,83 +105,58 @@ class ProjectController extends Controller
       ->orderBy('last_activity', 'DESC')
       ->orderBy('number', 'DESC')
       ->get();
-    return response()->json(['projects' => ProjectListResource::collection($projects)]);
+    return response()->json(['projects' => ProjectListResource::collection($projects), 'archived_projects' => ProjectListResource::collection($this->getTrashed())]);
   }
 
   /**
    * Get a list of concluded projects
-   * 
-   * @return \Illuminate\Http\Response
    */
-  public function getConcluded()
+  private function getConcluded()
   {
     if (auth()->user()->isAdmin())
     {
-      $user_projects = Project::concluded()->with('state', 'company', 'companies', 'manager')
-                      ->with(['previewMessages' => function ($query) {
-                        $query->with('sender', 'files')->limit(3);
-                      }])
-                      ->orderBy('last_activity', 'DESC')
-                      ->orderBy('number', 'DESC')
-                      ->where('user_id', auth()->user()->id)
-                      ->get();
+      $projects = Project::concluded()->with('state', 'company', 'companies', 'manager')
+                  ->with(['previewMessages' => function ($query) {
+                    $query->with('sender', 'files')->limit(3);
+                  }])
+                  ->orderBy('last_activity', 'DESC')
+                  ->orderBy('number', 'DESC')
+                  ->get();
 
-      // Get 'all projects'
-     $projects = Project::concluded()->with('state', 'company', 'companies', 'manager')
-                    ->with(['previewMessages' => function ($query) {
-                      $query->with('sender', 'files')->limit(3);
-                    }])
-                    ->orderBy('last_activity', 'DESC')
-                    ->orderBy('number', 'DESC')
-                    ->where('user_id', '!=', auth()->user()->id)
-                    ->get();
-      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+      return $projects;
     }
 
     // Get user projects
     $ids = ProjectUser::where('user_id', auth()->user()->id)->get()->pluck('project_id');
     $projects = Project::concluded()->with('company')
-      ->with(['previewMessages' => function ($query) {
-        $query->with('sender', 'files')->limit(3);
-      }])
-      ->whereIn('id', $ids)
-      ->orderBy('last_activity', 'DESC')
-      ->orderBy('number', 'DESC')
-      ->get();
-    return response()->json(['projects' => ProjectListResource::collection($projects)]);
+                ->with(['previewMessages' => function ($query) {
+                  $query->with('sender', 'files')->limit(3);
+                }])
+                ->whereIn('id', $ids)
+                ->orderBy('last_activity', 'DESC')
+                ->orderBy('number', 'DESC')
+                ->get();
+
+    return ProjectListResource::collection($projects);
   }
 
   /**
    * Get a list of trashed projects
    * 
-   * @return \Illuminate\Http\Response
    */
-  public function getTrashed()
+  private function getTrashed()
   {
     if (auth()->user()->isAdmin())
     {
-      $user_projects = Project::withTrashed()->with('state', 'company', 'companies', 'manager')
-                      ->with(['previewMessages' => function ($query) {
-                        $query->with('sender', 'files')->limit(3);
-                      }])
-                      ->orderBy('last_activity', 'DESC')
-                      ->orderBy('number', 'DESC')
-                      ->where('user_id', auth()->user()->id)
-                      ->where('deleted_at', '!=', null)
-                      ->get();
-
-      // Get 'all projects'
-     $projects = Project::withTrashed()->with('state', 'company', 'companies', 'manager')
+      $projects = Project::withTrashed()->with('state', 'company', 'companies', 'manager')
                     ->with(['previewMessages' => function ($query) {
                       $query->with('sender', 'files')->limit(3);
                     }])
                     ->orderBy('last_activity', 'DESC')
                     ->orderBy('number', 'DESC')
-                    ->where('user_id', '!=', auth()->user()->id)
                     ->where('deleted_at', '!=', null)
                     ->get();
-
-      return response()->json(['user_projects' => $user_projects, 'projects' => $projects]);
+      return $projects;
     }
 
     // Get user projects
@@ -199,7 +171,7 @@ class ProjectController extends Controller
       ->orderBy('number', 'DESC')
       ->get();
     
-    return response()->json(['projects' => ProjectListResource::collection($projects)]);
+    return $projects;
   }
 
   /**
