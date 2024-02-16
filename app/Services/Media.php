@@ -166,6 +166,27 @@ class Media
     return Storage::delete('public/uploads' . DIRECTORY_SEPARATOR . $filename);
   }
 
+  /** Moves a file to the trashed folder */
+  public function trash($filename = NULL, $folder = NULL)
+  {
+    if ($folder)
+    {
+      if (!File::isDirectory($this->storage_path . DIRECTORY_SEPARATOR . 'trashed' . DIRECTORY_SEPARATOR . $folder))
+      {
+        File::makeDirectory($this->storage_path . DIRECTORY_SEPARATOR . 'trashed' . DIRECTORY_SEPARATOR . $folder, 0775, true, true);
+      }
+
+      return Storage::move(
+        'public/uploads' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $filename,
+        'public/uploads' . DIRECTORY_SEPARATOR . 'trashed' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $filename
+      );
+    }
+    return Storage::move(
+      'public/uploads' . DIRECTORY_SEPARATOR . $filename,
+      'public/uploads' . DIRECTORY_SEPARATOR . 'trashed' . DIRECTORY_SEPARATOR . $filename
+    );
+  }
+
   /**
    * Sanitize a filename
    *
