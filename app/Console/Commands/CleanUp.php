@@ -49,8 +49,8 @@ class Cleanup extends Command
     foreach ($projects as $project)
     {
       $this->info('project id: ' . $project->id);
-      // Get all messages for the project
-      $messages = $project->messages;
+      // Get all messages for the project (including soft deleted ones)
+      $messages = Message::withTrashed()->where('project_id', $project->id)->get();
   
       // Loop through each message
       foreach ($messages as $message)
