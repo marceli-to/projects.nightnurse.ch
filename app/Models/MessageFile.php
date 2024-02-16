@@ -9,6 +9,7 @@ class MessageFile extends Base
 {
   use HasFactory, SoftDeletes;
 
+
 	protected $fillable = [
     'uuid',
     'name',
@@ -20,6 +21,7 @@ class MessageFile extends Base
     'size',
     'preview',
     'message_id',
+    'file_deleted_at',
 	];
 
   /**

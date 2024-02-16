@@ -26,6 +26,7 @@ class FileResource extends JsonResource
       'locked_markups' => MarkupResource::collection($this->markups->where('is_locked', true)),
       'markups' => MarkupResource::collection($this->markups),
       'message_uuid' => $this->message ? $this->message->uuid : null,
+      'file_deleted_at' => $this->file_deleted_at ? date('d.m.Y', strtotime($this->file_deleted_at)) : null
     ];
   }
 }

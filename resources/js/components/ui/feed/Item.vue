@@ -90,14 +90,15 @@
                   <span class="inline-block ml-2">{{ translate('Weniger anzeigen') }}</span>
                 </a>
               </template>
-              <a 
-                :href="`/download/zip/${message.uuid}`" 
-                target="_blank" 
-                :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']">
-                <folder-download-icon class="h-5 w-5" aria-hidden="true" />
-                <span class="inline-block ml-2">{{ translate('Download als ZIP') }}</span>
-              </a>
-              
+              <template v-if="hasNonDeletedFiles(message.files)">
+                <a 
+                  :href="`/download/zip/${message.uuid}`" 
+                  target="_blank" 
+                  :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']">
+                  <folder-download-icon class="h-5 w-5" aria-hidden="true" />
+                  <span class="inline-block ml-2">{{ translate('Download als ZIP') }}</span>
+                </a>
+              </template>
             </span>
           </div>
 
@@ -252,6 +253,10 @@ export default {
 
     getTruncateLimit(message) {
       return message.intermediate ? 20 : 3;
+    },
+
+    hasNonDeletedFiles(files) {
+      return files.filter(file => !file.file_deleted_at).length > 0;
     }
   },
 

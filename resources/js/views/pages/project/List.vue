@@ -227,23 +227,30 @@
       <div class="col-span-2 md:col-span-2">
         <div class="flex items-center justify-end gap-x-2">
           <template v-if="$store.state.user.admin">
-            <router-link :to="{name: 'project-update', params: { slug: d.slug, uuid: d.uuid }}">
-              <pencil-alt-icon class="icon-list" aria-hidden="true" />
-            </router-link>
-            <template v-if="type == 'trashed'">
+
+            <template v-if="!d.deleted_at">
+              <router-link :to="{name: 'project-update', params: { slug: d.slug, uuid: d.uuid }}">
+                <pencil-alt-icon class="icon-list" aria-hidden="true" />
+              </router-link>
+            </template>
+
+            <template v-if="d.deleted_at">
               <a href="" @click.prevent="restore(d.uuid)" :title="translate('Wiederherstellen')">
                 <refresh-icon class="icon-list" aria-hidden="true" />
               </a>
             </template>
+            
             <a href="" @click.prevent="destroy(d.uuid)" :title="translate('Löschen')">
               <trash-icon class="icon-list" aria-hidden="true" />
             </a>
           </template>
+
           <template v-else-if="$store.state.user.client_admin && d.state == 'active'">
             <router-link :to="{name: 'project-access', params: { slug: d.slug, uuid: d.uuid }}" :title="translate('Zugriffe verwalten')">
               <users-icon class="icon-list" aria-hidden="true" />
             </router-link>
           </template>
+          
         </div>
       </div>
     </div>

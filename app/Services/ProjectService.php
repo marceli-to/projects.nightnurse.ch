@@ -60,12 +60,40 @@ class ProjectService
       return TRUE;
     }
 
-    // Softdelete
+    // Softdelete should do the following:
+    // - set state to 4 (deleted)
+    // - delete the project
+    // - delete all messages and message files
+    // - set 'file_deleted_at' on message files table
+    // - physically delete the files from the server
+
+    // Get all messages for this project
+    $messages = $project->messages()->get();
+
+    // Loop through each message
+    foreach ($messages as $message)
+    {
+      $files = $message->files()->withTrashed()->get();
+
+      $this->media->removeMany($files);
+      $this->media->removeFolder($project->uuid);
+
+      // Loop through each file and delete it
+      foreach ($files as $file)
+      {
+        $file->file_deleted_at = now();
+        $file->save();
+      }
+      // Delete the message
+      $message->delete();
+    }
+    // Set state to 4 (deleted)
     $project->project_state_id = 4;
     $project->save();
 
     // Delete the project
     $project->delete();
+
     return TRUE;
   }
 
@@ -78,9 +106,17 @@ class ProjectService
 
   public function restore(Project $project)
   {
+    // Restore the project
     $project->restore();
     $project->project_state_id = 1;
     $project->save();
+
+    // Restore all messages
+    $messages = $project->messages()->withTrashed()->get();
+    foreach ($messages as $message)
+    {
+      $message->restore();
+    }
     return TRUE;
   }
 }
