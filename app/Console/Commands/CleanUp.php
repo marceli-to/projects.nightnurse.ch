@@ -48,7 +48,6 @@ class Cleanup extends Command
     // Loop through each project
     foreach ($projects as $project)
     {
-      $this->info('project id: ' . $project->id);
       // Get all messages for the project (including soft deleted ones)
       $messages = Message::withTrashed()->where('project_id', $project->id)->get();
   
@@ -61,8 +60,9 @@ class Cleanup extends Command
         // Loop through each file and delete it
         foreach ($files as $file)
         {
-          // $media = (new Media())->trash($file->name, $file->folder);
-          // $file->delete();
+          $media = (new Media())->trash($file->name, $file->folder);
+          // Set file_deleted_at to current time
+          $file->file_deleted_at = now();
           $this->info('deleted file: ' . $file->name);
         }
 
