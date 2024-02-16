@@ -166,7 +166,12 @@ class Media
     return Storage::delete('public/uploads' . DIRECTORY_SEPARATOR . $filename);
   }
 
-  /** Moves a file to the trashed folder */
+  /** 
+   * Moves a file to the trashed folder
+   *
+   * @param String $filename
+   * @param String $folder
+   */
   public function trash($filename = NULL, $folder = NULL)
   {
     if ($folder)

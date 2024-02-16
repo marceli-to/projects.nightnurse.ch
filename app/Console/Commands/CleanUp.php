@@ -48,6 +48,7 @@ class Cleanup extends Command
     // Loop through each project
     foreach ($projects as $project)
     {
+      $this->info('project id: ' . $project->id);
       // Get all messages for the project
       $messages = $project->messages;
   
