@@ -77,7 +77,8 @@ export default {
     ArrowLeftIcon,
     ContentHeader,
     ContentFooter,
-    NProgress
+    NProgress,
+    TinymceEditor,
   },
 
   mixins: [ErrorHandling, i18n, PageTitle],
