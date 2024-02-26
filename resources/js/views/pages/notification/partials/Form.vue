@@ -16,13 +16,11 @@
     
     <div class="form-group">
       <label>{{ translate('Inhalt') }}</label>
-      <textarea name="text" v-model="data.text.de"></textarea>
       <tinymce-editor
         :api-key="tinyApiKey"
         :init="tinyConfig"
         v-model="data.text.de"
       ></tinymce-editor>
-
     </div>
 
     <h4 class="!mt-12">English</h4>
