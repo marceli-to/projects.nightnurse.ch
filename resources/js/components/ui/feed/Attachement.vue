@@ -3,7 +3,7 @@
     <template v-if="$props.intermediate">
       <template v-if="file.file_deleted_at">
         <div class="font-mono italic text-gray-400 text-xs py-2">
-          {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at  }})
+          {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at }})
         </div>
       </template>
       <template v-else>
