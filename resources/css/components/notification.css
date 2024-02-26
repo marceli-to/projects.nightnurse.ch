@@ -31,7 +31,11 @@
 }
 
 .notification p {
-  @apply text-sm font-mono
+  @apply text-sm font-mono !mt-0
+}
+
+.notification p:last-of-type {
+  @apply !mb-0
 }
 
 .notification.is-toast {
