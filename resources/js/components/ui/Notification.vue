@@ -7,8 +7,7 @@
       <h1 v-if="notification.title[_locale()]">
         {{  notification.title[_locale()] }}
       </h1>
-      <div v-if="notification.text[_locale()]">
-        {{  notification.text[_locale()] }}
+      <div v-if="notification.text[_locale()]" v-html="notification.text[_locale()]">
       </div>
     </div>
   </div>
