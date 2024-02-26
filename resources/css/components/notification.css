@@ -31,7 +31,7 @@
 }
 
 .notification p {
-  @apply text-xs font-mono !mt-0
+  @apply text-xs font-mono !mt-0 leading-5
 }
 
 .notification p:last-of-type {
