@@ -17,6 +17,12 @@
     <div class="form-group">
       <label>{{ translate('Inhalt') }}</label>
       <textarea name="text" v-model="data.text.de"></textarea>
+      <tinymce-editor
+        :api-key="tinyApiKey"
+        :init="tinyConfig"
+        v-model="data.text.de"
+      ></tinymce-editor>
+
     </div>
 
     <h4 class="!mt-12">English</h4>
@@ -27,7 +33,11 @@
 
     <div class="form-group">
       <label>{{ translate('Inhalt') }}</label>
-      <textarea name="text" v-model="data.text.en"></textarea>
+      <tinymce-editor
+        :api-key="tinyApiKey"
+        :init="tinyConfig"
+        v-model="data.text.en"
+      ></tinymce-editor>
     </div>
 
     <div class="form-group">
@@ -56,6 +66,8 @@ import PageTitle from "@/mixins/PageTitle";
 import ContentHeader from "@/components/ui/layout/Header.vue";
 import ContentFooter from "@/components/ui/layout/Footer.vue";
 import FormRadio from "@/components/ui/form/Radio.vue";
+import tinyConfig from "@/config/tiny.js";
+import TinymceEditor from "@tinymce/tinymce-vue";
 import i18n from "@/i18n";
 import NProgress from 'nprogress';
 
@@ -108,6 +120,10 @@ export default {
       // States
       isFetched: true,
       isLoading: false,
+
+      // TinyMCE
+      tinyConfig: tinyConfig,
+      tinyApiKey: 'vuaywur9klvlt3excnrd9xki1a5lj25v18b2j0d0nu5tbwro',
     };
   },
 
