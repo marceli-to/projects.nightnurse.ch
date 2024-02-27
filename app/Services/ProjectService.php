@@ -54,6 +54,9 @@ class ProjectService
         $message->forceDelete();
       }
 
+      // Delete feedbacks
+      $project->feedbacks()->delete();
+
       // Delete companies
       $project->companies()->detach();
 
