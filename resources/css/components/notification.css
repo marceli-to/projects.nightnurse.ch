@@ -62,7 +62,8 @@
   @apply relative bg-transparent border-2 border-blue-400 text-blue-400 max-w-none mb-4
 }
 
-.notification.is-inline h1 {
+.notification.is-inline h1,
+.notification.is-inline a {
   @apply text-blue-400
 }
 
