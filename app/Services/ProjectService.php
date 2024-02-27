@@ -39,11 +39,16 @@ class ProjectService
         // Loop through each file and delete it
         foreach ($files as $file)
         {
+          // Delete markups
+          $file->markups()->delete();
           $file->forceDelete();
         }
 
         // Delete the message users
         $message->users()->detach();
+
+        // Delete the message reactions
+        $message->reactions()->delete();
 
         // Delete the message
         $message->forceDelete();
