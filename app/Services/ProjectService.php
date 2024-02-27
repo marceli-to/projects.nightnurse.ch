@@ -1,6 +1,7 @@
 <?php
 namespace App\Services;
 use App\Models\Project;
+use App\Models\Project;
 use App\Services\Media;
 
 class ProjectService
@@ -54,7 +55,15 @@ class ProjectService
         $message->forceDelete();
       }
 
-      // Delete feedbacks
+      // Delete feedbacks and feedback_queue
+      $feedbacks = $project->feedbacks()->get();
+
+      // Loop through each feedback and delete the feedback_queue item
+      foreach ($feedbacks as $feedback)
+      {
+        FeedbackQueue::where('feedback_id', $feedback->id)->delete();
+      }
+
       $project->feedbacks()->delete();
 
       // Delete companies
