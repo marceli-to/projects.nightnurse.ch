@@ -46,26 +46,28 @@ class Cleanup extends Command
     $this->info('Found ' . $projects->count() . ' projects');
 
     // Loop through each project
-    // foreach ($projects as $project)
-    // {
-    //   // Get all messages for the project (including soft deleted ones)
-    //   $messages = Message::withTrashed()->where('project_id', $project->id)->get();
+    foreach ($projects as $project)
+    {
+      // Get all messages for the project (including soft deleted ones)
+      $messages = Message::withTrashed()->where('project_id', $project->id)->get();
   
-    //   // Loop through each message
-    //   foreach ($messages as $message)
-    //   {
-    //     // Get all files for the message
-    //     $files = $message->files;
+      // Loop through each message
+      foreach ($messages as $message)
+      {
+        // Get all files for the message
+        $files = $message->files;
 
-    //     // Loop through each file and delete it
-    //     foreach ($files as $file)
-    //     {
-    //       $media = (new Media())->trash($file->name, $file->folder);
-    //       // Set file_deleted_at to current time
-    //       $file->file_deleted_at = now();
-    //       $this->info('deleted file: ' . $file->name);
-    //     }
-    //   }
-    // }
+        // Loop through each file and delete it
+        foreach ($files as $file)
+        {
+          // File to delete
+          $this->info('File to delete: ' . $file->name);
+          // $media = (new Media())->trash($file->name, $file->folder);
+          // // Set file_deleted_at to current time
+          // $file->file_deleted_at = now();
+          // $this->info('deleted file: ' . $file->name);
+        }
+      }
+    }
   }
 }
