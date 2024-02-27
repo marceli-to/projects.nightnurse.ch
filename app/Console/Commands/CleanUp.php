@@ -60,12 +60,10 @@ class Cleanup extends Command
         // Loop through each file and delete it
         foreach ($files as $file)
         {
-          // File to delete
-          $this->info('File to delete: ' . $file->name);
-          // $media = (new Media())->trash($file->name, $file->folder);
-          // // Set file_deleted_at to current time
-          // $file->file_deleted_at = now();
-          // $this->info('deleted file: ' . $file->name);
+          $media = (new Media())->trash($file->name, $file->folder);
+          // Set file_deleted_at to current time
+          $file->file_deleted_at = now();
+          $this->info('deleted file: ' . $file->name);
         }
       }
     }
