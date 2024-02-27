@@ -63,6 +63,7 @@ class Cleanup extends Command
           $media = (new Media())->trash($file->name, $file->folder);
           // Set file_deleted_at to current time
           $file->file_deleted_at = now();
+          $file->save();
           $this->info('deleted file: ' . $file->name);
         }
       }
