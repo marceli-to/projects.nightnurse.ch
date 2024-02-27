@@ -41,7 +41,7 @@ class Cleanup extends Command
     $this->info('Cleaning files');
     
     // Get all deleted projects
-    $projects = Project::onlyTrashed()->limit(100)->get();
+    $projects = Project::onlyTrashed()->get();
 
     $this->info('Found ' . $projects->count() . ' projects');
 
