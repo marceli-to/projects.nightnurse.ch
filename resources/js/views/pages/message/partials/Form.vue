@@ -622,7 +622,7 @@ export default {
 
     uploadMaxFilesExceeded(file) {
       this.$refs.dropzone.removeAllFiles(true);
-      this.$notify({ type: "danger", text: "image_max_files_exceeded", duration: 2000 });
+      this.$notify({ type: "danger", text: this.messages.image_max_files_exceeded, duration: 2000 });
     },
 
     uploadDelete(file) {
