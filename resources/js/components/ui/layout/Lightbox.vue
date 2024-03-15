@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed w-screen h-screen inset-0 bg-black bg-opacity-60 z-[2001] pb-32" v-if="isOpen">
+  <div class="fixed w-screen h-screen inset-0 bg-black bg-opacity-60 z-[20001] pb-32" v-if="isOpen">
     <div :class="`fixed z-50 left-1/2 -translate-x-1/2 w-full bg-white rounded-md p-4 ${$props.maxWidth} ${$props.styles}`">
       <div class="max-h-[80vh] overflow-y-auto">
       <div class="relative">
