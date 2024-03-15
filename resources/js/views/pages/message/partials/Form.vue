@@ -254,6 +254,7 @@ export default {
         deleted: 'Datei gelöscht',
         image_exceeds_max_size: 'max. Dateigrösse überschritten',
         image_type_not_allowed: 'Dateityp nicht erlaubt',
+        image_max_files_exceeded: 'max. Anzahl Dateien überschritten',
         confirm_recipients: null,
       },
 
