@@ -9,12 +9,6 @@ class Thumbnail implements FilterInterface
   
   public function applyFilter(Image $image)
   {
-    try {
-      $image->fit($this->size);
-    } catch (\Exception $e) {
-      $image->destroy();
-      \Log::error($e->getMessage());
-    }
-    return $image;
+    return $image->fit($this->size);
   }
 }
