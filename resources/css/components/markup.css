@@ -36,7 +36,7 @@
 }
 
 .shape.shape--comment {
-  @apply !border-none text-blue-700;
+  @apply !border-none text-blue-700 !z-[20000];
 }
 
 .shape.shape--comment.is-active {
