@@ -263,7 +263,7 @@ export default {
         url: "/api/upload",
         method: 'post',
         maxFilesize: 256,
-        maxFiles: 5,
+        maxFiles: 99,
         createImageThumbnails: false,
         autoProcessQueue: true,
         uploadMultiple: false,
