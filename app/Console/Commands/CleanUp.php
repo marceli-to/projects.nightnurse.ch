@@ -82,33 +82,32 @@ class Cleanup extends Command
       }
       else
       {
-          // get the record from the database with relationship to message and project
-          $messageFile = MessageFile::where('name', $file)->first();
+        // get the record from the database with relationship to message and project
+        $messageFile = MessageFile::where('name', $file)->first();
 
-          if (!$messageFile) continue;
+        if (!$messageFile) continue;
 
-          // get the message
-          $message = $messageFile->message;
+        // get the message
+        $message = $messageFile->message;
 
-          if (!$message) continue;
+        if (!$message) continue;
 
-          // get the project
-          $project = $message->project;
+        // get the project
+        $project = $message->project;
 
-          if (!$project) continue;
+        if (!$project) continue;
 
-          $project = Project::withTrashed()->find($project->id);
+        $project = Project::withTrashed()->find($project->id);
 
-          // check if the project is deleted
-          if ($project->deleted_at)
-          {
-            echo $project->id;
-            echo "\n";
-          }
+        // check if the project is deleted
+        if ($project->deleted_at)
+        {
+          echo $project->id;
+          echo "\n";
+        }
       }
 
     }
-    dd($files);
     
     // $this->info('Cleaning files');
     
