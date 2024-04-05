@@ -44,7 +44,7 @@ An:
 @if ($message['files'])
 <div class="pt-20">
 @foreach($message['files'] as $file)
-@if ($file['preview'])
+@if ($file['has_preview'])
 <table class="border-top" style="width: 100%">
 <tr>
   <td class="py-15" style="width: 60px">

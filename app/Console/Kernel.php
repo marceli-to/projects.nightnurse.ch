@@ -5,6 +5,7 @@ use App\Tasks\Notification;
 use App\Tasks\Markup;
 use App\Tasks\Feedback;
 use App\Tasks\CleanUpFiles;
+use App\Tasks\CreatePreviews;
 use Gecche\Multidomain\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel
@@ -30,6 +31,7 @@ class Kernel extends ConsoleKernel
     $schedule->call(new Markup)->everyMinute();
     $schedule->call(new Feedback)->everyMinute();
     $schedule->call(new CleanUpFiles)->everyMinute();
+    $schedule->call(new CreatePreviews)->everyMinute();
   }
 
   /**
