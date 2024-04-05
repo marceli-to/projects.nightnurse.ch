@@ -42,23 +42,15 @@ class CreatePreviews extends Command
       'png', 'jpg', 'jpeg', 'gif'
     ];
 
-    $files = MessageFile::noPreview()->limit(2)->get();
+    $files = MessageFile::noPreview()->limit(3)->get();
 
-
-
-    // for each file, create a preview with the filters
     foreach ($files as $file) {
-      if (in_array($file->extension, $previewable_image_types)) {
-
-        $this->info('Processing ' . $file->name);
+      if (in_array($file->extension, $previewable_image_types))
+      {
         $response = \Http::get(env('APP_URL') . '/img/small/' . $file->folder . '/' . $file->name);
         $response = \Http::get(env('APP_URL') . '/img/thumbnail/' . $file->folder . '/' . $file->name);
-        $this->info('Processed ' . $file->name);
-
         $file->has_preview = 1;
         $file->save();
-        $this->info('Updated record ' . $file->name);
-
       }
     }
 
