@@ -22,6 +22,7 @@ class FileResource extends JsonResource
       'folder' => $this->folder,
       'extension' => $this->extension,
       'preview' => $this->preview,
+      'has_preview' => $this->has_preview,
       'size' => \ReadableSize($this->size),
       'locked_markups' => MarkupResource::collection($this->markups->where('is_locked', true)),
       'markups' => MarkupResource::collection($this->markups),
