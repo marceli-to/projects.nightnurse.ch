@@ -42,7 +42,7 @@ class CreatePreviews extends Command
       'png', 'jpg', 'jpeg', 'gif'
     ];
 
-    $files = MessageFile::noPreview()->limit(3)->get();
+    $files = MessageFile::noPreview()->limit(5)->get();
 
     foreach ($files as $file) {
       if (in_array($file->extension, $previewable_image_types))
@@ -53,6 +53,5 @@ class CreatePreviews extends Command
         $file->save();
       }
     }
-
   }
 }
