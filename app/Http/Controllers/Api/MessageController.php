@@ -152,9 +152,8 @@ class MessageController extends Controller
     {
       $user = User::find(auth()->user()->id);
       $message = Message::with('project.company', 'sender', 'files', 'users')->find($message->id);
-      // 
       $message->can_delete = false;
-      broadcast(new MessageSent($user, MessageResource::make($message), $project))->toOthers();
+      broadcast(new MessageSent($user, $message->uuid, $project))->toOthers();
     }
 
     return response()->json(['messageId' => $message->id]);
