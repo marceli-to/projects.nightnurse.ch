@@ -10,6 +10,7 @@
         <a :href="fileUri(file)" 
           target="_blank" 
           :class="[file.preview ? 'flex-col' : 'items-center', 'flex no-underline hover:text-highlight py-2 lg:pt-3']">
+          {{ file.has_preview }}
           <img 
             :src="smallImageUri(file)" 
             height="100" 
@@ -27,7 +28,7 @@
         <router-link 
           :to="{name: 'markup', params: { slug: $route.params.slug, uuid: $route.params.uuid, messageUuid: message.uuid, imageUuid: file.uuid }}"
           class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3"
-          v-if="file.has_preview">
+          v-if="file.preview">
           <div class="relative">
             <annotation-icon class="h-4 w-4 mr-2"  aria-hidden="true" />
             <div class="rounded-full bg-highlight w-[7px] h-[7px] absolute -top-[2px] right-[6px]" v-if="file.markups.length"></div>
