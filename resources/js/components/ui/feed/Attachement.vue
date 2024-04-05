@@ -16,7 +16,7 @@
             width="100"
             loading="lazy"
             :class="[file.image_orientation == 'portrait' ? 'w-1/2' : 'w-full', '!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto bg-light rounded-sm']"
-            v-if="file.preview" />
+            v-if="file.has_preview" />
           <div class="mr-2 lg:mr-3 py-1" v-else>
             <file-type :extension="file.extension" />
           </div>
@@ -27,7 +27,7 @@
         <router-link 
           :to="{name: 'markup', params: { slug: $route.params.slug, uuid: $route.params.uuid, messageUuid: message.uuid, imageUuid: file.uuid }}"
           class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3"
-          v-if="file.preview">
+          v-if="file.has_preview">
           <div class="relative">
             <annotation-icon class="h-4 w-4 mr-2"  aria-hidden="true" />
             <div class="rounded-full bg-highlight w-[7px] h-[7px] absolute -top-[2px] right-[6px]" v-if="file.markups.length"></div>
@@ -60,7 +60,7 @@
             width="100"
             loading="lazy"
             class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
-            v-if="file.preview" />
+            v-if="file.has_preview" />
           <div class="mr-2 lg:mr-3 py-1" v-else>
             <file-type :extension="file.extension" />
           </div>
@@ -71,7 +71,7 @@
         <router-link 
           :to="{name: 'markup', params: { slug: $route.params.slug, uuid: $route.params.uuid, messageUuid: file.message_uuid, imageUuid: file.uuid }}"
           class="font-mono text-xs text-gray-400 hover:text-highlight no-underline flex items-center mb-3 mt-1"
-          v-if="file.preview">
+          v-if="file.has_preview">
           <div class="relative">
             <annotation-icon class="h-4 w-4 mr-2"  aria-hidden="true" />
             <div class="rounded-full bg-highlight w-[7px] h-[7px] absolute -top-[2px] right-[6px]" v-if="file.locked_markups.length"></div>

@@ -19,6 +19,7 @@ class MessageFile extends Base
     'extension',
     'size',
     'preview',
+    'has_preview',
     'message_id',
     'file_deleted_at',
 	];
@@ -35,6 +36,12 @@ class MessageFile extends Base
   public function markups()
   {
     return $this->hasMany(Markup::class);
+  }
+
+  // Add scope for files that do not have a preview
+  public function scopeNoPreview($query)
+  {
+    return $query->where('has_preview', 0);
   }
 
 }

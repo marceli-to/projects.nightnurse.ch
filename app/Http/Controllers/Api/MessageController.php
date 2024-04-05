@@ -117,6 +117,7 @@ class MessageController extends Controller
           'extension' => $file['extension'] ,
           'size' => $file['size'],
           'preview' => $file['preview'],
+          'has_preview' => $file['instant_previewable'],
           'message_id' => $message->id,
         ]);
       }

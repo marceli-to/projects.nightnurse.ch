@@ -9,7 +9,7 @@
             width="100"
             loading="lazy"
             class="!mt-0 !mb-0 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm group-hover:opacity-75 group-hover:transition-opacity"
-            v-if="file.preview" />
+            v-if="file.has_preview" />
         </a>
       </div>
     </div>

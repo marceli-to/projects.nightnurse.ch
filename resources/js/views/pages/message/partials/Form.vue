@@ -63,7 +63,7 @@
                   height="100" 
                   width="100"
                   class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
-                  v-if="d.preview" />
+                  v-if="d.instant_previewable" />
                 <div class="mr-2 lg:mr-3 py-1" v-else>
                   <file-type :extension="d.extension" />
                 </div>
@@ -337,12 +337,6 @@ export default {
           this.data.subject = `${this.translate('Neue Markierungen/Kommentare')}`;
           this.allowUploads = false;
         }
-
-        // if (this.$store.state.markupFiles && this.$store.state.markupFiles.length > 0) {
-        //   this.data.markupFiles = this.$store.state.markupFiles;
-        //   this.data.subject = `${this.translate('Neue Markierungen/Kommentare')}`;
-        //   this.allowUploads = false;
-        // }
 
         this.isFetched = true;
       }));
