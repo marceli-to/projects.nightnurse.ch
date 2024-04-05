@@ -10,7 +10,6 @@
         <a :href="fileUri(file)" 
           target="_blank" 
           :class="[file.preview ? 'flex-col' : 'items-center', 'flex no-underline hover:text-highlight py-2 lg:pt-3']">
-          {{ file.has_preview }}
           <img 
             :src="smallImageUri(file)" 
             height="100" 
