@@ -1,5 +1,5 @@
 <template>
-  <div :class="'flex items-center rounded-sm p-1.5 text-white text-tiny font-mono leading-none max-w-[40px] bg-dark is-' + extension">{{extension}}</div>
+  <div :class="'flex items-center rounded-sm p-1.5 text-white text-tiny font-mono leading-none max-w-[30px] bg-dark is-' + extension">{{extension}}</div>
 </template>
 
 <script>
