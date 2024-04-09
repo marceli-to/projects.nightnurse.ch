@@ -155,7 +155,7 @@ class MessageController extends Controller
       $message->can_delete = false;
       // wrap broadcast in try catch to prevent error when running tests
       try {
-        broadcast(new MessageSent($user, $message, $project))->toOthers();
+        broadcast(new MessageSent($user, MessageResource::make($message), $project))->toOthers();
       } catch (\Exception $e) {
         // log error
         \Log::error($e->getMessage());
