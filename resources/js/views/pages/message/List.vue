@@ -346,6 +346,7 @@ export default {
           icon: 'https://projects.nightnurse.ch/assets/img/logo-nightnurse.png'
         });
         notification.onclick = () => {
+          alert(e.message.uri);
           window.open(e.message.uri);
         };
       });
