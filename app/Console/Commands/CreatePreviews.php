@@ -47,10 +47,15 @@ class CreatePreviews extends Command
     foreach ($files as $file) {
       if (in_array($file->extension, $previewable_image_types))
       {
-        $response = \Http::get(env('APP_URL') . '/img/small/' . $file->folder . '/' . $file->name);
-        $response = \Http::get(env('APP_URL') . '/img/thumbnail/' . $file->folder . '/' . $file->name);
-        $file->has_preview = 1;
-        $file->save();
+        try {
+          $response = \Http::get(env('APP_URL') . '/img/small/' . $file->folder . '/' . $file->name);
+          $response = \Http::get(env('APP_URL') . '/img/thumbnail/' . $file->folder . '/' . $file->name);
+          $file->has_preview = 1;
+          $file->save();
+        }
+        catch (\Exception $e) {
+          $this->error('Could not create preview for ' . $file->name);
+        }
       }
     }
   }
