@@ -48,7 +48,6 @@ class CreatePreviews extends Command
       if (in_array($file->extension, $previewable_image_types))
       {
         try {
-          $this->info('Creating preview for ' . $file->name);
           $response = \Http::get(env('APP_URL') . '/img/small/' . $file->folder . '/' . $file->name);
           $response = \Http::get(env('APP_URL') . '/img/thumbnail/' . $file->folder . '/' . $file->name);
           $file->has_preview = 1;
