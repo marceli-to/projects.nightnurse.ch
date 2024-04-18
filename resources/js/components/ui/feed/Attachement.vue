@@ -16,7 +16,7 @@
             width="100"
             loading="lazy"
             :class="[file.image_orientation == 'portrait' ? 'w-1/2' : 'w-full', '!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto bg-light rounded-sm']"
-            v-if="file.has_preview" />
+            v-if="file.preview && file.has_preview" />
           <div class="mr-2 lg:mr-3 py-1" v-else>
             <file-type :extension="file.extension" />
           </div>
@@ -60,7 +60,7 @@
             width="100"
             loading="lazy"
             class="!mt-0 !mb-0 mr-3 lg:mr-4 block h-auto max-w-[50px] lg:max-w-[70px] bg-light rounded-sm"
-            v-if="file.has_preview" />
+            v-if="file.preview && file.has_preview" />
           <div class="mr-2 lg:mr-3 py-1" v-else>
             <file-type :extension="file.extension" />
           </div>
