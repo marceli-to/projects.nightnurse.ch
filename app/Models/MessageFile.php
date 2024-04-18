@@ -41,7 +41,7 @@ class MessageFile extends Base
   // Add scope for files that do not have a preview
   public function scopeNoPreview($query)
   {
-    return $query->where('has_preview', 0);
+    return $query->where('preview', 1)->where('has_preview', 0);
   }
 
 }
