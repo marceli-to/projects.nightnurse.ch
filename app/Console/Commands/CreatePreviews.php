@@ -45,7 +45,8 @@ class CreatePreviews extends Command
     $files = MessageFile::noPreview()->limit(5)->get();
 
     foreach ($files as $file) {
-      if (in_array($file->extension, $previewable_image_types))
+      $extension = strtolower($file->extension);
+      if (in_array($extension, $previewable_image_types))
       {
         try {
           $response = \Http::get(env('APP_URL') . '/img/small/' . $file->folder . '/' . $file->name);
