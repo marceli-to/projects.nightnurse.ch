@@ -17,7 +17,6 @@
     <div class="form-group">
       <label>{{ translate('Inhalt') }}</label>
       <tinymce-editor
-        :api-key="tinyApiKey"
         :init="tinyConfig"
         v-model="data.text.de"
       ></tinymce-editor>
@@ -32,7 +31,6 @@
     <div class="form-group">
       <label>{{ translate('Inhalt') }}</label>
       <tinymce-editor
-        :api-key="tinyApiKey"
         :init="tinyConfig"
         v-model="data.text.en"
       ></tinymce-editor>
