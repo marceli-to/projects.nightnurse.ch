@@ -28,14 +28,10 @@
 
         <div class="form-group mt-6 lg:mt-8">
           <label class="mb-2 lg:mb-3">{{ translate('Mitteilung') }}</label>
-          <textarea v-model="data.body" class="h-32 sm:h-40 lg:h-48"></textarea>
-          <!--
           <tinymce-editor
-            :api-key="tinyApiKey"
             :init="tinyConfig"
             v-model="data.body"
           ></tinymce-editor>
-          -->
         </div>
 
         <!-- Files -->
@@ -281,7 +277,7 @@ export default {
 
       // TinyMCE
       tinyConfig: tinyConfig,
-      tinyApiKey: 'vuaywur9klvlt3excnrd9xki1a5lj25v18b2j0d0nu5tbwro',
+      tinyApiKey: 'no-api-key',
 
       // Deepl
       deeplApiKey: '86b707ef-e41d-2645-71b1-b0e62e6126ef:fx',

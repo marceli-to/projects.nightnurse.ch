@@ -1,14 +1,15 @@
 export default {
-  skin_url: '/assets/js/tinymce/skins/custom',
+  license_key: 'gpl',
+  // skin_url: '/assets/js/tinymce/skins/content/writer',
   branding: false,
   menubar: false,
   statusbar: false,
   browser_spellcheck: true,
   contextmenu: '',
-  external_plugins: {
-    link: '/assets/js/tinymce/plugins/link/plugin.min.js',
-  },
-  plugins: ['lists', 'code', 'link', 'paste'],
+  // external_plugins: {
+  //   link: '/assets/js/tinymce/js/tinymce/plugins/link/plugin.min.js',
+  // },
+  plugins: ['lists', 'code', 'link'],
   toolbar: 'undo redo | bold | italic | bullist | link | removeformat | code',
   paste_as_text: true,
   height: "400px",
