@@ -30,8 +30,6 @@ class FeedbackController extends Controller
       return $item['project']['name'];
     });
 
-
-
     return response()->json($feedbacks);
   }
 

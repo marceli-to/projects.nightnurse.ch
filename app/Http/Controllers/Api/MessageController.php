@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\DataCollection;
 use App\Http\Resources\MessageResource;
 use App\Http\Resources\MarkupCommentResource;
@@ -101,25 +102,34 @@ class MessageController extends Controller
     }
 
     // Move file & create database entry
+    $faultyFiles = [];
     if ($request->input('files'))
     {
       foreach($request->input('files') as $file)
       {
         $filename = (new Media())->copy($file['name'], $project->uuid);
 
-        $messageFile = MessageFile::create([
-          'uuid' => \Str::uuid(),
-          'name' => $filename,
-          'original_name' => $file['original_name'],
-          'image_orientation' => $file['image_orientation'],
-          'image_ratio' => $file['image_ratio'],
-          'folder' => $project->uuid,
-          'extension' => $file['extension'] ,
-          'size' => $file['size'],
-          'preview' => $file['preview'],
-          'has_preview' => $file['instant_previewable'],
-          'message_id' => $message->id,
-        ]);
+        // make sure the file is stored in the storage
+        if (Storage::exists('public/uploads' . DIRECTORY_SEPARATOR . $project->uuid . DIRECTORY_SEPARATOR . $filename))
+        {
+          $messageFile = MessageFile::create([
+            'uuid' => \Str::uuid(),
+            'name' => $filename,
+            'original_name' => $file['original_name'],
+            'image_orientation' => $file['image_orientation'],
+            'image_ratio' => $file['image_ratio'],
+            'folder' => $project->uuid,
+            'extension' => $file['extension'] ,
+            'size' => $file['size'],
+            'preview' => $file['preview'],
+            'has_preview' => $file['instant_previewable'],
+            'message_id' => $message->id,
+          ]);
+        }
+        else {
+          \Log::error('Could not store file ' . $file['name']);
+          $faultyFiles[] = $file['name'];
+        }
       }
     }
 
@@ -162,7 +172,7 @@ class MessageController extends Controller
       }
     }
 
-    return response()->json(['messageId' => $message->id]);
+    return response()->json(['messageId' => $message->id, 'faultyFiles' => $faultyFiles]);
   }
 
   /**

@@ -105,8 +105,8 @@ class Media
         'public/uploads' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $newFilename
       );
       return $newFilename;
-
     }
+
     Storage::move(
       'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
       'public/uploads' . DIRECTORY_SEPARATOR . $filename

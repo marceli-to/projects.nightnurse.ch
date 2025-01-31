@@ -361,9 +361,17 @@ export default {
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
         this.saveRecipients();
         this.removeDraft();
-        this.$notify({ type: "success", text: this.translate(this.messages.created) });
         this.reset();
         window.scrollTo(0, 0);
+
+        // if there are faulty files, notify the user
+        if (response.data.faultyFiles.length > 0) {
+          // for each faulty file, notify the user
+          response.data.faultyFiles.forEach(file => {
+            this.$notify({ type: "danger", text: 'Die Datei ' + file + ' konnte nicht hochgeladen werden. Bitte versuche es erneut!', duration: -1 });
+          })
+        }
+        this.$notify({ type: "success", text: this.translate(this.messages.created) });
       });
     },
 
