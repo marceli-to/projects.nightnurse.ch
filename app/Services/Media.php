@@ -100,17 +100,26 @@ class Media
       }
 
       $newFilename = $this->uniqueFileName($filename, $folder);
-      Storage::move(
-        'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
-        'public/uploads' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $newFilename
-      );
+
+      try {
+        Storage::move(
+          'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
+          'public/uploads' . DIRECTORY_SEPARATOR . $folder . DIRECTORY_SEPARATOR . $newFilename
+        );
+      } catch (\Exception $e) {
+        Log::error($e->getMessage());
+      }
       return $newFilename;
     }
 
-    Storage::move(
-      'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
-      'public/uploads' . DIRECTORY_SEPARATOR . $filename
-    );
+    try {
+      Storage::move(
+        'public/uploads/temp' . DIRECTORY_SEPARATOR . $filename,
+        'public/uploads' . DIRECTORY_SEPARATOR . $filename
+      );
+    } catch (\Exception $e) {
+      Log::error($e->getMessage());
+    }
 
     return $filename;
 
