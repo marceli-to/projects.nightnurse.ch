@@ -125,8 +125,6 @@ class MessageController extends Controller
             'has_preview' => $file['instant_previewable'],
             'message_id' => $message->id,
           ]);
-          $faultyFiles[] = $file['name'];
-
         }
         else {
           \Log::error('Could not store file ' . $file['name']);
