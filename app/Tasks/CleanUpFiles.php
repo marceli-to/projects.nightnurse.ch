@@ -10,7 +10,8 @@ class CleanUpFiles
     // Folder: uploads/temp
     $files = \Storage::listContents('public/uploads/temp');
     collect($files)->each(function($file) {
-      if ($file->lastModified() < now()->subMinutes(60)->getTimestamp()) {
+      
+      if ($file->lastModified() < now()->subDays(1)->getTimestamp()) {
         \Storage::delete($file->path());
       }
     });
@@ -37,7 +38,7 @@ class CleanUpFiles
       else {
         $fileCollection->each(function($file) {
           // Delete files and folders older than 30 days
-          if ($file->lastModified() < now()->subDays(10)->getTimestamp()) {
+          if ($file->lastModified() < now()->subDays(30)->getTimestamp()) {
             \Storage::delete($file->path());
           }
         });
