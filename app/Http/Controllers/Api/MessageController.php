@@ -127,7 +127,12 @@ class MessageController extends Controller
           ]);
         }
         else {
-          \Log::error('Could not store file ' . $file['name']);
+          \Log::error('File not found', [
+            'path' => 'public/uploads' . DIRECTORY_SEPARATOR . $project->uuid . DIRECTORY_SEPARATOR . $filename,
+            'full_path' => Storage::path('public/uploads' . DIRECTORY_SEPARATOR . $project->uuid . DIRECTORY_SEPARATOR . $filename),
+            'disk' => config('filesystems.default'),
+            'permissions' => @fileperms(Storage::path('public/uploads' . DIRECTORY_SEPARATOR . $project->uuid . DIRECTORY_SEPARATOR . $filename)),
+          ]);
           $faultyFiles[] = $file['name'];
         }
       }
