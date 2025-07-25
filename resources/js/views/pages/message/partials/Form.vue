@@ -359,7 +359,6 @@ export default {
       this.isSending = true;
       this.data.intermediate = this.data.intermediate ? 1 : 0;
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
-        this.saveRecipients();
         this.removeDraft();
         this.reset();
         window.scrollTo(0, 0);
@@ -422,20 +421,17 @@ export default {
         if (idx == -1) {
           this.errors.users = false;
           this.data.users.push(user);
-          this.$store.commit('recipients', this.data.users);
         }
       }
       else {
         if (idx > -1) {
           this.data.users.splice(idx, 1);
-          this.$store.commit('recipients', this.data.users);
         }
       }
     },
 
     handleReplyRecipients() {
       this.data.users = [];
-      this.$store.commit('recipients', this.data.users);
       this.axios.get(`${this.routes.fetchMessageUsers}/${this.$props.message.uuid}`).then(response => {
         response.data.forEach(user => {
           this.addOrRemoveRecipient(true, user);
@@ -448,11 +444,6 @@ export default {
       this.removePreSelectedUser(this.$store.state.user);
     },
 
-    saveRecipients() {
-      const storage = { users: this.data.users };
-      const storageName = `recipients-${this.$route.params.uuid}-${this.data.private ? 'private' : 'public'}`;
-      localStorage.setItem(storageName, JSON.stringify(storage));
-    },
 
     // Add preselected recipients
     handleRecipients() {
@@ -462,18 +453,6 @@ export default {
         return;
       }
 
-      // Next upgrade: check if there are any preselected recipients in local storage
-      //-----------------------------------------------------------------------------
-      const storageName = `recipients-${this.$route.params.uuid}-${this.$store.state.feedType}`;
-      const storage = JSON.parse(localStorage.getItem(storageName));
-      // If there are users, loop over them and add them to the recipients array
-      if (storage && storage.users.length > 0) {
-        storage.users.forEach(user => {
-          this.addOrRemoveRecipient(true, user);
-          this.project.associates = this.project.associates.filter(x => x.id !== user.id);
-        });
-        return;
-      }
 
       // Remove project manager from the associates to prevent double entries
       this.project.associates = this.project.associates.filter(x => x.id !== this.project.manager.id);
@@ -697,32 +676,25 @@ export default {
 
     allowSubmit() {
       // Form submission is allowed if:
-      // 1. isSending is false
-      // 2. this.data.subject is not empty or null and this.data.files is empty and this.data.users is not empty
-      // 3. this.data.body is not empty and this.data.files is empty and this.data.users is not empty
-      // 4. this.data.files is not empty and this.data.users is not empty
-      if (this.isSending) {
+      // 1. Not currently sending
+      // 2. Has valid upload state
+      // 3. Has recipients
+      // 4. Has content (subject, body, or files)
+      if (this.isSending || !this.hasValidUpload || this.data.users.length === 0) {
         return false;
       }
-      else if (this.data.subject && this.data.subject.length > 0 && this.data.files.length == 0 && this.data.users.length > 0 && this.hasValidUpload) {
-        return true;
-      }
-      else if (this.data.body && this.data.body.length > 0 && this.data.files.length == 0 && this.data.users.length > 0 && this.hasValidUpload) {
-        return true;
-      }
-      else if (this.data.files.length > 0 && this.data.users.length > 0 && this.hasValidUpload) {
-        return true;
-      }
-      else {
-        return false;
-      }
+
+      // Must have either text content (subject or body) or files
+      const hasTextContent = (this.data.subject && this.data.subject.length > 0) || (this.data.body && this.data.body.length > 0);
+      const hasFiles = this.data.files.length > 0;
+
+      return hasTextContent || hasFiles;
     },
   },
 
   watch: {
     data: {
       handler() {
-        // store all changes to this.data in local storage.
         localStorage.setItem(this.draftName, JSON.stringify( { data: this.data } ));
       },
       deep: true,
