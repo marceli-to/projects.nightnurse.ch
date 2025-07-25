@@ -8,7 +8,7 @@
         {{ commentNumber }}
       </span>
     </div>
-    <div class="ml-3 flex-1">
+    <div class="ml-2 flex-1">
       <header class="text-xs text-gray-400 font-mono">
         <span>{{ comment.date }} – {{ comment.author }}</span>
       </header>
