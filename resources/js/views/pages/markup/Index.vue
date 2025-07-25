@@ -63,8 +63,8 @@ export default {
         this.axios.get(`${this.routes.files.get}/${this.$route.params.messageUuid}`),
       ]).then(axios.spread((...responses) => {
         this.project = responses[0].data;
-        this.file = responses[1].data;
-        this.files = responses[2].data;
+        this.file = responses[1].data.data;
+        this.files = responses[2].data.data;
         this.setPageTitle(this.project.title);
         this.isFetched = true;
         NProgress.done();

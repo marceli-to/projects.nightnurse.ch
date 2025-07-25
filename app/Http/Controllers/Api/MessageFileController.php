@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\DataCollection;
+use App\Http\Resources\FileResource;
 use App\Models\Message;
 use App\Models\MessageFile;
 use Illuminate\Http\Request;
@@ -16,8 +17,8 @@ class MessageFileController extends Controller
    */
   public function get(Message $message)
   {
-    $files = MessageFile::where('message_id', $message->id)->get();
-    return response()->json($files);
+    $files = MessageFile::with('markups')->where('message_id', $message->id)->get();
+    return FileResource::collection($files);
   }
 
   /**
@@ -28,8 +29,8 @@ class MessageFileController extends Controller
    */
   public function find(MessageFile $messageFile)
   {
-    $file = MessageFile::findOrFail($messageFile->id);
-    return response()->json($file);
+    $file = MessageFile::with('markups')->findOrFail($messageFile->id);
+    return FileResource::make($file);
   }
 
 }

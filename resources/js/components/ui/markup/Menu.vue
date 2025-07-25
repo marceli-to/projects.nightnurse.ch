@@ -25,9 +25,9 @@
       </template>
     </div>
 
-    <div class="w-auto gap-y-2 flex flex-col justify-center rounded-md -mt-[150px]">
+    <div class="w-auto gap-y-2 flex flex-col justify-center">
       <a href="javascript:;" @click="$emit('selectImage', thumbnail.uuid)"
-        v-for="thumbnail in images"
+        v-for="thumbnail in displayedImages"
         :key="thumbnail.uuid"
         class="group">
         <img 
@@ -35,8 +35,14 @@
           height="100" 
           width="100"
           loading="lazy"
-          :class="[$props.image.uuid == thumbnail.uuid ? 'opacity-100' : 'border-transparent opacity-30', 'border block h-auto max-w-[48px] !m-0 group-hover:opacity-100 transition']" />
+          :class="[$props.image.uuid == thumbnail.uuid ? 'opacity-100' : 'border-transparent opacity-30', 'border block h-auto max-w-[40px] !m-0 group-hover:opacity-100 transition']" />
       </a>
+      
+      <template v-if="images.length > 6">
+        <a href="javascript:;" @click="showImageSelector = true" class="text-xs font-mono text-gray-600 hover:text-highlight flex justify-center !no-underline transition-colors">
+          <plus-icon class="icon-list text-black h-7 w-7" aria-hidden="true" />
+        </a>
+      </template>
     </div>
 
     <div>
@@ -44,24 +50,34 @@
         <arrow-left-icon class="icon-list text-black h-5 w-5" aria-hidden="true" />
       </router-link>
     </div>
+    
+    <image-selector 
+      :show="showImageSelector"
+      :images="images"
+      :current-image="image"
+      @close="showImageSelector = false"
+      @selectImage="handleImageSelect" />
   </nav>
 </template>
 <script>
 import i18n from "@/i18n";
 import Helpers from "@/mixins/Helpers";
 import MenuSeparator from '@/components/ui/markup/MenuSeparator.vue';
-import { TrashIcon, AnnotationIcon, ArrowLeftIcon, SaveIcon } from "@vue-hero-icons/outline";
+import ImageSelector from '@/components/ui/markup/ImageSelector.vue';
+import { TrashIcon, AnnotationIcon, ArrowLeftIcon, SaveIcon, PlusIcon } from "@vue-hero-icons/outline";
 import RectangleIcon from '@/components/ui/icons/Rectangle.vue';
 import CircleIcon from '@/components/ui/icons/Circle.vue';
 export default {
 
   components: {
     MenuSeparator,
+    ImageSelector,
     TrashIcon,
     RectangleIcon,
     ArrowLeftIcon,
     CircleIcon,
     SaveIcon,
+    PlusIcon,
     AnnotationIcon,
   },
 
@@ -92,6 +108,24 @@ export default {
     images: {
       type: Array,
       default: () => [],
+    },
+  },
+
+  data() {
+    return {
+      showImageSelector: false,
+    };
+  },
+
+  computed: {
+    displayedImages() {
+      return this.images.slice(0, 6);
+    },
+  },
+
+  methods: {
+    handleImageSelect(imageUuid) {
+      this.$emit('selectImage', imageUuid);
     },
   },
 

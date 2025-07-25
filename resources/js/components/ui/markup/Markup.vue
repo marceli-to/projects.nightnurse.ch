@@ -66,8 +66,8 @@
         </template>
       </vue-draggable-resizable>
     </div>
-    <div class="bg-white border-l-2 border-l-gray-100 pt-2 pb-4 px-2 flex flex-col justify-between min-h-[100vh]">
-      <div>
+    <div class="bg-white border-l-2 border-l-gray-100 pt-2 pb-4 px-2 flex flex-col justify-between min-h-screen">
+      <div class="max-h-[calc(100dvh_-_125px)] overflow-y-auto pr-1">
         <template v-if="comments.length">
           <markup-comment 
             v-for="(comment, index) in sortedComments" 
@@ -95,7 +95,6 @@
 </template>
 
 <script>
-// https://vuejsexamples.com/vue2-component-for-resizable-rotable-and-draggable-elements/
 import { SaveIcon, AnnotationIcon, ChevronLeftIcon, ChevronRightIcon, ArrowNarrowRightIcon } from "@vue-hero-icons/outline";
 import Helpers from "@/mixins/Helpers";
 import i18n from "@/i18n";
@@ -702,10 +701,9 @@ export default {
   computed: {
     sortedComments() {
       return [...this.comments].sort((a, b) => {
-        // Sort by created_at timestamp
         return new Date(a.created_at) - new Date(b.created_at);
       });
-    }
+    },
   },
 
   watch: {

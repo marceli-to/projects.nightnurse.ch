@@ -149,6 +149,7 @@ export default {
         'Erledigt': 'Done',
         'Kommentar als erledigt markiert': 'Comment marked as done',
         'Fehler beim Markieren des Kommentars': 'Error marking comment as done',
+        'Bild auswählen': 'Select image',
       },
 
       defaultLang: 'de',
