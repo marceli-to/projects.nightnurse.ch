@@ -1,6 +1,6 @@
 <template>
 <div v-if="isFetched">
-  <form @submit.prevent="submit" class="pb-4 sm:pb-6 lg:pb-8 mb-4 lg:mb-8 border-bottom">
+  <form @submit.prevent="submit" class="p-2 sm:p-4 mb-4 lg:mb-8 bg-light rounded-md">
     <div class="sm:grid sm:grid-cols-12 lg:gap-8">
       <div class="sm:col-span-12">
         <!-- is it a reply? -->
