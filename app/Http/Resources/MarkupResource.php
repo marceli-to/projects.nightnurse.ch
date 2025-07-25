@@ -15,6 +15,7 @@ class MarkupResource extends JsonResource
     return [
       'uuid' => $this->uuid,
       'date' => $this->date_string,
+      'created_at' => $this->created_at,
       'type' => $this->type,
       'shape' => json_decode($this->shape),
       'is_done' => $this->is_done ? TRUE : FALSE,

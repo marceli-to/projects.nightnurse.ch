@@ -48,7 +48,14 @@
         :draggable="element.draggable"
         :resizable="element.resizable">
         <template v-if="element.type === 'comment'">
-          <annotation-icon class="h-6 w-6" aria-hidden="true" />
+          <div class="relative">
+            <annotation-icon class="h-6 w-6" aria-hidden="true" />
+            <span 
+              class="absolute -top-3 -right-3 bg-blue-700 text-white text-xs rounded-full w-[20px] h-[20px] font-bold flex items-center justify-center leading-none"
+              v-if="getCommentNumber(element.uuid)">
+              {{ getCommentNumber(element.uuid) }}
+            </span>
+          </div>
           <template v-if="element.uuid == selected && !isDragging && !isFresh">
             <textarea
               class="bg-highlight bg-opacity-80 p-1 text-white disabled:!text-white disabled:!opacity-100 mt-1 text-xs lg:p-2 w-40 min-h-[80px] !border-none rounded-md overflow-auto relative z-50"
@@ -63,9 +70,10 @@
       <div>
         <template v-if="comments.length">
           <markup-comment 
-            v-for="(comment, index) in comments" 
+            v-for="(comment, index) in sortedComments" 
             :key="comment.uuid" 
             :comment="comment"
+            :comment-number="index + 1"
             :highlighted="highlightedComment"
             @mouseover="addHighlight"
             @mouseout="removeHighlight">
@@ -355,6 +363,7 @@ export default {
                 author: element.author,
                 author_company: element.author_company,
                 date: element.date,
+                created_at: element.created_at,
               });
             }
           }
@@ -368,6 +377,11 @@ export default {
     },
 
     update(element) {
+      // Clean temporary CSS classes before saving
+      const cleanElement = { ...element };
+      cleanElement.shape = { ...element.shape };
+      cleanElement.shape.className = element.shape.className.replace(' is-active', '');
+      
       const data = {
         uuid: this.currentImage.uuid,
         element: element,
@@ -386,9 +400,11 @@ export default {
             this.comments.push({
               uuid: response.data.markup.uuid,
               comment: response.data.markup.comment,
+              is_done: response.data.markup.is_done,
               author: response.data.markup.author,
               author_company: response.data.markup.author_company,
               date: response.data.markup.date,
+              created_at: response.data.markup.created_at,
             });
           }
           this.tempComment = null;
@@ -651,10 +667,6 @@ export default {
           this.canDelete = false;
         }
       }, 100);
-
-
-
-
     },
 
     onResizeWindow() {
@@ -680,6 +692,20 @@ export default {
       return uuid;
     },
 
+    getCommentNumber(uuid) {
+      const sortedComments = this.sortedComments;
+      const index = sortedComments.findIndex(comment => comment.uuid === uuid);
+      return index !== -1 ? index + 1 : null;
+    },
+  },
+
+  computed: {
+    sortedComments() {
+      return [...this.comments].sort((a, b) => {
+        // Sort by created_at timestamp
+        return new Date(a.created_at) - new Date(b.created_at);
+      });
+    }
   },
 
   watch: {
