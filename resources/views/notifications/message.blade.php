@@ -83,6 +83,9 @@ An:
         <a href="{{url('')}}/storage/uploads/{{$file['name']}}" target="_blank" class="font-mono text-xs text-dark">{{ $file['original_name'] }}</a><br>{{ \ReadableSize($file['size'])}}
       @endif
     </span>
+    <div class="pt-10 text-xs text-dark font-mono">
+      <a href="{{url('')}}/project/{{$message['project']['slug']}}/{{$message['project']['uuid']}}/markup/{{$message['uuid']}}/{{$file['uuid']}}" class="text-xs text-dark font-mono">Kommentieren</a>
+    </div>
   </td>
 </tr>
 </table>
