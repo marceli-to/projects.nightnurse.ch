@@ -136,6 +136,30 @@ class MarkupController extends Controller
   }
 
   /**
+   * Mark a markup comment as done
+   * 
+   * @param Markup $markup
+   * @return \Illuminate\Http\Response
+   */
+  public function done(Markup $markup)
+  {
+    // Only admins can mark comments as done
+    if (!auth()->user()->isAdmin()) {
+      return response()->json([
+        'message' => 'You are not allowed to mark this comment as done',
+      ], 403);
+    }
+
+    $markup->done_at = now();
+    $markup->save();
+
+    return response()->json([
+      'message' => 'Comment marked as done',
+      'markup' => MarkupResource::make($markup),
+    ]);
+  }
+
+  /**
    * Delete a markup
    * 
    * @param Markup $markup

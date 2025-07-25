@@ -17,6 +17,7 @@ class MarkupResource extends JsonResource
       'date' => $this->date_string,
       'type' => $this->type,
       'shape' => json_decode($this->shape),
+      'is_done' => $this->is_done ? TRUE : FALSE,
       'is_owner' => $this->user_id === auth()->user()->id ? TRUE : FALSE,
       'is_locked' => $this->is_locked ? TRUE : FALSE,
       'resizable' => !$this->is_locked && $this->can_edit && $this->type !== 'comment' ? TRUE : FALSE,

@@ -104,6 +104,7 @@ Route::middleware('auth:sanctum')->group(function() {
   Route::post('markup/comment', [MarkupController::class, 'comment']);
   Route::post('markup', [MarkupController::class, 'create']);
   Route::put('markup/{markup:uuid}', [MarkupController::class, 'update']);
+  Route::put('markup/{markup:uuid}/done', [MarkupController::class, 'done']);
   Route::delete('markup/{markup:uuid}', [MarkupController::class, 'delete']);
 
   // Feedbacks

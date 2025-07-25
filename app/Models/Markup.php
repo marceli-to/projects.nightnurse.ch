@@ -10,6 +10,7 @@ class Markup extends Model
   protected $casts = [
     'created_at' => 'datetime:d.m.Y H:i',
     'deleted_at' => 'datetime:d.m.Y H:i',
+    'done_at' => 'datetime:d.m.Y H:i',
   ];
 
 	protected $fillable = [
@@ -21,6 +22,7 @@ class Markup extends Model
     'message_id',
     'message_file_id',
     'user_id',
+    'done_at',
 	];
 
   protected $appends = [
@@ -28,6 +30,7 @@ class Markup extends Model
     'author_company',
     'date_string',
     'can_edit',
+    'is_done',
   ];
 
   // Relations
@@ -71,6 +74,11 @@ class Markup extends Model
   public function getCanEditAttribute()
   {
     return auth()->user()->id === $this->user_id ? TRUE : FALSE;
+  }
+
+  public function getIsDoneAttribute()
+  {
+    return !is_null($this->done_at);
   }
 
 }

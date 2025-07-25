@@ -146,6 +146,9 @@ export default {
         'Möchten Sie zusätzlich zu den Kommentaren noch eine Nachricht erfassen?': 'Would you like to add a message in addition to the comments?',
         'Speichern & Schliessen': 'Save and close',
         'Speichern & Nachricht': 'Save and message',
+        'Erledigt': 'Done',
+        'Kommentar als erledigt markiert': 'Comment marked as done',
+        'Fehler beim Markieren des Kommentars': 'Error marking comment as done',
       },
 
       defaultLang: 'de',

@@ -6,12 +6,19 @@
     <div class="shrink-0">
       <annotation-icon class="text-gray-400 h-5 w-5" />
     </div>
-    <div class="ml-2">
+    <div class="ml-2 flex-1">
       <header class="text-xs text-gray-400 font-mono">
         {{ comment.date }} – {{ comment.author }}
       </header>
       <div class="text-dark text-sm leading-[1.5] mt-1">
-        {{ comment.comment }}
+        <span :class="[comment.is_done ? 'line-through opacity-60' : '']">{{ comment.comment }}</span>
+        <template v-if="$store.state.user.admin && !comment.is_done">
+          <button 
+            @click.stop="markAsDone"
+            class="text-xs block text-highlight hover:text-dark transition-colors duration-200 mt-2">
+            {{ translate('Erledigt') }}
+          </button>
+        </template>
       </div>
     </div>
   </a>
@@ -39,6 +46,27 @@ export default {
   },
 
   mixins: [i18n, Helpers],
+
+  methods: {
+    markAsDone() {
+      this.axios.put(`/api/markup/${this.comment.uuid}/done`)
+        .then(response => {
+          this.$notify({ 
+            type: "success", 
+            text: this.translate('Kommentar als erledigt markiert'),
+            duration: 0
+          });
+          this.comment.is_done = true;
+        })
+        .catch(error => {
+          this.$notify({ 
+            type: "danger", 
+            text: this.translate('Fehler beim Markieren des Kommentars'),
+            duration: 0
+          });
+        });
+    }
+  }
 
 }
 </script>

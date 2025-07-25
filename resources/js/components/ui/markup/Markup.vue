@@ -296,6 +296,7 @@ export default {
     addComment(x, y) {
       const element = {
         is_locked: false,
+        is_done: false,
         type: 'comment',
         resizable: false,
         draggable: true,
@@ -350,6 +351,7 @@ export default {
               this.comments.push({
                 uuid: element.uuid,
                 comment: element.comment,
+                is_done: element.is_done,
                 author: element.author,
                 author_company: element.author_company,
                 date: element.date,
