@@ -1,6 +1,6 @@
 <template>
   <div v-if="show" class="fixed inset-0 bg-black/80 flex items-center justify-center z-[21000]" @click.self="close">
-    <div class="bg-white rounded-lg p-4 pb-6 max-w-4xl max-h-[80vh] w-full mx-4 overflow-hidden">
+    <div class="bg-white rounded-lg p-4 pb-6 max-w-4xl max-h-[80vh] w-full overflow-y-auto">
       <div class="flex justify-between items-center mb-4">
         <h3 class="!mt-0 !mb-0 !text-lg w-full">{{ translate('Bild auswählen') }}</h3>
         <button @click="close" class="text-gray-400 hover:text-gray-600">
