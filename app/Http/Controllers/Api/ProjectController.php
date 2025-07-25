@@ -368,8 +368,13 @@ class ProjectController extends Controller
     // Make changes in 'Vertec'
     if (app()->environment() == 'production' || app()->environment() == 'staging')
     {
-      $vertec = new VertecApi();
-      $vertec->updateProject($project);
+      try {
+        $vertec = new VertecApi();
+        $vertec->updateProject($project);
+      } catch (\Exception $e) {
+        // Log the error but don't fail the project save
+        \Log::error('VertecApi error: ' . $e->getMessage());
+      }
     }
 
     return response()->json('successfully updated');

@@ -59,27 +59,27 @@ export default {
       }
       this.errors = data.body;
       NProgress.done();
-      this.$notify({ type: "danger", text: this.translate(`Bitte alle mit * markierten Felder prüfen!`)});
+      this.$notify({ type: "danger", text: this.translate(`Bitte alle mit * markierten Felder prüfen!`), duration: -1});
     },
 
     serverError(data) {
       NProgress.done();
-      this.$notify({ type: "danger", text: `${data.status} ${data.code}<br>${data.body.message}`});
+      this.$notify({ type: "danger", text: `${data.status} ${data.code}<br>${data.body.message}`, duration: -1});
     },
 
     notFoundError(data) {
-      this.$notify({ type: "danger", text: `${data.status} ${data.code}`});
+      this.$notify({ type: "danger", text: `${data.status} ${data.code}`, duration: -1});
       this.$router.push({ name: 'not-found' });
     },
 
     notAllowed(data) {
       NProgress.done();
-      this.$notify({ type: "danger", text: `${data.status} ${data.code}`});
+      this.$notify({ type: "danger", text: `${data.status} ${data.code}`, duration: -1});
     },
 
     forbiddenError(data) {
       NProgress.done();
-      this.$notify({ type: "danger", text: `${data.status} - Zugriff verweigert!`});
+      this.$notify({ type: "danger", text: `${data.status} - Zugriff verweigert!`, duration: -1});
       this.$router.push({ name: 'forbidden' });
     },
 
