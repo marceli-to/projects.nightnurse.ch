@@ -417,6 +417,10 @@ export default {
         this.data = response.data;
         this.isFetched = true;
         NProgress.done();
+      }).catch(error => {
+        this.handleError(error);
+        this.isFetched = true;
+        NProgress.done();
       });
     },
 
@@ -436,6 +440,9 @@ export default {
         this.$router.push({ name: "projects" });
         this.$notify({ type: "success", text: this.translate('Projekt erfasst') });
         NProgress.done();
+      }).catch(error => {
+        this.handleError(error);
+        NProgress.done();
       });
     },
 
@@ -454,12 +461,18 @@ export default {
         this.$router.push({ name: "projects" });
         this.$notify({ type: "success", text: this.translate('Änderungen gespeichert') });
         NProgress.done();
+      }).catch(error => {
+        this.handleError(error);
+        NProgress.done();
       });
     },
 
     quickSave() {
       NProgress.start();
       this.axios.put(`${this.routes.put}/${this.$route.params.uuid}`, this.data).then(response => {
+        NProgress.done();
+      }).catch(error => {
+        this.handleError(error);
         NProgress.done();
       });
     },
