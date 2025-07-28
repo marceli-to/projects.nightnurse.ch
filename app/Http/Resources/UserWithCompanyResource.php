@@ -22,6 +22,7 @@ class UserWithCompanyResource extends JsonResource
       'short_name' => $this->short_name,
       'full_name' => $this->full_name,
       'register_complete' => $this->register_complete,
+      'is_sbb' => $this->is_sbb,
       'company' => [
         'uuid' => $this->company->uuid,
         'name' => $this->company->name,

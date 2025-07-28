@@ -46,7 +46,7 @@
             {{ translate('Profil') }}
           </menu-item>
         </li>
-        <li class="block !p-0 !m-0">
+        <li class="block !p-0 !m-0" v-if="$store.state.user.is_sbb">
           <menu-item :route="'sbb'">
             <sbb-icon class="h-4 w-4 sm:h-7 sm:w-7 mr-2 sm:mr-4" aria-hidden="true" />
             {{ translate('SBB Bestellportal') }}

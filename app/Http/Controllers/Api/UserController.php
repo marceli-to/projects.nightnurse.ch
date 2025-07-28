@@ -97,6 +97,11 @@ class UserController extends Controller
       ];
     }
 
+    if ($user->isSBB())
+    {
+      $data['is_sbb'] = TRUE;
+    }
+
     return response()->json($data);
   }
 
@@ -133,6 +138,7 @@ class UserController extends Controller
       'gender_id' => $request->input('gender_id'),
       'role_id' => $request->input('role_id'),
       'vertec_id' => $request->input('vertec_id') ? $request->input('vertec_id') : NULL,
+      'is_sbb' => $request->input('is_sbb') ? $request->input('is_sbb') : 0,
     ]);
     return response()->json(['userId' => $user->id]);
   }

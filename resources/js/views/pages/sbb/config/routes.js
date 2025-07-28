@@ -7,7 +7,6 @@ import SbbZusaetzlicheBearbeitung from '@/views/pages/sbb/ZusaetzlicheBearbeitun
 import Sbb360FotografieBegehung from '@/views/pages/sbb/360FotografieBegehung.vue';
 
 const routes = [
-
   {
     name: 'sbb',
     path: '/sbb',

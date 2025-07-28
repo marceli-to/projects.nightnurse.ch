@@ -120,8 +120,26 @@ export default {
 
   mixins: [PageTitle, i18n],
 
+
+  mounted() {
+    this.fetchUser();
+  },
+
   created() {
     this.setPageTitle(this.translate('SBB Bestellportal'));
-  }
+  },
+
+  methods: {
+    fetchUser() {
+      if (!this.$store.state.user) {
+        this.axios.get(`/api/user/authenticated`).then(response => {
+          this.$store.commit('user', response.data);
+          if (!this.$store.state.user.is_sbb) {
+            this.$router.push({ name: 'forbidden' });
+          }
+        });
+      }
+    },
+  },
 }
 </script>

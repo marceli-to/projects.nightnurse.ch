@@ -31,7 +31,8 @@ class User extends Authenticatable implements MustVerifyEmail
     'team_id',
     'gender_id',
     'role_id',
-    'vertec_id'
+    'vertec_id',
+    'is_sbb'
   ];
 
   /**
@@ -142,6 +143,15 @@ class User extends Authenticatable implements MustVerifyEmail
   public function isClientAdmin()
   {
     return Role::find($this->role_id)->isClientAdmin();
+  }
+
+  /**
+   * SBB helper
+   */
+
+  public function isSBB()
+  {
+    return $this->is_sbb;
   }
 
   /**

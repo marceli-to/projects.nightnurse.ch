@@ -83,6 +83,15 @@
       </select>
     </div>
 
+    <div class="form-group" v-if="data.company.teams">
+      <label>{{ translate('Zugang SBB Plattform') }}</label>
+      <select v-model="data.is_sbb">
+        <option :value="0">{{ translate('Nein') }}</option>
+        <option :value="1">{{ translate('Ja') }}</option>
+      </select>
+    </div>
+
+
     <div class="form-group">
       <label>{{ translate('Vertec Id') }}</label>
       <input type="text" v-model="data.vertec_id">
@@ -147,6 +156,7 @@ export default {
         company_id: null,
         team_id: null,
         vertec_id: null,
+        is_sbb: false,
         company: {
           teams: null
         }

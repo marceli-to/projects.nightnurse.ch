@@ -148,12 +148,23 @@ export default {
   },
 
   mounted() {
-    if (this.$store.state.user) {
-      this.setPageTitle(this.translate('360°-Fotografie/Begehung'));
-    }
+    this.fetchUser();
   },
 
+
   methods: {
+    
+    fetchUser() {
+      if (!this.$store.state.user) {
+        this.axios.get(`/api/user/authenticated`).then(response => {
+          this.$store.commit('user', response.data);
+          if (!this.$store.state.user.is_sbb) {
+            this.$router.push({ name: 'forbidden' });
+          }
+        });
+      }
+    },
+
     toggleSection(section) {
       this.openSections[section] = !this.openSections[section];
     }
