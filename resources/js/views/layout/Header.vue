@@ -46,6 +46,13 @@
             {{ translate('Profil') }}
           </menu-item>
         </li>
+        <li class="block !p-0 !m-0">
+          <menu-item :route="'sbb'">
+            <sbb-icon class="h-4 w-4 sm:h-7 sm:w-7 mr-2 sm:mr-4" aria-hidden="true" />
+            {{ translate('SBB Bestellportal') }}
+          </menu-item>
+        </li>
+
         <li class="block !p-0 m-0 !mt-4">
           <div class="flex items-center justify-between pt-3 py-2 sm:py-3 sm:pb-0 pr-0">
             <a href="/logout" class="text-gray-400 hover:text-highlight text-xs font-normal no-underline flex items-center p-1 ml-1">
@@ -85,6 +92,7 @@ import MenuItemLabel from '@/components/ui/menu/Label';
 import Notification from '@/components/ui/Notification';
 import FlagDeIcon from '@/components/ui/icons/flag-de';
 import FlagEnIcon from '@/components/ui/icons/flag-en';
+import SbbIcon from '@/components/ui/icons/Sbb.vue';
 import i18n from "@/i18n";
 
 export default {
@@ -102,6 +110,7 @@ export default {
     MenuItemLabel,
     FlagDeIcon,
     FlagEnIcon,
+    SbbIcon,
     Notification
   },
 
