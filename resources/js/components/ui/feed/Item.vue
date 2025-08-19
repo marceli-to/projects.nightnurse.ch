@@ -6,14 +6,104 @@
 
       <div class="p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark relative rounded group-[.is-internal]:border-transparent group-[.is-internal]:bg-gray-100 group-[.is-private]:bg-alice-blue group-[.is-private]:border-alice-blue">
         
+        <!-- deleted -->
         <template v-if="message.deleted_at">
-          <feed-item-body>
-            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">
-              {{ translate('Nachricht gelöscht durch') }} {{message.sender.full_name}}
-            </div>
+
+          <shield-check-icon 
+            class="icon-card absolute right-1 top-1 sm:w-5 sm:h-5" 
+            aria-hidden="true" 
+            v-if="message.private">
+          </shield-check-icon>
+
+          <feed-item-header :class="[message.private ? 'text-dark': '', 'relative']">
+            <span class="font-bold">{{message.sender.full_name}}</span>
+            {{ translate('an') }}
+            <span class="has-tooltip" v-if="message.users && message.users.length > 2">
+              <span class='tooltip'>
+                {{ message.users.map(x => x.full_name).join(", ") }}
+              </span>
+              <a href="javascript:;" class="underline underline-offset-4 text-gray-400 decoration-dotted">{{ message.users.length }} {{ translate('Empfänger') }}</a>
+            </span>
+            <span v-else>
+              {{ message.users.map(x => x.full_name).join(", ") }}
+            </span>
+            {{ translate('um') }} {{message.message_time}}
+          </feed-item-header>
+
+          <feed-item-reply
+            :originalMessage="message.original_message"
+            @scrollTo="$emit('scrollTo', $event)"
+            v-if="message.is_reply">
+          </feed-item-reply>
+
+          <feed-item-body v-if="message.subject || message.body">
+            <a 
+              href="javascript:;"
+              class="no-underline font-mono text-gray-400 text-xs hover:text-highlight flex items-center text-sm mt-1 mb-3" 
+              @click.prevent="toggleMessageBody(message.uuid)"
+              v-if="hideMessageBody">
+              <plus-sm-icon class="h-4 w-4" aria-hidden="true" />
+              <span class="block ml-1">{{ translate('Nachricht anzeigen') }}</span>
+            </a>
+            <template v-if="!hideMessageBody">
+              <div :class="[message.body ? 'font-bold' : '', 'text-sm']" v-if="message.subject">
+                {{ message.subject }}
+              </div>
+              <div class="text-sm" v-html="message.body"></div>
+            </template>
           </feed-item-body>
+          <div 
+            :class="[message.subject || message.body ? 'mt-2 lg:mt-4' : 'mt-1 lg:mt-3', '']"
+            v-if="message.files.length > 0">
+            <feed-item-attachement 
+              v-for="(file, idx) in message.files"
+              :key="idx"
+              :index="idx"
+              :file="file"
+              :truncate="hasTruncateFiles"
+              :intermediate="message.intermediate"
+              :message="message"
+              :private="message.private"
+              :isDeleted="true">
+            </feed-item-attachement>
+            <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4">
+              <template v-if="(message.files.length > 3)">
+                <a 
+                  href="javascript:;" 
+                  @click="toggle(message.uuid)"
+                  :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
+                  v-if="hasTruncateFiles">
+                  <chevron-down-icon class="h-4 w-4" aria-hidden="true" />
+                  <span class="inline-block ml-2">{{ translate('Mehr anzeigen') }} ({{message.files.length - 3}})</span>
+                </a>
+                <a
+                  href="javascript:;" 
+                  @click="toggle(message.uuid)"
+                  :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']"
+                  v-else>
+                  <chevron-up-icon class="h-4 w-4" aria-hidden="true" />
+                  <span class="inline-block ml-2">{{ translate('Weniger anzeigen') }}</span>
+                </a>
+              </template>
+              <template v-if="hasNonDeletedFiles(message.files) && !message.deleted_at">
+                <a 
+                  :href="`/download/zip/${message.uuid}`" 
+                  target="_blank" 
+                  :class="[message.private || message.internal ? 'text-gray-400' : 'text-dark', 'flex items-center no-underline hover:text-highlight mt-3 sm:mt-0']">
+                  <folder-download-icon class="h-5 w-5" aria-hidden="true" />
+                  <span class="inline-block ml-2">{{ translate('Download als ZIP') }}</span>
+                </a>
+              </template>
+            </span>
+          </div>
+
+          <feed-item-reactions 
+            :reactions="message.reactions">
+          </feed-item-reactions>
+
         </template>
 
+        <!-- not deleted -->
         <template v-else>
           <shield-check-icon 
             class="icon-card absolute right-1 top-1 sm:w-5 sm:h-5" 
@@ -107,6 +197,7 @@
           </feed-item-reactions>
 
         </template>
+
       </div>
 
       <div class="flex justify-between">

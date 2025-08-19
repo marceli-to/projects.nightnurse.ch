@@ -112,7 +112,7 @@
         </a>
       </template>
     </template>
-    <template>
+    <template v-if="!project.is_deleted">
       <a href="javascript:;" 
         class="text-xs font-mono text-gray-400 hidden sm:flex justify-center items-center no-underline hover:text-highlight"
         @click="toggleTimeline()">

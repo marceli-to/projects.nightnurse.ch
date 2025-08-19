@@ -6,6 +6,16 @@
           {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at }})
         </div>
       </template>
+      <template v-else-if="$props.isDeleted">
+        <div class="flex items-center py-2">
+          <div class="mr-2 lg:mr-3 py-1">
+            <file-type :extension="file.extension" />
+          </div>
+          <div class="font-mono text-xs">
+            {{ file.original_name | truncate(45, '...') }} – {{ file.size }}<br>
+          </div>
+        </div>
+      </template>
       <template v-else>
         <a :href="fileUri(file)" 
           target="_blank" 
@@ -48,6 +58,16 @@
       <template v-if="file.file_deleted_at">
         <div class="font-mono italic text-gray-400 text-xs py-2">
           {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at  }})
+        </div>
+      </template>
+      <template v-else-if="$props.isDeleted">
+        <div class="flex items-center py-2">
+          <div class="mr-2 lg:mr-3 py-1">
+            <file-type :extension="file.extension" />
+          </div>
+          <div class="font-mono text-xs">
+            {{ file.original_name | truncate(45, '...') }} – {{ file.size }}<br>
+          </div>
         </div>
       </template>
       <template v-else>
@@ -141,6 +161,11 @@ export default {
     intermediate: {
       type: Number,
       default: 0
+    },
+
+    isDeleted: {
+      type: Boolean,
+      default: false
     },
   },
 }

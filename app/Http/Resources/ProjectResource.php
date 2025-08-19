@@ -38,6 +38,7 @@ class ProjectResource extends JsonResource
       'internal_users' => auth()->user()->isAdmin() ? UserWithCompanyResource::collection(Team::find(Team::TEAM_BUENOS_AIRES)->users) : null,
       'users' => UserWithCompanyResource::collection($this->users),
       'quotes' => ProjectQuoteResource::collection($this->quotes),
+      'is_deleted' => $this->deleted_at ? true : false,
     ];
   }
 }
