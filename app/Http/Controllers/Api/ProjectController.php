@@ -371,6 +371,7 @@ class ProjectController extends Controller
       try {
         $vertec = new VertecApi();
         $vertec->updateProject($project);
+        dd('success');
       } catch (\Exception $e) {
         // Log the error but don't fail the project save
         \Log::error('VertecApi error: ' . $e->getMessage());
