@@ -1,12 +1,7 @@
 <template>
   <div :class="[$props.private ? 'border-slate-300' : 'border-gray-200', 'first:border-t border-b']" v-if="($props.truncate && $props.index < truncateLimit) || !$props.truncate">
     <template v-if="$props.intermediate">
-      <template v-if="file.file_deleted_at">
-        <div class="font-mono italic text-gray-400 text-xs py-2">
-          {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at }})
-        </div>
-      </template>
-      <template v-else-if="$props.isDeleted">
+      <template v-if="$props.isDeleted">
         <div class="flex items-center py-2">
           <div class="mr-2 lg:mr-3 py-1">
             <file-type :extension="file.extension" />
@@ -14,6 +9,11 @@
           <div class="font-mono text-xs">
             {{ file.original_name | truncate(45, '...') }} – {{ file.size }}<br>
           </div>
+        </div>
+      </template>
+      <template v-else-if="file.file_deleted_at">
+        <div class="font-mono italic text-gray-400 text-xs py-2">
+          {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at }})
         </div>
       </template>
       <template v-else>
@@ -55,12 +55,7 @@
       </template>
     </template>
     <template v-else>
-      <template v-if="file.file_deleted_at">
-        <div class="font-mono italic text-gray-400 text-xs py-2">
-          {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at  }})
-        </div>
-      </template>
-      <template v-else-if="$props.isDeleted">
+      <template v-if="$props.isDeleted">
         <div class="flex items-center py-2">
           <div class="mr-2 lg:mr-3 py-1">
             <file-type :extension="file.extension" />
@@ -68,6 +63,11 @@
           <div class="font-mono text-xs">
             {{ file.original_name | truncate(45, '...') }} – {{ file.size }}<br>
           </div>
+        </div>
+      </template>
+      <template v-else-if="file.file_deleted_at">
+        <div class="font-mono italic text-gray-400 text-xs py-2">
+          {{ translate('Datei wurde gelöscht') }} ({{ file.file_deleted_at  }})
         </div>
       </template>
       <template v-else>
