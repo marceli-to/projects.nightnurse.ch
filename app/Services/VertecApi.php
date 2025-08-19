@@ -6,8 +6,8 @@ use Exception;
 
 class VertecApi
 { 
-  protected $auth_url = 'https://nightnurse.vertec-mobile.com/auth/xml';
-  protected $xml_url  = 'https://nightnurse.vertec-mobile.com/xml';
+  protected $auth_url = 'https://vertec.nightnurse.ch/auth/xml';
+  protected $xml_url  = 'https://vertec.nightnurse.ch/xml';
   private $token;
 
   public function updateProject(Project $project)
