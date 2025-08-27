@@ -7,6 +7,7 @@
       <div class="p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark relative rounded group-[.is-internal]:border-transparent group-[.is-internal]:bg-gray-100 group-[.is-private]:bg-alice-blue group-[.is-private]:border-alice-blue">
         
         <!-- deleted -->
+        <!--
         <template v-if="message.deleted_at">
 
           <shield-check-icon 
@@ -101,6 +102,14 @@
             :reactions="message.reactions">
           </feed-item-reactions>
 
+        </template>
+        -->
+        <template v-if="message.deleted_at">
+          <feed-item-body>
+            <div class="text-xs text-gray-400 font-mono italic sm:pt-1">
+              {{ translate('Nachricht gelöscht durch') }} {{message.sender.full_name}}
+            </div>
+          </feed-item-body>
         </template>
 
         <!-- not deleted -->

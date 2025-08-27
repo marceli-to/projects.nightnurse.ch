@@ -25,9 +25,6 @@
         </div>
       </div>
       <list-action>
-        <router-link :to="{name: 'employee-update', params: { uuid: d.uuid }}" v-if="d.register_complete">
-          <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
-        </router-link>
         <template v-if="!d.register_complete">
           <a href="" @click.prevent="invite(d.uuid)">
             <mail-icon class="icon-list mr-2" aria-hidden="true" />
@@ -36,6 +33,9 @@
             <link-icon class="icon-list mr-2" aria-hidden="true" />
           </a>
         </template>
+        <router-link :to="{name: 'employee-update', params: { uuid: d.uuid }}">
+          <pencil-alt-icon class="icon-list mr-2" aria-hidden="true" />
+        </router-link>
         <a href="" @click.prevent="destroy(d.uuid)">
           <trash-icon class="icon-list" aria-hidden="true" />
         </a>
