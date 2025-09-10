@@ -168,7 +168,8 @@
               :truncate="hasTruncateFiles"
               :intermediate="message.intermediate"
               :message="message"
-              :private="message.private">
+              :private="message.private"
+              :isDeleted="$props.projectDeleted">
             </feed-item-attachement>
             <span class="sm:flex sm:items-center justify-between text-xs font-mono pb-1 pt-4">
               <template v-if="(message.files.length > 3)">
@@ -307,6 +308,8 @@ export default {
     },
 
     projectState: null,
+
+    projectDeleted: null,
   },
 
   mounted() {

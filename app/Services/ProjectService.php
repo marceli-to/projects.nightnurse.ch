@@ -101,8 +101,8 @@ class ProjectService
         $file->file_deleted_at = now();
         $file->save();
       }
-      // Delete the message
-      $message->delete();
+      // Delete the message [commented out: 2025-08-29 by Marcel Stadelmann]
+      // $message->delete();
     }
     // Set state to 4 (deleted)
     $project->project_state_id = 4;
@@ -128,12 +128,12 @@ class ProjectService
     $project->project_state_id = 1;
     $project->save();
 
-    // Restore all messages
-    $messages = $project->messages()->withTrashed()->get();
-    foreach ($messages as $message)
-    {
-      $message->restore();
-    }
+    // Restore all messages [commented out: 2025-08-29 by Marcel Stadelmann]
+    // $messages = $project->messages()->withTrashed()->get();
+    // foreach ($messages as $message)
+    // {
+    //   $message->restore();
+    // }
     return TRUE;
   }
 }

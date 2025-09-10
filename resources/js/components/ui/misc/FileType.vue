@@ -1,5 +1,5 @@
 <template>
-  <div :class="'flex items-center rounded-sm p-1.5 text-white text-tiny font-mono leading-none max-w-[33px] bg-dark is-' + extension">{{extension}}</div>
+  <div :class="'inline-flex items-center rounded-sm p-1.5 text-white text-tiny font-mono leading-none bg-dark is-' + extension">{{extension}}</div>
 </template>
 
 <script>
@@ -12,9 +12,11 @@ export default {
 }
 </script>
 <style>
-.is-jpg {
-  @apply bg-gray-300;
-}
+.is-jpg,
+.is-jpeg,
+.is-webp,
+.is-gif,
+.is-avif,
 .is-png {
   @apply bg-gray-300;
 }

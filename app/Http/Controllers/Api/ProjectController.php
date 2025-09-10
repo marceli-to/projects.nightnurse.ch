@@ -149,9 +149,6 @@ class ProjectController extends Controller
     if (auth()->user()->isAdmin())
     {
       $projects = Project::withTrashed()->with('state', 'company', 'companies', 'manager')
-                    ->with(['previewMessages' => function ($query) {
-                      $query->with('sender', 'files')->limit(3);
-                    }])
                     ->orderBy('last_activity', 'DESC')
                     ->orderBy('number', 'DESC')
                     ->where('deleted_at', '!=', null)
