@@ -5,8 +5,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Message;
-use Symfony\Component\HttpFoundation\Email;
-use Symfony\Component\HttpFoundation\Header\UnstructuredHeader;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Header\UnstructuredHeader;
 
 class MessageNotification extends Mailable
 {
