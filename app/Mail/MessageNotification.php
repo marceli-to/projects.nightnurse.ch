@@ -33,8 +33,9 @@ class MessageNotification extends Mailable
       ->replyTo($this->message->sender->email)
       ->subject($this->subject)
       ->with(['message' => $this->message])
-      ->withSwiftMessage(function ($message) {
-        $message->getHeaders()->addParameterizedHeader('X-Mailgun-Variables', 'message_uuid=' . $this->message->uuid);
+      ->withSymfonyMessage(function (Email $email) {
+        $vars = json_encode(['message_uuid' => $this->message->uuid], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        $email->getHeaders()->add(new UnstructuredHeader('X-Mailgun-Variables', $vars));
       })
       ->markdown('notifications.message');
 
