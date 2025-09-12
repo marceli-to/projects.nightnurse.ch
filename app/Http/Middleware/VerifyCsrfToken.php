@@ -10,6 +10,7 @@ class VerifyCsrfToken extends Middleware
    * @var array
    */
   protected $except = [
+    'webhooks/mailgun',
     'api/image/upload',
     'api/file/upload',
   ];

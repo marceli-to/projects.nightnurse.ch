@@ -48,6 +48,17 @@ return [
   |
   */
 
-  'owner_id' => env('NIGHTNURSE_OWNER_ID', 1)
+  'owner_id' => env('NIGHTNURSE_OWNER_ID', 1),
+
+  /*
+  |--------------------------------------------------------------------------
+  | Mailgun webhook signing key
+  |--------------------------------------------------------------------------
+  |
+  */
+
+  'mailgun' => [
+    'webhook_signing_key' => env('MAILGUN_WEBHOOK_SIGNING_KEY'),
+  ],
 ]
 ?>

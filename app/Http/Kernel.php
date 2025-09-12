@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\CheckRole::class,
         'project-redirect' => \App\Http\Middleware\HandleProjectRedirect::class,
+        'verify.mailgun' => \App\Http\Middleware\VerifyMailgunSignature::class,
     ];
 }

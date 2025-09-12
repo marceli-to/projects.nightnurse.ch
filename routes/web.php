@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\QuoteController;
+use App\Http\Controllers\MailgunWebhookController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,6 +18,10 @@ use App\Http\Controllers\QuoteController;
 Route::get('/offerte/annehmen/{key}', [QuoteController::class, 'accept'])->name('quote.accept');
 Route::get('/offerte/{slug?}/{key}', [QuoteController::class, 'index']);
 Route::get('/offerte/{key}', [QuoteController::class, 'index']);
+
+Route::post('/webhooks/mailgun', [MailgunWebhookController::class, 'handle'])
+  ->middleware('verify.mailgun')
+  ->name('webhooks.mailgun');
 
 /*
 |--------------------------------------------------------------------------
