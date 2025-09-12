@@ -29,8 +29,18 @@ class MailgunWebhookController extends Controller
       // (Implement your own service/repo as needed)
 
       // Send raw email to recipient
-      Mail::raw($deliveryMsg, function ($message) {
-        $message->to(env('MAIL_TO'));
+      $emailContent = "Mailgun Webhook Event:\n\n" .
+        "Event: {$event}\n" .
+        "Severity: {$severity}\n" .
+        "Reason: {$reason}\n" .
+        "Recipient: {$recipient}\n" .
+        "Code: {$code}\n" .
+        "Message: {$deliveryMsg}\n" .
+        "SMTP Response: {$smtpResp}\n" .
+        "Message ID: {$messageId}";
+
+      Mail::raw($emailContent, function ($message) {
+        $message->to(env('MAIL_TO'))->subject('Mailgun Webhook: ' . ucfirst($event));
       });
 
       // Log
