@@ -42,7 +42,7 @@ class MailgunWebhookController extends Controller
         "SMTP Response: {$smtpResp}\n" .
         "Message ID: {$messageId}";
 
-      Mail::raw($emailContent, function ($message) {
+      Mail::raw($emailContent, function ($message) use ($event) {
         $message->to(env('MAIL_TO'))->subject('Mailgun Webhook: ' . ucfirst($event));
       });
 
