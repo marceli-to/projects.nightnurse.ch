@@ -20,6 +20,7 @@ class MailgunWebhookController extends Controller
     $deliveryMsg = data_get($eventData, 'delivery-status.message') ?? 'No message';
     $code        = data_get($eventData, 'delivery-status.code') ?? 'unknown';
     $smtpResp    = data_get($eventData, 'delivery-status.description') ?? data_get($eventData, 'delivery-status.smtp-response') ?? 'unknown';
+    $messageUuid = data_get($eventData, 'user-variables.message_uuid');
 
     // Debug log the raw payload
     Log::info('Mailgun webhook payload', ['payload' => $payload]);
@@ -40,7 +41,8 @@ class MailgunWebhookController extends Controller
         "Code: {$code}\n" .
         "Message: {$deliveryMsg}\n" .
         "SMTP Response: {$smtpResp}\n" .
-        "Message ID: {$messageId}";
+        "Message ID: {$messageId}\n" .
+        "Message UUID: {$messageUuid}";
 
       Mail::raw($emailContent, function ($message) use ($event) {
         $message->to(env('MAIL_TO'))->subject('Mailgun Webhook: ' . ucfirst($event));
@@ -56,6 +58,7 @@ class MailgunWebhookController extends Controller
         'message'   => $deliveryMsg,
         'smtp'      => $smtpResp,
         'messageId' => $messageId,
+        'messageUuid' => $messageUuid,
       ]);
     }
 

@@ -34,7 +34,7 @@ class MessageNotification extends Mailable
       ->subject($this->subject)
       ->with(['message' => $this->message])
       ->withSwiftMessage(function ($message) {
-        $message->getHeaders()->addTextHeader('X-Message-UUID', $this->message->uuid);
+        $message->getHeaders()->addParameterizedHeader('X-Mailgun-Variables', 'message_uuid=' . $this->message->uuid);
       })
       ->markdown('notifications.message');
 
