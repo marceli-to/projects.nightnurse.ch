@@ -33,6 +33,9 @@ class MessageNotification extends Mailable
       ->replyTo($this->message->sender->email)
       ->subject($this->subject)
       ->with(['message' => $this->message])
+      ->withSwiftMessage(function ($message) {
+        $message->getHeaders()->addTextHeader('X-Message-UUID', $this->message->uuid);
+      })
       ->markdown('notifications.message');
 
     // TODO: remove this once we have a proper reply-to address
