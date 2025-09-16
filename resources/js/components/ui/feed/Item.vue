@@ -6,8 +6,15 @@
 
       <div class="p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark relative rounded group-[.is-internal]:border-transparent group-[.is-internal]:bg-gray-100 group-[.is-private]:bg-alice-blue group-[.is-private]:border-alice-blue">
         
-        {{ message.has_delivery_error }}
-        {{ message.delivery_errors }}
+        <template v-if="message.has_delivery_error">
+          <div>
+            <div class="text-tiny font-mono bg-red-500 rounded-sm py-[5px] mb-2 mt-1 pr-2 pl-1 gap-x-2 inline-flex items-center w-auto text-white">
+              <exclamation-icon class="h-4 w-4" aria-hidden="true" />
+              <span>Message not delivered (Reason: {{ message.delivery_errors['reason'] }})</span>
+            </div>
+          </div>
+        </template>
+
         <!-- deleted -->
         <!--
         <template v-if="message.deleted_at">
@@ -238,6 +245,7 @@ import {
   PlusSmIcon,
   TrashIcon, 
   ShieldCheckIcon, 
+  ExclamationIcon,
   CloudDownloadIcon, 
   FolderDownloadIcon,
   ChevronDownIcon,
@@ -266,6 +274,7 @@ export default {
     ChevronDownIcon,
     ChevronUpIcon,
     CloudDownloadIcon,
+    ExclamationIcon,
     FeedItemHeader,
     FeedItemTimestamp,
     FeedItemAttachement,

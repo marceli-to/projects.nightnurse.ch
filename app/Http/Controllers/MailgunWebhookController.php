@@ -51,6 +51,7 @@ class MailgunWebhookController extends Controller
         ]);
         
         Mail::to('m@marceli.to')->send(new DeliveryErrorNotification($message));
+        Mail::to('deiters@nightnurse.ch')->send(new DeliveryErrorNotification($message));
 
         // Log
         Log::warning('Mailgun blocked-like event', [
