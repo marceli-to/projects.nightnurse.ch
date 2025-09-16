@@ -6,6 +6,8 @@
 
       <div class="p-3 lg:py-2 lg:pb-3 bg-white border-2 border-gray-100 text-sm sm:text-base text-dark relative rounded group-[.is-internal]:border-transparent group-[.is-internal]:bg-gray-100 group-[.is-private]:bg-alice-blue group-[.is-private]:border-alice-blue">
         
+        {{ message.has_delivery_error }}
+        {{ message.delivery_errors }}
         <!-- deleted -->
         <!--
         <template v-if="message.deleted_at">

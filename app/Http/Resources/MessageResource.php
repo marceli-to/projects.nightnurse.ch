@@ -33,6 +33,8 @@ class MessageResource extends JsonResource
       'team' => $this->team, 
       'can_delete' => $this->can_delete,
       'truncate_files' => $this->files->count() > 3 ? true : false,
+      'has_delivery_error' => $this->has_delivery_error,
+      'delivery_errors' => $this->delivery_errors ? $this->delivery_errors : null,
       'message_time' => $this->message_time,
       'message_date' => $this->message_date,
       'message_date_string' => $this->message_date_string,
