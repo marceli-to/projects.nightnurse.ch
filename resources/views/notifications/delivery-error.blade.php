@@ -30,9 +30,14 @@ An:
 </tr>
 </table>
 </div>
-<div class="pt-25 message-body delivery-error">
-  <div class="text-xs text-slate font-mono">
-    {{$message['delivery_errors']['message']}}
+<div class="py-10 message-body">
+  <div class="text-xs font-mono delivery-error">
+    <span>Delivery Error:</span><br>
+    <span>Event:</span> {{ $message['delivery_errors']['event'] }}<br>
+    <span>Severity:</span> {{ $message['delivery_errors']['severity'] }}<br>
+    <span>Reason:</span> {{ $message['delivery_errors']['reason'] }}<br>
+    <span>Recipient:</span> {{ $message['delivery_errors']['recipient'] }}<br>
+    <span>Message:</span> {{ $message['delivery_errors']['message'] }}
   </div>
 </div>
 @if ($message['body'])
