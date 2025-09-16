@@ -10,7 +10,7 @@ class MailgunWebhookController extends Controller
 {
   public function handle(Request $request)
   {
-    // return response()->json(200);
+    return response()->json(200);
     // Prefer JSON body; fall back to form fields
     $payload   = $request->all();
     $eventData = data_get($payload, 'event-data', $payload); // if not present, use flat payload
