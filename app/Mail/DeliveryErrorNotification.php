@@ -38,6 +38,6 @@ class DeliveryErrorNotification extends Mailable
         $vars = json_encode(['message_uuid' => $this->message->uuid], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         $email->getHeaders()->add(new UnstructuredHeader('X-Mailgun-Variables', $vars));
       })
-      ->markdown('notifications.message');
+      ->markdown('notifications.delivery-error');
   }
 }
