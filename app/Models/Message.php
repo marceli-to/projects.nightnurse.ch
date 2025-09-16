@@ -13,6 +13,7 @@ class Message extends Base
   protected $casts = [
     'created_at' => 'datetime:d.m.Y H:i',
     'deleted_at' => 'datetime:d.m.Y H:i',
+    'delivery_errors' => 'array',
   ];
 
 	protected $fillable = [
@@ -22,6 +23,8 @@ class Message extends Base
     'intermediate',
     'private',
     'internal',
+    'has_delivery_error',
+    'delivery_errors',
     'project_id',
     'user_id',
     'message_id',

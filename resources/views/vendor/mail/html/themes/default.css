@@ -254,6 +254,13 @@ table td {
   padding-bottom: 15px !important;
 }
 
+/* Delivery Error */
+.delivery-error {
+  border: 2px solid #D00000;
+  border-radius: 2px;
+  padding: 10px;
+}
+
 /* Utilities */
 
 .break-all {
