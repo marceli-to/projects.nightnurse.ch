@@ -153,7 +153,7 @@ return [
         */
 
         // 404 Not Found
-        'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' => 'warning',
+        'Symfony\Component\HttpKernel\Exception\NotFoundHttpException' => 'skip',
 
         // 403 Forbidden
         'Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException' => 'warning',
