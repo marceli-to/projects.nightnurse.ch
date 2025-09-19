@@ -21,6 +21,7 @@
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.8",
         "laravel/ui": "^4.0",
+        "marceli-to/wiretap": "^1.4",
         "nesbot/carbon": "^2.36",
         "omniphx/forrest": "2.*",
         "opcodesio/log-viewer": "^2.3",
@@ -45,7 +46,10 @@
         "optimize-autoloader": true,
         "platform-check": false,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "extra": {
         "laravel": {
