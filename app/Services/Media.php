@@ -70,7 +70,7 @@ class Media
     $filesize = File::size($this->upload_path . DIRECTORY_SEPARATOR . $filename);
 
     $previewable = $file_data !== FALSE ? $this->previewable($file_data, $filetype) : FALSE;
-    $instant_previewable = $file_data !== FALSE ? $this->instant_previewable($file_data, $filetype) : FALSE;
+    $instant_previewable = $file_data !== FALSE ? $this->instantPreviewable($file_data, $filetype) : FALSE;
 
     return [
       'name' => $filename, 
@@ -79,8 +79,8 @@ class Media
       'image_ratio' => $file_data !== FALSE && in_array($filetype, $this->image_types) ? $file_data[0] .'/'. $file_data[1] : NULL,
       'extension' => $filetype, 
       'size' => $filesize,
-      'preview' => $previewable ? TRUE : FALSE,
-      'instant_previewable' => $instant_previewable ? TRUE : FALSE
+      'preview' => $previewable,
+      'instant_previewable' => $instant_previewable
     ];
   }
 
@@ -651,7 +651,7 @@ class Media
    * @return Boolean
    */
  
-   protected function instant_previewable($file_data = NULL, $filetype = NULL)
+   protected function instantPreviewable($file_data = NULL, $filetype = NULL)
    {
      if (in_array(strtolower($filetype), $this->image_types))
      {
