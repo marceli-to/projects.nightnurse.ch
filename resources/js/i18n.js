@@ -247,6 +247,7 @@ export default {
         'Auch grössere Anpassungen (>1 Stunde Arbeitsaufwand) machen wir gerne noch möglich. Wir verstehen, wenn nicht alle Wünsche im schlanken Prozess Platz finden. Für solche, allenfalls benötigte zusätzliche Schritte, ist diese Option, die Sie als Besteller unkompliziert über die Bestellplattform dem Auftrag hinzufügen können.': 'We are also happy to make larger adjustments (>1 hour of work) possible. We understand if not all wishes can fit into the lean process. For such additional steps that may be needed, this is an option that you as the client can easily add to the order via the ordering platform.',
         'Die Einheit ist pro Stunde - in Absprache mit ihrem Projektleiter können sie die richtige Anzahl der Stunden für Ihre Anpassung auswählen.': 'The unit is per hour - in consultation with your project manager, you can select the right number of hours for your adjustment.',
         'Zusätzliche Bearbeitung, im Stundenaufwand': 'Additional processing, hourly rate',
+        'Kopie an mich senden': 'Send me a copy',
       },
 
       defaultLang: 'de',
