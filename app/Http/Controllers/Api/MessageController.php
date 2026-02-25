@@ -155,6 +155,21 @@ class MessageController extends Controller
       }
     }
 
+    // Persist the sender's copy preference and optionally add them as a recipient
+    $sender = User::find(auth()->user()->id);
+    $sendCopy = $request->boolean('send_copy');
+    $sender->send_copy = $sendCopy;
+    $sender->save();
+
+    if ($sendCopy)
+    {
+      MessageUser::create([
+        'message_id' => $message->id,
+        'user_id'    => $sender->id,
+        'message_state_id' => 1,
+      ]);
+    }
+
     // Update last_activity only for public messages since private messages 
     // are not shown in the project list and therefore don't need to update
     if (!$request->input('private'))

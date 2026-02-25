@@ -20,6 +20,15 @@
           @addOrRemoveRecipient="addOrRemoveRecipient">
         </user-selection>
 
+        <!-- Send copy to self -->
+        <div class="form-group mt-4 lg:mt-6">
+          <label class="mb-2 lg:mb-3">{{ translate('Kopie an mich senden') }}</label>
+          <label class="relative !flex items-center cursor-pointer">
+            <input type="checkbox" v-model="data.send_copy" class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-highlight"></div>
+          </label>
+        </div>
+
         <!-- Message (subject, text) -->
         <div class="form-group">
           <label>{{ translate('Betreff') }}</label>
@@ -201,6 +210,7 @@ export default {
         body: '',
         private: 0,
         intermediate: 0,
+        send_copy: false,
         message_uuid: null,
         users: [],
         files: [],
@@ -288,6 +298,7 @@ export default {
   created() {
     this.fetch();
     this.data.private = this.$store.state.feedType === 'private' ? 1 : 0;
+    this.data.send_copy = this.$store.state.user.send_copy || false;
 
     // Handle drafts
     this.handleDrafts();
@@ -359,6 +370,9 @@ export default {
       this.isSending = true;
       this.data.intermediate = this.data.intermediate ? 1 : 0;
       this.axios.post(`${this.routes.post}/${this.$route.params.uuid}`, this.data).then(response => {
+        // Keep the store in sync with the user's send_copy preference
+        const updatedUser = { ...this.$store.state.user, send_copy: this.data.send_copy };
+        this.$store.commit('user', updatedUser);
         this.removeDraft();
         this.reset();
         window.scrollTo(0, 0);

@@ -22,7 +22,8 @@ class MessageStoreRequest extends FormRequest
   public function rules()
   {
     return [
-      'users' => 'required',
+      'users'     => 'required',
+      'send_copy' => 'nullable|boolean',
     ];
   }
 

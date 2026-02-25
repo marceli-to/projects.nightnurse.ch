@@ -25,7 +25,8 @@ class UserResource extends JsonResource
       'register_complete' => $this->register_complete,
       'company_id' => $this->company_id,
       'team_id' => $this->team_id,
-      'is_sbb' => $this->is_sbb
+      'is_sbb' => $this->is_sbb,
+      'send_copy' => $this->send_copy,
     ];
   }
 }

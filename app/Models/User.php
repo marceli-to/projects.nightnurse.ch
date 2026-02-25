@@ -32,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
     'gender_id',
     'role_id',
     'vertec_id',
-    'is_sbb'
+    'is_sbb',
+    'send_copy'
   ];
 
   /**
