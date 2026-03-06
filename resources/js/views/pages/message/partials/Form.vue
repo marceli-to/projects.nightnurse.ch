@@ -298,10 +298,12 @@ export default {
   created() {
     this.fetch();
     this.data.private = this.$store.state.feedType === 'private' ? 1 : 0;
-    this.data.send_copy = this.$store.state.user.send_copy || false;
 
     // Handle drafts
     this.handleDrafts();
+
+    // Always use the global user preference for send_copy (not the draft value)
+    this.data.send_copy = this.$store.state.user.send_copy || false;
   },
 
   methods: {
